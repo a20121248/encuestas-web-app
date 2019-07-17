@@ -1,0 +1,13 @@
+<div class="card">
+    <div class="card-header">
+        ASIGNACIÓN POR EMPRESA
+    </div>
+    <div class="card-body">
+      <div class="form-group row" *ngFor="let empresa of lstEmpresas">
+        <label for="{{empresa.id}}" class="col-sm-9 col-form-label">{{empresa.nombre}}</label>
+        <div class="col-sm-2 offset-md-1">
+          <input type="text" class="form-control" id="{{empresa.id}}" value="0%">
+        </div>
+      </div>
+    </div>
+  </div>
