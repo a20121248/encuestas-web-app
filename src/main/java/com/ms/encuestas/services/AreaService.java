@@ -14,17 +14,19 @@ public class AreaService implements AreaServiceI {
 	private AreaRepository areaRepository;
 
 	public long count() {
-		// TODO Auto-generated method stub
-		return 0;
+		return areaRepository.count();
 	}
 
 	public List<Area> findAll() {
 		return areaRepository.findAll();
 	}
+	
+	public List<Area> findAllWithDivision() {
+		return areaRepository.findAllWithDivision();
+	}
 
 	public Area findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return areaRepository.findById(id);
 	}
 
 	public Area save(Area area) {
@@ -40,5 +42,9 @@ public class AreaService implements AreaServiceI {
 	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public Area findByIdWithDivision(Long id) {
+		return areaRepository.findByIdWithDivision(id);
 	}
 }

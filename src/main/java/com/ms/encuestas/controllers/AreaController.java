@@ -25,15 +25,30 @@ import com.ms.encuestas.services.AreaServiceI;
 public class AreaController {
 	@Autowired
 	private AreaServiceI areaService;
-
+	
+	@GetMapping("/areas/cantidad")
+	public Long count() {
+		return areaService.count();
+	}
+	
 	@GetMapping("/areas")
-	public List<Area> index() throws Exception {
+	public List<Area> index() {
 		return areaService.findAll();
 	}
+	
+	@GetMapping("/areas-con-division")
+	public List<Area> showWithDivision() {
+		return this.areaService.findAllWithDivision();
+	}	
 
 	@GetMapping("/areas/{id}")
 	public Area show(@PathVariable Long id) {
 		return this.areaService.findById(id);
+	}
+	
+	@GetMapping("/areas-con-division/{id}")
+	public Area showWithDivision(@PathVariable Long id) {
+		return this.areaService.findByIdWithDivision(id);
 	}
 
 	@PutMapping("/areas")

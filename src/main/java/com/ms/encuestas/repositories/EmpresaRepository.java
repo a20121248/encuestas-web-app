@@ -18,8 +18,6 @@ import com.ms.encuestas.models.Empresa;
 @CrossOrigin(origins={})
 @Repository
 public class EmpresaRepository {
-	
-	//private NamedParameterJdbcTemplate plantilla;
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 	
