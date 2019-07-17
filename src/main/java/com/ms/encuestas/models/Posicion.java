@@ -2,7 +2,7 @@ package com.ms.encuestas.models;
 
 import java.util.Date;
 
-public class Empresa {
+public class Posicion {
 	private Long id;
 	private String nombre;
 	private Date fechaCreacion;

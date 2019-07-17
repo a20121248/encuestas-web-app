@@ -1,5 +1,14 @@
 package com.ms.encuestas.services;
 
-public interface PosicionServiceI {
+import java.util.List;
 
+import com.ms.encuestas.models.Posicion;
+
+public interface PosicionServiceI {
+	public long count();
+	public List<Posicion> findAll();
+	public Posicion findById(Long id);
+	public Posicion save(Posicion posicion);
+	public void delete(Posicion posicion);
+	public void deleteById(Long id);
 }
