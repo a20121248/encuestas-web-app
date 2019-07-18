@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.ms.encuestas.models.Centro;
 
-public class CentroMapper implements RowMapper<Centro> {
+public class UsuarioMapper implements RowMapper<Centro> {
 	@Override
 	public Centro mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Centro centro = new Centro();

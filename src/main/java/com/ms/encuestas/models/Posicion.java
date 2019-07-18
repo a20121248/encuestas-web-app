@@ -2,9 +2,11 @@ package com.ms.encuestas.models;
 
 import java.util.Date;
 
-public class Empresa {
+public class Posicion {
 	private Long id;
 	private String nombre;
+	private Centro centro;
+	private Area area;
 	private Date fechaCreacion;
 
 	public Long getId() {
@@ -22,7 +24,23 @@ public class Empresa {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	
+
+	public Centro getCentro() {
+		return centro;
+	}
+
+	public void setCentro(Centro centro) {
+		this.centro = centro;
+	}
+
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
+	}
+
 	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}
