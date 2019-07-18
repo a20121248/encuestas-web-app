@@ -19,7 +19,7 @@ private url:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas';
     return this.http.get<Empresa[]>(this.url);
     
   }
-  postEmpresaPorc(): Observable<Empresa[]> {
+  getEmpresaPorc(): Observable<Empresa[]> {
 
     return this.http.get<Empresa[]>(this.url);
   }

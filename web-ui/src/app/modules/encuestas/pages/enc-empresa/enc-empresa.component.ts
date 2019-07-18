@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Empresa } from  '../../../../shared/models/empresa';
 import { EmpresaComponent } from '../../components/empresa/empresa.component';
-import { AfterViewInit, ViewChild } from '@angular/core';
+import { ViewChild } from '@angular/core';
+
 
 @Component({
   selector: 'app-enc-empresa',
@@ -22,7 +23,9 @@ export class EncEmpresaComponent implements OnInit {
   guardarEncuesta(){
   this.lstEmpresas = this.empresaComponent.lstEmpresas;
   console.log(this.lstEmpresas);
-
+  this.empresaComponent.postRespuesta (this.lstEmpresas [1]);
+  console.log(this.lstEmpresas[1]);
+  
   }
   
 
