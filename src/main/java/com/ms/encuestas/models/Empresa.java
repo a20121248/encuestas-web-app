@@ -6,7 +6,8 @@ public class Empresa {
 	private Long id;
 	private String nombre;
 	private Date fechaCreacion;
-
+	private double porcentaje;
+	
 	public Long getId() {
 		return id;
 	}
@@ -29,5 +30,13 @@ public class Empresa {
 
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
+	}
+	
+	public double getPorcentaje() {
+		return porcentaje;
+	}
+
+	public void setPorcentaje(double porcentaje) {
+		this.porcentaje = porcentaje;
 	}
 }

@@ -46,23 +46,15 @@ public class EmpresaController {
 		return empresa;
 	}
 
-	/*@PostMapping(path = "/empresas", consumes = "application/x-www-form-urlencoded")	
-	public Empresa create(@RequestBody Empresa empresa) {
-		// empresa.setFechaCreacion(new Date());
-		
-		this.empresaService.save(empresa);
-		return empresa;
-	}*/
-
 	@PutMapping("/empresas/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Empresa update(@RequestBody Empresa empresa, @PathVariable Long id) {
-		Empresa currentCentro = this.empresaService.findById(id);
-		currentCentro.setNombre(empresa.getNombre());
-		// currentCentro.setApellido(centro.get());
-		// currentCentro.setEmail(centro.getEmail());
-		this.empresaService.save(currentCentro);
-		return currentCentro;
+		Empresa currentEmpresa = this.empresaService.findById(id);
+		
+		currentEmpresa.setNombre(empresa.getNombre());
+		this.empresaService.save(currentEmpresa);
+		
+		return currentEmpresa;
 	}
 
 	@DeleteMapping("/empresas/{id}")

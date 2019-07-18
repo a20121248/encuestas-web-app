@@ -19,7 +19,7 @@ public class AreaMapper implements RowMapper<Area> {
 			division.setFechaCreacion(rs.getDate("division_fecha_creacion"));
 		} catch (java.sql.SQLException e) {
 			division = null;
-		}		
+		}
 		
 		Area area = new Area();
 		area.setId(rs.getLong("area_id"));
