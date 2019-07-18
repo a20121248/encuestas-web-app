@@ -22,8 +22,9 @@ import { CentroService } from './shared/services/centro.service';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', redirectTo: 'encuestas', pathMatch: 'full' },
@@ -72,6 +73,7 @@ const routes: Routes = [
     MatTableModule,
     BrowserModule,
     HttpClientModule,
+    FormsModule,
     RouterModule.forRoot(routes)
   ],
   providers: [CentroService],

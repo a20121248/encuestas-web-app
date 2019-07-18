@@ -16,4 +16,19 @@ export class EmpresaComponent implements OnInit {
     this.empresaService.getEmpresas().subscribe(empresas=> this.lstEmpresas=empresas);
   }
 
+  editField: number;
+
+  updateList(id: number, property: string, event: any) {
+    const editField = parseFloat(event.target.textContent);
+    this.lstEmpresas[id][property] = editField;
+  }
+
+  changeValue(id: number, property: string, event: any) {
+    this.editField = parseFloat(event.target.textContent);
+  }
+  
+  getLstEmpresas(){
+    return this.lstEmpresas;
+
+  }
 }

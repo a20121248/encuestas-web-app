@@ -8,14 +8,19 @@ import {HttpClient} from '@angular/common/http';
   providedIn: 'root'
 })
 export class EmpresaService {
-private url:string = 'http://hp840g-malfbl35:8080/api/empresas';
+private url:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas';
 
   constructor(private http: HttpClient) { }
 
   listEmpresas: Empresa[] = [];
 
   getEmpresas(): Observable<Empresa[]> {
-    // return of(this.listEmpresas);
+
+    return this.http.get<Empresa[]>(this.url);
+    
+  }
+  postEmpresaPorc(): Observable<Empresa[]> {
+
     return this.http.get<Empresa[]>(this.url);
   }
 }
