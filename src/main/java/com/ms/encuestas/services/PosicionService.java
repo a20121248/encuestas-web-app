@@ -13,33 +13,40 @@ public class PosicionService implements PosicionServiceI {
 	@Autowired
 	private PosicionRepository posicionRepository;
 
-	public long count() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Long count() {
+		return posicionRepository.count();
 	}
 
 	public List<Posicion> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return posicionRepository.findAll();
 	}
 
-	public Posicion findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Posicion findByCodigo(String codigo) {
+		return posicionRepository.findByCodigo(codigo);
+	}
+
+	public Posicion findByCodigoWithAreaAndCentro(String codigo) {
+		return posicionRepository.findByCodigoWithAreaAndCentro(codigo);
+	}
+	
+	public Posicion findByCodigoWithArea(String codigo) {
+		return posicionRepository.findByCodigoWithArea(codigo);
+	}
+	
+	public Posicion findByCodigoWithCentro(String codigo) {
+		return posicionRepository.findByCodigoWithCentro(codigo);
 	}
 
 	public Posicion save(Posicion posicion) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void delete(Posicion posicion) {
-		// TODO Auto-generated method stub
-		
+		return;
 	}
 
 	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

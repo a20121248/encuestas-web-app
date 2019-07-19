@@ -1,6 +1,9 @@
 package com.ms.encuestas.models;
 
-public class Tipo {
+import java.io.Serializable;
+
+public class Tipo implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String codigo;
 	private String nombre;

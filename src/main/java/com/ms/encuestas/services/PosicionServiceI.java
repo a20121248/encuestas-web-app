@@ -5,9 +5,12 @@ import java.util.List;
 import com.ms.encuestas.models.Posicion;
 
 public interface PosicionServiceI {
-	public long count();
+	public Long count();
 	public List<Posicion> findAll();
-	public Posicion findById(Long id);
+	public Posicion findByCodigo(String codigo);
+	public Posicion findByCodigoWithAreaAndCentro(String codigo);
+	public Posicion findByCodigoWithArea(String codigo);
+	public Posicion findByCodigoWithCentro(String codigo);
 	public Posicion save(Posicion posicion);
 	public void delete(Posicion posicion);
 	public void deleteById(Long id);

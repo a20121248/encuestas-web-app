@@ -1,8 +1,10 @@
 package com.ms.encuestas.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Centro {
+public class Centro implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String codigo;
 	private String nombre;
@@ -11,8 +13,6 @@ public class Centro {
 	private String tipo;
 	private Date fechaCreacion;
 
-	public Centro() {};
-	
 	public Long getId() {
 		return id;
 	}
@@ -20,7 +20,7 @@ public class Centro {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
+	
 	public String getCodigo() {
 		return codigo;
 	}

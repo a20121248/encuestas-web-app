@@ -1,8 +1,10 @@
 package com.ms.encuestas.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Empresa {
+public class Empresa implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String nombre;
 	private Date fechaCreacion;

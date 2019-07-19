@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.ms.encuestas.models.Area;
-import com.ms.encuestas.models.Empresa;
 
 @Repository
 public class AreaRepository {

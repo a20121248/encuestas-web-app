@@ -14,56 +14,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ms.encuestas.models.Area;
-import com.ms.encuestas.services.AreaServiceI;
+import com.ms.encuestas.models.Division;
+import com.ms.encuestas.services.DivisionServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
-public class AreaController {
+public class DivisionController {
 	@Autowired
-	private AreaServiceI areaService;
+	private DivisionServiceI divisionService;
 	
-	@GetMapping("/areas/cantidad")
+	@GetMapping("/divisiones/cantidad")
 	public Long count() {
-		return areaService.count();
+		return divisionService.count();
 	}
 	
-	@GetMapping("/areas")
-	public List<Area> index() {
-		return areaService.findAll();
-	}
-	
-	@GetMapping("/areas-con-division")
-	public List<Area> showWithDivision() {
-		return this.areaService.findAllWithDivision();
-	}	
-
-	@GetMapping("/areas/{id}")
-	public Area show(@PathVariable Long id) {
-		return this.areaService.findById(id);
-	}
-	
-	@GetMapping("/areas-con-division/{id}")
-	public Area showWithDivision(@PathVariable Long id) {
-		return this.areaService.findByIdWithDivision(id);
+	@GetMapping("/divisiones")
+	public List<Division> index() {
+		return divisionService.findAll();
 	}
 
-	@PutMapping("/areas")
+	@GetMapping("/divisiones/{id}")
+	public Division show(@PathVariable Long id) {
+		return this.divisionService.findById(id);
+	}
+
+	@PutMapping("/divisiones")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Area update(@RequestBody Area area, @PathVariable Long id) {
-		Area currentCentro = this.areaService.findById(id);
-		currentCentro.setNombre(area.getNombre());
+	public Division update(@RequestBody Division area, @PathVariable Long id) {
+		Division currentDivision = this.divisionService.findById(id);
+		currentDivision.setNombre(area.getNombre());
 		//currentCentro.setApellido(centro.get());
 		//currentCentro.setEmail(centro.getEmail());
-		this.areaService.save(currentCentro);
-		return currentCentro;
+		this.divisionService.save(currentDivision);
+		return currentDivision;
 	}
 
-	@DeleteMapping("/areas/{id}")
+	@DeleteMapping("/divisiones/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
-		Area currentArea = this.areaService.findById(id);
-		this.areaService.delete(currentArea);
+		Division currentDivision = this.divisionService.findById(id);
+		this.divisionService.delete(currentDivision);
 	}
 }

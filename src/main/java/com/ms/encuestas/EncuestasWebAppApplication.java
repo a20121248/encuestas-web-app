@@ -1,9 +1,5 @@
 package com.ms.encuestas;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,12 +7,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import com.ms.encuestas.models.Customer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class EncuestasWebAppApplication implements CommandLineRunner {
 	private static final LoggerWrapper LOGGER = LoggerWrapper.getLogger(EncuestasWebAppApplication.class);	
+	
+	//@Autowired
+	//private BCryptPasswordEncoder passwordEnconder;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(EncuestasWebAppApplication.class, args);
@@ -41,6 +39,11 @@ public class EncuestasWebAppApplication implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
+    	/*String password = "secret";
+    	for (int i = 0; i < 5; ++i) {
+			String passwordBcrypt = passwordEnconder.encode(password);
+			System.out.println(passwordBcrypt);
+		}*/
     	/*LOGGER.info("Creating tables");
 
         jdbcTemplate.execute("DROP TABLE customers IF EXISTS");

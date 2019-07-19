@@ -3,20 +3,18 @@ package com.ms.encuestas.models;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Posicion implements Serializable {
+public class Rol implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String codigo;
+	private Long id;
 	private String nombre;
-	private Centro centro;
-	private Area area;
 	private Date fechaCreacion;
 
-	public String getCodigo() {
-		return codigo;
+	public Long getId() {
+		return id;
 	}
 
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getNombre() {
@@ -26,23 +24,7 @@ public class Posicion implements Serializable {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
-	public Centro getCentro() {
-		return centro;
-	}
-
-	public void setCentro(Centro centro) {
-		this.centro = centro;
-	}
-
-	public Area getArea() {
-		return area;
-	}
-
-	public void setArea(Area area) {
-		this.area = area;
-	}
-
+	
 	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}

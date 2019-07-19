@@ -7,32 +7,32 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.ms.encuestas.models.Division;
+import com.ms.encuestas.models.Justificacion;
 
 @Repository
-public class DivisionRepository {
+public class JustificacionRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 	
 	public Long count() {
-		String sql = "SELECT COUNT(1) CNT FROM divisiones WHERE fecha_eliminacion IS NULL";
+		String sql = "SELECT COUNT(1) CNT FROM justificaciones WHERE fecha_eliminacion IS NULL";
 		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
 	}
 	
-	public List<Division> findAll() {
+	public List<Justificacion> findAll() {
 		String sql = "SELECT *\n" +
-				     "  FROM divisiones\n" +
+				     "  FROM justificaciones\n" +
 				     " WHERE fecha_eliminacion IS NULL";
-		return plantilla.query(sql, new DivisionMapper());
+		return plantilla.query(sql, new JustificacionMapper());
 	}
 
-	public Division findById(Long id) {
+	public Justificacion findById(Long id) {
 		String sql = "SELECT *\n" +
-				     "  FROM divisiones\n" +
+				     "  FROM justificaciones\n" +
 				     " WHERE id=:id\n" +
 				     "   AND fecha_eliminacion IS NULL";
         return plantilla.queryForObject(sql,
         		new MapSqlParameterSource("id", id),
-        		new DivisionMapper());
+        		new JustificacionMapper());
 	}
 }

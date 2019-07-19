@@ -19,7 +19,7 @@ public class EncuestaService implements EncuestaServiceI {
     }
 
 	@Override
-	public int saveEncuestaEmpresa(Empresa empresa, long procesoId, String posicionCodigo) {
-		return encuestaRepository.saveEncuestaEmpresa(empresa, procesoId, posicionCodigo);
+	public void saveLstEmpresas(List<Empresa> lstEmpresas, Long procesoId, String posicionCodigo) {
+		encuestaRepository.saveEncuestaEmpresa(lstEmpresas, procesoId, posicionCodigo);
 	}    
 }
