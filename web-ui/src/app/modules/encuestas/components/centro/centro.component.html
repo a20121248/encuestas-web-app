@@ -1,4 +1,4 @@
-<div class="card">
+<!-- <div class="card">
   <div class="card-header">
       ASIGNACIÓN POR CENTRO DE COSTOS
   </div>
@@ -11,3 +11,47 @@
     </div>
   </div>
 </div>
+
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+ 
+
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> id </th>
+    <td mat-cell *matCellDef="let centro"> {{centro.id}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="codigo">
+    <th mat-header-cell *matHeaderCellDef> CODIGO </th>
+    <td mat-cell *matCellDef="let centro"> {{centro.codigo}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef> NOMBRE </th>
+    <td mat-cell *matCellDef="let centro"> {{centro.nombre}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="abreviatura">
+    <th mat-header-cell *matHeaderCellDef> ABREVIATURA </th>
+    <td mat-cell *matCellDef="let centro"> {{centro.abreviatura}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="porcentaje">
+    <th mat-header-cell *matHeaderCellDef> PORCENTAJE </th>
+    <td mat-cell *matCellDef="let centro"> {{centro.porcentaje}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="fechaCreacion">
+    <th mat-header-cell *matHeaderCellDef> FECHA CREACION </th>
+    <td mat-cell *matCellDef="let centro"> {{centro.fechaCreacion}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="nivel">
+    <th mat-header-cell *matHeaderCellDef> NIVEL </th>
+    <td mat-cell *matCellDef="let centro"> {{centro.nivel}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="dcEmpresa"></tr>
+  <tr mat-row *matRowDef="let row; columns: dcEmpresa;"></tr>
+</table> -->

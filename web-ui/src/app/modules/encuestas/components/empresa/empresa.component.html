@@ -27,3 +27,29 @@
     </div>
   </div>
 </div>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef> EMPRESA </th>
+    <td mat-cell *matCellDef="let empresa"> {{empresa.nombre}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="porcentaje">
+    <th mat-header-cell *matHeaderCellDef> PORCENTAJE </th>
+
+    <td mat-cell *matCellDef="let empresa">  
+    <mat-form-field class="example-full-width">
+      <input type="number" matInput  [(ngModel)]="empresa.porcentaje">
+  </mat-form-field>
+    </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <tr mat-header-row *matHeaderRowDef="dcEmpresa"></tr>
+  <tr mat-row *matRowDef="let row; columns: dcEmpresa;"></tr>
+</table>
