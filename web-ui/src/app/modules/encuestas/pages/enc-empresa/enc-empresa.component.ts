@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Empresa } from  '../../../../shared/models/empresa';
 import { EmpresaComponent } from '../../components/empresa/empresa.component';
 import { ViewChild } from '@angular/core';
+import { EmpresaService } from 'src/app/shared/services/empresa.service';
+
 
 
 @Component({
@@ -13,7 +15,7 @@ export class EncEmpresaComponent implements OnInit {
   lstEmpresas: Empresa[] ;
   
 
-  constructor() { }
+  constructor(private empresaService:EmpresaService) { }
   
   @ViewChild(EmpresaComponent, {static: false})  empresaComponent: EmpresaComponent ;
 
@@ -21,11 +23,8 @@ export class EncEmpresaComponent implements OnInit {
   }
 
   guardarEncuesta(){
-  this.lstEmpresas = this.empresaComponent.lstEmpresas;
-  console.log(this.lstEmpresas);
-  this.empresaComponent.postRespuesta (this.lstEmpresas [1]);
-  console.log(this.lstEmpresas[1]);
-  
+    this.lstEmpresas = this.empresaComponent.getLstEmpresas();
+    this.empresaService.postRespuesta (this.lstEmpresas);  
   }
   
 
