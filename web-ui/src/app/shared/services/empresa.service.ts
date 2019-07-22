@@ -9,8 +9,8 @@ import { AppConfig } from './config/app.config';
   providedIn: 'root'
 })
 export class EmpresaService {
-  private url:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas';
-
+  private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas';
+  private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
   //private url = 'api';
   //private urlJsonServer = 'http://' + AppConfig.settings.apiServer.ruta_host + ':' + AppConfig.settings.apiServer.puerto_host
 //    + '/SimuladorIFRS9/rest/parametrizacion';
@@ -24,11 +24,25 @@ export class EmpresaService {
 
   getEmpresas(): Observable<Empresa[]> {
 
-    return this.http.get<Empresa[]>(this.url);
+    return this.http.get<Empresa[]>(this.urlEndPoint);
     
   }
   getEmpresaPorc(): Observable<Empresa[]> {
 
-    return this.http.get<Empresa[]>(this.url);
+    return this.http.get<Empresa[]>(this.urlEndPoint);
+  }
+
+  postRespuesta(empresas: Empresa[]):any {
+    fetch(this.urlEndPoint,
+      {
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify(empresas)
+      })
+      .then(function(res){ console.log(res) })
+      .catch(function(res){ console.log(res) });
   }
 }

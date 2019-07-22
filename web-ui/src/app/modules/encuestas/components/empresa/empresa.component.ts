@@ -5,9 +5,7 @@ import { Observable } from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { MatTableDataSource } from '@angular/material';
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+
 
 @Component({
   selector: 'app-form-empresa',
@@ -17,12 +15,11 @@ const httpOptions = {
 
 
 export class EmpresaComponent implements OnInit {
-  lstEmpresas: Empresa[] ;
+  private lstEmpresas: Empresa[] ;
   private url: string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas';
-  
+  private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
 
   dcEmpresa = ['nombre', 'porcentaje'];
-  dataSource: MatTableDataSource<Empresa>;
 
   // empresa: Empresa[] = [
   //   { id: 1, codigo: '001', nombre: 'PRIMA' , fechaCreacion: new Date (), porcentaje: 1},
@@ -33,14 +30,13 @@ export class EmpresaComponent implements OnInit {
  
   constructor(private empresaService: EmpresaService, 
               private http: HttpClient) { 
-                this.dataSource = new MatTableDataSource<Empresa>()
-                console.log(this.lstEmpresas);
-                this.dataSource.data = this.lstEmpresas;
               }
 
   ngOnInit() {
-    this.empresaService.getEmpresas().subscribe(empresas=>{   this.dataSource.data=empresas; this.lstEmpresas=empresas});
-    console.log(this.lstEmpresas);
+    this.empresaService.getEmpresas().subscribe(empresas=>{ 
+      this.lstEmpresas=empresas;
+      }
+    );
   }
   
   editField: number;
@@ -56,10 +52,5 @@ export class EmpresaComponent implements OnInit {
   
   getLstEmpresas(){
     return this.lstEmpresas;
-
-  }
-  postRespuesta(_body: Empresa): any {
-    console.log( _body);
-    return this.http.post(this.url, _body, httpOptions) ;
   }
 }
