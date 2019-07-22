@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,7 +22,7 @@ public class AreaRepository {
 		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
 	}
 	
-	public List<Area> findAll() {
+	public List<Area> findAll() throws EmptyResultDataAccessException {
 		String sql = "" +
 				"SELECT id area_id,\n" +
 				"       nombre area_nombre,\n" +
@@ -30,7 +31,7 @@ public class AreaRepository {
 		return plantilla.query(sql, new AreaMapper());
 	}
 	
-	public List<Area> findAllWithDivision() {
+	public List<Area> findAllWithDivision() throws EmptyResultDataAccessException {
 		String sql = "" +
 				"SELECT A.id area_id,\n" + 
 				"       A.nombre area_nombre,\n" + 
@@ -45,7 +46,7 @@ public class AreaRepository {
 		return plantilla.query(sql, new AreaMapper());
 	}
 
-	public Area findById(Long id) {
+	public Area findById(Long id) throws EmptyResultDataAccessException {
 		String queryStr = "" +
 				"SELECT id area_id,\n" +
 				"       nombre area_nombre,\n" +
@@ -56,7 +57,7 @@ public class AreaRepository {
         		new AreaMapper());
 	}
 	
-	public Area findByIdWithDivision(Long id) {
+	public Area findByIdWithDivision(Long id) throws EmptyResultDataAccessException {
 		String sql = "" +
 				"SELECT A.id area_id,\n" + 
 				"       A.nombre area_nombre,\n" + 

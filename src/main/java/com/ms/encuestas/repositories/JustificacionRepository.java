@@ -3,6 +3,7 @@ package com.ms.encuestas.repositories;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -19,14 +20,14 @@ public class JustificacionRepository {
 		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
 	}
 	
-	public List<Justificacion> findAll() {
+	public List<Justificacion> findAll() throws EmptyResultDataAccessException {
 		String sql = "SELECT *\n" +
 				     "  FROM justificaciones\n" +
 				     " WHERE fecha_eliminacion IS NULL";
 		return plantilla.query(sql, new JustificacionMapper());
 	}
 
-	public Justificacion findById(Long id) {
+	public Justificacion findById(Long id) throws EmptyResultDataAccessException {
 		String sql = "SELECT *\n" +
 				     "  FROM justificaciones\n" +
 				     " WHERE id=:id\n" +

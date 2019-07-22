@@ -3,6 +3,7 @@ package com.ms.encuestas.repositories;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -19,22 +20,22 @@ public class UsuarioRepository {
 		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
 	}
 	
-	public List<Usuario> findAll() {
+	public List<Usuario> findAll() throws EmptyResultDataAccessException {
 		String sql = "SELECT * FROM usuarios";
 		return plantilla.query(sql, new UsuarioMapper());
 	}
 
-	public Usuario findByCodigo(String codigo) {
+	public Usuario findByCodigo(String codigo) throws EmptyResultDataAccessException {
 		String sql = "SELECT *\n" +
 					 "  FROM usuarios\n" +
 				     " WHERE codigo=:codigo" +
 					 "   AND fecha_eliminacion IS NULL";
-        return plantilla.queryForObject(sql,
-        		new MapSqlParameterSource("codigo", codigo),
-        		new UsuarioMapper());
+		return plantilla.queryForObject(sql,
+				new MapSqlParameterSource("codigo", codigo),
+				new UsuarioMapper());
 	}
 	
-	public Usuario findByCodigoWithPosicion(String codigo) {
+	public Usuario findByCodigoWithPosicion(String codigo) throws EmptyResultDataAccessException {
 		String sql = "SELECT A.*,\n" + 
 					 "       B.posicion_codigo,\n" + 
 					 "       C.nombre posicion_nombre,\n" + 
@@ -44,10 +45,10 @@ public class UsuarioRepository {
 					 "  JOIN posiciones C ON B.posicion_codigo=C.codigo\n" + 
 					 " WHERE A.codigo=:codigo\n" + 
 					 "   AND A.fecha_eliminacion IS NULL\n" + 
-					 "   AND B.fecha_eliminacion IS NULL";
-        return plantilla.queryForObject(sql,
-        		new MapSqlParameterSource("codigo", codigo),
-        		new UsuarioMapper());
+					 "   AND B.fecha_eliminacion IS NULL";		
+		return plantilla.queryForObject(sql,
+				new MapSqlParameterSource("codigo", codigo),
+				new UsuarioMapper());
 	}
 
 	public Usuario save(Usuario usuario) {

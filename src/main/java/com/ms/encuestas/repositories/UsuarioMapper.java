@@ -21,13 +21,19 @@ public class UsuarioMapper implements RowMapper<Usuario> {
 			posicion = null;
 		}
 		
-		Usuario usuario = new Usuario();
-		usuario.setCodigo(rs.getString("codigo"));
-		usuario.setContrasenha(rs.getString("contrasenha"));
-		usuario.setNombre(rs.getString("nombre"));
-		usuario.setNombreCompleto(rs.getString("nombre_completo"));
-		usuario.setFechaCreacion(rs.getDate("fecha_creacion"));
-		usuario.setPosicion(posicion);
+		Usuario usuario;
+		try {
+			usuario = new Usuario();
+			usuario.setCodigo(rs.getString("codigo"));
+			usuario.setContrasenha(rs.getString("contrasenha"));
+			usuario.setNombre(rs.getString("nombre"));
+			usuario.setNombreCompleto(rs.getString("nombre_completo"));
+			usuario.setFechaCreacion(rs.getDate("fecha_creacion"));
+			usuario.setPosicion(posicion);
+		} catch (java.sql.SQLException e) {
+			usuario = null;
+		}		
+
 		return usuario;
 	}
 }
