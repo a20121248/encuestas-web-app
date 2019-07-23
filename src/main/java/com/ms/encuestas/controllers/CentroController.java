@@ -26,11 +26,16 @@ public class CentroController {
 	@Autowired
 	private CentroServiceI centroService;
 
+	@GetMapping("/centros/cantidad")
+	public Long count() {
+		return centroService.count();
+	}
+	
 	@GetMapping("/centros")
 	public List<Centro> index() throws Exception {
 		return centroService.findAll();
 	}
-
+	
 	@GetMapping("/centros/{id}")
 	public Centro show(@PathVariable Long id) {
 		return this.centroService.findById(id);

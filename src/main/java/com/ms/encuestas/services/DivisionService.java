@@ -14,18 +14,15 @@ public class DivisionService implements DivisionServiceI {
 	private DivisionRepository divisionRepository;
 
 	public long count() {
-		// TODO Auto-generated method stub
-		return 0;
+		return divisionRepository.count();
 	}
 
 	public List<Division> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return divisionRepository.findAll();
 	}
 
 	public Division findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return divisionRepository.findById(id);
 	}
 
 	public int save(Division division) {

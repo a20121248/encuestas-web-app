@@ -15,17 +15,18 @@ import { CentroService } from 'src/app/shared/services/centro.service';
   styleUrls: ['./enc-centro.component.css']
 })
 export class EncCentroComponent implements OnInit {
-    lstCentros: Centro[] ;
+  lstCentros: Centro[] ;
+  titulo = 'Herramienta de encuestas';
 
-  constructor(private centroService:CentroService) { }
+  constructor(private centroService: CentroService) { }
 
   @ViewChild(CentroComponent, {static: false})  centroComponent: CentroComponent ;
 
   ngOnInit() {
   }
 
-  guardarEncuesta(){
+  guardarEncuesta() {
     this.lstCentros = this.centroComponent.getLstCentro();
-    this.centroService.postRespuesta (this.lstCentros);  
+    this.centroService.postRespuesta (this.lstCentros);
   }
 }

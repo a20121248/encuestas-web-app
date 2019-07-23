@@ -156,10 +156,8 @@ public abstract class ModuloDatos {
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				centro = new Centro();
-				centro.setId(rs.getLong("id"));
 				centro.setCodigo(rs.getString("codigo"));
 				centro.setNombre(rs.getString("nombre"));
-				centro.setAbreviatura(rs.getString("abreviatura"));
 				centro.setNivel(rs.getInt("nivel"));
 				centros.add(centro);
 			}

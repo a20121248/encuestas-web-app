@@ -13,9 +13,8 @@ public class CentroService implements CentroServiceI {
 	@Autowired
 	private CentroRepository centroRepository;
 
-	public long count() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Long count() {
+		return centroRepository.count();
 	}
 
 	public List<Centro> findAll() {

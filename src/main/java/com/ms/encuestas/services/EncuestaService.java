@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ms.encuestas.models.Centro;
 import com.ms.encuestas.models.Empresa;
 import com.ms.encuestas.repositories.EmpresaRepository;
 import com.ms.encuestas.repositories.EncuestaRepository;
@@ -14,12 +15,21 @@ public class EncuestaService implements EncuestaServiceI {
     @Autowired
     private EncuestaRepository encuestaRepository;
     
-    public List<Empresa> getEncuestaEmpresa(long procesoId, String posicionCodigo) {
+    @Override
+    public List<Empresa> getEncuestaEmpresa(Long procesoId, String posicionCodigo) {
     	return encuestaRepository.getEncuestaEmpresa(procesoId, posicionCodigo);
     }
 
 	@Override
-	public int saveEncuestaEmpresa(Empresa empresa, long procesoId, String posicionCodigo) {
-		return encuestaRepository.saveEncuestaEmpresa(empresa, procesoId, posicionCodigo);
+	public void saveLstEmpresas(List<Empresa> lstEmpresas, Long procesoId, String posicionCodigo) {
+		encuestaRepository.saveEncuestaEmpresa(lstEmpresas, procesoId, posicionCodigo);
+	}
+
+	@Override
+	public List<Centro> getEncuestaCentro(Long empresaId, Long procesoId, String posicionCodigo) {
+		System.out.println(String.format("empresaId: %d", empresaId));
+		System.out.println(String.format("procesoId: %d", procesoId));
+		System.out.println(String.format("posicionCodigo: %s", posicionCodigo));
+		return encuestaRepository.getEncuestaCentro(empresaId, procesoId, posicionCodigo);
 	}    
 }
