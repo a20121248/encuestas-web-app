@@ -3,4 +3,5 @@ export class Linea {
     codigo: string;
     nombre: string;
     fechaCreacion: Date;
+    porcentaje: number;
 }

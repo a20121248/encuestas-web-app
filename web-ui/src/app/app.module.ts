@@ -43,7 +43,8 @@ const routes: Routes = [
     path: 'encuestas',
     children: [
       { path: 'eps', component: EncEPSComponent },
-      { path: 'centro', component: EncCentroComponent }
+      { path: 'centro', component: EncCentroComponent },
+      { path: 'linea-canal', component: EncLineaCanalComponent }
     ]
   },
   { path: 'login', component: LoginComponent }
