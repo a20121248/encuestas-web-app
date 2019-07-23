@@ -20,7 +20,6 @@ export class EmpresaComponent implements OnInit {
   private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
 
   dcEmpresa = ['nombre', 'porcentaje'];
-
   // empresa: Empresa[] = [
   //   { id: 1, codigo: '001', nombre: 'PRIMA' , fechaCreacion: new Date (), porcentaje: 1},
   //   { id: 2, codigo: '002', nombre: 'PACIFICO' , fechaCreacion: new Date (), porcentaje: 2},
