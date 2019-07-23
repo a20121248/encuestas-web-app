@@ -47,4 +47,7 @@
     box-align: center;
     font-size: 17px;
   }
-
+  
+  tr.mat-footer-row {
+    font-weight: bold;
+  }
