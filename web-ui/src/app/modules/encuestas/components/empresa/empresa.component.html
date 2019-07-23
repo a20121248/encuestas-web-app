@@ -1,16 +1,11 @@
 <div class="card">
   <h3 class="card-header text-center font-weight-bold text-uppercase py-4">ASIGNACIÓN POR EMPRESA</h3>
-  <div class="card-body">
-    <div id="table" class="table-editable">
-      <span class="table-add float-right mb-3 mr-2">
-        <a class="text-success" (click)="add()">
-          <div fas icon="plus" size="2x"></div>
-        </a>
-      </span>
+  <div class="card-body">      
       <table mat-table [dataSource]="lstEmpresas" class="mat-elevation-z8">
         <ng-container matColumnDef="nombre">
           <th mat-header-cell *matHeaderCellDef> EMPRESA </th>
           <td mat-cell *matCellDef="let empresa"> {{empresa.nombre}} </td>
+          <td mat-footer-cell *matFooterCellDef> Total </td>  
         </ng-container>
       
         <ng-container matColumnDef="porcentaje">
@@ -20,11 +15,21 @@
               <input type="number" matInput  [(ngModel)]="empresa.porcentaje">
             </mat-form-field>
           </td>
+          <td mat-footer-cell *matFooterCellDef > {{getTotalPorcentaje()}} </td>
         </ng-container>
-      
+
+        <ng-container matColumnDef="ingresar">
+          <th mat-header-cell *matHeaderCellDef> MÁS DETALLE </th>
+            <td mat-cell *matCellDef="let empresa" >
+              <ng-container *ngIf="revisarEmpresa(empresa.id)">
+                <button mat-raised-button color="primary"  (click)="irMasDetalle(empresa)">Ir</button>  
+              </ng-container>
+            </td>
+          <td mat-footer-cell *matFooterCellDef>  </td>  
+        </ng-container>
         <tr mat-header-row *matHeaderRowDef="dcEmpresa"></tr>
         <tr mat-row *matRowDef="let row; columns: dcEmpresa;"></tr>
+        <tr mat-footer-row *matFooterRowDef="dcEmpresa"></tr>
       </table>
-    </div>
   </div>
 </div>

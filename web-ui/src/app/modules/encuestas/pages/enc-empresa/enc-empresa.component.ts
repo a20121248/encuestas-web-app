@@ -24,9 +24,6 @@ export class EncEmpresaComponent implements OnInit {
 
   guardarEncuesta(){
     this.lstEmpresas = this.empresaComponent.getLstEmpresas();
-    this.empresaService.postRespuesta (this.lstEmpresas);  
+    this.empresaService.postRespuesta (this.lstEmpresas);
   }
-  
-
-
 }

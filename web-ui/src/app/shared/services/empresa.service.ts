@@ -11,16 +11,8 @@ import { AppConfig } from './config/app.config';
 export class EmpresaService {
   private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas';
   private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
-  //private url = 'api';
-  //private urlJsonServer = 'http://' + AppConfig.settings.apiServer.ruta_host + ':' + AppConfig.settings.apiServer.puerto_host
-//    + '/SimuladorIFRS9/rest/parametrizacion';
-  constructor(private http: HttpClient) { }
-  private handleError(error: HttpErrorResponse) {
-    console.error(error);
-    return throwError(error);
-  }
 
-  listEmpresas: Empresa[] = [];
+  constructor(private http: HttpClient) { }
 
   getEmpresas(): Observable<Empresa[]> {
 
