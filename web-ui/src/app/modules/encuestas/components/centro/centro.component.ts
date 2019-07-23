@@ -12,7 +12,7 @@ import {CentroService} from '../../../../shared/services/centro.service';
 })
 
 export class CentroComponent implements OnInit {
-  private lstCentros: Centro[] ;
+  private lstCentros: Centro[] = [] ;
 
   dcCentro = ['codigo','nombre', 'porcentaje'];
 
@@ -25,5 +25,9 @@ export class CentroComponent implements OnInit {
 
   getLstCentro() {
     return this.lstCentros;
+  }
+
+  getTotalPorcentaje(){
+    return this.lstCentros.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
   }
 }

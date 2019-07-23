@@ -22,7 +22,6 @@ export class UsuarioDatosComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioService.getUsuario().subscribe(usuario=>{ this.usuario = usuario});
-    console.log(this.usuario);
   }
 
 }

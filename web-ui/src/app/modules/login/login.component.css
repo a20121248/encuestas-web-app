@@ -23,7 +23,7 @@
 }
 
 .login .card-header {
-  background-color:#09c;
+  background-color:#09c !important;
 }
 
 .login .card-title {

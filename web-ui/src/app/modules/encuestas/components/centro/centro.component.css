@@ -25,17 +25,29 @@
   .design th {
     font-weight: 600 !important;
     color: #585a5b !important; 
-    font-size: 15px;
+    font-size: 14px;
     text-align: center;
+    padding: 0px 10px 0px 10px;
   }
 
   .design td {
       text-align: left;
+      font-size: 13px;
   }
+
   .mat-table{
-    font-family: "Foco","Arial",sans-serif;;
+    font-family: "Foco","Arial",sans-serif;
     color: #585a5b !important;
     box-align: center;
   }
 
-
+  h5{
+    font-family: "Foco","Arial",sans-serif;;
+    color: #585a5b !important;
+    box-align: center;
+    font-size: 17px;
+  }
+  
+  tr.mat-footer-row {
+    font-weight: bold;
+  }

@@ -1,0 +1,26 @@
+h2{
+    font-family: "Foco","Arial",sans-serif;
+    color: #585a5b !important;
+    box-align: center;
+    font-size: 22px;
+    font-weight: bold;
+ 
+  }
+
+  div.container{
+    background-color:#f2f3f3;
+  }
+
+
+  div.card{
+        border-width:1.5px;  
+        border-style:solid;
+  }
+
+  .mat-raised-button{
+      color: white;
+      background-color:#ff6319;
+      margin-left: 10px;
+      width: 80px !important;
+      /* padding: 0px 20px 0px 20px; */
+  }
