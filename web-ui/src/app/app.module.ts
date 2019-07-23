@@ -7,12 +7,11 @@ import {MatCardModule}from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 
 import { AppComponent } from './app.component';
-//import { CentroDatosComponent } from './shared/components/centro-datos/centro-datos.component';
 import { UsuarioDatosComponent } from './shared/components/usuario-datos/usuario-datos.component';
 import { JustificacionComponent } from './shared/components/justificacion/justificacion.component';
 import { EmpresaComponent } from './modules/encuestas/components/empresa/empresa.component';
+import { CentroComponent } from './modules/encuestas/components/centro/centro.component';
 import { EpsComponent } from './modules/encuestas/components/eps/eps.component';
-//import { CentroComponent } from './modules/encuestas/components/centro/centro.component';
 import { LineaCanalComponent } from './modules/encuestas/components/linea-canal/linea-canal.component';
 import { ProductoCanalComponent } from './modules/encuestas/components/producto-canal/producto-canal.component';
 import { ProductoSubcanalComponent } from './modules/encuestas/components/producto-subcanal/producto-subcanal.component';
@@ -20,10 +19,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { EncProductoSubCanalComponent } from './modules/encuestas/pages/enc-producto-subcanal/enc-producto-subcanal.component';
 import { EncProductoCanalComponent } from './modules/encuestas/pages/enc-producto-canal/enc-producto-canal.component';
 import { EncLineaCanalComponent } from './modules/encuestas/pages/enc-linea-canal/enc-linea-canal.component';
-//import { EncCentroComponent } from './modules/encuestas/pages/enc-centro/enc-centro.component';
+
 import { EncEmpresaComponent } from './modules/encuestas/pages/enc-empresa/enc-empresa.component';
 import { EncEPSComponent } from './modules/encuestas/pages/enc-eps/enc-eps.component';
-//import { CentroService } from './shared/services/centro.service';
+import { EncCentroComponent } from './modules/encuestas/pages/enc-centro/enc-centro.component';
+
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
@@ -42,7 +42,7 @@ const routes: Routes = [
     path: 'encuestas',
     children: [
       { path: 'eps', component: EncEPSComponent },
-      //{ path: 'centro', component: EncCentroComponent }
+      { path: 'centro', component: EncCentroComponent }
     ]
   },
   { path: 'login', component: LoginComponent }
@@ -68,14 +68,14 @@ const routes: Routes = [
     JustificacionComponent,
     EmpresaComponent,
     EpsComponent,
-    //CentroComponent,
+    CentroComponent,
     LineaCanalComponent,
     ProductoCanalComponent,
     ProductoSubcanalComponent,
     EncProductoSubCanalComponent,
     EncProductoCanalComponent,
     EncLineaCanalComponent,
-    //EncCentroComponent,
+    EncCentroComponent,
     EncEmpresaComponent,
     EncEPSComponent,
     LoginComponent,
@@ -95,7 +95,7 @@ const routes: Routes = [
     MatGridListModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [ ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
