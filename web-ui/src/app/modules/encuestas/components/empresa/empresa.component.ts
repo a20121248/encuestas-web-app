@@ -30,7 +30,7 @@ export class EmpresaComponent implements OnInit {
     return this.lstEmpresas;
   }
 
-  getTotalPorcentaje():any{
+  getTotalPorcentaje(){
     return this.lstEmpresas.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
   }
 
