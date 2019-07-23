@@ -5,6 +5,9 @@ import {MatInputModule} from '@angular/material/input';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {MatSelectModule} from '@angular/material/select';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+
 
 import { AppComponent } from './app.component';
 import { UsuarioDatosComponent } from './shared/components/usuario-datos/usuario-datos.component';
@@ -28,8 +31,6 @@ import { EncCentroComponent } from './modules/encuestas/pages/enc-centro/enc-cen
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
 import { HttpClientModule } from '@angular/common/http';
-
-import { FormsModule } from '@angular/forms';
 
 import {AppConfig} from './shared/services/config/app.config';
 import { LoginComponent } from './modules/login/login.component';
@@ -93,7 +94,10 @@ const routes: Routes = [
     MatToolbarModule,
     MatCardModule,
     MatGridListModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [ ],
   bootstrap: [AppComponent]
