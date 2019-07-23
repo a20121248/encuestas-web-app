@@ -158,7 +158,6 @@ public abstract class ModuloDatos {
 				centro = new Centro();
 				centro.setCodigo(rs.getString("codigo"));
 				centro.setNombre(rs.getString("nombre"));
-				centro.setAbreviatura(rs.getString("abreviatura"));
 				centro.setNivel(rs.getInt("nivel"));
 				centros.add(centro);
 			}

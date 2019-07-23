@@ -8,10 +8,10 @@ public class Centro implements Serializable {
 	private Long id;
 	private String codigo;
 	private String nombre;
-	private String abreviatura;
 	private int nivel;
 	private String tipo;
 	private Date fechaCreacion;
+	private double porcentaje;
 
 	public Long getId() {
 		return id;
@@ -37,14 +37,6 @@ public class Centro implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public String getAbreviatura() {
-		return abreviatura;
-	}
-
-	public void setAbreviatura(String abreviatura) {
-		this.abreviatura = abreviatura;
-	}
-
 	public int getNivel() {
 		return nivel;
 	}
@@ -67,5 +59,13 @@ public class Centro implements Serializable {
 
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
+	}
+	
+	public double getPorcentaje() {
+		return porcentaje;
+	}
+
+	public void setPorcentaje(double porcentaje) {
+		this.porcentaje = porcentaje;
 	}
 }
