@@ -44,7 +44,7 @@ export class EmpresaComponent implements OnInit {
       this.router.navigateByUrl("/encuestas/eps");
     }
     if(empresa.nombre.toUpperCase().includes("PGA")){
-      this.router.navigateByUrl("/encuestas/centros");
+      this.router.navigateByUrl("/encuestas/centro");
     }
   }
 }

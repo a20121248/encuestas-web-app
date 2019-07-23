@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
-
+import { Location } from '@angular/common';
 //-------------------COMPONENTES LOCALES----------------------------------
 
 import { Centro } from  '../../../../shared/models/centro';
@@ -18,7 +18,9 @@ export class EncCentroComponent implements OnInit {
   lstCentros: Centro[] ;
   titulo = 'Herramienta de encuestas';
 
-  constructor(private centroService: CentroService) { }
+  constructor(
+    private centroService: CentroService,
+    private location: Location  ) { }
 
   @ViewChild(CentroComponent, {static: false})  centroComponent: CentroComponent ;
 
@@ -28,5 +30,8 @@ export class EncCentroComponent implements OnInit {
   guardarEncuesta() {
     this.lstCentros = this.centroComponent.getLstCentro();
     this.centroService.postRespuesta (this.lstCentros);
+  }
+  goBack(){
+    this.location.back();
   }
 }
