@@ -1,16 +1,27 @@
-<div class="card mt-3">
-    <div class="card-body">
-      <div class="row">
-          <div class="col-md-6">
-            <app-form-eps></app-form-eps>
-          </div>
-          <div class="col-md-5 offset-md-1">
-            <app-form-justificacion></app-form-justificacion>
-          </div>
-          <div class="col-md-12 text-right">
-            <button mat-raised-button color="accent"  (click)="guardarEncuesta()">Guardar</button>
-          </div>
-        </div>
+<app-navegacion></app-navegacion>
+<div class="container">
+  <div class="card mt-4 mb-3">
+    <div class="card-body text-center">
+      <h2 class="card-title mb-0">{{ titulo.toUpperCase() }}</h2>
     </div>
   </div>
-  <br>
+  <div class="card mt-4 mb-3">
+    <app-usuario-datos></app-usuario-datos>
+  </div>
+  <div class="card mt-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <app-form-eps></app-form-eps>
+        </div>
+        <div class="col-md-5 offset-md-1">
+          <app-form-justificacion></app-form-justificacion>
+        </div>
+        <div class="col-md-12 text-right">
+          <button mat-raised-button color="accent" (click)="guardarEncuesta()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>

@@ -2,11 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
-//-------------------COMPONENTES LOCALES----------------------------------
-
 import { Centro } from 'src/app/shared/models/centro';
 import {CentroService} from '../../../../shared/services/centro.service';
-
 
 @Component({
   selector: 'app-form-centro',
@@ -19,20 +16,14 @@ export class CentroComponent implements OnInit {
 
   dcCentro = ['codigo','nombre', 'porcentaje'];
 
-  constructor( private centroService: CentroService, 
-    private http: HttpClient) { }
+  constructor( private centroService: CentroService, private http: HttpClient) { }
 
   ngOnInit() {
-    this.centroService.getCentro().subscribe(centros=>{ 
-      this.lstCentros=centros;
-      }
+    this.centroService.getCentro().subscribe(centros => { this.lstCentros = centros; }
     );
   }
 
-  editField: number;
-  
-  getLstCentro(){
+  getLstCentro() {
     return this.lstCentros;
   }
-
 }

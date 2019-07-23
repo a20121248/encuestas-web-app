@@ -1,18 +1,18 @@
 package com.ms.encuestas.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Centro {
+public class Centro implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String codigo;
 	private String nombre;
-	private String abreviatura;
 	private int nivel;
 	private String tipo;
 	private Date fechaCreacion;
+	private double porcentaje;
 
-	public Centro() {};
-	
 	public Long getId() {
 		return id;
 	}
@@ -20,7 +20,7 @@ public class Centro {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
+	
 	public String getCodigo() {
 		return codigo;
 	}
@@ -35,14 +35,6 @@ public class Centro {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public String getAbreviatura() {
-		return abreviatura;
-	}
-
-	public void setAbreviatura(String abreviatura) {
-		this.abreviatura = abreviatura;
 	}
 
 	public int getNivel() {
@@ -67,5 +59,13 @@ public class Centro {
 
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
+	}
+	
+	public double getPorcentaje() {
+		return porcentaje;
+	}
+
+	public void setPorcentaje(double porcentaje) {
+		this.porcentaje = porcentaje;
 	}
 }

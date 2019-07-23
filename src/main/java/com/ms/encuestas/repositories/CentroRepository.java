@@ -3,7 +3,8 @@ package com.ms.encuestas.repositories;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.ms.encuestas.models.Centro;
@@ -11,29 +12,26 @@ import com.ms.encuestas.models.Centro;
 @Repository
 public class CentroRepository {
 	@Autowired
-	private JdbcTemplate plantilla;
+	private NamedParameterJdbcTemplate plantilla;
+	
+	public Long count() {
+		String sql = "SELECT COUNT(1) CNT FROM centros WHERE fecha_eliminacion IS NULL";
+		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
+	}
 
 	public List<Centro> findAll() {
-		String queryStr = String.format("SELECT * FROM centros");
+		String queryStr = String.format("SELECT * FROM centros WHERE fecha_eliminacion IS NULL");
 	    return plantilla.query(queryStr, new CentroMapper());
 	}
 
 	public Centro findById(Long id) {
-		String queryStr = String.format("" +
-	            "SELECT *\n" +
-	            "  FROM centros\n" +
-	            " WHERE id=%s\n",
-	            id);
-		return plantilla.queryForObject(queryStr, new CentroMapper());
-	}
-
-	public Centro findByCodigo(String codigo) {
-		String queryStr = String.format("" +
-	            "SELECT *\n" +
-	            "  FROM centros\n" +
-	            " WHERE codigo='%s'\n",
-	            codigo);
-		return plantilla.queryForObject(queryStr, new CentroMapper());
+		String queryStr = "SELECT *\n" +
+		                  "  FROM centros\n" +
+                          " WHERE id=:id\n" +
+		                  "   AND fecha_eliminacion IS NULL";
+        return plantilla.queryForObject(queryStr,
+        		new MapSqlParameterSource("id", id),
+        		new CentroMapper());
 	}
 
 	public Centro save(Centro centro) {

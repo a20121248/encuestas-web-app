@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatCardModule}from '@angular/material/card';
+import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 
 import { AppComponent } from './app.component';
@@ -32,6 +32,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import {AppConfig} from './shared/services/config/app.config';
+import { LoginComponent } from './modules/login/login.component';
+import { NavegacionComponent } from './shared/components/navegacion/navegacion.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'encuestas', pathMatch: 'full' },
@@ -42,7 +44,8 @@ const routes: Routes = [
       { path: 'eps', component: EncEPSComponent },
       { path: 'centro', component: EncCentroComponent }
     ]
-  }
+  },
+  { path: 'login', component: LoginComponent }
 ];
 
 /*const routes: Routes = [
@@ -74,7 +77,9 @@ const routes: Routes = [
     EncLineaCanalComponent,
     EncCentroComponent,
     EncEmpresaComponent,
-    EncEPSComponent
+    EncEPSComponent,
+    LoginComponent,
+    NavegacionComponent
   ],
   imports: [
     BrowserAnimationsModule,

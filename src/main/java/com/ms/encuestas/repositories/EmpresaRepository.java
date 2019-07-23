@@ -6,10 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -34,11 +32,11 @@ public class EmpresaRepository {
 	}
 
 	public int save(Empresa empresa) {
-		String sql = "INSERT INTO empresas(nombre) VALUES (:nombre)";
+		String sql = "INSERT INTO empresas(nombre,fecha_creacion) VALUES (:nombre,:fecha_creacion)";
 
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("nombre", empresa.getNombre());
-        //paramMap.put("fecha_creacion", new Date());
+        paramMap.put("fecha_creacion", new Date());
 	
 		return plantilla.update(sql,paramMap);
 	}
