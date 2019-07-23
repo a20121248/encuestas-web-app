@@ -1,0 +1,35 @@
+.login {
+  text-align:center;
+	background-image:url(https://www3.pacificoseguros.com/loginPacifico/images/facebook/degrade_superior.jpg);
+	background-position:center top;
+	background-repeat:repeat-x;
+}
+
+.login h5 {
+  font-size: 14px!important;
+}
+
+.login input {
+  font-size: 14px!important;
+}
+
+.login .btn {
+  font-size: 14px!important;
+}
+
+.login .btn {
+  font-size: 14px!important;
+}
+
+.login .card-header {
+  background-color:#09c;
+}
+
+.login .card-title {
+  color:white;
+}
+
+.btn-green {
+  background-color:#00af3f;
+  color:white;
+}

@@ -1,5 +1,6 @@
 export class Usuario {
     codigo: string;
+    contrasenha: string;
     nombreCompleto: string;
     posicionCodigo: string;
     posicionNombre: string;
@@ -7,5 +8,4 @@ export class Usuario {
     centroCodigo: string;
     centroNombre: string;
     centroNivel: number;
-  }
-  
+}
