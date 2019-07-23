@@ -32,6 +32,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import {AppConfig} from './shared/services/config/app.config';
+import { LoginComponent } from './modules/login/login.component';
+import { NavegacionComponent } from './shared/components/navegacion/navegacion.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'encuestas', pathMatch: 'full' },
@@ -39,10 +41,11 @@ const routes: Routes = [
   {
     path: 'encuestas',
     children: [
-      { path: 'eps', component: EncEPSComponent }
+      { path: 'eps', component: EncEPSComponent },
       //{ path: 'centro', component: EncCentroComponent }
     ]
-  }
+  },
+  { path: 'login', component: LoginComponent }
 ];
 
 /*const routes: Routes = [
@@ -74,7 +77,9 @@ const routes: Routes = [
     EncLineaCanalComponent,
     //EncCentroComponent,
     EncEmpresaComponent,
-    EncEPSComponent
+    EncEPSComponent,
+    LoginComponent,
+    NavegacionComponent
   ],
   imports: [
     BrowserAnimationsModule,
