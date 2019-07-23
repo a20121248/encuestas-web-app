@@ -1,16 +1,15 @@
 
 
 
-.mat-column-codigo { 
+ .mat-column-codigo { 
     width: 20% !important;
   }
-.mat-column-nombre { 
+  
+ .mat-column-nombre { 
     width: 60% !important;
   }
   
-
-
-  .mat-column-porcentaje { 
+ .mat-column-porcentaje { 
     width: 20px !important;
   }
 

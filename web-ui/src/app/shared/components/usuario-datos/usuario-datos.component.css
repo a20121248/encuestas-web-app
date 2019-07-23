@@ -2,3 +2,15 @@
 
  
 
+  label {
+    font-weight: 600 !important;
+    color: #585a5b !important; 
+    font-size: 14px;
+    text-align: left;
+  }
+
+  input {
+    color: #585a5b !important; 
+    font-size: 14px;
+    text-align: left;
+  }
