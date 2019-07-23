@@ -14,7 +14,7 @@ import { Eps } from 'src/app/shared/models/eps';
   styleUrls: ['./eps.component.css']
 })
 export class EpsComponent implements OnInit {
-  private lstEps: Eps[] ;
+  private lstEps: Eps[] = [];
 
   dcEps = ['nombre', 'porcentaje'];
 
@@ -34,4 +34,7 @@ export class EpsComponent implements OnInit {
     return this.lstEps;
   }
 
+  getTotalPorcentaje(){
+    return this.lstEps.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+  }
 }
