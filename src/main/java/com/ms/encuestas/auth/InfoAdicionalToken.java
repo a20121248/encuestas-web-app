@@ -20,10 +20,17 @@ public class InfoAdicionalToken implements TokenEnhancer {
 	
 	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-		Usuario usuario = usuarioService.findByCodigo(authentication.getName());
+		Usuario usuario = usuarioService.findByCodigoWithPosicionFull(authentication.getName());
 		Map<String, Object> additionalInformation = new HashMap<>();
-		additionalInformation.put("info adicional", "Hola que tal: !".concat(authentication.getName()));
-		additionalInformation.put("nombre usuario ", usuario.getCodigo() + ": " + usuario.getNombre());
+		additionalInformation.put("nombre", usuario.getNombre());
+		additionalInformation.put("nombreCompleto", usuario.getNombreCompleto());
+		additionalInformation.put("posicionCodigo", usuario.getPosicion().getCodigo());
+		additionalInformation.put("posicionNombre", usuario.getPosicion().getNombre());
+		additionalInformation.put("areaNombre", usuario.getPosicion().getArea().getNombre());
+		additionalInformation.put("centroId", usuario.getPosicion().getCentro().getId());
+		additionalInformation.put("centroCodigo", usuario.getPosicion().getCentro().getCodigo());
+		additionalInformation.put("centroNombre", usuario.getPosicion().getCentro().getNombre());
+		additionalInformation.put("centroNivel", usuario.getPosicion().getCentro().getNivel());
 		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
 		
 		return accessToken;
