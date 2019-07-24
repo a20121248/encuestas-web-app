@@ -1,5 +1,5 @@
 <div class="card">
-    <h3 class="card-header text-center font-weight-bold text-uppercase py-4">DETALLE LINEA EPS</h3>
+    <h5 class="card-header text-center font-weight-bold text-uppercase">DETALLE LINEA EPS</h5>
     <div class="card-body">
       <div id="table" class="table-editable">
         <span class="table-add float-right mb-3 mr-2">
@@ -7,7 +7,7 @@
             <div fas icon="plus" size="2x"></div>
           </a>
         </span>
-        <table mat-table [dataSource]="lstEps" class="mat-elevation-z8">
+        <table mat-table [dataSource]="lstEps" class="design">
           <ng-container matColumnDef="nombre">
             <th mat-header-cell *matHeaderCellDef> LINEA </th>
             <td mat-cell *matCellDef="let eps"> {{eps.nombre}} </td>
@@ -16,8 +16,8 @@
         
           <ng-container matColumnDef="porcentaje">
             <th mat-header-cell *matHeaderCellDef> PORCENTAJE </th>
-            <td mat-cell *matCellDef="let eps">  
-              <mat-form-field class="example-full-width">
+            <td mat-cell class="input-porcentaje" *matCellDef="let eps">  
+              <mat-form-field style="width: 40px;">
                 <input type="number" matInput  [(ngModel)]="eps.porcentaje">
               </mat-form-field>
             </td>

@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Justificacion } from '../../../shared/models/justificacion';
+
 import {FormControl, Validators} from '@angular/forms';
+import { ViewChild } from '@angular/core';
+import { JustificacionService } from 'src/app/shared/services/justificacion.service';
+import { Router } from '@angular/router';
+
 
 export interface Justificacion {
   nombre: string;
@@ -15,15 +21,19 @@ export class JustificacionComponent implements OnInit {
   
   justificacionControl = new FormControl('', [Validators.required]);
   selectFormControl = new FormControl('', Validators.required);
-  lstJustificaciones: Justificacion[] = [
-    {nombre: 'Calculado en base a HH', id: 1},
-    {nombre: 'Calculado en base a procesos auditados', id: 2},
-    {nombre: 'Calculado en base a transacciones', id: 3},
-    {nombre: 'Calculado en base a esfuerzo estimado', id: 4},
-    {nombre: 'Otros', id: 5}
-  ];
-  constructor() { }
+  lstJustificaciones: Justificacion[];
+  
+  constructor(private justificacionService: JustificacionService,
+    private router: Router) { }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+      this.justificacionService.getJustificaciones().subscribe(justificaciones=>{ 
+        this.lstJustificaciones=justificaciones;
+        }
+      );
+    }
+
+    getLstEmpresas(){
+      return this.lstJustificaciones;
+    }
 }

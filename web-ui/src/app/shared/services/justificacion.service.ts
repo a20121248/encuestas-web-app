@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Eps } from '../models/eps';
+import { Justificacion } from '../models/justificacion';
 import { throwError, of, Observable } from 'rxjs';
 import {HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 
@@ -8,8 +8,8 @@ import {HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
   providedIn: 'root'
 })
 
-export class EpsService {
-  private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas/2/centros';
+export class JustificacionService {
+  private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/justificaciones';
   private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
 
   constructor(private http: HttpClient) { }
@@ -18,19 +18,12 @@ export class EpsService {
     return throwError(error);
   }
 
-//   listEps: Eps[] = [];
+  getJustificaciones(): Observable<Justificacion[]> {
 
-  getEps(): Observable<Eps[]> {
-
-    return this.http.get<Eps[]>(this.urlEndPoint);
-    
-  }
-  getEpsPorc(): Observable<Eps[]> {
-
-    return this.http.get<Eps[]>(this.urlEndPoint);
+    return this.http.get<Justificacion[]>(this.urlEndPoint);  
   }
 
-  postRespuesta(eps: Eps[]):any {
+  postRespuesta(justificaciones: Justificacion[]):any {
     fetch(this.urlEndPoint,
       {
         headers: {
@@ -38,7 +31,7 @@ export class EpsService {
         'Content-Type': 'application/json'
         },
         method: "POST",
-        body: JSON.stringify(eps)
+        body: JSON.stringify(justificaciones)
       })
       .then(function(res){ console.log(res) })
       .catch(function(res){ console.log(res) });
