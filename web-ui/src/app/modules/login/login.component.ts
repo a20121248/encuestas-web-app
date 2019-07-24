@@ -18,6 +18,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.isAuthenticated()) {
+      swal.fire('Login', `Hola ${this.authService.usuario.nombre}, ya iniciaste sesión anteriormente.`, 'info');
+      this.router.navigate(['/encuestas']);
+    }
   }
 
   login(): void {
@@ -29,9 +33,20 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.usuario).subscribe(
       response => {
         console.log(response);
+        //let payload = JSON.parse(atob(response.access_token.split('.')[1]));
+        //console.log(payload);
+
+        this.authService.guardarUsuario(response.access_token);
+        this.authService.guardarToken(response.access_token);
+        let usuario = this.authService.usuario;
         this.router.navigate(['/encuestas']);
-        swal.fire('Login', `Hola ${response.codigo}, has iniciado sesión con éxito!`, 'success');
-      });
+        swal.fire('Login', `Hola ${usuario.nombre}, has iniciado sesión con éxito!`, 'success');
+      }, err => {
+        if (err.status == 400) {
+          swal.fire('Error en iniciar sesión', 'Usuario o clave incorrecta.', 'error');
+        }
+      }
+      );
   }
 
 }
