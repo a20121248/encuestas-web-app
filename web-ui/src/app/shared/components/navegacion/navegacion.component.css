@@ -8,3 +8,16 @@ nav a {
     color: white;
     font-weight: 600;
     }
+
+button.btn {
+        color: white;
+        font-weight: 600;
+}
+button.btn:hover {
+
+    background:#0075b0;
+}   
+
+nav li:hover {
+    background:#0075b0;
+} 
