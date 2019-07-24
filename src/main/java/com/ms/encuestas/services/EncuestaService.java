@@ -31,5 +31,10 @@ public class EncuestaService implements EncuestaServiceI {
 		System.out.println(String.format("procesoId: %d", procesoId));
 		System.out.println(String.format("posicionCodigo: %s", posicionCodigo));
 		return encuestaRepository.getEncuestaCentro(empresaId, procesoId, posicionCodigo);
-	}    
+	}
+	
+	@Override
+	public void saveLstCentros(List<Centro> lstCentros, Long procesoId, String posicionCodigo) {
+		encuestaRepository.saveEncuestaCentro(lstCentros, procesoId, posicionCodigo);
+	}
 }

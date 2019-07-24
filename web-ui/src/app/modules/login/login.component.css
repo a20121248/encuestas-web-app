@@ -6,7 +6,7 @@
 }
 
 .login h5 {
-  font-size: 14px!important;
+  font-size: 17px!important;
 }
 
 .login input {
@@ -19,6 +19,7 @@
 
 .login .btn {
   font-size: 14px!important;
+  width: 100px!important;
 }
 
 .login .card-header {

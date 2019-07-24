@@ -64,4 +64,13 @@ public class EncuestaController {
 		String posicionCodigo = "208829";
 		this.encuestaService.saveLstEmpresas(lstEmpresas, procesoId, posicionCodigo);
 	}
+	
+	@PostMapping("/encuesta/empresas/{empresaId}/centros")
+	@ResponseStatus(HttpStatus.CREATED)
+	public void create(@PathVariable Long empresaId, @RequestBody List<Centro> lstCentros) {
+		System.out.println("cnt" + lstCentros.size());
+		Long procesoId = Long.valueOf(2);
+		String posicionCodigo = "208829";
+		this.encuestaService.saveLstCentros(lstCentros, procesoId, posicionCodigo);
+	}
 }

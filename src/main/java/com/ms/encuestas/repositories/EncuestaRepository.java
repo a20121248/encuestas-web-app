@@ -84,14 +84,18 @@ public class EncuestaRepository {
 	}
 	
 	public void saveEncuestaCentro(List<Centro> lstCentros, Long procesoId, String posicionCodigo) {
-		String sql;
+		String sql = "DELETE FROM encuesta_centro\n" +
+		             " WHERE posicion_codigo=:posicion_codigo\n" +
+		             "   AND proceso_id=:proceso_id";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("posicion_codigo", posicionCodigo);
+		paramMap.put("proceso_id", procesoId);
+		plantilla.update(sql,paramMap);
+		
 		for (Centro centro: lstCentros) {
-			sql = "UPDATE encuesta_centro\n"+
-                  "   SET porcentaje=:porcentaje\n" +
-			      " WHERE posicion_codigo=:posicion_codigo\n" + 
-			      "   AND proceso_id=:proceso_id\n" + 
-			      "   AND centro_id=:centro_id";
-			Map<String, Object> paramMap = new HashMap<String, Object>();
+			sql = "INSERT INTO encuesta_centro(proceso_id,posicion_codigo,centro_id,porcentaje)\n" +
+                  "VALUES (:proceso_id,:posicion_codigo,:centro_id,:porcentaje)";
+			paramMap = new HashMap<String, Object>();
 			paramMap.put("posicion_codigo", posicionCodigo);
 			paramMap.put("proceso_id", procesoId);
 	        paramMap.put("centro_id", centro.getId());
