@@ -7,16 +7,13 @@ import { Canal } from '../models/canal';
   providedIn: 'root'
 })
 export class CanalService {
-  private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresa';
+  private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas/2/centros';
   private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
 
   constructor(private http: HttpClient) { }
 
   getCanal(): Observable<Canal[]> {
     return this.http.get<Canal[]>(this.urlEndPoint);  
-  }
-  getLineaCanalPorc(): Observable<Canal[]> {
-    return this.http.get<Canal[]>(this.urlEndPoint);
   }
 
   postRespuesta(lstCanal: Canal[]):any {

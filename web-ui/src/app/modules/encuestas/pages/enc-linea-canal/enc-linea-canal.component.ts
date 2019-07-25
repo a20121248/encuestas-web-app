@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Location } from '@angular/common';
+
 import { LineaCanalService } from 'src/app/shared/services/linea-canal.service';
 import { LineaCanalComponent } from '../../components/linea-canal/linea-canal.component';
 import { LineaCanal } from 'src/app/shared/models/linea-canal';
@@ -17,7 +19,10 @@ export class EncLineaCanalComponent implements OnInit {
   
   titulo = 'Herramienta de encuestas';
 
-  constructor(private lineaCanalService: LineaCanalService) { }
+  constructor(
+    private lineaCanalService: LineaCanalService,
+    private location:Location
+    ) { }
 
   @ViewChild(LineaCanalComponent, {static: false})  lineaCanalComponent: LineaCanalComponent ;
 
@@ -29,4 +34,7 @@ export class EncLineaCanalComponent implements OnInit {
     this.lineaCanalService.postRespuesta (this.lstLineaCanal);
   }
 
+  goBack(){
+    this.location.back();
+  }
 }

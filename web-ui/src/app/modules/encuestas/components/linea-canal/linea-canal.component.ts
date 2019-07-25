@@ -27,6 +27,7 @@ export class LineaCanalComponent implements OnInit {
   ngOnInit() {
     this.lineaService.getLinea().subscribe(linea => {
       this.lstLinea = linea;
+      console.log(this.lstLinea);
     });
     this.canalService.getCanal().subscribe(canal => {
       this.lstCanal = canal;
