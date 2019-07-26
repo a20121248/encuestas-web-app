@@ -13,4 +13,5 @@ public interface UsuarioServiceI {
 	public Usuario save(Usuario usuario);
 	public void delete(Usuario usuario);
 	public void deleteById(String codigo);
+	public List<Usuario> findUsuariosDependientesByCodigo(Long procesoId, String usuarioCodigo);
 }

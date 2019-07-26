@@ -35,6 +35,13 @@ public class UsuarioController {
 	public List<Usuario> index() throws Exception {
 		return usuarioService.findAll();
 	}
+	
+	@GetMapping("/usuarios-dependientes")
+	public List<Usuario> findUsuariosDependientes() throws Exception {
+		Long procesoId = new Long(2);
+		String posicionCodigo = "208829";
+		return usuarioService.findUsuariosDependientesByCodigo(procesoId, posicionCodigo);
+	}
 
 	@GetMapping("/usuarios/{codigo}")
 	public ResponseEntity<?> show(@PathVariable String codigo) {

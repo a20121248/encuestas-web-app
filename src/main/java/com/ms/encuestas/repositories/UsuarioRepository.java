@@ -15,6 +15,13 @@ public class UsuarioRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 
+	public List<Usuario> findUsuariosDependientesByCodigo(Long procesoId, String usuarioCodigo) {
+		String sql = "SELECT * FROM usuarios WHERE codigo='364084' OR codigo='588748' OR codigo='583287'";
+		return plantilla.query(sql,
+				new MapSqlParameterSource("codigo", usuarioCodigo),
+				new UsuarioMapper());
+	}
+	
 	public Long count() {
 		String sql = "SELECT COUNT(1) FROM usuarios WHERE fecha_eliminacion IS NULL";
 		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
