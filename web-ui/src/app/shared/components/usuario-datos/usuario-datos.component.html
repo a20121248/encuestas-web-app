@@ -3,33 +3,33 @@
     <div class="form-group row">
       <label for="colaborador" class="col-sm-2 col-form-label">COLABORADOR:</label>
       <div class="col-sm-4">
-        <input type="text" readonly class="form-control" value="{{ authService.usuario.nombreCompleto }}">
+        <input type="text" readonly class="form-control" value="{{ usuario.nombreCompleto }}">
       </div>
       <label for="area" class="col-sm-2 col-form-label">ÁREA:</label>
       <div class="col-sm-4">
-        <input type="text" readonly class="form-control" value="{{ authService.usuario.areaNombre }}">
+        <input type="text" readonly class="form-control" value="{{ usuario.areaNombre }}">
       </div>
     </div>
 
     <div class="form-group row">
       <label for="matricula" class="col-sm-2 col-form-label">MATRÍCULA:</label>
       <div class="col-sm-4">
-        <input type="text" readonly class="form-control" value="{{ authService.usuario.codigo }}">
+        <input type="text" readonly class="form-control" value="{{ usuario.codigo }}">
       </div>
       <label for="centro" class="col-sm-2 col-form-label">CENTRO DE COSTOS:</label>
       <div class="col-sm-4">
-        <input type="text" readonly class="form-control" value="{{ authService.usuario.centroCodigo }}">
+        <input type="text" readonly class="form-control" value="{{ usuario.centroNombre }}">
       </div>
     </div>
 
       <div class="form-group row mb-0">
         <label for="posicion" class="col-sm-2 col-form-label">POSICIÓN:</label>
         <div class="col-sm-4">
-          <input type="text" readonly class="form-control" value="{{ authService.usuario.posicionNombre }}">
+          <input type="text" readonly class="form-control" value="{{ usuario.posicionNombre }}">
         </div>
         <label for="nivel" class="col-sm-2 col-form-label">NIVEL:</label>
         <div class="col-sm-4">
-          <input type="text" readonly class="form-control" value="{{ authService.usuario.centroNivel }}">
+          <input type="text" readonly class="form-control" value="{{ usuario.centroNivel }}">
         </div>
       </div>
 

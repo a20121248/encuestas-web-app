@@ -48,12 +48,12 @@ import { ReportesResultadosComponent } from './modules/reportes/components/repor
 import { ReportesComponent } from './modules/reportes/pages/reportes/reportes.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'encuestas', pathMatch: 'full' },
-  { path: 'encuestas', component: EncEmpresaComponent },
+  { path: '', redirectTo: 'encuesta', pathMatch: 'full' },
+  { path: 'usuario', component: SeleccionarUsuarioComponent },
+  { path: 'usuario/:codigo/encuesta', component: EncEmpresaComponent },
   {
     path: 'encuestas',
     children: [
-      { path: 'seleccionar-usuario', component: SeleccionarUsuarioComponent },
       { path: 'eps', component: EncEPSComponent },
       { path: 'centro', component: EncCentroComponent },
       { path: 'linea', component: EncLineaComponent },

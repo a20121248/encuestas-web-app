@@ -1,6 +1,7 @@
 export class Usuario {
     codigo: string; //Matricula
     nombre: string;
+    contrasenha: string;
     nombreCompleto: string;
     posicionCodigo: string;
     posicionNombre: string;
