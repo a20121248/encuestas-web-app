@@ -9,6 +9,7 @@ import { Usuario } from '../models/usuario';
 export class AuthService {
   private _usuario: Usuario;
   private _token: string;
+  private _seleccionado: Usuario;
 
   constructor(private http: HttpClient) { }
 
@@ -20,6 +21,17 @@ export class AuthService {
       return this._usuario;
     }
     return new Usuario();
+  }
+
+  public get seleccionado(): Usuario {
+    return this._seleccionado;
+    if (this._seleccionado != null) {
+    }
+    return new Usuario();
+  }
+
+  setSeleccionado(seleccionado: Usuario): void {
+    this._seleccionado = seleccionado;
   }
 
   public get token(): string {

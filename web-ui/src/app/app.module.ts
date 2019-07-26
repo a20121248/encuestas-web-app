@@ -35,18 +35,37 @@ import { HttpClientModule } from '@angular/common/http';
 import {AppConfig} from './shared/services/config/app.config';
 import { LoginComponent } from './modules/login/login.component';
 import { NavegacionComponent } from './shared/components/navegacion/navegacion.component';
+import { LineaComponent } from './modules/encuestas/components/linea/linea.component';
+import { CanalComponent } from './modules/encuestas/components/canal/canal.component';
+import { EncLineaComponent } from './modules/encuestas/pages/enc-linea/enc-linea.component';
+import { EncCanalComponent } from './modules/encuestas/pages/enc-canal/enc-canal.component';
+import { SeleccionarUsuarioComponent } from './modules/encuestas/pages/seleccionar-usuario/seleccionar-usuario.component';
+import { CargarUsuariosComponent } from './modules/mantenimientos/components/cargar-usuarios/cargar-usuarios.component';
+import { ProcesoComponent } from './modules/mantenimientos/components/proceso/proceso.component';
+import { MantenimientosComponent } from './modules/mantenimientos/pages/mantenimientos/mantenimientos.component';
+import { ReportesControlComponent } from './modules/reportes/components/reportes-control/reportes-control.component';
+import { ReportesResultadosComponent } from './modules/reportes/components/reportes-resultados/reportes-resultados.component';
+import { ReportesComponent } from './modules/reportes/pages/reportes/reportes.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'encuestas', pathMatch: 'full' },
-  { path: 'encuestas', component: EncEmpresaComponent },
+  { path: '', redirectTo: 'encuesta', pathMatch: 'full' },
+  { path: 'usuario', component: SeleccionarUsuarioComponent },
+  { path: 'usuario/:codigo/encuesta', component: EncEmpresaComponent },
   {
     path: 'encuestas',
     children: [
       { path: 'eps', component: EncEPSComponent },
-      { path: 'centro', component: EncCentroComponent }
+      { path: 'centro', component: EncCentroComponent },
+      { path: 'linea', component: EncLineaComponent },
+      { path: 'canal', component: EncCanalComponent },
+      { path: 'linea-canal', component: EncLineaCanalComponent },
+      { path: 'producto-subcanal', component: EncProductoSubCanalComponent }
     ]
   },
+  { path: 'mantenimientos', component: MantenimientosComponent },
+  { path: 'reportes', component: ReportesComponent },
   { path: 'login', component: LoginComponent }
+
 ];
 
 /*const routes: Routes = [
@@ -80,7 +99,18 @@ const routes: Routes = [
     EncEmpresaComponent,
     EncEPSComponent,
     LoginComponent,
-    NavegacionComponent
+    NavegacionComponent,
+    LineaComponent,
+    CanalComponent,
+    EncLineaComponent,
+    EncCanalComponent,
+    SeleccionarUsuarioComponent,
+    CargarUsuariosComponent,
+    ProcesoComponent,
+    MantenimientosComponent,
+    ReportesControlComponent,
+    ReportesResultadosComponent,
+    ReportesComponent
   ],
   imports: [
     BrowserAnimationsModule,

@@ -3,7 +3,7 @@ import { Empresa } from '../../../../shared/models/empresa';
 import { EmpresaComponent } from '../../components/empresa/empresa.component';
 import { ViewChild } from '@angular/core';
 import { EmpresaService } from 'src/app/shared/services/empresa.service';
-
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -14,12 +14,14 @@ import { EmpresaService } from 'src/app/shared/services/empresa.service';
 export class EncEmpresaComponent implements OnInit {
   lstEmpresas: Empresa[];
   titulo = 'Herramienta de encuestas';
+  usuarioCodigo: string;
 
-  constructor(private empresaService: EmpresaService) { }
+  constructor(private empresaService: EmpresaService, private _activatedRoute:ActivatedRoute) { }
 
   @ViewChild(EmpresaComponent, {static: false})  empresaComponent: EmpresaComponent ;
 
   ngOnInit() {
+    this.usuarioCodigo = this._activatedRoute.snapshot.paramMap.get('codigo');
   }
 
   guardarEncuesta(){

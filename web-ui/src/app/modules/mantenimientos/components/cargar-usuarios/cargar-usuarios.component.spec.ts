@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EncProductoCanalComponent } from './enc-producto-canal.component';
+import { CargarUsuariosComponent } from './cargar-usuarios.component';
 
-describe('EncProductoCanalComponent', () => {
-  let component: EncProductoCanalComponent;
-  let fixture: ComponentFixture<EncProductoCanalComponent>;
+describe('CargarUsuariosComponent', () => {
+  let component: CargarUsuariosComponent;
+  let fixture: ComponentFixture<CargarUsuariosComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EncProductoCanalComponent ]
+      declarations: [ CargarUsuariosComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EncProductoCanalComponent);
+    fixture = TestBed.createComponent(CargarUsuariosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
