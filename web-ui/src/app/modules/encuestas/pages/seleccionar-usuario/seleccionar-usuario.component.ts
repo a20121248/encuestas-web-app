@@ -29,14 +29,4 @@ export class SeleccionarUsuarioComponent implements OnInit {
     }
     );
   }
-
-  getUsuariosDependientes() {
-    return this.lstUsuario;
-  }
-
-  completarEncuesta(usuario: Usuario) {
-    //this.authService.setSeleccionado(usuario);
-    //this.router.navigateByUrl("/encuestas");
-    //swal.fire('titul', 'usuario: ' + this.authService.seleccionado.nombre, 'info');
-  }
 }

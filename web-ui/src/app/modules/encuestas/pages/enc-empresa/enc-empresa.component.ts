@@ -36,19 +36,10 @@ export class EncEmpresaComponent implements OnInit {
   ngOnInit() {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.empresaService.obtenerEncuesta(this.posicionCodigo).subscribe(encuesta => {
-      this.encuesta = encuesta;
       this.lstEmpresas = encuesta.lstItems as Empresa[];
       this.observaciones = encuesta.observaciones;
       this.justificacion = encuesta.justificacion;
     });
-    /*this.empresaService.obtenerEncuesta(this.usuarioDatosComponent.usuario.posicion.codigo).subscribe(encuesta => {
-      this.encuesta = encuesta;
-    });
-    console.log(this.encuesta);*/
-  }
-
-  ngAfterViewInit() {
-
   }
 
   guardarEncuesta() {
@@ -56,7 +47,7 @@ export class EncEmpresaComponent implements OnInit {
     this.encuesta.lstItems = this.empresaComponent.lstEmpresas;
     this.encuesta.justificacion = this.justificacionComponent.justificacion;
     this.encuesta.observaciones = this.justificacionComponent.observaciones;
-    this.empresaService.guardarEncuesta(this.encuesta, this.usuarioDatosComponent.usuario.posicion.codigo).subscribe(
+    this.empresaService.guardarEncuesta(this.encuesta, this.posicionCodigo).subscribe(
       response => console.log(response),
       err => console.log(err)
     );
