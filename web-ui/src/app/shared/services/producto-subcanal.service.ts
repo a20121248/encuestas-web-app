@@ -1,19 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { throwError, of, Observable } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 import { AppConfig } from 'src/app/shared/services/app.config';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { Empresa } from 'src/app/shared/models/empresa';
 import { Encuesta } from 'src/app/shared/models/encuesta';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EmpresaService {
-  private urlEndPoint = 'http://localhost:8080/api/encuesta/empresas';
+export class ProductoSubcanalService {
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   protected urlServer = AppConfig.settings.urlServer;
 
