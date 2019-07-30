@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {EpsService} from '../../../../shared/services/eps.service';
@@ -14,25 +14,18 @@ import { Eps } from 'src/app/shared/models/eps';
   styleUrls: ['./eps.component.css']
 })
 export class EpsComponent implements OnInit {
-  private lstEps: Eps[] = [];
+  @Input() lstEps: Eps[];
 
   dcEps = ['nombre', 'porcentaje'];
 
-  constructor( private epsService: EpsService, 
-    private http: HttpClient) { }
+  constructor() { }
 
   ngOnInit() {
-    this.epsService.getEps().subscribe(eps=>{ 
-      this.lstEps=eps;
-      }
-    );
+  this.lstEps = [];
   }
 
   editField: number;
   
-  getLstEps(){
-    return this.lstEps;
-  }
 
   getTotalPorcentaje(){
     return this.lstEps.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);

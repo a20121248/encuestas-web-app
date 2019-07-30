@@ -2,6 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
+import { Router, ActivatedRoute } from "@angular/router";
+
 //-------------------COMPONENTES LOCALES----------------------------------
 
 import { Centro } from  '../../../../shared/models/centro';
@@ -20,7 +22,8 @@ export class EncCentroComponent implements OnInit {
 
   constructor(
     private centroService: CentroService,
-    private location: Location  ) { }
+    private activatedRoute: ActivatedRoute,
+    private location: Location ) { }
 
   @ViewChild(CentroComponent, {static: false})  centroComponent: CentroComponent ;
 
