@@ -1,37 +1,55 @@
+mat-option {
+  padding: 0 11px 0;
+  line-height: 15px;
+  height: 15px;
+  font-size: 14px!important;
+}
+mat-option.mat-active {
+/*   background: blue; */
+}
+
+mat-form-field {
+  width: 280px;
+  font-size: 16px;
+}
+
+mat-card-content > div {
+  margin-top: 5px;
+}
+
+mat-card-content {
+  margin-bottom: 5px;
+}
+
+.login-main {
+  margin-top: 10%;
+}
+
+mat-card {
+  min-width: 50%;
+  background: rgba(242,242,242,0.3);
+  padding: 20px 0 35px;
+}
+
+mat-card mat-card-header mat-card-title {
+  font-size:23px;
+  font-weight: 600;
+  color: #09c;
+  margin: 4px;
+}
+
+.logopage {
+  margin-top: 20px;
+}
+
+mat-card-content > div > mat-icon {
+  margin-right:13px;
+}
+
 .login {
   text-align:center;
-	background-image:url(https://www3.pacificoseguros.com/loginPacifico/images/facebook/degrade_superior.jpg);
+	background-image:url('../.././../assets/img/degrade_superior.jpg');
 	background-position:center top;
   background-repeat:repeat-x;
   background-color:white;
-}
-
-.login h5 {
-  font-size: 17px!important;
-}
-
-.login input {
-  font-size: 14px!important;
-}
-
-.login .btn {
-  font-size: 14px!important;
-}
-
-.login .btn {
-  font-size: 14px!important;
-  width: 100px!important;
-}
-
-.login .card-header {
-  background-color:#09c !important;
-}
-
-.login .card-title {
-  color:white;
-}
-
-.btn-green {
-  background-color:#00af3f;
-  color:white;
 }

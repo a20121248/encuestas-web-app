@@ -77,6 +77,12 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	
 	@Override
 	@Transactional(readOnly = true)
+	public Usuario findByPosicionCodigo(String posicionCodigo) {
+		return usuarioRepository.findByPosicionCodigo(posicionCodigo);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
 	public Usuario findByCodigoWithPosicion(String codigo) {
 		return usuarioRepository.findByCodigoWithPosicion(codigo);
 	}

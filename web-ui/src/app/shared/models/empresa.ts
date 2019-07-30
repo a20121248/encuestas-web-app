@@ -1,8 +1,6 @@
 export class Empresa {
-    id: number;
-    codigo: string;
-    nombre: string;
-    fechaCreacion: Date;
-    porcentaje: number;
-  }
-  
+  id: number;
+  nombre: string;
+  fechaCreacion: Date;
+  porcentaje: number;
+}

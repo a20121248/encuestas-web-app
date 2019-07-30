@@ -8,7 +8,8 @@ public class Area implements Serializable {
 	private Long id;
 	private String nombre;
 	private Date fechaCreacion;
-	private Division division;
+	private Date fechaActualizacion;
+	private String division;
 
 	public Long getId() {
 		return id;
@@ -33,12 +34,20 @@ public class Area implements Serializable {
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
+	
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
 
-	public Division getDivision() {
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public String getDivision() {
 		return division;
 	}
 
-	public void setDivision(Division division) {
+	public void setDivision(String division) {
 		this.division = division;
 	}
 }

@@ -14,6 +14,7 @@ public class JustificacionMapper implements RowMapper<Justificacion> {
 		justificacion.setId(rs.getLong("id"));
 		justificacion.setNombre(rs.getString("nombre"));
 		justificacion.setFechaCreacion(rs.getDate("fecha_creacion"));
+		justificacion.setFechaActualizacion(rs.getDate("fecha_actualizacion"));
 		return justificacion;
 	}
 }

@@ -51,10 +51,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		TokenEnhancerChain tokenEnhacEnhancerChain = new TokenEnhancerChain();
 		tokenEnhacEnhancerChain.setTokenEnhancers(Arrays.asList(infoAdicionalToken, accessTokenConverter()));
 		
-		endpoints.authenticationManager(authenticationManager)
-		.tokenStore(tokenStore())
-		.accessTokenConverter(accessTokenConverter())
-		.tokenEnhancer(tokenEnhacEnhancerChain);		
+		endpoints
+			.authenticationManager(authenticationManager)
+			.tokenStore(tokenStore())
+			.accessTokenConverter(accessTokenConverter())
+			.tokenEnhancer(tokenEnhacEnhancerChain);		
 	}
 
 	@Bean
@@ -64,7 +65,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
-		JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-		return jwtAccessTokenConverter;
+        CustomJwtAccessTokenConverter accessTokenConverter = new CustomJwtAccessTokenConverter();
+        //accessTokenConverter.setSigningKey("a1b2c3d4e5f6g");
+        return accessTokenConverter;
+		//JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+		//return jwtAccessTokenConverter;
 	}	
 }

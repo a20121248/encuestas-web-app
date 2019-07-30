@@ -36,16 +36,15 @@ public class UsuarioController {
 		return usuarioService.findAll();
 	}
 	
-	@GetMapping("/usuarios-dependientes")
-	public List<Usuario> findUsuariosDependientes() throws Exception {
-		Long procesoId = new Long(2);
-		String posicionCodigo = "208829";
+	@GetMapping("/procesos/{procesoId}/usuarios-dependientes/{posicionCodigo}")
+	public List<Usuario> findUsuariosDependientes(@PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
 		return usuarioService.findUsuariosDependientesByCodigo(procesoId, posicionCodigo);
 	}
 
 	@GetMapping("/usuarios/{codigo}")
-	public ResponseEntity<?> show(@PathVariable String codigo) {
-		Usuario usuario = null;
+	public Usuario show(@PathVariable String codigo) {
+		return this.usuarioService.findByCodigo(codigo);
+		/*Usuario usuario = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
 			usuario = this.usuarioService.findByCodigo(codigo);
@@ -60,7 +59,12 @@ public class UsuarioController {
 		response.put("codigo",usuario.getCodigo());
 		response.put("nombreCompleto",usuario.getNombreCompleto());
 		response.put("fechaCompleto",usuario.getFechaCreacion());
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);*/
+	}
+	
+	@GetMapping("/usuarios/posicion/{posicionCodigo}")
+	public Usuario showByPosicionCodigo(@PathVariable String posicionCodigo) {
+		return this.usuarioService.findByPosicionCodigo(posicionCodigo);
 	}
 
 	@PostMapping("/usuarios")

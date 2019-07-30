@@ -1,11 +1,15 @@
-.mat-column-codigo { 
-    width: 20% !important;
-  }
-  
- .mat-column-nombre { 
-    width: 60% !important;
-  }
-  
- .mat-column-area { 
-    width: 20% !important;
-  }
+.mat-column-codigo {
+  width: 10% !important;
+}
+
+.mat-column-nombre {
+  width: 50% !important;
+}
+
+.mat-column-area {
+  width: 30% !important;
+}
+
+.mat-column-completar {
+  width: 10% !important;
+}

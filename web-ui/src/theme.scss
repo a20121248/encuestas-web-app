@@ -1,0 +1,112 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$azul: (
+    50 : #e0f3f9,
+    100 : #b3e0f0,
+    200 : #80cce6,
+    300 : #4db8db,
+    400 : #26a8d4,
+    500 : #0099cc,
+    600 : #0091c7,
+    700 : #0086c0,
+    800 : #007cb9,
+    900 : #006bad,
+    A100 : #d7edff,
+    A200 : #a4d7ff,
+    A400 : #71c0ff,
+    A700 : #58b5ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+$verde: (
+    50 : #e0f5e8,
+    100 : #b3e7c5,
+    200 : #80d79f,
+    300 : #4dc779,
+    400 : #26bb5c,
+    500 : #00af3f,
+    600 : #00a839,
+    700 : #009f31,
+    800 : #009629,
+    900 : #00861b,
+    A100 : #b3ffbc,
+    A200 : #80ff8f,
+    A400 : #4dff63,
+    A700 : #33ff4d,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+$naranja: (
+    50 : #ffece3,
+    100 : #ffd0ba,
+    200 : #ffb18c,
+    300 : #ff925e,
+    400 : #ff7a3c,
+    500 : #ff6319,
+    600 : #ff5b16,
+    700 : #ff5112,
+    800 : #ff470e,
+    900 : #ff3508,
+    A100 : #ffffff,
+    A200 : #fff6f4,
+    A400 : #ffcac1,
+    A700 : #ffb4a7,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+// below creates a primary palette with three shades of blue
+$my-app-primary: mat-palette($azul);
+$my-app-accent:  mat-palette($verde);
+$my-app-warn:    mat-palette($naranja);
+$my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
+@include angular-material-theme($my-app-theme);
+.alternate-theme {
+  $alternate-primary: mat-palette($mat-light-blue);
+  $alternate-accent:  mat-palette($mat-yellow, 400);
+  $alternate-theme: mat-light-theme($alternate-primary, $alternate-accent);
+  @include angular-material-theme($alternate-theme);
+}

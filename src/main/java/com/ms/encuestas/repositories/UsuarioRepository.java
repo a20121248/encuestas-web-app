@@ -1,6 +1,8 @@
 package com.ms.encuestas.repositories;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,11 +17,31 @@ public class UsuarioRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 
-	public List<Usuario> findUsuariosDependientesByCodigo(Long procesoId, String usuarioCodigo) {
-		String sql = "SELECT * FROM usuarios WHERE codigo='364084' OR codigo='588748' OR codigo='583287'";
-		return plantilla.query(sql,
-				new MapSqlParameterSource("codigo", usuarioCodigo),
-				new UsuarioMapper());
+	public List<Usuario> findUsuariosDependientesByCodigo(Long procesoId, String posicionCodigo) {
+		String sql = "SELECT A.usuario_codigo,\n" +
+					 "       B.contrasenha usuario_contrasenha,\n" + 
+					 "       B.nombre_completo usuario_nombre_completo,\n" + 
+					 "       B.fecha_creacion usuario_fecha_creacion,\n" + 
+					 "       B.fecha_actualizacion usuario_fecha_actualizacion,\n" + 
+					 "       A.area_id,\n" + 
+					 "       C.nombre area_nombre,\n" +
+					 "       C.division area_division,\n" +
+					 "       C.fecha_creacion area_fecha_creacion,\n" + 
+					 "       C.fecha_actualizacion area_fecha_actualizacion,\n" +
+					 "       D.codigo posicion_codigo,\n" + 
+					 "       D.nombre posicion_nombre,\n" + 
+					 "       D.fecha_creacion posicion_fecha_creacion,\n" + 
+					 "       D.fecha_actualizacion posicion_fecha_actualizacion\n" +
+					 "  FROM posicion_datos A\n" + 
+					 "  JOIN usuarios B ON A.usuario_codigo=B.codigo\n" + 
+					 "  JOIN areas C ON A.area_id=C.id\n" +
+					 "  JOIN posiciones D ON A.posicion_codigo=D.codigo\n" +
+					 " WHERE proceso_id=:procesoId\n" + 
+					 "   AND responsable_posicion_codigo=:posicionCodigo";
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("procesoId", procesoId);
+        paramMap.put("posicionCodigo", posicionCodigo);
+		return plantilla.query(sql, paramMap, new UsuarioMapper());
 	}
 	
 	public Long count() {
@@ -33,26 +55,105 @@ public class UsuarioRepository {
 	}
 
 	public Usuario findByCodigo(String codigo) throws EmptyResultDataAccessException {
-		String sql = "SELECT *\n" +
-					 "  FROM usuarios\n" +
-				     " WHERE codigo=:codigo" +
-					 "   AND fecha_eliminacion IS NULL";
+		String sql = "SELECT A.codigo usuario_codigo,\n" +
+				     "       A.contrasenha usuario_contrasenha,\n" +
+				     "       A.nombre_completo usuario_nombre_completo,\n" +
+				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
+				     "       A.fecha_actualizacion usuario_fecha_actualizacion,\n" +
+				     "       B.posicion_codigo,\n" +
+				     "       C.nombre posicion_nombre,\n" +
+				     "       C.fecha_creacion posicion_fecha_creacion,\n" +
+				     "       C.fecha_actualizacion posicion_fecha_actualizacion,\n" +
+				     "       B.area_id,\n" +
+				     "       D.nombre area_nombre,\n" +
+				     "       D.division area_division,\n" +
+				     "       D.fecha_creacion area_fecha_creacion,\n" +
+				     "       D.fecha_actualizacion area_fecha_actualizacion,\n" +
+				     "       B.centro_id,\n" +
+				     "       E.codigo centro_codigo,\n" +
+				     "       E.nombre centro_nombre,\n" +
+				     "       E.nivel centro_nivel,\n" +
+				     "       E.fecha_creacion centro_fecha_creacion,\n" +
+				     "       E.fecha_actualizacion centro_fecha_actualizacion,\n" +
+				     "       E.centro_tipo_id,\n" +
+				     "       F.nombre centro_tipo_nombre,\n" +
+				     "       F.fecha_creacion centro_tipo_fec_creacion,\n" +
+				     "       F.fecha_actualizacion centro_tipo_fec_actualizacion,\n" +
+				     "       E.centro_grupo_id,\n" +
+				     "       G.nombre centro_grupo_nombre,\n" +
+				     "       G.fecha_creacion centro_grupo_fec_creacion,\n" +
+				     "       G.fecha_actualizacion centro_grupo_fec_actualizacion\n" +
+					 "  FROM usuarios A\n" +
+					 "  LEFT JOIN posicion_datos B ON A.codigo=B.usuario_codigo\n" +
+					 "  LEFT JOIN posiciones C ON B.posicion_codigo=C.codigo\n" +
+					 "  LEFT JOIN areas D ON B.area_id=D.id\n" +
+					 "  LEFT JOIN centros E ON B.centro_id=E.id\n" +
+					 "  LEFT JOIN centro_tipos F ON E.centro_tipo_id=F.id\n" +
+					 "  LEFT JOIN centro_grupos G ON E.centro_grupo_id=G.id\n" +
+				     " WHERE A.codigo=:codigo\n" +
+					 "   AND A.fecha_eliminacion IS NULL";
 		return plantilla.queryForObject(sql,
 				new MapSqlParameterSource("codigo", codigo),
 				new UsuarioMapper());
 	}
 	
+	public Usuario findByPosicionCodigo(String posicionCodigo) throws EmptyResultDataAccessException {
+		String sql = "SELECT A.codigo usuario_codigo,\n" +
+				     "       A.contrasenha usuario_contrasenha,\n" +
+				     "       A.nombre_completo usuario_nombre_completo,\n" +
+				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
+				     "       A.fecha_actualizacion usuario_fecha_actualizacion,\n" +
+				     "       B.posicion_codigo,\n" +
+				     "       C.nombre posicion_nombre,\n" +
+				     "       C.fecha_creacion posicion_fecha_creacion,\n" +
+				     "       C.fecha_actualizacion posicion_fecha_actualizacion,\n" +
+				     "       B.area_id,\n" +
+				     "       D.nombre area_nombre,\n" +
+				     "       D.division area_division,\n" +
+				     "       D.fecha_creacion area_fecha_creacion,\n" +
+				     "       D.fecha_actualizacion area_fecha_actualizacion,\n" +
+				     "       B.centro_id,\n" +
+				     "       E.codigo centro_codigo,\n" +
+				     "       E.nombre centro_nombre,\n" +
+				     "       E.nivel centro_nivel,\n" +
+				     "       E.fecha_creacion centro_fecha_creacion,\n" +
+				     "       E.fecha_actualizacion centro_fecha_actualizacion,\n" +
+				     "       E.centro_tipo_id,\n" +
+				     "       F.nombre centro_tipo_nombre,\n" +
+				     "       F.fecha_creacion centro_tipo_fec_creacion,\n" +
+				     "       F.fecha_actualizacion centro_tipo_fec_actualizacion,\n" +
+				     "       E.centro_grupo_id,\n" +
+				     "       G.nombre centro_grupo_nombre,\n" +
+				     "       G.fecha_creacion centro_grupo_fec_creacion,\n" +
+				     "       G.fecha_actualizacion centro_grupo_fec_actualizacion\n" +
+					 "  FROM usuarios A\n" +
+					 "  LEFT JOIN posicion_datos B ON A.codigo=B.usuario_codigo\n" +
+					 "  LEFT JOIN posiciones C ON B.posicion_codigo=C.codigo\n" +
+					 "  LEFT JOIN areas D ON B.area_id=D.id\n" +
+					 "  LEFT JOIN centros E ON B.centro_id=E.id\n" +
+					 "  LEFT JOIN centro_tipos F ON E.centro_tipo_id=F.id\n" +
+					 "  LEFT JOIN centro_grupos G ON E.centro_grupo_id=G.id\n" +
+				     " WHERE B.posicion_codigo=:posicionCodigo\n" +
+					 "   AND A.fecha_eliminacion IS NULL";
+		return plantilla.queryForObject(sql,
+				new MapSqlParameterSource("posicionCodigo", posicionCodigo),
+				new UsuarioMapper());
+	}
+	
 	public Usuario findByCodigoWithPosicion(String codigo) throws EmptyResultDataAccessException {
-		String sql = "SELECT A.*,\n" + 
+		String sql = "SELECT A.codigo usuario_codigo,\n" +
+				     "       A.contrasenha usuario_contrasenha,\n" +
+				     "       A.nombre_completo usuario_nombre_completo,\n" +
+				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
+				     "       A.fecha_actualizacion usuario_fecha_actualizacion,\n" +
 					 "       B.posicion_codigo,\n" + 
 					 "       C.nombre posicion_nombre,\n" + 
 					 "       C.fecha_creacion posicion_fecha_creacion\n" +
 					 "  FROM usuarios A\n" + 
-					 "  JOIN posicion_usuario B ON A.codigo=B.usuario_codigo\n" + 
+					 "  JOIN posicion_datos B ON A.codigo=B.usuario_codigo\n" + 
 					 "  JOIN posiciones C ON B.posicion_codigo=C.codigo\n" + 
 					 " WHERE A.codigo=:codigo\n" + 
-					 "   AND A.fecha_eliminacion IS NULL\n" + 
-					 "   AND B.fecha_eliminacion IS NULL";		
+					 "   AND A.fecha_eliminacion IS NULL";		
 		return plantilla.queryForObject(sql,
 				new MapSqlParameterSource("codigo", codigo),
 				new UsuarioMapper());

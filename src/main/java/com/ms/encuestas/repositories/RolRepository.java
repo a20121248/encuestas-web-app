@@ -31,7 +31,8 @@ public class RolRepository {
 		String queryStr = "SELECT id,\n" +
                 		  "       nombre,\n" +
                 		  "       fecha_creacion\n" +
-                		  "  FROM roles WHERE id=:id";
+                		  "  FROM roles\n" +
+                		  " WHERE id=:id";
         return plantilla.queryForObject(queryStr,new MapSqlParameterSource("id", id),new RolMapper());
 	}
 	

@@ -21,6 +21,7 @@ public class EmpresaMapper implements RowMapper<Empresa> {
 		empresa.setId(rs.getLong("id"));
 		empresa.setNombre(rs.getString("nombre"));
 		empresa.setFechaCreacion(rs.getDate("fecha_creacion"));
+		empresa.setFechaActualizacion(rs.getDate("fecha_actualizacion"));
 		empresa.setPorcentaje(porcentaje);
 		return empresa;
 	}

@@ -1,38 +1,20 @@
-<!-- <form>
-  <div class="form-group">
-    <label for="justificacion">Justificación</label>
-    <select data-placeholder="Escoga un motivo" class="form-control" id="justificacion">
-      <option value="1">Calculado en base a HH</option>
-      <option value="2">Calculado en base a procesos auditados</option>
-      <option value="3">Calculado en base a transacciones</option>
-      <option value="4">Calculado en base a esfuerzo estimado</option>
-      <option value="5">Otros</option>
-    </select>
-    <small id="emailHelp" class="form-text text-muted">Enviar archivo asociado con el sustento a <a href="mailto:Ana.Lama@pacifico.com.pe">Ana.Lama@pacifico.com.pe</a></small>
-  </div>
-  <div class="form-group">
-    <label for="observaciones">Observaciones:</label>
-    <textarea class="form-control" id="observaciones" rows="3"></textarea>
-  </div>
-</form> -->
-
 <div class="form-group">
-<h5>Elija un Sustento</h5>
-<mat-form-field>
-  <mat-label>Justificación</mat-label>
-  <mat-select  [formControl]="justificacionControl" required>
-  <mat-option ><span></span></mat-option> 
-    <mat-option  *ngFor="let justificacion of lstJustificaciones" [value]="justificacion">
-     <span >{{justificacion.nombre}}</span> 
-    </mat-option>
-  </mat-select>
-  <mat-error *ngIf="justificacionControl.hasError('required')">Por favor elija alguna justificación</mat-error>
-</mat-form-field>
-<small id="emailHelp" class="form-text text-muted">Enviar archivo asociado con el sustento a <a href="mailto:Ana.Lama@pacifico.com.pe">Ana.Lama@pacifico.com.pe</a></small>
+  <h5>Elija un Sustento</h5>
+  <mat-form-field>
+    <mat-label>Justificación</mat-label>
+    <mat-select [formControl]="justificacionControl" [(value)]="justificacion" required>
+      <mat-option *ngFor="let item of lstJustificaciones" [value]="item">
+        <span>{{item.nombre}}</span>
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="justificacionControl.hasError('required')">Por favor elija alguna justificación</mat-error>
+  </mat-form-field>
+  <small id="emailHelp" class="form-text text-muted">Enviar archivo asociado con el sustento a <a
+      href="mailto:Ana.Lama@pacifico.com.pe">Ana.Lama@pacifico.com.pe</a></small>
 
-<h5>Observaciones</h5>
-<mat-form-field>
-    <textarea  rows="8" matInput placeholder="Detalle"></textarea>
+  <h5>Observaciones</h5>
+  <mat-form-field>
+    <textarea rows="8" matInput placeholder="Detalle" [(ngModel)]="observaciones"></textarea>
   </mat-form-field>
 
-  </div>
+</div>

@@ -10,29 +10,29 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.stereotype.Component;
 
+import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.models.Usuario;
+import com.ms.encuestas.services.ProcesoServiceI;
 import com.ms.encuestas.services.UsuarioServiceI;
 
 @Component
 public class InfoAdicionalToken implements TokenEnhancer {
 	@Autowired
 	private UsuarioServiceI usuarioService;
+	@Autowired
+	private ProcesoServiceI procesoService;
 	
 	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-		Usuario usuario = usuarioService.findByCodigoWithPosicionFull(authentication.getName());
+		Proceso proceso = procesoService.getCurrentProceso();
+		Usuario usuario = usuarioService.findByCodigo(authentication.getName());
 		Map<String, Object> additionalInformation = new HashMap<>();
-		additionalInformation.put("nombre", usuario.getNombre());
-		additionalInformation.put("nombreCompleto", usuario.getNombreCompleto());
+		String nombreCompleto = usuario.getNombreCompleto();
+		additionalInformation.put("nombre", nombreCompleto.substring(0, nombreCompleto.indexOf(' ')));
+		additionalInformation.put("procesoId", proceso.getId());
+		additionalInformation.put("procesoNombre", proceso.getNombre());
 		additionalInformation.put("posicionCodigo", usuario.getPosicion().getCodigo());
-		additionalInformation.put("posicionNombre", usuario.getPosicion().getNombre());
-		additionalInformation.put("areaNombre", usuario.getPosicion().getArea().getNombre());
-		additionalInformation.put("centroId", usuario.getPosicion().getCentro().getId());
-		additionalInformation.put("centroCodigo", usuario.getPosicion().getCentro().getCodigo());
-		additionalInformation.put("centroNombre", usuario.getPosicion().getCentro().getNombre());
-		additionalInformation.put("centroNivel", usuario.getPosicion().getCentro().getNivel());
-		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
-		
+		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);		
 		return accessToken;
 	}
 }

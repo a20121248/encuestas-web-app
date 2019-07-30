@@ -8,6 +8,8 @@ public class Empresa implements Serializable {
 	private Long id;
 	private String nombre;
 	private Date fechaCreacion;
+	private Date fechaActualizacion;
+
 	private double porcentaje;
 	
 	public Long getId() {
@@ -32,6 +34,14 @@ public class Empresa implements Serializable {
 
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
+	}
+	
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 	
 	public double getPorcentaje() {

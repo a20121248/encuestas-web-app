@@ -1,9 +1,8 @@
-export class Encuesta{
-    procesoId: number;
-    posicionCodigo: string;
-    estadoId: number;
-    justificacionId: number;
-    justificacionDetalle: string;
-    observaciones: string;
-    encuestaTipoId: number;
+import { Empresa } from './empresa';
+import { Justificacion } from './justificacion';
+
+export class Encuesta {
+  lstItems: object[];
+  justificacion: Justificacion;
+  observaciones: string;
 }

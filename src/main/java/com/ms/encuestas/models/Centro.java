@@ -9,8 +9,11 @@ public class Centro implements Serializable {
 	private String codigo;
 	private String nombre;
 	private int nivel;
-	private String tipo;
+	private Tipo tipo;
+	private Tipo grupo;
 	private Date fechaCreacion;
+	private Date fechaActualizacion;
+
 	private double porcentaje;
 
 	public Long getId() {
@@ -45,20 +48,36 @@ public class Centro implements Serializable {
 		this.nivel = nivel;
 	}
 
-	public String getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
-
 	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}
 
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
+	}
+	
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
+	}
+	
+	public Tipo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
+	}
+
+	public Tipo getGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(Tipo grupo) {
+		this.grupo = grupo;
 	}
 	
 	public double getPorcentaje() {
