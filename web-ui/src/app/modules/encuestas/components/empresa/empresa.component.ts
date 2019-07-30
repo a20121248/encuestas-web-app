@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Empresa } from 'src/app/shared/models/empresa';
-import { EmpresaService } from 'src/app/shared/services/empresa.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-form-empresa',
@@ -14,13 +13,11 @@ export class EmpresaComponent implements OnInit {
   dcEmpresa = ['nombre', 'porcentaje', 'ingresar'];
 
   constructor(
-    private empresaService: EmpresaService,
+    private route: ActivatedRoute,
     private router: Router) { }
 
   ngOnInit() {
-    /*this.empresaService.getEmpresas().subscribe(empresas => {
-      this.lstEmpresas = empresas;
-    });*/
+      this.lstEmpresas = [];
   }
 
   getTotalPorcentaje() {
@@ -34,10 +31,10 @@ export class EmpresaComponent implements OnInit {
 
   irMasDetalle(empresa: Empresa) {
     if (empresa.nombre.toUpperCase().includes("EPS")) {
-      this.router.navigateByUrl("/encuestas/eps");
+      this.router.navigate(['eps'], { relativeTo: this.route })
     }
     if (empresa.nombre.toUpperCase().includes("PGA")) {
-      this.router.navigateByUrl("/encuestas/centro");
+      this.router.navigate(['centro'], { relativeTo: this.route });
     }
   }
 }
