@@ -62,7 +62,7 @@ export class EmpresaService {
     return this.http.get<Encuesta>(url, { headers: this.agregarAuthorizationHeader() });
   }
 
-  guardarEncuesta(encuesta: Encuesta, posicionCodigo: string): any {
+  guardarEncuesta(encuesta: Encuesta, posicionCodigo: string): Observable<any> {
     const str1 = 'procesos/' + this.authService.proceso.id;
     const str2 = 'colaboradores/' + posicionCodigo;
     const str3 = 'encuesta/empresas';
