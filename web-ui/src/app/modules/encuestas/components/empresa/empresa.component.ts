@@ -18,9 +18,7 @@ export class EmpresaComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    /*this.empresaService.getEmpresas().subscribe(empresas => {
-      this.lstEmpresas = empresas;
-    });*/
+      this.lstEmpresas = [];
   }
 
   getTotalPorcentaje() {

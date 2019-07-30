@@ -1,12 +1,13 @@
-import { AppConfig } from 'src/app/shared/services/app.config';
-import { AuthService } from 'src/app/shared/services/auth.service';
-import { catchError, map, tap } from 'rxjs/operators';
-import { Empresa } from 'src/app/shared/models/empresa';
-import { Encuesta } from 'src/app/shared/models/encuesta';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { throwError, of, Observable } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+
+import { AppConfig } from 'src/app/shared/services/app.config';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { Empresa } from 'src/app/shared/models/empresa';
+import { Encuesta } from 'src/app/shared/models/encuesta';
 
 @Injectable({
   providedIn: 'root'
@@ -36,20 +37,6 @@ export class EmpresaService {
     }
     return false;
   }
-
-  /*getEmpresas(): Observable<Empresa[]> {
-    return this.http.get<Empresa[]>(this.urlEndPoint, { headers: this.agregarAuthorizationHeader() }).pipe(
-      catchError(e => {
-        this.isNoAutorizado(e);
-        return throwError(e);
-      })
-    );
-  }
-  getEmpresaPorc(): Observable<Empresa[]> {
-
-    return this.http.get<Empresa[]>(this.urlEndPoint);
-  }*/
-
   errorHandler(error: any): void {
     console.log(error);
   }
