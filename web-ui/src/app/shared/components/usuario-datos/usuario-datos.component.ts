@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Usuario } from '../../../shared/models/usuario';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import { MatTableDataSource } from '@angular/material';
-import { UsuarioService } from '../../services/usuario.service';
-
+import { Component, OnInit, Input } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Usuario } from 'src/app/shared/models/usuario';
+import { UsuarioService } from 'src/app/shared/services/usuario.service';
 
 @Component({
   selector: 'app-usuario-datos',
@@ -12,18 +10,23 @@ import { UsuarioService } from '../../services/usuario.service';
   styleUrls: ['./usuario-datos.component.css']
 })
 export class UsuarioDatosComponent implements OnInit {
-
-
+  @Input() posicionCodigo: string;
   usuario: Usuario;
 
-  constructor(private usuarioService: UsuarioService, private http: HttpClient, private authService: AuthService) {
-      this.usuario = new Usuario();
-    }
-
-  ngOnInit() {
-    this.usuarioService.getUsuario().subscribe(usuario => { this.usuario = usuario});
+  constructor(
+    public authService: AuthService,
+    private usuarioService: UsuarioService,
+    private http: HttpClient) {
+    this.usuario = new Usuario();
   }
 
+  ngOnInit() {
+    this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
+      if (usuario) {
+        this.usuario = usuario;
+      }
+    });
+  }
 }
 
 

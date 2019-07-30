@@ -1,13 +1,16 @@
 package com.ms.encuestas.models;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Tipo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String codigo;
-	private String nombre;
-
+	private String nombre;	
+	private Date fechaCreacion;
+	private Date fechaActualizacion;
+	
 	public Long getId() {
 		return id;
 	}
@@ -30,5 +33,21 @@ public class Tipo implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+	
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 }

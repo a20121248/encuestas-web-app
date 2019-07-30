@@ -1,31 +1,42 @@
-<div class="container-fluid login">
-  <div class="row">
-    <div class="col-md-11 offset-md-1 mt-3 text-left">
-      <div id="logopage">
-          <img src="https://www3.pacificoseguros.com/loginPacifico/images/facebook/logo.png" alt="" style="behavior: url(CSS/iepngfix.htc);">
-      </div>
-    </div>
-    <div class="col-md-4 offset-md-4 mt-5">
-      <div class="card border-primary text-center">
-          <div class="card-header"><h5 class="card-title mb-0">{{ titulo }}</h5></div>
-          <div class="card-body">
-            <form method="post">
-              <div class="form-group col-md-12">
-                <input [(ngModel)]="usuario.codigo" type="text" class="form-control"
-                       name="username" id="username" placeholder="Matrícula" autofocus required>
-              </div>
-              <div class="form-group col-md-12">
-                <input [(ngModel)]="usuario.contrasenha" type="password" class="form-control"
-                       name="password" id="password" placeholder="Contraseña" required>
-              </div>
-              <div class="form-group text-center col-md-4 offset-md-4 mb-0">
-                <input (click)='login()' type="submit" class="btn btn-green btn-block" value="Ingresar">
-              </div>
-            </form>
+<div fxFlex fxLayout fxLayoutAlign="column" class="login" fxHide.xs>
+  <div fxFlex="33" class="logopage">
+    <img [src]="'assets/img/logo2.png'" alt="">
+  </div>
+  <div fxFlex="30" fxLayout="column wrap" fxLayoutAlign="center" class="login-main">
+    <form method="post">
+      <mat-card>
+        <mat-card-content fxLayout="column">
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-form-field>
+              <mat-label>Usuario de red</mat-label>
+              <input [(ngModel)]="usuario.codigo" matInput placeholder="Ej. S88748" name="username">
+            </mat-form-field>
           </div>
-    </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon matPrefix>lock</mat-icon>
+            <mat-form-field>
+              <input [(ngModel)]="usuario.contrasenha" matInput placeholder="Contraseña" [type]="hide ? 'password' : 'text'" name="password">
+              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon matPrefix>settings</mat-icon>
+            <mat-form-field>
+              <mat-select placeholder="Tipo" [formControl]="selectFormControl" required>
+                <mat-option value="1">Pacífico Vida</mat-option>
+                <mat-option value="2">Pacífico Generales</mat-option>
+              </mat-select>
+              <mat-error *ngIf="selectFormControl.hasError('required')">Por favor elija un tipo</mat-error>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+        <mat-card-actions align="center">
+          <button (click)='login()' mat-raised-button color="accent"><b>LOGIN</b></button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
   </div>
 </div>
-
-
-

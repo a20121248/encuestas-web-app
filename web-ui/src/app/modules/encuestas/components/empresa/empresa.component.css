@@ -1,8 +1,24 @@
+.design input::-webkit-outer-spin-button,
+.design input::-webkit-inner-spin-button {
+  display: none;
+}
 
-table {
-    width: 100%;
-  }
+.design input {
+  -moz-appearance: textfield;
+}
+
 tr.mat-footer-row {
   font-weight: bold;
 }
-  
+
+.mat-column-nombre {
+  width: 65% !important;
+}
+
+.mat-column-porcentaje {
+  width: 20% !important;
+}
+
+.mat-column-ingresar {
+  width: 15% !important;
+}

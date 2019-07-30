@@ -1,0 +1,9 @@
+{
+  "env": {
+    "name": "#{envName}"
+  },
+  "urlServer": {
+    "api": "http://hp840g-malfbl35:8080/api/",
+    "oauth": "http://hp840g-malfbl35:8080/oauth/"
+  }
+}

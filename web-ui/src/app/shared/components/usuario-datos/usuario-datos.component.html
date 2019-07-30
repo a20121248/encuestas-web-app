@@ -3,58 +3,32 @@
     <div class="form-group row">
       <label for="colaborador" class="col-sm-2 col-form-label">COLABORADOR:</label>
       <div class="col-sm-4">
-        <input type="text" readonly class="form-control" value="{{ authService.usuario.nombreCompleto }}">
+        <input type="text" readonly class="form-control" [ngModel]="usuario?.nombreCompleto">
       </div>
       <label for="area" class="col-sm-2 col-form-label">ÁREA:</label>
       <div class="col-sm-4">
-        <input type="text" readonly class="form-control" value="{{ authService.usuario.areaNombre }}">
+        <input type="text" readonly class="form-control" [ngModel]="usuario?.posicion?.area?.nombre">
       </div>
     </div>
-
     <div class="form-group row">
       <label for="matricula" class="col-sm-2 col-form-label">MATRÍCULA:</label>
       <div class="col-sm-4">
-        <input type="text" readonly class="form-control" value="{{ authService.usuario.codigo }}">
+        <input type="text" readonly class="form-control" [ngModel]="usuario?.codigo">
       </div>
       <label for="centro" class="col-sm-2 col-form-label">CENTRO DE COSTOS:</label>
       <div class="col-sm-4">
-        <input type="text" readonly class="form-control" value="{{ authService.usuario.centroCodigo }}">
+        <input type="text" readonly class="form-control" [ngModel]="usuario?.posicion?.centro?.codigo + ' ' + usuario?.posicion?.centro?.nombre">
       </div>
     </div>
-
-      <div class="form-group row mb-0">
-        <label for="posicion" class="col-sm-2 col-form-label">POSICIÓN:</label>
-        <div class="col-sm-4">
-          <input type="text" readonly class="form-control" value="{{ authService.usuario.posicionNombre }}">
-        </div>
-        <label for="nivel" class="col-sm-2 col-form-label">NIVEL:</label>
-        <div class="col-sm-4">
-          <input type="text" readonly class="form-control" value="{{ authService.usuario.centroNivel }}">
-        </div>
+    <div class="form-group row mb-0">
+      <label for="posicion" class="col-sm-2 col-form-label">POSICIÓN:</label>
+      <div class="col-sm-4">
+        <input type="text" readonly class="form-control" [ngModel]="usuario?.posicion?.nombre">
       </div>
-
+      <label for="nivel" class="col-sm-2 col-form-label">NIVEL:</label>
+      <div class="col-sm-4">
+        <input type="text" readonly class="form-control" [ngModel]="usuario?.posicion?.centro?.nivel">
+      </div>
+    </div>
   </div>
 </div>
-
-  <!-- <mat-card class="example-card">
-      <mat-card-header>
-        <mat-card-title>Datos de Usuario</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-          <mat-grid-list cols="4" rowHeight="10:2">
-              <mat-grid-tile><div class="etiqueta">COLABORADOR:</div></mat-grid-tile>
-              <mat-grid-tile><div class="contenido">{{usuario.nombreCompleto}}</div></mat-grid-tile>
-              <mat-grid-tile>ÁREA:</mat-grid-tile>
-              <mat-grid-tile>{{usuario.areaNombre}}</mat-grid-tile>
-              <mat-grid-tile>MATRÍCULA:</mat-grid-tile>
-              <mat-grid-tile>{{usuario.codigo}}</mat-grid-tile>
-              <mat-grid-tile>CENTRO DE COSTOS:</mat-grid-tile>
-              <mat-grid-tile>{{usuario.centroCodigo}}</mat-grid-tile>
-              <mat-grid-tile>POSICIÓN</mat-grid-tile>
-              <mat-grid-tile>{{usuario.posicionNombre}}</mat-grid-tile>
-              <mat-grid-tile>NIVEL:</mat-grid-tile>
-              <mat-grid-tile>{{usuario.centroNivel}}</mat-grid-tile>
-            </mat-grid-list>
-      </mat-card-content>
-    </mat-card>
-     -->

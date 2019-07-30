@@ -1,23 +1,41 @@
-nav {
-background-color: #09c;
-height: 40px;
-color: white;
+.modulos {
+  top: 0;
+  box-shadow:0 1px 4px rgba(0,0,0,0.2);
 }
 
-nav a {
-    color: white;
-    font-weight: 600;
-    }
-
-button.btn {
-        color: white;
-        font-weight: 600;
+.modulos .mat-nav-list {
+  padding-top: 0;
 }
-button.btn:hover {
 
-    background:#0075b0;
-}   
+.modulos .mat-nav-list a.mat-list-item span {
+  min-width: 106px;
+  display: flex;
+  justify-content: center;
+}
 
-nav li:hover {
-    background:#0075b0;
-} 
+.modulos a {
+  color: white;
+  font-weight: 600;
+  font-family: "Foco","Arial",sans-serif;
+  font-size: 15px;
+  text-decoration: none;
+  height: 64px;
+}
+
+.modulos a:hover {
+  background-color: rgba(0,117,176,0.5);
+}
+
+.modulos a.active {
+  background-color: rgba(0,117,176,0.5);
+  border-bottom: 4px solid white;
+}
+
+.logout a {
+  min-width: auto;
+}
+
+.logout a:hover {
+  background-color: transparent;
+  border: 0;
+}

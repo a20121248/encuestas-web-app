@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Usuario } from '../models/usuario';
+import { Usuario } from 'src/app/shared/models/usuario';
+import { Tipo } from 'src/app/shared/models/tipo';
+import { AppConfig } from 'src/app/shared/services/app.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private _usuario: Usuario;
+  private _proceso: Tipo;
   private _token: string;
+  private _seleccionado: Usuario;
+  protected urlServer = AppConfig.settings.urlServer;
 
   constructor(private http: HttpClient) { }
 
@@ -22,6 +27,31 @@ export class AuthService {
     return new Usuario();
   }
 
+  public get seleccionado(): Usuario {
+    return this._seleccionado;
+    if (this._seleccionado != null) {
+    }
+    return new Usuario();
+  }
+
+  setSeleccionado(seleccionado: Usuario): void {
+    this._seleccionado = seleccionado;
+  }
+
+  public get proceso(): Tipo {
+    if (this._proceso != null) {
+      return this._proceso;
+    } else if (this._proceso == null && sessionStorage.getItem('proceso') != null) {
+      this._proceso = JSON.parse(sessionStorage.getItem('proceso')) as Tipo;
+      return this._proceso;
+    }
+    return new Tipo();
+  }
+
+  setProceso(proceso: Tipo): void {
+    this._proceso = proceso;
+  }
+
   public get token(): string {
     if (this._token != null) {
       return this._token;
@@ -33,7 +63,8 @@ export class AuthService {
   }
 
   login(usuario: Usuario): Observable<any> {
-    const urlEndpoint = 'http://hp840g-malfbl35:8080/oauth/token';
+    const urlEndpoint = this.urlServer.oauth + 'token';
+    console.log(urlEndpoint);
     const credenciales = btoa('angularapp' + ':' + '12345');
     const httpHeaders = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -43,8 +74,8 @@ export class AuthService {
     params.set('grant_type', 'password');
     params.set('username', usuario.codigo);
     params.set('password', usuario.contrasenha);
-    console.log(params.toString());
-    return this.http.post<any>(urlEndpoint, params.toString(), {headers: httpHeaders});
+    //console.log(params.toString());
+    return this.http.post<any>(urlEndpoint, params.toString(), { headers: httpHeaders });
   }
 
   guardarUsuario(accessToken: string): void {
@@ -52,16 +83,19 @@ export class AuthService {
     this._usuario = new Usuario();
     this._usuario.codigo = payload.user_name;
     this._usuario.nombre = payload.nombre;
-    this._usuario.nombreCompleto = payload.nombreCompleto;
+    this._proceso = new Tipo();
+    this._proceso.id = payload.procesoId;
+    this._proceso.nombre = payload.procesoNombre;
     this._usuario.posicionCodigo = payload.posicionCodigo;
-    this._usuario.posicionNombre = payload.posicionNombre;
+    /*this._usuario.posicionNombre = payload.posicionNombre;
     this._usuario.areaNombre = payload.areaNombre;
     this._usuario.centroId = payload.centroId;
     this._usuario.centroCodigo = payload.centroCodigo;
     this._usuario.centroNombre = payload.centroNombre;
-    this._usuario.centroNivel = payload.centroNivel;
+    this._usuario.centroNivel = payload.centroNivel;*/
 
     sessionStorage.setItem('usuario', JSON.stringify(this._usuario));
+    sessionStorage.setItem('proceso', JSON.stringify(this._proceso));
   }
 
   guardarToken(accessToken: string): void {
@@ -78,7 +112,7 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     let payload = this.obtenerDatosToken(this.token);
-    if (payload != null && payload.user_name && payload.user_name.length>0) {
+    if (payload != null && payload.user_name && payload.user_name.length > 0) {
       return true;
     }
     return false;
@@ -90,5 +124,6 @@ export class AuthService {
     //sessionStorage.clear();
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('usuario');
+    sessionStorage.removeItem('proceso');
   }
 }

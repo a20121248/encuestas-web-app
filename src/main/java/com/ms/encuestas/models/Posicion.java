@@ -10,6 +10,7 @@ public class Posicion implements Serializable {
 	private Centro centro;
 	private Area area;
 	private Date fechaCreacion;
+	private Date fechaActualizacion;
 
 	public String getCodigo() {
 		return codigo;
@@ -49,5 +50,13 @@ public class Posicion implements Serializable {
 
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
+	}
+	
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 }

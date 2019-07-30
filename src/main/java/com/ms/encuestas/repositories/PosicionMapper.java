@@ -20,16 +20,8 @@ public class PosicionMapper implements RowMapper<Posicion> {
 			area.setId(rs.getLong("area_id"));
 			area.setNombre(rs.getString("area_nombre"));
 			area.setFechaCreacion(rs.getDate("area_fecha_creacion"));
-			
-			Division division = new Division();
-			try {
-				division.setId(rs.getLong("division_id"));
-				division.setNombre(rs.getString("division_nombre"));
-				division.setFechaCreacion(rs.getDate("division_fecha_creacion"));			
-			} catch (java.sql.SQLException e) {
-				division = null;
-			}
-			area.setDivision(division);
+			area.setFechaActualizacion(rs.getDate("area_fecha_actualizacion"));
+			area.setDivision(rs.getString("area_division"));
 		} catch (java.sql.SQLException e) {
 			area = null;
 		}

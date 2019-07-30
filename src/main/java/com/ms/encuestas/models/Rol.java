@@ -8,6 +8,7 @@ public class Rol implements Serializable {
 	private Long id;
 	private String nombre;
 	private Date fechaCreacion;
+	private Date fechaActualizacion;
 
 	public Long getId() {
 		return id;
@@ -31,5 +32,13 @@ public class Rol implements Serializable {
 
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
+	}
+	
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 }

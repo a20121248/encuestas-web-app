@@ -33,6 +33,12 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 
 	@Override
 	@Transactional(readOnly = true)
+	public List<Usuario> findUsuariosDependientesByCodigo(Long procesoId, String usuarioCodigo) {
+		return usuarioRepository.findUsuariosDependientesByCodigo(procesoId, usuarioCodigo);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String codigo) throws UsernameNotFoundException {
 		Usuario usuario = usuarioRepository.findByCodigo(codigo);
 		
@@ -67,6 +73,12 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	@Transactional(readOnly = true)
 	public Usuario findByCodigo(String codigo) {
 		return usuarioRepository.findByCodigo(codigo);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Usuario findByPosicionCodigo(String posicionCodigo) {
+		return usuarioRepository.findByPosicionCodigo(posicionCodigo);
 	}
 	
 	@Override

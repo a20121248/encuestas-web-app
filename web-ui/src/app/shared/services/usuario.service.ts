@@ -1,15 +1,32 @@
 import { Injectable } from '@angular/core';
-import { Usuario } from '../models/usuario';
+import { Usuario } from 'src/app/shared/models/usuario';
 import { throwError, of, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AppConfig } from 'src/app/shared/services/app.config';
+import { AuthService } from 'src/app/shared/services/auth.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
-  private url = 'http://hp840g-malfbl35:8080/api/usuario-datos/589980';
+  protected urlServer = AppConfig.settings.urlServer;
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    public authService: AuthService,
+    private http: HttpClient,
+    private router: Router,
+    private _activatedRoute: ActivatedRoute) { }
+
+  private agregarAuthorizationHeader() {
+    let token = this.authService.token;
+    if (token != null) {
+      return this.httpHeaders.append('Authorization', 'Bearer ' + token);
+    }
+    return this.httpHeaders;
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error(error);
     return throwError(error);
@@ -23,7 +40,17 @@ export class UsuarioService {
     return false;
   }
 
-  getUsuario(): Observable<Usuario> {
-    return this.http.get<Usuario>(this.url);
+  getUsuario(codigo: string): Observable<Usuario> {
+    return this.http.get<Usuario>(this.urlServer.api + 'usuarios/' + codigo);
+  }
+
+  getUsuarioByPosicionCodigo(codigo: string): Observable<Usuario> {
+    return this.http.get<Usuario>(this.urlServer.api + 'usuarios/posicion/' + codigo);
+  }
+
+  getUsuariosDependientes(): Observable<Usuario[]> {
+    let str1 = 'procesos/' + this.authService.proceso.id;
+    let str2 = 'usuarios-dependientes/' + this.authService.usuario.posicionCodigo;
+    return this.http.get<Usuario[]>(this.urlServer.api + str1 + '/' + str2, { headers: this.agregarAuthorizationHeader() });
   }
 }

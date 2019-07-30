@@ -1,26 +1,22 @@
-<nav class="navbar navbar-expand-lg">
-  <a class="navbar-brand" href="#">Pacífico</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarColor01">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active" routerLinkActive="active">
-        <a class="nav-link" routerLink="/encuestas">Encuestas <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/resumen">Resumen</a>
-      </li>
-      <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/reportes">Reportes</a>
-      </li>
-      <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/mantenimiento">Mantenimiento</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav nav-right">
-      <button class="btn" (click)="logout()" type="submit">Cerrar Sesión</button>
-    </ul>
+<mat-toolbar color="primary" class="modulos">
+<!--<div fxHide.gt-xs>
+        <button mat-icon-button (click)="onToggleSidenav()">
+            <mat-icon>menu</mat-icon>
+        </button>
+  </div> -->
+  <div fxFlex fxLayout fxLayoutAlign="flex-start" fxHide.xs>
+    <span class=""><img [src]="'assets/img/logo.png'" alt="image"></span>
   </div>
-</nav>
+  <div fxFlex fxLayout fxLayoutAlign="center" fxHide.xs>
+    <mat-nav-list fxLayout>
+      <a mat-list-item [routerLink]="'/colaboradores'" routerLinkActive="active"><span>Encuesta</span> <span class="sr-only">(current)</span></a>
+      <a mat-list-item [routerLink]="'/reporting'" routerLinkActive="active"><span>Reporting</span></a>
+      <a mat-list-item [routerLink]="'/mantenimiento'" routerLinkActive="active"><span>Mantenimiento</span></a>
+    </mat-nav-list>
+  </div>
+  <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>
+    <mat-nav-list fxLayout class="logout">
+      <a mat-list-item (click)="logout()"><i class="material-icons">exit_to_app</i> Cerrar Sesión</a>
+    </mat-nav-list>
+  </div>
+</mat-toolbar>

@@ -8,5 +8,5 @@ export class Centro {
     empresaId: number;
     fechaCreacion: Date;
     porcentaje: number;
-
+    procesoId: number;
   }

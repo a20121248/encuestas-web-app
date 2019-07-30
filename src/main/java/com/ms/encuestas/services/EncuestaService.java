@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.ms.encuestas.models.Centro;
 import com.ms.encuestas.models.Empresa;
-import com.ms.encuestas.repositories.EmpresaRepository;
+import com.ms.encuestas.models.Encuesta;
+import com.ms.encuestas.models.Justificacion;
 import com.ms.encuestas.repositories.EncuestaRepository;
 
 @Service
@@ -16,13 +17,23 @@ public class EncuestaService implements EncuestaServiceI {
     private EncuestaRepository encuestaRepository;
     
     @Override
-    public List<Empresa> getEncuestaEmpresa(Long procesoId, String posicionCodigo) {
-    	return encuestaRepository.getEncuestaEmpresa(procesoId, posicionCodigo);
+    public Encuesta getEncuestaEmpresa(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+    	return encuestaRepository.getEncuestaEmpresa(procesoId, posicionCodigo, encuestaTipoId);
     }
 
 	@Override
-	public void saveLstEmpresas(List<Empresa> lstEmpresas, Long procesoId, String posicionCodigo) {
-		encuestaRepository.saveEncuestaEmpresa(lstEmpresas, procesoId, posicionCodigo);
+	public void saveEncuestaCabecera(Justificacion justificacion, String observaciones, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+		encuestaRepository.saveEncuestaCabecera(justificacion, observaciones, procesoId, posicionCodigo, encuestaTipoId);		
+	}
+	
+	@Override
+	public void saveEncuestaEmpresaDetalle(List<Empresa> lstEmpresas, Long procesoId, String posicionCodigo) {
+		encuestaRepository.saveEncuestaEmpresaDetalle(lstEmpresas, procesoId, posicionCodigo);
+	}
+	
+	@Override
+	public void saveEncuestaCentroDetalle(List<Centro> lstEmpresas, Long procesoId, String posicionCodigo) {
+		encuestaRepository.saveEncuestaCentroDetalle(lstEmpresas, procesoId, posicionCodigo);
 	}
 
 	@Override

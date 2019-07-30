@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Usuario implements Serializable {
+public class Usuario implements Serializable/*, UserDetails*/ {
 	private static final long serialVersionUID = 1L;
 	private String codigo;
 	private String contrasenha;
-	private String nombre;
 	private String nombreCompleto;
 	private Date fechaCreacion;
+	private Date fechaActualizacion;
 	private List<Rol> lstRoles;
 	private Posicion posicion;
 
@@ -30,14 +30,6 @@ public class Usuario implements Serializable {
 		this.contrasenha = contrasenha;
 	}
 
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
 	public String getNombreCompleto() {
 		return nombreCompleto;
 	}
@@ -52,6 +44,14 @@ public class Usuario implements Serializable {
 
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
+	}
+	
+	public Date getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Date fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 
 	public List<Rol> getLstRoles() {
@@ -69,4 +69,39 @@ public class Usuario implements Serializable {
 	public void setPosicion(Posicion posicion) {
 		this.posicion = posicion;
 	}
+
+	/*@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+
+	@Override
+	public String getPassword() {
+		return contrasenha;
+	}
+
+	@Override
+	public String getUsername() {
+		return codigo;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}*/
 }

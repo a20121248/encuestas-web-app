@@ -1,2 +1,3 @@
-
-<div><router-outlet></router-outlet></div>
+<app-navegacion *ngIf="this.authService.isAuthenticated()"></app-navegacion>
+<router-outlet></router-outlet>
+<!-- 588748 -->
