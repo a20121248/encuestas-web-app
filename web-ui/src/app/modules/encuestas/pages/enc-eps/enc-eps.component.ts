@@ -2,12 +2,14 @@ import { Component, OnInit } from "@angular/core";
 import { ViewChild } from "@angular/core";
 import { Location } from "@angular/common";
 import swal from "sweetalert2";
+import { Router, ActivatedRoute } from "@angular/router";
+
+//-------------------COMPONENTES LOCALES----------------------------------
 
 import { Eps } from "../../../../shared/models/eps";
 import { EpsComponent } from "../../components/eps/eps.component";
 import { EpsService } from "src/app/shared/services/eps.service";
 import { JustificacionComponent } from "src/app/shared/components/justificacion/justificacion.component";
-import { Router, ActivatedRoute } from "@angular/router";
 import { Encuesta } from "src/app/shared/models/encuesta";
 import { UsuarioDatosComponent } from "src/app/shared/components/usuario-datos/usuario-datos.component";
 import { Justificacion } from "src/app/shared/models/justificacion";
@@ -55,9 +57,10 @@ export class EncEPSComponent implements OnInit {
     this.epsService
       .guardarEncuesta(this.encuesta, this.posicionCodigo)
       .subscribe(response => console.log(response), err => console.log(err));
+    swal.fire("Guardar encuesta", "Se guardó la encuesta.", "success");
+  }
 
-    // goBack() {
-    //   this.location.back();
-    // }
+  goBack() {
+    this.location.back();
   }
 }
