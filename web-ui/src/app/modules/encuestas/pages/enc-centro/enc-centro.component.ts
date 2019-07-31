@@ -22,7 +22,11 @@ import { JustificacionComponent } from "src/app/shared/components/justificacion/
 })
 export class EncCentroComponent implements OnInit {
   lstCentros: Centro[];
+  observaciones: string;
+  justificacion: Justificacion;
   titulo = "Herramienta de encuestas";
+  posicionCodigo: string;
+  encuesta: Encuesta;
 
   constructor(
     private centroService: CentroService,
@@ -32,22 +36,33 @@ export class EncCentroComponent implements OnInit {
 
   @ViewChild(CentroComponent, { static: false })
   centroComponent: CentroComponent;
+  @ViewChild(JustificacionComponent, { static: false })
+  justificacionComponent: JustificacionComponent;
+  @ViewChild(UsuarioDatosComponent, { static: false })
+  usuarioDatosComponent: UsuarioDatosComponent;
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get("codigo");
+    this.centroService
+      .obtenerEncuesta(this.posicionCodigo)
+      .subscribe(encuesta => {
+        this.lstCentros = encuesta.lstItems as Centro[];
+        this.observaciones = encuesta.observaciones;
+        this.justificacion = encuesta.justificacion;
+      });
+  }
 
   guardarEncuesta() {
     this.encuesta = new Encuesta();
-    this.encuesta.lstItems = this.epsComponent.lstEps;
-    this.encuesta.justificacion = null;
-    this.encuesta.observaciones = null;
-    this.epsService
+    this.encuesta.lstItems = this.centroComponent.lstCentros;
+    this.encuesta.justificacion = this.justificacionComponent.justificacion;
+    this.encuesta.observaciones = this.justificacionComponent.observaciones;
+    this.centroService
       .guardarEncuesta(this.encuesta, this.posicionCodigo)
       .subscribe(response => console.log(response), err => console.log(err));
-
-    // goBack() {
-    //   this.location.back();
-    // }
+    swal.fire("Guardar encuesta", "Se guardó la encuesta.", "success");
   }
+
   goBack() {
     this.location.back();
   }
