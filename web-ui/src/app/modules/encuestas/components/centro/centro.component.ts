@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Observable } from 'rxjs';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 
 import { Centro } from 'src/app/shared/models/centro';
 import {CentroService} from '../../../../shared/services/centro.service';
@@ -22,9 +21,9 @@ export class CentroComponent implements OnInit {
     this.lstCentros = [];
 }
 
-  getLstCentro() {
-    return this.lstCentros;
-  }
+  // getLstCentro() {
+  //   return this.lstCentros;
+  // }
 
   getTotalPorcentaje(){
     return this.lstCentros.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);

@@ -1,33 +1,69 @@
-import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Linea } from '../models/linea';
+import { Injectable } from "@angular/core";
+import { Eps } from "../models/eps";
+import { Encuesta } from "src/app/shared/models/encuesta";
+import { throwError, of, Observable } from "rxjs";
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse
+} from "@angular/common/http";
+import { AuthService } from "src/app/shared/services/auth.service";
+import { Router } from "@angular/router";
+import { AppConfig } from "src/app/shared/services/app.config";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class LineaService {
+  private httpHeaders = new HttpHeaders({ "Content-Type": "application/json" });
+  protected urlServer = AppConfig.settings.urlServer;
 
-  private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas';
-  private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
+  constructor(
+    public authService: AuthService,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
-  constructor(private http: HttpClient) { }
-
-  getLinea(): Observable<Linea[]> {
-    return this.http.get<Linea[]>(this.urlEndPoint);  
+  private agregarAuthorizationHeader() {
+    let token = this.authService.token;
+    if (token != null) {
+      return this.httpHeaders.append("Authorization", "Bearer " + token);
+    }
+    return this.httpHeaders;
   }
 
-  postRespuesta(lstLinea: Linea[]):any {
-    fetch(this.urlEndPoint,
-      {
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify(lstLinea)
-      })
-      .then(function(res){ console.log(res) })
-      .catch(function(res){ console.log(res) });
+  private isNoAutorizado(e): boolean {
+    if (e.status == 401 || e.status == 403) {
+      this.router.navigate(["/login"]);
+      return true;
+    }
+    return false;
+  }
+
+  errorHandler(error: any): void {
+    console.log(error);
+  }
+
+  obtenerEncuesta(posicionCodigo: string): Observable<Encuesta> {
+    const str1 = "procesos/" + this.authService.proceso.id;
+    const str2 = "colaboradores/" + posicionCodigo;
+    const str3 = "encuesta/linea";
+    // const url = this.urlServer.api + str1 + "/" + str2 + "/" + str3;
+    const url = "https://api.myjson.com/bins/ncmwt";
+
+    return this.http.get<Encuesta>(url, {
+      headers: this.agregarAuthorizationHeader()
+    });
+  }
+
+  guardarEncuesta(encuesta: Encuesta, posicionCodigo: string): Observable<any> {
+    const str1 = "procesos/" + this.authService.proceso.id;
+    const str2 = "colaboradores/" + posicionCodigo;
+    const str3 = "encuesta/linea";
+    const url = this.urlServer.api + str1 + "/" + str2 + "/" + str3;
+    console.log(encuesta);
+    return this.http.post<any>(url, encuesta, {
+      headers: this.agregarAuthorizationHeader()
+    });
   }
 }

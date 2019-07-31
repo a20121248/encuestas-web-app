@@ -1,1 +1,28 @@
-<p>enc-linea works!</p>
+<div class="container">
+    <div class="card mt-4 mb-3">
+      <div class="card-body text-center">
+        <h2 class="card-title mb-0">{{ titulo.toUpperCase() }}</h2>
+      </div>
+    </div>
+    <div class="card mt-4 mb-3">
+      <app-usuario-datos  [posicionCodigo]="posicionCodigo"></app-usuario-datos>
+    </div>
+    <div class="card mt-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-7">
+            <app-form-linea [lstLineas]="lstLineas"></app-form-linea>
+          </div>
+          <div class="col-md-5">
+            <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"></app-form-justificacion>
+          </div>
+          <div class="col-md-12 text-right">
+            <button mat-raised-button  (click)="goBack()">Atrás</button>
+            <button mat-raised-button  (click)="guardarEncuesta()">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  

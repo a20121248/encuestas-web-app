@@ -9,7 +9,6 @@ import { AppConfig } from "src/app/shared/services/app.config";
 import { AuthService } from "src/app/shared/services/auth.service";
 import { Router } from "@angular/router";
 
-
 import { Centro } from "src/app/shared/models/centro";
 import { Encuesta } from "src/app/shared/models/encuesta";
 
@@ -50,7 +49,8 @@ export class CentroService {
     const str1 = "procesos/" + this.authService.proceso.id;
     const str2 = "colaboradores/" + posicionCodigo;
     const str3 = "encuesta/empresas";
-    const url = this.urlServer.api + str1 + "/" + str2 + "/" + str3;
+    const url = "https://api.myjson.com/bins/7oi9p";
+    // const url = this.urlServer.api + str1 + "/" + str2 + "/" + str3;
     return this.http.get<Encuesta>(url, {
       headers: this.agregarAuthorizationHeader()
     });
