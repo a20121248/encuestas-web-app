@@ -28,6 +28,8 @@ export class EncLineaComponent implements OnInit {
   posicionCodigo: string;
   encuesta: Encuesta;
 
+  lineaSeleccionada: Linea;
+
   constructor(
     private lineaService: LineaService,
     private activatedRoute: ActivatedRoute,
@@ -51,7 +53,7 @@ export class EncLineaComponent implements OnInit {
         this.justificacion = encuesta.justificacion;
       });
   }
-
+  // Rest interaction
   guardarEncuesta() {
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.lineaComponent.lstLineas;
@@ -65,5 +67,9 @@ export class EncLineaComponent implements OnInit {
 
   goBack() {
     this.location.back();
+  }
+  // Output events
+  showCanalesByLinea(linea: Linea) {
+    this.lineaSeleccionada = linea;
   }
 }

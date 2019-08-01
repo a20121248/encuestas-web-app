@@ -49,7 +49,7 @@ export class LineaService {
     const str2 = "colaboradores/" + posicionCodigo;
     const str3 = "encuesta/linea";
     // const url = this.urlServer.api + str1 + "/" + str2 + "/" + str3;
-    const url = "https://api.myjson.com/bins/ncmwt";
+    const url = "https://api.myjson.com/bins/r8drx";
 
     return this.http.get<Encuesta>(url, {
       headers: this.agregarAuthorizationHeader()

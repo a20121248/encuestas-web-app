@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-canal',
+  selector: 'app-form-canal',
   templateUrl: './canal.component.html',
   styleUrls: ['./canal.component.css']
 })

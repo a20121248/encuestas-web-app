@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 import { Linea } from "src/app/shared/models/linea";
@@ -11,13 +11,18 @@ import { LineaService } from "../../../../shared/services/linea.service";
 })
 export class LineaComponent implements OnInit {
   @Input() lstLineas: Linea[];
+  @Output() sendLinea = new EventEmitter();
 
-  dcLinea = ["codigo", "nombre", "porcentaje"];
+  dcLinea = ["codigo", "nombre", "porcentaje", "completar"];
 
   constructor(private lineaService: LineaService, private http: HttpClient) {}
 
   ngOnInit() {
     this.lstLineas = [];
+  }
+
+  showCanalesBylineaBoton(linea: Linea) {
+    this.sendLinea.emit(linea);
   }
 
   getTotalPorcentaje() {
