@@ -25,15 +25,18 @@ export class EmpresaComponent implements OnInit {
   }
 
   revisarEmpresa(codigo: string): boolean {
-    if (codigo == "1" || codigo == "2") return true;
-    else return false;
+    if (codigo == '1' || codigo == '2') {
+      return true;
+    }
+    return false;
   }
 
   irMasDetalle(empresa: Empresa) {
-    if (empresa.nombre.toUpperCase().includes("EPS")) {
-      this.router.navigate(['eps'], { relativeTo: this.route })
+    if (empresa.nombre.toUpperCase().includes('PACÍFICO EPS')) {
+      this.router.navigate(['eps'], { relativeTo: this.route });
     }
-    if (empresa.nombre.toUpperCase().includes("PGA")) {
+    console.log(empresa.nombre);
+    if (empresa.nombre.toUpperCase().includes('PACÍFICO SEGUROS')) {
       this.router.navigate(['centro'], { relativeTo: this.route });
     }
   }

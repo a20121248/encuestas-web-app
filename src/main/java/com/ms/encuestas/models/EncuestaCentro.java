@@ -5,15 +5,15 @@ import java.util.List;
 
 public class EncuestaCentro implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private List<Empresa> lstItems;
+	private List<Centro> lstItems;
 	private Justificacion justificacion;
 	private String observaciones;
 
-	public List<Empresa> getLstItems() {
+	public List<Centro> getLstItems() {
 		return lstItems;
 	}
 
-	public void setLstItems(List<Empresa> lstItems) {
+	public void setLstItems(List<Centro> lstItems) {
 		this.lstItems = lstItems;
 	}
 

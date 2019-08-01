@@ -3,7 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 import { Centro } from 'src/app/shared/models/centro';
-import {CentroService} from '../../../../shared/services/centro.service';
+import {CentroService} from 'src/app/shared/services/centro.service';
 
 @Component({
   selector: 'app-form-centro',
@@ -13,7 +13,7 @@ import {CentroService} from '../../../../shared/services/centro.service';
 
 export class CentroComponent implements OnInit {
   @Input() lstCentros: Centro[];
-  dcCentro = ['codigo','nombre', 'porcentaje'];
+  dcCentro = ['codigo', 'nombre', 'porcentaje'];
 
   constructor( private centroService: CentroService, private http: HttpClient) { }
 

@@ -118,8 +118,10 @@ public class EncuestaRepository {
 		paramMap.put("encuesta_tipo_id", encuestaTipoId);
 		EncuestaCentro encuesta = plantilla.queryForObject(sql, paramMap, new EncuestaCentroMapper());
 		
-		sql = "SELECT A.id,\n" + 
+		sql = "SELECT A.id,\n" +
+			  "       A.codigo,\n" +
 			  "       A.nombre,\n" +
+			  "       A.nivel,\n" +
 			  "       A.fecha_creacion,\n" +
 			  "       A.fecha_actualizacion,\n" +
 			  "       NVL(B.porcentaje*100,0) porcentaje\n" + 
@@ -131,7 +133,7 @@ public class EncuestaRepository {
 			  " WHERE A.empresa_id=:empresa_id\n" +
 			  "   AND A.fecha_eliminacion IS NULL\n" +
 			  " ORDER BY A.id";
-		encuesta.setLstItems(plantilla.query(sql, paramMap, new EmpresaMapper()));		
+		encuesta.setLstItems(plantilla.query(sql, paramMap, new CentroMapper()));		
 		return encuesta;
 	}
 	

@@ -28,5 +28,3 @@ export class UsuarioDatosComponent implements OnInit {
     });
   }
 }
-
-

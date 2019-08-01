@@ -50,11 +50,30 @@ public class UsuarioRepository {
 	}
 	
 	public List<Usuario> findAll() throws EmptyResultDataAccessException {
-		String sql = "SELECT * FROM usuarios";
-		return plantilla.query(sql, new UsuarioMapper());
+		String sql = "SELECT B.codigo usuario_codigo,\n" +
+				 "       B.contrasenha usuario_contrasenha,\n" + 
+				 "       B.nombre_completo usuario_nombre_completo,\n" + 
+				 "       B.fecha_creacion usuario_fecha_creacion,\n" + 
+				 "       B.fecha_actualizacion usuario_fecha_actualizacion,\n" + 
+				 "       A.area_id,\n" + 
+				 "       C.nombre area_nombre,\n" +
+				 "       C.division area_division,\n" +
+				 "       C.fecha_creacion area_fecha_creacion,\n" + 
+				 "       C.fecha_actualizacion area_fecha_actualizacion,\n" +
+				 "       D.codigo posicion_codigo,\n" + 
+				 "       D.nombre posicion_nombre,\n" + 
+				 "       D.fecha_creacion posicion_fecha_creacion,\n" + 
+				 "       D.fecha_actualizacion posicion_fecha_actualizacion\n" +
+				 "  FROM usuarios B \n" + 
+				 "  LEFT JOIN posicion_datos A ON A.usuario_codigo=B.codigo AND A.proceso_id=0\n" + 
+				 "  LEFT JOIN areas C ON A.area_id=C.id\n" +
+				 "  LEFT JOIN posiciones D ON A.posicion_codigo=D.codigo\n" +
+				 " WHERE B.fecha_eliminacion IS NULL";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		return plantilla.query(sql, paramMap, new UsuarioMapper());
 	}
 
-	public Usuario findByCodigo(String codigo) throws EmptyResultDataAccessException {
+	public Usuario findByCodigo(String codigo, Long procesoId) throws EmptyResultDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
@@ -91,13 +110,15 @@ public class UsuarioRepository {
 					 "  LEFT JOIN centro_tipos F ON E.centro_tipo_id=F.id\n" +
 					 "  LEFT JOIN centro_grupos G ON E.centro_grupo_id=G.id\n" +
 				     " WHERE A.codigo=:codigo\n" +
+					 "   AND B.proceso_id=:proceso_id" +
 					 "   AND A.fecha_eliminacion IS NULL";
-		return plantilla.queryForObject(sql,
-				new MapSqlParameterSource("codigo", codigo),
-				new UsuarioMapper());
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("codigo", codigo);
+        paramMap.put("proceso_id", procesoId);
+		return plantilla.queryForObject(sql, paramMap, new UsuarioMapper());
 	}
 	
-	public Usuario findByPosicionCodigo(String posicionCodigo) throws EmptyResultDataAccessException {
+	public Usuario findByPosicionCodigo(String posicionCodigo, Long procesoId) throws EmptyResultDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
@@ -133,11 +154,13 @@ public class UsuarioRepository {
 					 "  LEFT JOIN centros E ON B.centro_id=E.id\n" +
 					 "  LEFT JOIN centro_tipos F ON E.centro_tipo_id=F.id\n" +
 					 "  LEFT JOIN centro_grupos G ON E.centro_grupo_id=G.id\n" +
-				     " WHERE B.posicion_codigo=:posicionCodigo\n" +
+				     " WHERE proceso_id=:procesoId\n" +
+					 "   AND B.posicion_codigo=:posicionCodigo\n" +
 					 "   AND A.fecha_eliminacion IS NULL";
-		return plantilla.queryForObject(sql,
-				new MapSqlParameterSource("posicionCodigo", posicionCodigo),
-				new UsuarioMapper());
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("procesoId", procesoId);
+        paramMap.put("posicionCodigo", posicionCodigo);
+		return plantilla.queryForObject(sql,paramMap,new UsuarioMapper());
 	}
 	
 	public Usuario findByCodigoWithPosicion(String codigo) throws EmptyResultDataAccessException {

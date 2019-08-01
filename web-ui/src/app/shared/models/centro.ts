@@ -7,6 +7,7 @@ export class Centro {
     tipoId: number;
     empresaId: number;
     fechaCreacion: Date;
+    fechaActualizacion: Date;
     porcentaje: number;
     procesoId: number;
   }

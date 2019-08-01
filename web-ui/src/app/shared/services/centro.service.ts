@@ -48,9 +48,8 @@ export class CentroService {
   obtenerEncuesta(posicionCodigo: string): Observable<Encuesta> {
     const str1 = "procesos/" + this.authService.proceso.id;
     const str2 = "colaboradores/" + posicionCodigo;
-    const str3 = "encuesta/empresas";
-    const url = "https://api.myjson.com/bins/7oi9p";
-    // const url = this.urlServer.api + str1 + "/" + str2 + "/" + str3;
+    const str3 = "encuesta/centro";
+    const url = this.urlServer.api + str1 + "/" + str2 + "/" + str3;
     return this.http.get<Encuesta>(url, {
       headers: this.agregarAuthorizationHeader()
     });
@@ -59,7 +58,7 @@ export class CentroService {
   guardarEncuesta(encuesta: Encuesta, posicionCodigo: string): Observable<any> {
     const str1 = "procesos/" + this.authService.proceso.id;
     const str2 = "colaboradores/" + posicionCodigo;
-    const str3 = "encuesta/empresas";
+    const str3 = "encuesta/centro";
     const url = this.urlServer.api + str1 + "/" + str2 + "/" + str3;
     return this.http.post<any>(url, encuesta, {
       headers: this.agregarAuthorizationHeader()

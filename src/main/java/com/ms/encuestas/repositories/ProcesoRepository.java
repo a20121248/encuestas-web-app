@@ -18,8 +18,7 @@ public class ProcesoRepository {
 			         "       A.fecha_cierre proceso_fecha_cierre,\n" + 
 			         "       A.fecha_creacion proceso_fecha_creacion,\n" + 
 			         "       A.fecha_actualizacion proceso_fecha_actualizacion,\n" + 
-			         "       B.codigo usuario_codigo,\n" + 
-			         "       B.nombre usuario_nombre,\n" + 
+			         "       B.codigo usuario_codigo,\n" +
 			         "       B.nombre_completo usuario_nombre_completo,\n" + 
 			         "       B.fecha_creacion usuario_fecha_creacion,\n" + 
 			         "       B.fecha_actualizacion usuario_fecha_actualizacion\n" + 
@@ -27,8 +26,6 @@ public class ProcesoRepository {
 			         "  JOIN usuarios B ON A.usuario_codigo=B.codigo\n" + 
 			         " WHERE A.fecha_eliminacion IS NULL\n" + 
 			         "   AND A.fecha_cierre IS NULL";
-        return plantilla.queryForObject(sql,
-        		new MapSqlParameterSource("codigo", "a"),
-        		new ProcesoMapper());
+        return plantilla.queryForObject(sql, (MapSqlParameterSource) null, new ProcesoMapper());
 	}
 }
