@@ -55,6 +55,10 @@ const routes: Routes = [
   { path: '', redirectTo: 'encuesta', pathMatch: 'full' },
   { path: 'colaboradores', component: SeleccionarUsuarioComponent },
   { path: 'colaboradores/:codigo/encuesta', component: EncEmpresaComponent },
+  { path: 'colaboradores/:codigo/encuesta/eps', component: EncEPSComponent },
+  { path: 'colaboradores/:codigo/encuesta/centro', component: EncCentroComponent },
+  { path: 'colaboradores/:codigo/encuesta/linea', component: EncLineaComponent },
+
   {
     path: 'encuestas',
     children: [
