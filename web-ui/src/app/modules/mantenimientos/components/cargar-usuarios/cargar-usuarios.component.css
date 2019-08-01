@@ -1,0 +1,8 @@
+.mat-raised-button{
+    color: white;
+    background-color:#ff6319;
+    margin-left: 10px;
+    width: 80px !important;
+    margin-top: 15px; 
+    /* padding: 0px 20px 0px 20px; */
+}
