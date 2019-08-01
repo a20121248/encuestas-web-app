@@ -55,28 +55,13 @@ public class EncuestaService implements EncuestaServiceI {
 	}
 	
 	@Override
-	public EncuestaEps getEps(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+	public EncuestaCentro getCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
     	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId)) {
     		if (!posicionRepository.exists(procesoId, posicionCodigo))
     			return null;
 			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);    		
     	}
-    	return encuestaRepository.getEncuestaEps(procesoId, posicionCodigo, encuestaTipoId);
-	}
-	
-	@Override
-	public void saveEps(EncuestaEps encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		//encuestaRepository.saveEps(encuesta, procesoId, posicionCodigo, encuestaTipoId);		
-	}
-	
-	@Override
-	public EncuestaCentro getCentro(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId)) {
-    		if (!posicionRepository.exists(procesoId, posicionCodigo))
-    			return null;
-			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);    		
-    	}
-    	return encuestaRepository.getEncuestaCentro(procesoId, posicionCodigo, encuestaTipoId);
+    	return encuestaRepository.getEncuestaCentro(empresaId, procesoId, posicionCodigo, encuestaTipoId);
 	}
 	
 	@Override

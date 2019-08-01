@@ -98,36 +98,8 @@ public class EncuestaRepository {
 		encuesta.setLstItems(plantilla.query(sql, paramMap, new EmpresaMapper()));		
 		return encuesta;
 	}
-
-	public EncuestaEps getEncuestaEps(Long procesoId, String posicionCodigo, Long encuestaTipoId) {		
-		String sql = "SELECT A.id,\n" + 
-					 "       A.nombre,\n" +
-					 "       A.fecha_creacion,\n" +
-					 "       A.fecha_actualizacion,\n" +
-					 "       NVL(B.porcentaje*100,0) porcentaje\n" + 
-					 "  FROM centros A\n" + 
-					 "  LEFT JOIN encuesta_centro B\n" +
-					 "    ON A.id=B.centro_id\n" +
-					 "   AND B.proceso_id=:proceso_id\n" +
-					 "   AND B.posicion_codigo=:posicion_codigo\n" + 
-					 " WHERE A.empresa_id=:empresa_id\n" +
-					 "   AND A.fecha_eliminacion IS NULL\n" +
-					 " ORDER BY A.id";
-		Map<String, Object> paramMap = new HashMap<String, Object>();		
-		paramMap.put("proceso_id", procesoId);
-		paramMap.put("empresa_id", 2);
-		paramMap.put("posicion_codigo", posicionCodigo);
-		paramMap.put("encuesta_tipo_id", encuestaTipoId);
-		EncuestaEps encuesta = new EncuestaEps();
-		encuesta.setLstItems(plantilla.query(sql, paramMap, new EmpresaMapper()));		
-		return encuesta;
-	}
 	
-	public void saveEncuestaEpsDetalle(List<Empresa> lstEmpresas, Long procesoId, String posicionCodigo) {
-		
-	}
-	
-	public EncuestaCentro getEncuestaCentro(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+	public EncuestaCentro getEncuestaCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
 		String sql = "SELECT A.justificacion_id,\n" + 
 			         "       B.nombre justificacion_nombre,\n" +
 			         "       A.justificacion_detalle,\n" +
@@ -141,7 +113,7 @@ public class EncuestaRepository {
 			         "   AND encuesta_tipo_id=:encuesta_tipo_id";
 		Map<String, Object> paramMap = new HashMap<String, Object>();		
 		paramMap.put("proceso_id", procesoId);
-		paramMap.put("empresa_id", 1);
+		paramMap.put("empresa_id", empresaId);
 		paramMap.put("posicion_codigo", posicionCodigo);
 		paramMap.put("encuesta_tipo_id", encuestaTipoId);
 		EncuestaCentro encuesta = plantilla.queryForObject(sql, paramMap, new EncuestaCentroMapper());

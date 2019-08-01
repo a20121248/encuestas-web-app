@@ -13,10 +13,7 @@ public interface EncuestaServiceI {
 	public EncuestaEmpresa getEmpresa(Long procesoId, String posicionCodigo, Long encuestaTipoId);
 	public void saveEmpresa(EncuestaEmpresa encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);	
 	
-	public EncuestaEps getEps(Long procesoId, String posicionCodigo, Long encuestaTipoId);
-	public void saveEps(EncuestaEps encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);
-
-	public EncuestaCentro getCentro(Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	public EncuestaCentro getCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId);
 	public void saveCentro(EncuestaCentro encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);
 	
 	public EncuestaLinea getLinea(Long procesoId, String posicionCodigo, Long encuestaTipoId);

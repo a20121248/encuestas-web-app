@@ -47,20 +47,20 @@ public class EncuestaController {
 	
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps")
 	@Transactional(readOnly = true)
-	public EncuestaEps getEps(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
-		return encuestaService.getEps(procesoId, posicionCodigo, new Long(2));
+	public EncuestaCentro getEps(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
+		return encuestaService.getCentro(new Long(2), procesoId, posicionCodigo, new Long(2));
 	}
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createEps(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaEps encuesta) {
-		this.encuestaService.saveEps(encuesta, procesoId, posicionCodigo, new Long(2));
+		//this.encuestaService.saveEps(encuesta, procesoId, posicionCodigo, new Long(2));
 	}
 	
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro")
 	@Transactional(readOnly = true)
 	public EncuestaCentro getCentro(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
-		return encuestaService.getCentro(procesoId, posicionCodigo, new Long(3));
+		return encuestaService.getCentro(new Long(1), procesoId, posicionCodigo, new Long(3));
 	}
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro")
