@@ -1,46 +1,68 @@
-import { Injectable } from '@angular/core';
-import { Centro } from '../models/centro';
-import { throwError, of, Observable } from 'rxjs';
-import {HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { throwError, of, Observable } from "rxjs";
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse
+} from "@angular/common/http";
+import { AppConfig } from "src/app/shared/services/app.config";
+import { AuthService } from "src/app/shared/services/auth.service";
+import { Router } from "@angular/router";
 
+import { Centro } from "src/app/shared/models/centro";
+import { Encuesta } from "src/app/shared/models/encuesta";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
-
 export class CentroService {
-  private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas/1/centros';
-  private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
+  private httpHeaders = new HttpHeaders({ "Content-Type": "application/json" });
+  protected urlServer = AppConfig.settings.urlServer;
 
-  constructor(private http: HttpClient) { }
-  private handleError(error: HttpErrorResponse) {
-    console.error(error);
-    return throwError(error);
+  constructor(
+    public authService: AuthService,
+    private http: HttpClient,
+    private router: Router
+  ) {}
+
+  private agregarAuthorizationHeader() {
+    let token = this.authService.token;
+    if (token != null) {
+      return this.httpHeaders.append("Authorization", "Bearer " + token);
+    }
+    return this.httpHeaders;
   }
 
-  listCentros: Centro[] = [];
-
-  getCentro(): Observable<Centro[]> {
-
-    return this.http.get<Centro[]>(this.urlEndPoint);
-    
-  }
-  getEpsPorc(): Observable<Centro[]> {
-
-    return this.http.get<Centro[]>(this.urlEndPoint);
+  private isNoAutorizado(e): boolean {
+    if (e.status == 401 || e.status == 403) {
+      this.router.navigate(["/login"]);
+      return true;
+    }
+    return false;
   }
 
-  postRespuesta(centros: Centro[]):any {
-    fetch(this.urlEndPoint,
-      {
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify(centros)
-      })
-      .then(function(res){ console.log(res) })
-      .catch(function(res){ console.log(res) });
+  errorHandler(error: any): void {
+    console.log(error);
+  }
+
+  obtenerEncuesta(posicionCodigo: string): Observable<Encuesta> {
+    const str1 = "procesos/" + this.authService.proceso.id;
+    const str2 = "colaboradores/" + posicionCodigo;
+    const str3 = "encuesta/empresas";
+    const url = "https://api.myjson.com/bins/7oi9p";
+    // const url = this.urlServer.api + str1 + "/" + str2 + "/" + str3;
+    return this.http.get<Encuesta>(url, {
+      headers: this.agregarAuthorizationHeader()
+    });
+  }
+
+  guardarEncuesta(encuesta: Encuesta, posicionCodigo: string): Observable<any> {
+    const str1 = "procesos/" + this.authService.proceso.id;
+    const str2 = "colaboradores/" + posicionCodigo;
+    const str3 = "encuesta/empresas";
+    const url = this.urlServer.api + str1 + "/" + str2 + "/" + str3;
+    return this.http.post<any>(url, encuesta, {
+      headers: this.agregarAuthorizationHeader()
+    });
   }
 }
