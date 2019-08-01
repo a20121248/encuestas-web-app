@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from "@angular/core";
+import { Linea } from "src/app/shared/models/linea";
 
 @Component({
-  selector: 'app-form-canal',
-  templateUrl: './canal.component.html',
-  styleUrls: ['./canal.component.css']
+  selector: "app-form-canal",
+  templateUrl: "./canal.component.html",
+  styleUrls: ["./canal.component.css"]
 })
 export class CanalComponent implements OnInit {
 
-  constructor() { }
+  @Input() lineaSeleccionada: Linea;
 
-  ngOnInit() {
-  }
+  constructor() {}
 
+  ngOnInit() {}
 }

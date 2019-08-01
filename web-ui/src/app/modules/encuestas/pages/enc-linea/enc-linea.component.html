@@ -12,11 +12,13 @@
             <div class="row">
                 <div class="col-md-7">
                     <app-form-linea (sendLinea)="showCanalesByLinea($event)" [lstLineas]="lstLineas"></app-form-linea>
-                </div>
-                <div class="col-md-5">
+                </div>lineaSeleccionada
+                <app-form-canal *ngIf="lineaSeleccionada" [lineaSeleccionada]="lineaSeleccionada"></app-form-canal>
+
+                <!-- <div class="col-md-5">
                     <app-form-justificacion *ngIf="lineaSeleccionada" [justificacion]="justificacion" [observaciones]="observaciones">
                         </app-form-justificacion>
-                </div>
+                </div> -->
                 <div class="col-md-12 text-right">
                     <button mat-raised-button (click)="goBack()">Atrás</button>
                     <button mat-raised-button (click)="guardarEncuesta()">Guardar</button>
