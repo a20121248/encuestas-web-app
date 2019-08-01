@@ -12,11 +12,8 @@
   <div class="card mt-3">
     <div class="card-body">
       <div class="row">
-        <div class="col-md-6">
-          <app-form-empresa [lstEmpresas]="lstEmpresas"></app-form-empresa>
-        </div>
-        <div class="col-md-5 offset-md-1">
-          <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"></app-form-justificacion>
+        <div class="col-md-12 text-center">
+          <app-producto-subcanal [matriz]="matriz"></app-producto-subcanal>
         </div>
         <div class="col-md-12 text-right">
           <button mat-raised-button color="warn" (click)="goBack()">Atrás</button>

@@ -1,10 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Subcanal } from 'src/app/shared/models/subcanal';
-import { Producto } from 'src/app/shared/models/producto';
-import { ProductoSubcanal } from 'src/app/shared/models/producto-subcanal';
-import { ProductoService } from 'src/app/shared/services/producto.service';
-import { SubcanalService } from 'src/app/shared/services/subcanal.service';
-import { ProductoSubcanalService } from 'src/app/shared/services/producto-subcanal.service';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+
 
 @Component({
   selector: 'app-producto-subcanal',
@@ -12,38 +7,40 @@ import { ProductoSubcanalService } from 'src/app/shared/services/producto-subcan
   styleUrls: ['./producto-subcanal.component.css']
 })
 export class ProductoSubcanalComponent implements OnInit {
-
-  @Input() lstProductoSubcanal: ProductoSubcanal[] ;
-  @Input() lstProducto: Producto[];
-  @Input() lstSubcanal: Subcanal[];
-  lstCabeceraTable: string[]= ["nombreLinea"];
+  
+  @Input() matriz: any[];
+  
+  lstCabeceraTableObtenida: string[];
+  lstCabeceraTableDynamico: string[];
+  sumaTotal:number;
   constructor(
-    private lineaSubcanalService: ProductoSubcanalService,
-    private productoService: ProductoService,
-    private subcanalService: SubcanalService
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.lstProductoSubcanal = [];
-    this.lstProducto= [];
-    this.lstSubcanal = [];
+    this.obtenerNombresColumna();
   }
 
-  setUpCabeceraTabla():void{
-    this.lstSubcanal.forEach(element => {
-      this.lstCabeceraTable.push(element.nombre);
-    });
+  obtenerNombresColumna(){
+    this.lstCabeceraTableDynamico=this.matriz[0].lstSubcanales.map(sC=> sC.nombre);
+    this.lstCabeceraTableObtenida=['nombreProducto'];
+    this.lstCabeceraTableObtenida.push(...this.lstCabeceraTableDynamico);
+    this.lstCabeceraTableObtenida.push('Total');
   }
-
-  getLstProductoSubcanal(): ProductoSubcanal[] {
-    return this.lstProductoSubcanal;
+  obtenerSuma(element: any):number{
+    if(element!=null){
+      return element.lstSubcanales.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+    }
+    else return 0;
+      
   }
-
-  getLstProducto(): Producto[] {
-    return this.lstProducto;
-  }
-
-  getLstSubcanal(): Subcanal[] {
-    return this.lstSubcanal;
+  obtenerSumaTotal():number{
+    this.sumaTotal=0;
+    if(this.matriz!= null){
+      this.matriz.forEach(element => {
+        this.sumaTotal+=element.lstSubcanales.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+      });
+      return this.sumaTotal;
+    }
+    else return 0;
   }
 }

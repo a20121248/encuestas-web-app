@@ -1,0 +1,39 @@
+.card {
+    width: 100%;
+}
+.tabla-container {
+  height:500px;
+  width: 100%;
+  overflow: auto;
+  padding: 0%;
+}
+table {
+  width: 100%;
+}
+
+tr.mat-footer-row {
+    font-weight: bold;
+}
+th.mat-header-cell {
+    text-align: center;
+}
+
+.mat-column-nombreProducto {
+    font-weight: bold;
+    text-align: left;
+}
+
+.mat-column-Total {
+    font-weight: bold;
+    text-align: right;
+}
+
+.mat-form-field { 
+    width: 75px !important;
+    text-align: right !important;
+    margin-right: 5px;
+}
+
+th.mat-header-cell:first-of-type{
+    text-align: left;
+}
