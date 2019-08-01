@@ -3,7 +3,7 @@ package com.ms.encuestas.models;
 import java.io.Serializable;
 import java.util.List;
 
-public class Encuesta implements Serializable {
+public class EncuestaCentro implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Empresa> lstItems;
 	private Justificacion justificacion;

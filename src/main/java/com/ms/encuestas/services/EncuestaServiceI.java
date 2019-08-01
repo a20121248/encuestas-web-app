@@ -1,17 +1,36 @@
 package com.ms.encuestas.services;
 
-import java.util.List;
-
-import com.ms.encuestas.models.Centro;
-import com.ms.encuestas.models.Empresa;
-import com.ms.encuestas.models.Encuesta;
-import com.ms.encuestas.models.Justificacion;
+import com.ms.encuestas.models.EncuestaEmpresa;
+import com.ms.encuestas.models.EncuestaCanal;
+import com.ms.encuestas.models.EncuestaCentro;
+import com.ms.encuestas.models.EncuestaEps;
+import com.ms.encuestas.models.EncuestaLinea;
+import com.ms.encuestas.models.EncuestaLineaCanal;
+import com.ms.encuestas.models.EncuestaProductoCanal;
+import com.ms.encuestas.models.EncuestaProductoSubcanal;
 
 public interface EncuestaServiceI {
-	public Encuesta getEncuestaEmpresa(Long procesoId, String posicionCodigo, Long encuestaTipoId);
-	public void saveEncuestaCabecera(Justificacion justificacion, String observaciones, Long procesoId, String posicionCodigo, Long encuestaTipoId);
-	public void saveEncuestaEmpresaDetalle(List<Empresa> lstItems, Long procesoId, String posicionCodigo);
-	public void saveEncuestaCentroDetalle(List<Centro> lstItems, Long procesoId, String posicionCodigo);
-	public List<Centro> getEncuestaCentro(Long empresaId, Long procesoId, String posicionCodigo);
-	public void saveLstCentros(List<Centro> lstEmpresas, Long procesoId, String posicionCodigo);
+	public EncuestaEmpresa getEmpresa(Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	public void saveEmpresa(EncuestaEmpresa encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);	
+	
+	public EncuestaEps getEps(Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	public void saveEps(EncuestaEps encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);
+
+	public EncuestaCentro getCentro(Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	public void saveCentro(EncuestaCentro encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	
+	public EncuestaLinea getLinea(Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	public void saveLinea(EncuestaLinea encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	
+	public EncuestaCanal getCanal(Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	public void saveCanal(EncuestaCanal encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	
+	public EncuestaLineaCanal getLineaCanal(Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	public void saveLineaCanal(EncuestaLineaCanal encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	
+	public EncuestaProductoSubcanal getProductoSubcanal(Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	public void saveProductoSubcanal(EncuestaProductoSubcanal encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	
+	public EncuestaProductoCanal getProductoCanal(Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	public void saveProductoCanal(EncuestaProductoCanal encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);
 }

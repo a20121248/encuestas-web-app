@@ -1,12 +1,15 @@
 package com.ms.encuestas.repositories;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.ms.encuestas.models.EncuestaEmpresa;
 import com.ms.encuestas.models.Posicion;
 
 @Repository
@@ -17,6 +20,17 @@ public class PosicionRepository {
 	public Long count() {
 		String sql = "SELECT COUNT(1) FROM posiciones WHERE fecha_eliminacion IS NULL";
 		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
+	}
+	
+	public boolean exists(Long procesoId, String posicionCodigo) {
+		String sql = "SELECT COUNT(1)\n" +
+					 "  FROM posicion_datos\n" +
+					 " WHERE proceso_id=:proceso_id\n" +
+					 "   AND posicion_codigo=:posicion_codigo";
+		Map<String, Object> paramMap = new HashMap<String, Object>();		
+		paramMap.put("proceso_id", procesoId);
+		paramMap.put("posicion_codigo", posicionCodigo);
+		return plantilla.queryForObject(sql, paramMap, Integer.class)==1;
 	}
 	
 	public List<Posicion> findAll() {
