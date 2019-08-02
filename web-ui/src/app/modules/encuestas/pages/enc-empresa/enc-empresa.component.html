@@ -6,17 +6,17 @@
   </div>
 
   <div class="card mt-4 mb-3">
-    <app-usuario-datos [posicionCodigo]="posicionCodigo"></app-usuario-datos>
+    <app-usuario-datos *ngIf="usuarioSeleccionado" [posicionCodigo]="posicionCodigo"></app-usuario-datos>
   </div>
 
   <div class="card mt-3">
     <div class="card-body">
       <div class="row">
         <div class="col-md-6">
-          <app-form-empresa [lstEmpresas]="lstEmpresas"></app-form-empresa>
+          <app-form-empresa *ngIf="usuarioSeleccionado" [lstEmpresas]="lstEmpresas" [usuarioSeleccionado]="usuarioSeleccionado"></app-form-empresa>
         </div>
         <div class="col-md-5 offset-md-1">
-          <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"></app-form-justificacion>
+          <app-form-justificacion *ngIf="usuarioSeleccionado" [justificacion]="justificacion" [observaciones]="observaciones"></app-form-justificacion>
         </div>
         <div class="col-md-12 text-right">
           <button mat-raised-button color="warn" (click)="goBack()">Atrás</button>

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 
 
 @Component({
-  selector: 'app-producto-subcanal',
+  selector: 'app-form-producto-subcanal',
   templateUrl: './producto-subcanal.component.html',
   styleUrls: ['./producto-subcanal.component.css']
 })

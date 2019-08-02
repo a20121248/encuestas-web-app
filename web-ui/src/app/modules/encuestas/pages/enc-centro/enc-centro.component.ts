@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { ViewChild } from "@angular/core";
 import { Location } from "@angular/common";
 
@@ -14,6 +14,7 @@ import { Encuesta } from "src/app/shared/models/encuesta";
 import { UsuarioDatosComponent } from "src/app/shared/components/usuario-datos/usuario-datos.component";
 import { Justificacion } from "src/app/shared/models/justificacion";
 import { JustificacionComponent } from "src/app/shared/components/justificacion/justificacion.component";
+import { Usuario } from 'src/app/shared/models/usuario';
 
 @Component({
   selector: "app-enc-centro",
@@ -27,6 +28,7 @@ export class EncCentroComponent implements OnInit {
   titulo = "Herramienta de encuestas";
   posicionCodigo: string;
   encuesta: Encuesta;
+  @Input() usuarioSeleccionado: Usuario;
 
   constructor(
     private centroService: CentroService,
@@ -43,13 +45,13 @@ export class EncCentroComponent implements OnInit {
 
   ngOnInit() {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get("codigo");
-    this.centroService
-      .obtenerEncuesta(this.posicionCodigo)
-      .subscribe(encuesta => {
-        this.lstCentros = encuesta.lstItems as Centro[];
-        this.observaciones = encuesta.observaciones;
-        this.justificacion = encuesta.justificacion;
-      });
+    // this.centroService
+    //   .obtenerEncuesta(this.posicionCodigo)
+    //   .subscribe(encuesta => {
+    //     this.lstCentros = encuesta.lstItems as Centro[];
+    //     this.observaciones = encuesta.observaciones;
+    //     this.justificacion = encuesta.justificacion;
+    //   });
   }
 
   guardarEncuesta() {

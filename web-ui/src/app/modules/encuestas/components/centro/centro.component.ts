@@ -21,10 +21,6 @@ export class CentroComponent implements OnInit {
     this.lstCentros = [];
 }
 
-  // getLstCentro() {
-  //   return this.lstCentros;
-  // }
-
   getTotalPorcentaje(){
     return this.lstCentros.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
   }
