@@ -15,7 +15,8 @@ export class AuthService {
   private _seleccionado: Usuario;
   protected urlServer = AppConfig.settings.urlServer;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient) { }
 
   public get usuario(): Usuario {
     if (this._usuario != null) {

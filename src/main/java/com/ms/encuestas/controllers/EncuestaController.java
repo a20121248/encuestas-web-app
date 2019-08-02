@@ -48,7 +48,7 @@ public class EncuestaController {
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps")
 	@Transactional(readOnly = true)
 	public EncuestaCentro getEps(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
-		return encuestaService.getCentro(new Long(2), procesoId, posicionCodigo, new Long(2));
+		return encuestaService.getCentro(new Long(2), procesoId, posicionCodigo, new Long(2), 0);
 	}
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps")
@@ -57,10 +57,10 @@ public class EncuestaController {
 		//this.encuestaService.saveEps(encuesta, procesoId, posicionCodigo, new Long(2));
 	}
 	
-	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro")
+	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro/{nivel}")
 	@Transactional(readOnly = true)
-	public EncuestaCentro getCentro(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
-		return encuestaService.getCentro(new Long(1), procesoId, posicionCodigo, new Long(3));
+	public EncuestaCentro getCentro(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable int nivel) {
+		return encuestaService.getCentro(new Long(1), procesoId, posicionCodigo, new Long(3), nivel);
 	}
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro")

@@ -16,7 +16,8 @@ import { JustificacionComponent } from "src/app/shared/components/justificacion/
 import { EmpresaService } from "src/app/shared/services/empresa.service";
 import { Encuesta } from "src/app/shared/models/encuesta";
 import { UsuarioDatosComponent } from "src/app/shared/components/usuario-datos/usuario-datos.component";
-import { Justificacion } from "src/app/shared/models/justificacion";
+import { Justificacion } from 'src/app/shared/models/justificacion';
+import { EncuestaService } from 'src/app/shared/services/encuesta.service';
 
 @Component({
   selector: "app-enc-empresa",
@@ -27,14 +28,15 @@ export class EncEmpresaComponent implements OnInit {
   lstEmpresas: Empresa[];
   observaciones: string;
   justificacion: Justificacion;
-  titulo = "Herramienta de encuestas";
+  titulo = 'Herramienta de encuestas';
   posicionCodigo: string;
   encuesta: Encuesta;
 
   constructor(
     private empresaService: EmpresaService,
     private activatedRoute: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private encuestaService: EncuestaService
   ) {}
 
   @ViewChild(EmpresaComponent, { static: false })
@@ -45,7 +47,7 @@ export class EncEmpresaComponent implements OnInit {
   usuarioDatosComponent: UsuarioDatosComponent;
 
   ngOnInit() {
-    this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get("codigo");
+    this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.empresaService
       .obtenerEncuesta(this.posicionCodigo)
       .subscribe(encuesta => {
@@ -67,6 +69,6 @@ export class EncEmpresaComponent implements OnInit {
     this.empresaService
       .guardarEncuesta(this.encuesta, this.posicionCodigo)
       .subscribe(response => console.log(response), err => console.log(err));
-    swal.fire("Guardar encuesta", "Se guardó la encuesta.", "success");
+    swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
   }
 }

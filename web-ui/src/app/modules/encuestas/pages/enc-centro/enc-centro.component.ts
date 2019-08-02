@@ -42,9 +42,9 @@ export class EncCentroComponent implements OnInit {
   usuarioDatosComponent: UsuarioDatosComponent;
 
   ngOnInit() {
-    this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get("codigo");
+    this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.centroService
-      .obtenerEncuesta(this.posicionCodigo)
+      .obtenerEncuesta(this.posicionCodigo, 11)
       .subscribe(encuesta => {
         this.lstCentros = encuesta.lstItems as Centro[];
         this.observaciones = encuesta.observaciones;

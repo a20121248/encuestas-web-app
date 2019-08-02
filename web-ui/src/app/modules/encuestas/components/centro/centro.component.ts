@@ -13,17 +13,13 @@ import {CentroService} from 'src/app/shared/services/centro.service';
 
 export class CentroComponent implements OnInit {
   @Input() lstCentros: Centro[];
-  dcCentro = ['codigo', 'nombre', 'porcentaje'];
+  dcCentro = ['codigo', 'nombre', 'nivel', 'porcentaje'];
 
   constructor( private centroService: CentroService, private http: HttpClient) { }
 
   ngOnInit() {
     this.lstCentros = [];
-}
-
-  // getLstCentro() {
-  //   return this.lstCentros;
-  // }
+  }
 
   getTotalPorcentaje(){
     return this.lstCentros.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);

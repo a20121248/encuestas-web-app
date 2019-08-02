@@ -41,7 +41,7 @@ public class UsuarioController {
 		return usuarioService.findUsuariosDependientesByCodigo(procesoId, posicionCodigo);
 	}
 
-	@GetMapping("/procesos/{procesoId}usuarios/{codigo}")
+	@GetMapping("/procesos/{procesoId}/usuarios/{codigo}")
 	public Usuario show(@PathVariable Long procesoId, @PathVariable String codigo) {
 		return this.usuarioService.findByCodigo(codigo, procesoId);
 		/*Usuario usuario = null;

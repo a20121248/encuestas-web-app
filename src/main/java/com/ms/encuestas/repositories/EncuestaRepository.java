@@ -99,7 +99,7 @@ public class EncuestaRepository {
 		return encuesta;
 	}
 	
-	public EncuestaCentro getEncuestaCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+	public EncuestaCentro getEncuestaCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId, int nivel) {
 		String sql = "SELECT A.justificacion_id,\n" + 
 			         "       B.nombre justificacion_nombre,\n" +
 			         "       A.justificacion_detalle,\n" +
@@ -116,6 +116,7 @@ public class EncuestaRepository {
 		paramMap.put("empresa_id", empresaId);
 		paramMap.put("posicion_codigo", posicionCodigo);
 		paramMap.put("encuesta_tipo_id", encuestaTipoId);
+		paramMap.put("nivel", nivel);
 		EncuestaCentro encuesta = plantilla.queryForObject(sql, paramMap, new EncuestaCentroMapper());
 		
 		sql = "SELECT A.id,\n" +
@@ -131,8 +132,9 @@ public class EncuestaRepository {
 			  "   AND B.proceso_id=:proceso_id\n" +
 			  "   AND B.posicion_codigo=:posicion_codigo\n" + 
 			  " WHERE A.empresa_id=:empresa_id\n" +
+			  "   AND A.nivel>:nivel\n" +
 			  "   AND A.fecha_eliminacion IS NULL\n" +
-			  " ORDER BY A.id";
+			  " ORDER BY A.nivel,A.id";
 		encuesta.setLstItems(plantilla.query(sql, paramMap, new CentroMapper()));		
 		return encuesta;
 	}

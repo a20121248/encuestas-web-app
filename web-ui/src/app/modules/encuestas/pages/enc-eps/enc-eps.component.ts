@@ -6,8 +6,8 @@ import { Router, ActivatedRoute } from "@angular/router";
 
 //-------------------COMPONENTES LOCALES----------------------------------
 
-import { Eps } from "../../../../shared/models/eps";
-import { EpsComponent } from "../../components/eps/eps.component";
+import { Eps } from 'src/app/shared/models/eps';
+import { EpsComponent } from 'src/app/modules/encuestas/components/eps/eps.component';
 import { EpsService } from "src/app/shared/services/eps.service";
 import { JustificacionComponent } from "src/app/shared/components/justificacion/justificacion.component";
 import { Encuesta } from "src/app/shared/models/encuesta";
@@ -23,7 +23,7 @@ export class EncEPSComponent implements OnInit {
   lstEps: Eps[];
   observaciones: string;
   justificacion: Justificacion;
-  titulo = "Herramienta de encuestas";
+  titulo = 'Herramienta de encuestas';
   posicionCodigo: string;
   encuesta: Encuesta;
 
