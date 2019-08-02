@@ -51,14 +51,13 @@ export class UsuarioService {
 
   getUsuarioByPosicionCodigo(codigo: string): Observable<Usuario> {
     return this.http.get<Usuario>(
-      this.urlServer.api + "usuarios/posicion/" + codigo
+      this.urlServer.api + "procesos/"+this.authService.proceso.id+"/usuarios/posicion/" + codigo
     );
   }
 
   getUsuariosDependientes(): Observable<Usuario[]> {
     const str1 = "procesos/" + this.authService.proceso.id;
-    const str2 =
-      "usuarios-dependientes/" + this.authService.usuario.posicionCodigo;
+    const str2 = "usuarios-dependientes/" + this.authService.usuario.posicionCodigo;
 
     return this.http.get<Usuario[]>(this.urlServer.api + str1 + "/" + str2, {
       headers: this.agregarAuthorizationHeader()

@@ -8,6 +8,7 @@ import { AppConfig } from 'src/app/shared/services/app.config';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Empresa } from 'src/app/shared/models/empresa';
 import { Encuesta } from 'src/app/shared/models/encuesta';
+import { Usuario } from '../models/usuario';
 
 @Injectable({
   providedIn: 'root'
@@ -41,12 +42,13 @@ export class EmpresaService {
     console.log(error);
   }
 
-  obtenerEncuesta(posicionCodigo: string): Observable<Encuesta> {
+  obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {
     const str1 = 'procesos/' + this.authService.proceso.id;
-    const str2 = 'colaboradores/' + posicionCodigo;
+    const str2 = 'colaboradores/' + usuario.posicion.codigo;
     const str3 = 'encuesta/empresas';
     const url = this.urlServer.api + str1 + '/' + str2 + '/' + str3;
     return this.http.get<Encuesta>(url, { headers: this.agregarAuthorizationHeader() });
+    
   }
 
   guardarEncuesta(encuesta: Encuesta, posicionCodigo: string): Observable<any> {
