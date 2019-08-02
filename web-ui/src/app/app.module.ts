@@ -15,6 +15,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppComponent } from './app.component';
 import { UsuarioDatosComponent } from './shared/components/usuario-datos/usuario-datos.component';
@@ -138,7 +140,9 @@ export function initializeApp(appConfig: AppConfig) {
     MatTableModule,
     MatToolbarModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    MatDatepickerModule,
+    MatNativeDateModule 
   ],
   providers: [
     Title,
@@ -147,7 +151,8 @@ export function initializeApp(appConfig: AppConfig) {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,
       deps: [AppConfig], multi: true
-    }
+    },
+    MatDatepickerModule
   ],
   bootstrap: [AppComponent]
 })

@@ -28,7 +28,7 @@ export class ProductoSubcanalComponent implements OnInit {
   }
   obtenerSuma(element: any):number{
     if(element!=null){
-      return element.lstSubcanales.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+      return Math.trunc(100000*element.lstSubcanales.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0))/100000;
     }
     else return 0;
       
@@ -39,7 +39,7 @@ export class ProductoSubcanalComponent implements OnInit {
       this.matriz.forEach(element => {
         this.sumaTotal+=element.lstSubcanales.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
       });
-      return this.sumaTotal;
+      return Math.trunc(100000*this.sumaTotal)/100000;
     }
     else return 0;
   }

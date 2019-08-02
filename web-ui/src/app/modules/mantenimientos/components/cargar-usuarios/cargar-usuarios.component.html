@@ -1,1 +1,17 @@
-<p>cargar-usuarios works!</p>
+<div class="card">
+    <h6 class="card-header text-left font-weight-bold text-uppercase py-4">Carga Masiva de Usuarios</h6>
+    <div class="card-body tabla-container">
+        <div class="col-md-12 text-left ">
+            <input  type="file" />
+        </div>
+        <div class="col-md-12 text-left ">
+            Descargar listado vigente
+            <button mat-icon-button color="primary">
+                <i class="material-icons">cloud_download</i>
+            </button>
+        </div>
+    </div>
+    <div class="card-footer">
+        Nota: La ultima actualización del maestro de usuarios fue: {{getLastDateUpdate()}}.
+    </div>
+</div>
