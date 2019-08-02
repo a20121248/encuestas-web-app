@@ -41,7 +41,7 @@ export class EncEmpresaComponent implements OnInit {
     private location: Location,
     private usuarioService: UsuarioService,
     private usuarioSeleccionadoService: UsuarioSeleccionadoService
-  ) {}
+  ) { }
 
   @ViewChild(EmpresaComponent, { static: false })
   empresaComponent: EmpresaComponent;
@@ -52,18 +52,18 @@ export class EncEmpresaComponent implements OnInit {
 
   ngOnInit() {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get("codigo");
-    this.usuarioSeleccionadoService.usuarioActual.subscribe(usuario =>{
-      this.usuarioSeleccionado =usuario;
-    });
-    this.empresaService
-      .obtenerEncuesta(this.usuarioSeleccionado)
-      .subscribe(encuesta => {
-        this.lstEmpresas = encuesta.lstItems as Empresa[];
-        this.observaciones = encuesta.observaciones;
-        this.justificacion = encuesta.justificacion;
-        console.log(this.usuarioSeleccionado);
+    this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo)
+      .subscribe(usr => {
+        this.usuarioSeleccionado = usr;
+        this.usuarioSeleccionadoService.setUsuarioSeleccionado(usr);
+        this.empresaService
+          .obtenerEncuesta(this.usuarioSeleccionado)
+          .subscribe(encuesta => {
+            this.lstEmpresas = encuesta.lstItems as Empresa[];
+            this.observaciones = encuesta.observaciones;
+            this.justificacion = encuesta.justificacion;
+          });
       });
- 
   }
 
   goBack() {

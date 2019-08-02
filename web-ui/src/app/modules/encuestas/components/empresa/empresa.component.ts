@@ -17,13 +17,14 @@ export class EmpresaComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router) {
-     }
+  }
 
   ngOnInit() {
   }
 
   getTotalPorcentaje() {
-    if(this.lstEmpresas != null) return this.lstEmpresas.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+    if (this.lstEmpresas != null) 
+      return this.lstEmpresas.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
     else return 0;
   }
 

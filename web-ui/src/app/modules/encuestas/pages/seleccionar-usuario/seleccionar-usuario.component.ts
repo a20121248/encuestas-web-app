@@ -17,23 +17,20 @@ export class SeleccionarUsuarioComponent implements OnInit {
   dcUsuario = ['codigo', 'nombre', 'area', 'completar'];
   lstUsuario: Usuario[];
 
-
-
   titulo = 'Listado de Usuarios';
   constructor(
     private usuarioService: UsuarioService,
     private router: Router,
-    private usuarioSeleccionadoService: UsuarioSeleccionadoService) { }
-
+    private usuarioSeleccionadoService: UsuarioSeleccionadoService
+  ) {}
 
   ngOnInit() {
     this.usuarioService.getUsuariosDependientes().subscribe(usuarios => {
       this.lstUsuario = usuarios;
-    }
-    );
+    });
   }
-  seleccionarUsuario(usuario:Usuario){
-    this.usuarioSeleccionadoService.cambiarUsuario(usuario);
+  
+  seleccionarUsuario(usuario: Usuario) {
+    this.usuarioSeleccionadoService.setUsuarioSeleccionado(usuario);
   }
-
 }
