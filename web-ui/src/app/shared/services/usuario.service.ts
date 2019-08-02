@@ -11,11 +11,11 @@ import { AppConfig } from "src/app/shared/services/app.config";
 import { AuthService } from "src/app/shared/services/auth.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class UsuarioService {
   protected urlServer = AppConfig.settings.urlServer;
-  private httpHeaders = new HttpHeaders({ "Content-Type": "application/json" });
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   constructor(
     public authService: AuthService,
@@ -27,7 +27,7 @@ export class UsuarioService {
   private agregarAuthorizationHeader() {
     let token = this.authService.token;
     if (token != null) {
-      return this.httpHeaders.append("Authorization", "Bearer " + token);
+      return this.httpHeaders.append('Authorization', 'Bearer ' + token);
     }
     return this.httpHeaders;
   }
@@ -39,14 +39,14 @@ export class UsuarioService {
 
   private isNoAutorizado(e): boolean {
     if (e.status == 401 || e.status == 403) {
-      this.router.navigate(["login"]);
+      this.router.navigate(['login']);
       return true;
     }
     return false;
   }
 
   getUsuario(codigo: string): Observable<Usuario> {
-    return this.http.get<Usuario>(this.urlServer.api + "usuarios/" + codigo);
+    return this.http.get<Usuario>(this.urlServer.api + 'usuarios/' + codigo);
   }
 
   getUsuarioByPosicionCodigo(codigo: string): Observable<Usuario> {
@@ -59,10 +59,10 @@ export class UsuarioService {
   }
 
   getUsuariosDependientes(): Observable<Usuario[]> {
-    const str1 = "procesos/" + this.authService.proceso.id;
-    const str2 = "usuarios-dependientes/" + this.authService.usuario.posicionCodigo;
+    const str1 = 'procesos/' + this.authService.proceso.id + '/';
+    const str2 = 'usuarios-dependientes/' + this.authService.usuario.posicionCodigo;
 
-    return this.http.get<Usuario[]>(this.urlServer.api + str1 + "/" + str2, {
+    return this.http.get<Usuario[]>(this.urlServer.api + str1 + str2, {
       headers: this.agregarAuthorizationHeader()
     });
   }
