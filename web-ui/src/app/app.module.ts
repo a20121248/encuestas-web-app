@@ -73,6 +73,7 @@ const routes: Routes = [
       },
     ]
   },
+  { path:'encuestas', component: EncEmpresaComponent},
   {
     path: 'encuestas',
     children: [
