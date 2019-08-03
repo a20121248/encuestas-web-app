@@ -15,7 +15,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppComponent } from './app.component';
@@ -57,10 +57,22 @@ const routes: Routes = [
   { path: '', redirectTo: 'encuesta', pathMatch: 'full' },
   { path: 'colaboradores', component: SeleccionarUsuarioComponent },
   { path: 'colaboradores/:codigo/encuesta', component: EncEmpresaComponent },
-  { path: 'colaboradores/:codigo/encuesta/eps', component: EncEPSComponent },
-  { path: 'colaboradores/:codigo/encuesta/centro', component: EncCentroComponent },
-  { path: 'colaboradores/:codigo/encuesta/linea', component: EncLineaComponent },
-
+  {
+    path: 'colaboradores/:codigo/encuesta',
+    children: [
+      { path: 'eps', component: EncEPSComponent },
+      { path: 'centro', component: EncCentroComponent },
+      { path: 'linea-canal', component: EncLineaCanalComponent },
+      { path: 'linea', component: EncLineaComponent },
+      {
+        path: 'linea',
+        children: [
+          { path: 'producto-subcanal', component: EncProductoSubCanalComponent },
+          { path: 'producto-canal', component: EncCentroComponent },
+        ]
+      },
+    ]
+  },
   {
     path: 'encuestas',
     children: [
@@ -142,7 +154,7 @@ export function initializeApp(appConfig: AppConfig) {
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
     MatDatepickerModule,
-    MatNativeDateModule 
+    MatNativeDateModule
   ],
   providers: [
     Title,
