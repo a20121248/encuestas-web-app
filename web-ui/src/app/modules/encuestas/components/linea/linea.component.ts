@@ -12,7 +12,7 @@ import { LineaService } from "../../../../shared/services/linea.service";
 export class LineaComponent implements OnInit {
   @Input() lstLineas: Linea[];
   @Output() sendLinea = new EventEmitter();
-
+|
   dcLinea = ["codigo", "nombre", "porcentaje", "completar"];
 
   constructor(private lineaService: LineaService, private http: HttpClient) {}
