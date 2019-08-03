@@ -3,7 +3,7 @@ package com.ms.encuestas.models;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Empresa implements Serializable {
+public class Eps implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String nombre;
