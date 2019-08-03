@@ -43,19 +43,18 @@ export class EmpresaService {
   }
 
   obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {
-    const str1 = 'procesos/' + this.authService.proceso.id;
-    const str2 = 'colaboradores/' + usuario.posicion.codigo;
+    const str1 = 'procesos/' + this.authService.proceso.id + '/';
+    const str2 = 'colaboradores/' + usuario.posicion.codigo + '/';
     const str3 = 'encuesta/empresas';
-    const url = this.urlServer.api + str1 + '/' + str2 + '/' + str3;
-    return this.http.get<Encuesta>(url, { headers: this.agregarAuthorizationHeader() });
-    
+    const url = this.urlServer.api + str1  + str2  + str3;
+    return this.http.get<Encuesta>(url, { headers: this.agregarAuthorizationHeader() });  
   }
 
   guardarEncuesta(encuesta: Encuesta, posicionCodigo: string): Observable<any> {
-    const str1 = 'procesos/' + this.authService.proceso.id;
-    const str2 = 'colaboradores/' + posicionCodigo;
+    const str1 = 'procesos/' + this.authService.proceso.id + '/';
+    const str2 = 'colaboradores/' + posicionCodigo + '/';
     const str3 = 'encuesta/empresas';
-    const url = this.urlServer.api + str1 + '/' + str2 + '/' + str3;
+    const url = this.urlServer.api + str1  + str2  + str3;
     return this.http.post<any>(url, encuesta, { headers: this.agregarAuthorizationHeader() });
   }
 }

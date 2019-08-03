@@ -7,18 +7,54 @@
   -moz-appearance: textfield;
 }
 
+.card {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+
+.tabla-container {
+  width: 100%;
+  overflow: auto;
+}
 tr.mat-footer-row {
   font-weight: bold;
 }
 
 .mat-column-nombre {
-  width: 65% !important;
+  width: 40%;
+  font-weight: bold;
 }
 
+.mat-form-field { 
+  width: 75px !important;
+  text-align: right !important;
+  margin-right: 5px;
+}
+
+th.mat-header-cell {
+  text-align: center;
+  font-size: bold;
+}
+
+th.mat-header-cell:first-of-type{
+  text-align: left;
+}
 .mat-column-porcentaje {
-  width: 20% !important;
+  width: 30% !important;
+  text-align: center !important;
 }
 
 .mat-column-ingresar {
-  width: 15% !important;
+  width: 20%;
+  text-align: center !important;
+}
+
+h5{
+  font-family: "Foco","Arial",sans-serif;;
+  color: #585a5b !important;
+  box-align: center;
+  font-size: 17px;
 }
