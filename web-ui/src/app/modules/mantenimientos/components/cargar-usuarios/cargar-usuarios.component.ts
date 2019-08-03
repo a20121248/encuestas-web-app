@@ -11,5 +11,7 @@ export class CargarUsuariosComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  getLastDateUpdate():any{
+    return 0;
+  }
 }

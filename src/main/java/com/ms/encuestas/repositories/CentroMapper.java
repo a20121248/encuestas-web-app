@@ -21,8 +21,9 @@ public class CentroMapper implements RowMapper<Centro> {
 		centro.setId(rs.getLong("id"));
 		centro.setCodigo(rs.getString("codigo"));
 		centro.setNombre(rs.getString("nombre"));
-		//centro.setNivel(rs.getInt("nivel"));
+		centro.setNivel(rs.getInt("nivel"));
 		centro.setFechaCreacion(rs.getDate("fecha_creacion"));
+		centro.setFechaActualizacion(rs.getDate("fecha_actualizacion"));
 		centro.setPorcentaje(porcentaje);
 		return centro;
 	}

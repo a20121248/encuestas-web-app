@@ -7,6 +7,8 @@ import { AppConfig } from 'src/app/shared/services/app.config';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Encuesta } from 'src/app/shared/models/encuesta';
 import { MATRIZ } from 'src/app/shared/services/producto-subcanal.json'
+import { Usuario } from '../models/usuario';
+import { ProductoSubcanal } from '../models/producto-subcanal';
 @Injectable({
   providedIn: 'root'
 })
@@ -38,7 +40,20 @@ export class ProductoSubcanalService {
     console.log(error);
   }
 
-  obtenerMatriz():Observable<any>{
+  obtenerMatriz(usuario:Usuario):Observable<ProductoSubcanal[]>{
+    // const str1 = 'procesos/' + this.authService.proceso.id;
+    // const str2 = 'colaboradores/' + usuario.posicion.codigo;
+    // const str3 = 'encuesta/linea/producto-subcanal';
+    // const url = this.urlServer.api + str1 + '/' + str2 + '/' + str3;
+    // return this.http.get<Encuesta>(url, { headers: this.agregarAuthorizationHeader() });
     return of(MATRIZ);
+  }
+
+  guardarEncuesta(matriz: ProductoSubcanal[], posicionCodigo: string): Observable<any> {
+    const str1 = 'procesos/' + this.authService.proceso.id + '/';
+    const str2 = 'colaboradores/' + posicionCodigo + '/';
+    const str3 = 'encuesta/linea/producto-subcanal';
+    const url = this.urlServer.api + str1 + str2 + str3;
+    return this.http.post<any>(url, matriz, { headers: this.agregarAuthorizationHeader() });
   }
 }

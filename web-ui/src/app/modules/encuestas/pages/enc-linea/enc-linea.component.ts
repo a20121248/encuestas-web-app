@@ -44,7 +44,7 @@ export class EncLineaComponent implements OnInit {
   usuarioDatosComponent: UsuarioDatosComponent;
 
   ngOnInit() {
-    this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get("codigo");
+    this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.lineaService
       .obtenerEncuesta(this.posicionCodigo)
       .subscribe(encuesta => {

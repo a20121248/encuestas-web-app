@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 
 import { Centro } from 'src/app/shared/models/centro';
 import {CentroService} from '../../../../shared/services/centro.service';
+import { Usuario } from 'src/app/shared/models/usuario';
 
 @Component({
   selector: 'app-form-centro',
@@ -13,6 +14,7 @@ import {CentroService} from '../../../../shared/services/centro.service';
 
 export class CentroComponent implements OnInit {
   @Input() lstCentros: Centro[];
+  @Input() usuarioSeleccionado: Usuario;
   dcCentro = ['codigo','nombre', 'porcentaje'];
 
   constructor( private centroService: CentroService, private http: HttpClient) { }
@@ -20,10 +22,6 @@ export class CentroComponent implements OnInit {
   ngOnInit() {
     this.lstCentros = [];
 }
-
-  // getLstCentro() {
-  //   return this.lstCentros;
-  // }
 
   getTotalPorcentaje(){
     return this.lstCentros.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);

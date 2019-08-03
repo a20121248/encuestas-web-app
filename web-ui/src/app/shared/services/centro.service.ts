@@ -11,6 +11,7 @@ import { Router } from "@angular/router";
 
 import { Centro } from "src/app/shared/models/centro";
 import { Encuesta } from "src/app/shared/models/encuesta";
+import { Usuario } from '../models/usuario';
 
 @Injectable({
   providedIn: "root"
@@ -45,12 +46,12 @@ export class CentroService {
     console.log(error);
   }
 
-  obtenerEncuesta(posicionCodigo: string): Observable<Encuesta> {
-    const str1 = "procesos/" + this.authService.proceso.id;
-    const str2 = "colaboradores/" + posicionCodigo;
-    const str3 = "encuesta/empresas";
-    const url = "https://api.myjson.com/bins/7oi9p";
-    // const url = this.urlServer.api + str1 + "/" + str2 + "/" + str3;
+  obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {
+    const str1 = 'procesos/' + this.authService.proceso.id + '/';
+    const str2 = 'colaboradores/' + usuario.posicion.codigo + '/';
+    const str3 = 'encuesta/centro/' + usuario.posicion.centro.nivel;
+    // const url = "https://api.myjson.com/bins/7oi9p";
+    const url = this.urlServer.api + str1 + str2 + str3;
     return this.http.get<Encuesta>(url, {
       headers: this.agregarAuthorizationHeader()
     });

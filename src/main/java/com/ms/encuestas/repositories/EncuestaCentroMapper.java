@@ -5,12 +5,12 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.ms.encuestas.models.EncuestaEmpresa;
+import com.ms.encuestas.models.EncuestaCentro;
 import com.ms.encuestas.models.Justificacion;
 
-public class EncuestaMapper implements RowMapper<EncuestaEmpresa> {
+public class EncuestaCentroMapper implements RowMapper<EncuestaCentro> {
 	@Override
-	public EncuestaEmpresa mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public EncuestaCentro mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Justificacion justificacion;
 		try {
 			justificacion = new Justificacion();
@@ -23,9 +23,9 @@ public class EncuestaMapper implements RowMapper<EncuestaEmpresa> {
 			justificacion = null;
 		}		
 		
-		EncuestaEmpresa encuesta;
+		EncuestaCentro encuesta;
 		try {
-			encuesta = new EncuestaEmpresa();
+			encuesta = new EncuestaCentro();
 			encuesta.setObservaciones(rs.getString("observaciones"));
 			encuesta.setJustificacion(justificacion);
 		} catch (java.sql.SQLException e) {

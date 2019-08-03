@@ -25,7 +25,7 @@ public class InfoAdicionalToken implements TokenEnhancer {
 	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
 		Proceso proceso = procesoService.getCurrentProceso();
-		Usuario usuario = usuarioService.findByCodigo(authentication.getName());
+		Usuario usuario = usuarioService.findByCodigo(authentication.getName(), proceso.getId());
 		Map<String, Object> additionalInformation = new HashMap<>();
 		String nombreCompleto = usuario.getNombreCompleto();
 		additionalInformation.put("nombre", nombreCompleto.substring(0, nombreCompleto.indexOf(' ')));

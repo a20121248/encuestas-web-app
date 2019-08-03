@@ -41,9 +41,9 @@ public class UsuarioController {
 		return usuarioService.findUsuariosDependientesByCodigo(procesoId, posicionCodigo);
 	}
 
-	@GetMapping("/usuarios/{codigo}")
-	public Usuario show(@PathVariable String codigo) {
-		return this.usuarioService.findByCodigo(codigo);
+	@GetMapping("/procesos/{procesoId}/usuarios/{codigo}")
+	public Usuario show(@PathVariable Long procesoId, @PathVariable String codigo) {
+		return this.usuarioService.findByCodigo(codigo, procesoId);
 		/*Usuario usuario = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -62,18 +62,18 @@ public class UsuarioController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);*/
 	}
 	
-	@GetMapping("/usuarios/posicion/{posicionCodigo}")
-	public Usuario showByPosicionCodigo(@PathVariable String posicionCodigo) {
-		return this.usuarioService.findByPosicionCodigo(posicionCodigo);
+	@GetMapping("procesos/{procesoId}/usuarios/posicion/{posicionCodigo}")
+	public Usuario showByPosicionCodigo(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
+		return this.usuarioService.findByPosicionCodigo(posicionCodigo, procesoId);
 	}
 
-	@PostMapping("/usuarios")
-	public ResponseEntity<?> create(@PathVariable String codigo) {
+	@PostMapping("procesos/{procesoId}/usuarios")
+	public ResponseEntity<?> create(@PathVariable Long procesoId, @PathVariable String codigo) {
 		Usuario usuario = null;
 		Map<String, Object> response = new HashMap<>();
 
 		try {
-			usuario = this.usuarioService.findByCodigo(codigo);
+			usuario = this.usuarioService.findByCodigo(codigo, procesoId);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
 			response.put("error", e.getMessage() + ": " + e.getMostSpecificCause().getMessage());
