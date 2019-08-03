@@ -17,6 +17,9 @@ import { EmpresaService } from "src/app/shared/services/empresa.service";
 import { Encuesta } from "src/app/shared/models/encuesta";
 import { UsuarioDatosComponent } from "src/app/shared/components/usuario-datos/usuario-datos.component";
 import { Justificacion } from "src/app/shared/models/justificacion";
+import { Usuario } from 'src/app/shared/models/usuario';
+import { UsuarioService } from 'src/app/shared/services/usuario.service';
+import { UsuarioSeleccionadoService } from 'src/app/shared/services/usuario-seleccionado.service';
 
 @Component({
   selector: "app-enc-empresa",
@@ -29,13 +32,16 @@ export class EncEmpresaComponent implements OnInit {
   justificacion: Justificacion;
   titulo = "Herramienta de encuestas";
   posicionCodigo: string;
+  usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
 
   constructor(
     private empresaService: EmpresaService,
     private activatedRoute: ActivatedRoute,
-    private location: Location
-  ) {}
+    private location: Location,
+    private usuarioService: UsuarioService,
+    private usuarioSeleccionadoService: UsuarioSeleccionadoService
+  ) { }
 
   @ViewChild(EmpresaComponent, { static: false })
   empresaComponent: EmpresaComponent;
@@ -46,12 +52,17 @@ export class EncEmpresaComponent implements OnInit {
 
   ngOnInit() {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get("codigo");
-    this.empresaService
-      .obtenerEncuesta(this.posicionCodigo)
-      .subscribe(encuesta => {
-        this.lstEmpresas = encuesta.lstItems as Empresa[];
-        this.observaciones = encuesta.observaciones;
-        this.justificacion = encuesta.justificacion;
+    this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo)
+      .subscribe(usr => {
+        this.usuarioSeleccionado = usr;
+        this.usuarioSeleccionadoService.setUsuarioSeleccionado(usr);
+        this.empresaService
+          .obtenerEncuesta(this.usuarioSeleccionado)
+          .subscribe(encuesta => {
+            this.lstEmpresas = encuesta.lstItems as Empresa[];
+            this.observaciones = encuesta.observaciones;
+            this.justificacion = encuesta.justificacion;
+          });
       });
   }
 

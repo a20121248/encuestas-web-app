@@ -1,5 +1,5 @@
 import { ProductoSubcanal } from '../models/producto-subcanal';
-export const MATRIZ: any[] = [
+export const MATRIZ: ProductoSubcanal[] = [
     {   
         codigo: 'PRO01',
         nombre: 'Producto 1',

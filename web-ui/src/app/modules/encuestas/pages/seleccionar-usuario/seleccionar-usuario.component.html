@@ -31,8 +31,8 @@
               <th mat-header-cell *matHeaderCellDef> COMPLETAR </th>
               <td mat-cell *matCellDef="let usuario">
                 <ng-container>
-                  <a mat-raised-button color="primary" [routerLink]="[usuario.posicion.codigo,'encuesta']"><i
-                      class="material-icons">navigate_next</i></a>
+                  <button mat-raised-button color="primary" (click)="seleccionarUsuario(usuario)" [routerLink]="[usuario.posicion.codigo,'encuesta']"><i
+                      class="material-icons">navigate_next</i></button>
                 </ng-container>
               </td>
               <td mat-footer-cell *matFooterCellDef> </td>

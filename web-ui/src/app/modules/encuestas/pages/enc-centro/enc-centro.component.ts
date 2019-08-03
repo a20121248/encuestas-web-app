@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { ViewChild } from "@angular/core";
 import { Location } from "@angular/common";
 
@@ -14,6 +14,9 @@ import { Encuesta } from "src/app/shared/models/encuesta";
 import { UsuarioDatosComponent } from "src/app/shared/components/usuario-datos/usuario-datos.component";
 import { Justificacion } from "src/app/shared/models/justificacion";
 import { JustificacionComponent } from "src/app/shared/components/justificacion/justificacion.component";
+import { Usuario } from 'src/app/shared/models/usuario';
+import { UsuarioService } from 'src/app/shared/services/usuario.service';
+import { UsuarioSeleccionadoService } from 'src/app/shared/services/usuario-seleccionado.service';
 
 @Component({
   selector: "app-enc-centro",
@@ -27,9 +30,12 @@ export class EncCentroComponent implements OnInit {
   titulo = "Herramienta de encuestas";
   posicionCodigo: string;
   encuesta: Encuesta;
+  usuarioSeleccionado: Usuario;
 
   constructor(
     private centroService: CentroService,
+    private usuarioService: UsuarioService,
+    private usuarioSeleccionadoService:UsuarioSeleccionadoService,
     private activatedRoute: ActivatedRoute,
     private location: Location
   ) {}
@@ -43,13 +49,19 @@ export class EncCentroComponent implements OnInit {
 
   ngOnInit() {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get("codigo");
-    this.centroService
-      .obtenerEncuesta(this.posicionCodigo)
+    this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo)
+      .subscribe(usr => {
+        this.usuarioSeleccionado = usr;
+        this.usuarioSeleccionadoService.setUsuarioSeleccionado(usr);
+        this.centroService
+      .obtenerEncuesta(this.posicionCodigo,this.usuarioSeleccionado.posicion.centro.nivel)
       .subscribe(encuesta => {
         this.lstCentros = encuesta.lstItems as Centro[];
         this.observaciones = encuesta.observaciones;
         this.justificacion = encuesta.justificacion;
       });
+      });
+    
   }
 
   guardarEncuesta() {

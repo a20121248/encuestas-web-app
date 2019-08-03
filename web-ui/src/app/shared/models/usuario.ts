@@ -5,13 +5,7 @@ export class Usuario {
   nombre: string;
   contrasenha: string;
   nombreCompleto: string;
-  posicionCodigo: string;
-  posicionNombre: string;
-  areaNombre: string;
-  centroId: number;
-  centroCodigo: string;
-  centroNombre: string;
-  centroNivel: number;
+  posicionCodigo:string;
   usuarioRed: string;
   fechaCreacion: Date;
   tipoEncuestaId: number;

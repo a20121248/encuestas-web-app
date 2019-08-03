@@ -11,5 +11,13 @@ export class ProcesoComponent implements OnInit {
 
   ngOnInit() {
   }
+  getLastDateUpdate():any{
+    return 0;
+  }
 
+  // chosenYearHandler(normalizedYear: Moment) {
+  //   const ctrlValue = this.date.value;
+  //   ctrlValue.year(normalizedYear.year());
+  //   this.date.setValue(ctrlValue);
+  // }
 }
