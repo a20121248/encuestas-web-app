@@ -10,8 +10,7 @@ import { UsuarioService } from 'src/app/shared/services/usuario.service';
   styleUrls: ['./usuario-datos.component.css']
 })
 export class UsuarioDatosComponent implements OnInit {
-  @Input() posicionCodigo: string;
-  usuario: Usuario;
+  @Input() usuario: Usuario;
 
   constructor(
     public authService: AuthService,
@@ -21,11 +20,6 @@ export class UsuarioDatosComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
-      if (usuario) {
-        this.usuario = usuario;
-      }
-    });
   }
 }
 

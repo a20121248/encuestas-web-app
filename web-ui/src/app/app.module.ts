@@ -13,7 +13,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -50,6 +50,7 @@ import { MantenimientosComponent } from './modules/mantenimientos/pages/mantenim
 import { ReportesControlComponent } from './modules/reportes/components/reportes-control/reportes-control.component';
 import { ReportesResultadosComponent } from './modules/reportes/components/reportes-resultados/reportes-resultados.component';
 import { ReportesComponent } from './modules/reportes/pages/reportes/reportes.component';
+import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 
 const routes: Routes = [
   //{ path: '/', redirectTo: 'login', pathMatch: 'full' },
@@ -158,6 +159,7 @@ export function initializeApp(appConfig: AppConfig) {
     MatNativeDateModule
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     Title,
     AppConfig,
     {
