@@ -1,31 +1,30 @@
-<div class="card">
-    <h3 class="card-header text-center font-weight-bold text-uppercase py-4">ASIGNACIÓN POR PRODUCTO - SUBCANAL</h3>
-    <div class="card-body tabla-container">
-        <table mat-table [dataSource]="matriz" class="design">
-            <ng-container matColumnDef="nombreProducto" sticky>
-                <th mat-header-cell *matHeaderCellDef> Nombre Producto </th>
-                <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
-                <td mat-footer-cell *matFooterCellDef>  </td>
-            </ng-container>
-            <ng-container *ngFor="let subcanal of lstCabeceraTableDynamico; let i = index" matColumnDef="{{subcanal}}">
-                <th mat-header-cell *matHeaderCellDef> {{subcanal}} </th>
-                <td mat-cell *matCellDef="let element">
-                    <mat-form-field>
-                        <input matInput type ='number'[(ngModel)]='element.lstSubcanales[i].porcentaje'>
-                        <span matSuffix>%</span>
-                    </mat-form-field>
-                </td>
-                <td mat-footer-cell *matFooterCellDef>  </td>
-            </ng-container>
-
-            <ng-container matColumnDef="Total" stickyEnd>
-                <th mat-header-cell *matHeaderCellDef> Total </th>
-                <td mat-cell *matCellDef="let element"> {{obtenerSuma(element)}} <span matSuffix>%</span></td>
-                <td mat-footer-cell *matFooterCellDef> Total {{obtenerSumaTotal()}} <span matSuffix>%</span></td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="lstCabeceraTableObtenida; sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: lstCabeceraTableObtenida;"></tr>
-            <tr mat-footer-row *matFooterRowDef="lstCabeceraTableObtenida; sticky: true"></tr>
-        </table>
-    </div>
-</div>
+<mat-card class="encuesta mat-elevation-z2">
+  <h4 class="card-header text-center py-3">ASIGNACIÓN POR PRODUCTO - SUBCANAL</h4>
+  <div class="table-responsive cuadro">
+    <table mat-table [dataSource]="matriz">
+      <ng-container matColumnDef="nombreProducto" sticky>
+        <th mat-header-cell *matHeaderCellDef>Productos</th>
+        <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      <ng-container *ngFor="let subcanal of lstCabeceraTableDynamico; let i = index" matColumnDef="{{ subcanal }}">
+        <th mat-header-cell *matHeaderCellDef>{{ subcanal }}</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-form-field>
+            <input matInput type ='number'[(ngModel)]='element.lstSubcanales[i].porcentaje'>
+            <span matSuffix>%</span>
+          </mat-form-field>
+        </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+      <ng-container matColumnDef="Total" stickyEnd>
+        <th mat-header-cell *matHeaderCellDef>Total</th>
+        <td mat-cell *matCellDef="let element"> {{obtenerSuma(element)}} <span matSuffix>%</span></td>
+        <td mat-footer-cell *matFooterCellDef> Total {{obtenerSumaTotal()}} <span matSuffix>%</span></td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="lstCabeceraTableObtenida; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: lstCabeceraTableObtenida;"></tr>
+      <tr mat-footer-row *matFooterRowDef="lstCabeceraTableObtenida; sticky: true"></tr>
+    </table>
+  </div>
+</mat-card>

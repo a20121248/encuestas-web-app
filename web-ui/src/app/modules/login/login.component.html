@@ -1,42 +1,13 @@
-<div fxFlex fxLayout fxLayoutAlign="column" class="login" fxHide.xs>
-  <div fxFlex="33" class="logopage">
-    <img [src]="'assets/img/logo2.png'" alt="">
-  </div>
-  <div fxFlex="30" fxLayout="column wrap" fxLayoutAlign="center" class="login-main">
-    <form method="post">
-      <mat-card>
-        <mat-card-content fxLayout="column">
-          <div fxLayout="row" fxLayoutAlign="center center">
-            <mat-icon matPrefix>person</mat-icon>
-            <mat-form-field>
-              <mat-label>Usuario de red</mat-label>
-              <input [(ngModel)]="usuario.codigo" matInput placeholder="Ej. S88748" name="username">
-            </mat-form-field>
-          </div>
-          <div fxLayout="row" fxLayoutAlign="center center">
-            <mat-icon matPrefix>lock</mat-icon>
-            <mat-form-field>
-              <input [(ngModel)]="usuario.contrasenha" matInput placeholder="Contraseña" [type]="hide ? 'password' : 'text'" name="password">
-              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-          <div fxLayout="row" fxLayoutAlign="center center">
-            <mat-icon matPrefix>settings</mat-icon>
-            <mat-form-field>
-              <mat-select placeholder="Tipo" [formControl]="selectFormControl" required>
-                <mat-option value="1">Pacífico Vida</mat-option>
-                <mat-option value="2">Pacífico Generales</mat-option>
-              </mat-select>
-              <mat-error *ngIf="selectFormControl.hasError('required')">Por favor elija un tipo</mat-error>
-            </mat-form-field>
-          </div>
-        </mat-card-content>
-        <mat-card-actions align="center">
-          <button (click)='login()' mat-raised-button color="accent"><b>LOGIN</b></button>
-        </mat-card-actions>
-      </mat-card>
-    </form>
-  </div>
+<div class="contenedor">
+    <header>
+        Header: Título
+    </header>
+
+    <div class="principal">
+        Texto aleatorio.
+    </div>
+
+    <footer>
+        Footer: 2018
+    </footer>
 </div>

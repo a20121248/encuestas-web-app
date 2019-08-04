@@ -14,7 +14,7 @@ import { UsuarioSeleccionadoService } from 'src/app/shared/services/usuario-sele
 })
 export class SeleccionarUsuarioComponent implements OnInit {
 
-  dcUsuario = ['codigo', 'nombre', 'area', 'completar'];
+  dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'completar'];
   lstUsuario: Usuario[];
 
   titulo = 'Listado de Usuarios';
@@ -29,7 +29,7 @@ export class SeleccionarUsuarioComponent implements OnInit {
       this.lstUsuario = usuarios;
     });
   }
-  
+
   seleccionarUsuario(usuario: Usuario) {
     this.usuarioSeleccionadoService.setUsuarioSeleccionado(usuario);
   }

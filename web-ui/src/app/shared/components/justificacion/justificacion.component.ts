@@ -22,21 +22,12 @@ export class JustificacionComponent implements OnInit {
 
   constructor(
     private justificacionService: JustificacionService,
-    private router: Router) { }
+    private router: Router) {
+      this.justificacionService.getJustificaciones().subscribe(justificaciones => {
+        this.lstJustificaciones = justificaciones;
+      });
+    }
 
   ngOnInit() {
-    this.justificacionService.getJustificaciones().subscribe(justificaciones => {
-      this.lstJustificaciones = justificaciones;
-    });
-  }
-
-  ngAfterViewInit() {
-    console.log('luego:');
-    console.log(this.observaciones);
-    console.log(this.justificacion);
-  }
-
-  getLstEmpresas() {
-    return this.lstJustificaciones;
   }
 }

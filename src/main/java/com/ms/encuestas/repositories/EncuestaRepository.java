@@ -65,6 +65,32 @@ public class EncuestaRepository {
 		plantilla.update(sql,paramMap);
 	}
 	
+	public void updateEncuestaCabecera(Justificacion justificacion, String observaciones, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+		String sql = "UPDATE encuestas\n" +
+					 "   SET estado=:estado,\n" +
+					 "       justificacion_id=:justificacion_id,\n" +
+					 "       justificacion_detalle=:justificacion_detalle,\n" +
+					 "       observaciones=:observaciones,\n" +
+					 "		 fecha_creacion=:fecha_creacion,\n" +
+					 "		 fecha_actualizacion=:fecha_actualizacion\n" +
+				     " WHERE proceso_id=:proceso_id\n" + 
+				     "	 AND encuesta_tipo_id=:encuesta_tipo_id\n" + 
+				     "   AND posicion_codigo=:posicion_codigo";
+		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("proceso_id", procesoId);
+		paramMap.put("encuesta_tipo_id", encuestaTipoId);
+		paramMap.put("posicion_codigo", posicionCodigo);
+		paramMap.put("estado", 1);
+		paramMap.put("justificacion_id", justificacion.getId());
+		paramMap.put("justificacion_detalle", justificacion.getDetalle());
+		paramMap.put("observaciones", observaciones);
+		Date fecha = new Date();
+		paramMap.put("fecha_creacion", fecha);
+		paramMap.put("fecha_actualizacion", fecha);        
+		plantilla.update(sql,paramMap);
+	}
+	
 	public EncuestaEmpresa getEncuestaEmpresa(Long procesoId, String posicionCodigo, Long encuestaTipoId) {			
 		String sql = "SELECT A.justificacion_id,\n" + 
 			         "       B.nombre justificacion_nombre,\n" +
@@ -139,8 +165,46 @@ public class EncuestaRepository {
 		return encuesta;
 	}
 	
-	public void saveEncuestaCentroDetalle(List<Centro> lstCentros, Long procesoId, String posicionCodigo) {
+	public void insertLstEmpresas(List<Empresa> lstEmpresas, Long procesoId, String posicionCodigo) {
+		String sql = "DELETE FROM encuesta_empresa\n" +
+					 " WHERE proceso_id=:proceso_id\n" +
+					 "   AND posicion_codigo=:posicion_codigo";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("proceso_id", procesoId);
+		paramMap.put("posicion_codigo", posicionCodigo);
+		plantilla.update(sql,paramMap);
 		
+		for (Empresa empresa: lstEmpresas) {
+			sql = "INSERT INTO encuesta_empresa(proceso_id,posicion_codigo,empresa_id,porcentaje)\n"+
+	              "VALUES(:proceso_id,:posicion_codigo,:empresa_id,:porcentaje)";
+			paramMap = new HashMap<String, Object>();
+			paramMap.put("proceso_id", procesoId);
+			paramMap.put("posicion_codigo", posicionCodigo);
+			paramMap.put("empresa_id", empresa.getId());
+			paramMap.put("porcentaje", empresa.getPorcentaje()/100);
+			plantilla.update(sql,paramMap);
+		}
+	}
+	
+	public void insertLstCentros(List<Centro> lstCentros, Long procesoId, String posicionCodigo) {
+		String sql = "DELETE FROM encuesta_centro\n" +
+				 	 " WHERE proceso_id=:proceso_id\n" +
+				 	 "   AND posicion_codigo=:posicion_codigo";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("proceso_id", procesoId);
+		paramMap.put("posicion_codigo", posicionCodigo);
+		plantilla.update(sql,paramMap);
+		
+		for (Centro centro: lstCentros) {
+			sql = "INSERT INTO encuesta_centro(proceso_id,posicion_codigo,centro_id,porcentaje)\n"+
+	              "VALUES(:proceso_id,:posicion_codigo,:centro_id,:porcentaje)";
+			paramMap = new HashMap<String, Object>();
+			paramMap.put("proceso_id", procesoId);
+			paramMap.put("posicion_codigo", posicionCodigo);
+			paramMap.put("centro_id", centro.getId());
+			paramMap.put("porcentaje", centro.getPorcentaje()/100);
+			plantilla.update(sql,paramMap);
+		}
 	}
 	
 	public EncuestaLinea getEncuestaLinea(Long procesoId, String posicionCodigo, Long encuestaTipoId) {

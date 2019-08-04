@@ -1,6 +1,8 @@
 package com.ms.encuestas.controllers;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,8 +42,8 @@ public class EncuestaController {
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/empresas")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createEmpresa(/*Authentication authentication, */@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaEmpresa encuesta) {
-		//User user = (User) authentication.getPrincipal();System.out.println("POST " + user.getUsername());
+	public void createEmpresa(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaEmpresa encuesta) {
+		//User user = (User) authentication.getPrincipal();
 		this.encuestaService.saveEmpresa(encuesta, procesoId, posicionCodigo, new Long(1));
 	}
 	
@@ -53,8 +55,8 @@ public class EncuestaController {
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createEps(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaEps encuesta) {
-		//this.encuestaService.saveEps(encuesta, procesoId, posicionCodigo, new Long(2));
+	public void createEps(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaCentro encuesta) {
+		this.encuestaService.saveCentro(encuesta, procesoId, posicionCodigo, new Long(2));
 	}
 	
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro/{nivel}")

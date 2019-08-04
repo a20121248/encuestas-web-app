@@ -12,7 +12,6 @@ export class AuthService {
   private _usuario: Usuario;
   private _proceso: Tipo;
   private _token: string;
-  private _seleccionado: Usuario;
   protected urlServer = AppConfig.settings.urlServer;
 
   constructor(private http: HttpClient) { }
@@ -25,17 +24,6 @@ export class AuthService {
       return this._usuario;
     }
     return new Usuario();
-  }
-
-  public get seleccionado(): Usuario {
-    return this._seleccionado;
-    if (this._seleccionado != null) {
-    }
-    return new Usuario();
-  }
-
-  setSeleccionado(seleccionado: Usuario): void {
-    this._seleccionado = seleccionado;
   }
 
   public get proceso(): Tipo {
@@ -68,18 +56,17 @@ export class AuthService {
     const credenciales = btoa('angularapp' + ':' + '12345');
     const httpHeaders = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + credenciales
+      Authorization: 'Basic ' + credenciales
     });
     let params = new URLSearchParams();
     params.set('grant_type', 'password');
     params.set('username', usuario.codigo);
     params.set('password', usuario.contrasenha);
-    //console.log(params.toString());
     return this.http.post<any>(urlEndpoint, params.toString(), { headers: httpHeaders });
   }
 
   guardarUsuario(accessToken: string): void {
-    let payload = this.obtenerDatosToken(accessToken);
+    const payload = this.obtenerDatosToken(accessToken);
     this._usuario = new Usuario();
     this._usuario.codigo = payload.user_name;
     this._usuario.nombre = payload.nombre;
@@ -87,12 +74,7 @@ export class AuthService {
     this._proceso.id = payload.procesoId;
     this._proceso.nombre = payload.procesoNombre;
     this._usuario.posicionCodigo = payload.posicionCodigo;
-    /*this._usuario.posicionNombre = payload.posicionNombre;
-    this._usuario.areaNombre = payload.areaNombre;
-    this._usuario.centroId = payload.centroId;
-    this._usuario.centroCodigo = payload.centroCodigo;
-    this._usuario.centroNombre = payload.centroNombre;
-    this._usuario.centroNivel = payload.centroNivel;*/
+    this._usuario.posicion = payload.posicion;
 
     sessionStorage.setItem('usuario', JSON.stringify(this._usuario));
     sessionStorage.setItem('proceso', JSON.stringify(this._proceso));

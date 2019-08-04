@@ -32,19 +32,12 @@ export class EpsService {
   }
 
   obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {
-    const str1 = 'procesos/' + this.authService.proceso.id + '/';
-    const str2 = 'colaboradores/' + usuario.posicion.codigo + '/';
-    const str3 = 'encuesta/eps';
-    const url = this.urlServer.api + str1 + str2 + str3;
-    return this.http.get<Encuesta>(url);
+    const url = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/encuesta/eps`;
+    return this.http.get<Encuesta>(this.urlServer.api + url);
   }
 
   guardarEncuesta(encuesta: Encuesta, usuario: Usuario): Observable<any> {
-    const str1 = 'procesos/' + this.authService.proceso.id + '/';
-    const str2 = 'colaboradores/' + usuario.posicion.codigo + '/';
-    const str3 = 'encuesta/eps';
-    const url = this.urlServer.api + str1 + str2 + str3;
-    console.log(encuesta);
-    return this.http.post<any>(url, encuesta);
+    const url = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/encuesta/eps`;
+    return this.http.post<any>(this.urlServer.api + url, encuesta);
   }
 }

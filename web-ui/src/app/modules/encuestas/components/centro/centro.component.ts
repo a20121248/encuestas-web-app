@@ -1,9 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import {HttpClient} from '@angular/common/http';
-
 import { Centro } from 'src/app/shared/models/centro';
-import {CentroService} from '../../../../shared/services/centro.service';
 import { Usuario } from 'src/app/shared/models/usuario';
 
 @Component({
@@ -15,9 +12,9 @@ import { Usuario } from 'src/app/shared/models/usuario';
 export class CentroComponent implements OnInit {
   @Input() lstCentros: Centro[];
   @Input() usuarioSeleccionado: Usuario;
-  dcCentro = ['codigo','nombre', 'porcentaje'];
+  dcCentro = ['codigo', 'nombre', 'nivel', 'porcentaje'];
 
-  constructor( private centroService: CentroService, private http: HttpClient) { }
+  constructor() { }
 
   ngOnInit() {
     this.lstCentros = [];

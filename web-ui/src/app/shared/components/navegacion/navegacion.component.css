@@ -28,7 +28,7 @@
 
 .modulos a.active {
   background-color: rgba(0,117,176,0.5);
-  border-bottom: 4px solid white;
+  border-bottom: 4px solid #ff6319;
 }
 
 .logout a {

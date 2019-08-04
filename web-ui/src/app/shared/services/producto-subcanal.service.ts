@@ -21,14 +21,6 @@ export class ProductoSubcanalService {
     private http: HttpClient,
     private router: Router) { }
 
-  private agregarAuthorizationHeader() {
-    let token = this.authService.token;
-    if (token != null) {
-      return this.httpHeaders.append('Authorization', 'Bearer ' + token);
-    }
-    return this.httpHeaders;
-  }
-
   private isNoAutorizado(e): boolean {
     if (e.status == 401 || e.status == 403) {
       this.router.navigate(['/login']);
@@ -36,11 +28,12 @@ export class ProductoSubcanalService {
     }
     return false;
   }
+
   errorHandler(error: any): void {
     console.log(error);
   }
 
-  obtenerMatriz(usuario:Usuario):Observable<ProductoSubcanal[]>{
+  obtenerMatriz(usuario: Usuario): Observable<ProductoSubcanal[]> {
     // const str1 = 'procesos/' + this.authService.proceso.id;
     // const str2 = 'colaboradores/' + usuario.posicion.codigo;
     // const str3 = 'encuesta/linea/producto-subcanal';
@@ -54,6 +47,6 @@ export class ProductoSubcanalService {
     const str2 = 'colaboradores/' + posicionCodigo + '/';
     const str3 = 'encuesta/linea/producto-subcanal';
     const url = this.urlServer.api + str1 + str2 + str3;
-    return this.http.post<any>(url, matriz, { headers: this.agregarAuthorizationHeader() });
+    return this.http.post<any>(url, matriz);
   }
 }

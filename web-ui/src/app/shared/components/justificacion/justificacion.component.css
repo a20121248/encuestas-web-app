@@ -1,32 +1,25 @@
-div.form-group{
-margin-top: 60px;
-font-family: "Foco","Arial",sans-serif;
+mat-form-field {
+  width: 100%;
+  font-size: 19px;
 }
 
+mat-form-field.mat-form-field {
+  font-size: 16px;
+}
 
-mat-form-field {
-    width: 95%;
-    /* padding: 0px 0px 50px 0; */
-  }
-
-span {
-    font-size: 14px;
-    columns: 2;
+mat-select, mat-option {
+  font-size: 14px;
 }
 
 h5{
     font-family: "Foco","Arial",sans-serif;
     font-size: 17px;
     font-weight: 600;
-    color: #585a5b !important; 
+    color: #585a5b !important;
 }
 
-small{
-    padding: 0px 0px 50px 0;
-
-}
-
-textarea{
-    background-color:#f2f3f3;
-
+textarea.mat-input-element {
+  background-color:#f2f3f3;
+  font-size: 14px;
+  padding: .5em;
 }

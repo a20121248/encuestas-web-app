@@ -1,34 +1,27 @@
-<div class="card">
-  <div class="card-body">
-    <div class="form-group row">
-      <label for="colaborador" class="col-sm-2 col-form-label">COLABORADOR:</label>
-      <div class="col-sm-4">
-        <input type="text" readonly class="form-control" [ngModel]="usuario.nombreCompleto">
-      </div>
-      <label for="area" class="col-sm-2 col-form-label">ÁREA:</label>
-      <div class="col-sm-4">
-        <input type="text" readonly class="form-control" [ngModel]="usuario.posicion.area.nombre">
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="matricula" class="col-sm-2 col-form-label">MATRÍCULA:</label>
-      <div class="col-sm-4">
-        <input type="text" readonly class="form-control" [ngModel]="usuario.codigo">
-      </div>
-      <label for="centro" class="col-sm-2 col-form-label">CENTRO DE COSTOS:</label>
-      <div class="col-sm-4">
-        <input type="text" readonly class="form-control" [ngModel]="usuario.posicion.centro.codigo + ' ' + usuario.posicion.centro.nombre">
-      </div>
-    </div>
-    <div class="form-group row mb-0">
-      <label for="posicion" class="col-sm-2 col-form-label">POSICIÓN:</label>
-      <div class="col-sm-4">
-        <input type="text" readonly class="form-control" [ngModel]="usuario.posicion.nombre">
-      </div>
-      <label for="nivel" class="col-sm-2 col-form-label">NIVEL:</label>
-      <div class="col-sm-4">
-        <input type="text" readonly class="form-control" [ngModel]="usuario.posicion.centro.nivel">
-      </div>
-    </div>
+<div class="row">
+  <label for="colaborador" class="col-md-2 col-form-label">COLABORADOR:</label>
+  <div class="col-md-4">
+    <input type="text" id="colaborador" readonly class="form-control" [ngModel]="usuario.nombreCompleto">
+  </div>
+  <label for="area" class="col-md-2 col-form-label">ÁREA:</label>
+  <div class="col-md-4">
+    <input type="text" id="area" readonly class="form-control" [ngModel]="usuario.posicion.area.nombre">
+  </div>
+  <label for="matricula" class="col-md-2 col-form-label mt-2">MATRÍCULA:</label>
+  <div class="col-md-4 mt-2">
+    <input type="text" id="matricula" readonly class="form-control" [ngModel]="usuario.codigo">
+  </div>
+  <label for="centro" class="col-md-2 col-form-label mt-2">CENTRO DE COSTOS:</label>
+  <div class="col-md-4 mt-2">
+    <input type="text" id="centro" readonly class="form-control"
+      [ngModel]="usuario.posicion.centro.codigo + ' ' + usuario.posicion.centro.nombre">
+  </div>
+  <label for="posicion" class="col-md-2 col-form-label mt-2">POSICIÓN:</label>
+  <div class="col-md-4 mt-2">
+    <input type="text" id="posicion" readonly class="form-control" [ngModel]="usuario.posicion.nombre">
+  </div>
+  <label for="nivel" class="col-md-2 col-form-label mt-2">NIVEL:</label>
+  <div class="col-md-4 mt-2">
+    <input type="text" id="nivel" readonly class="form-control" [ngModel]="usuario.posicion.centro.nivel">
   </div>
 </div>

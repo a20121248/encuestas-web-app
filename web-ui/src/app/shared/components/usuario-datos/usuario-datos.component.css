@@ -1,18 +1,14 @@
+label {
+  font-weight: 600 !important;
+  color: #585a5b !important;
+  font-size: 14px;
+  text-align: left;
+  font-family: "Foco","Arial",sans-serif
+}
 
-
- 
-
-  label {
-    font-weight: 600 !important;
-    color: #585a5b !important; 
-    font-size: 14px;
-    text-align: left;
-    font-family: "Foco","Arial",sans-serif
-  }
-
-  input {
-    color: #585a5b !important; 
-    font-size: 14px;
-    text-align: left;
-    font-family: "Foco","Arial",sans-serif
-  }
+input {
+  color: #585a5b !important;
+  font-size: 14px;
+  text-align: left;
+  font-family: "Foco","Arial",sans-serif
+}

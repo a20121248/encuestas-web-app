@@ -1,47 +1,17 @@
-.design input::-webkit-outer-spin-button,
-.design input::-webkit-inner-spin-button {
-  display: none;
-}
-.card {
-    width: 100%;
-}
-.tabla-container {
-  height:500px;
-  width: 100%;
-  overflow: auto;
-  padding: 0%;
-}
-table {
-  width: 100%;
-}
-
-tr.mat-footer-row {
-    font-weight: bold;
-}
-th.mat-header-cell {
-    text-align: center;
-}
-
 .mat-column-nombreProducto {
-    font-weight: bold;
-    text-align: left;
+  font-weight: bold;
+  text-align: left;
+}
+
+.mat-column-subcanal {
+  text-align: center;
 }
 
 .mat-column-Total {
-    font-weight: bold;
-    text-align: right;
-}
-
-.mat-form-field { 
-    width: 75px !important;
-    text-align: right !important;
-    margin-right: 5px;
+  font-weight: bold;
+  text-align: right;
 }
 
 th.mat-header-cell:first-of-type{
-    text-align: left;
-}
-
-.design input {
-    -moz-appearance: textfield;
+  text-align: left;
 }

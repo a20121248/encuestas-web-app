@@ -41,17 +41,20 @@ public class EncuestaService implements EncuestaServiceI {
     
     @Override
     public EncuestaEmpresa getEmpresa(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId)) {
-    		if (!posicionRepository.exists(procesoId, posicionCodigo))
-    			return null;
-			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);    		
-    	}
+		if (!posicionRepository.exists(procesoId, posicionCodigo))
+			return null;
+    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId))
+			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);
     	return encuestaRepository.getEncuestaEmpresa(procesoId, posicionCodigo, encuestaTipoId);
     }
 
 	@Override
 	public void saveEmpresa(EncuestaEmpresa encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		//encuestaRepository.saveEmpresa(encuesta, procesoId, posicionCodigo, encuestaTipoId);		
+    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId))
+			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);
+    	else
+    		encuestaRepository.updateEncuestaCabecera(encuesta.getJustificacion(), encuesta.getObservaciones(), procesoId, posicionCodigo, encuestaTipoId);
+		encuestaRepository.insertLstEmpresas(encuesta.getLstItems(), procesoId, posicionCodigo);		
 	}
 	
 	@Override
@@ -66,7 +69,15 @@ public class EncuestaService implements EncuestaServiceI {
 	
 	@Override
 	public void saveCentro(EncuestaCentro encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		//encuestaRepository.saveEps(lstItems, justificacion, observaciones, procesoId, posicionCodigo, encuestaTipoId);		
+		if (encuesta.getJustificacion() == null) {
+			encuesta.setJustificacion(getJustificacionDefault());
+			encuesta.setObservaciones(getObservacionesDefault());
+		}
+    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId))
+			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);
+    	else
+    		encuestaRepository.updateEncuestaCabecera(encuesta.getJustificacion(), encuesta.getObservaciones(), procesoId, posicionCodigo, encuestaTipoId);
+		encuestaRepository.insertLstCentros(encuesta.getLstItems(), procesoId, posicionCodigo);
 	}
 	
 	@Override

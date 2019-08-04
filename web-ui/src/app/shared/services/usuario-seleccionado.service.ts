@@ -10,8 +10,7 @@ export class UsuarioSeleccionadoService {
   usuarioActual = this.usuario.asObservable();
   constructor() { }
 
-  setUsuarioSeleccionado(usuarioEscogido: Usuario){
+  setUsuarioSeleccionado(usuarioEscogido: Usuario) {
     this.usuario.next(usuarioEscogido);
-    console.log(this.usuario);
   }
 }

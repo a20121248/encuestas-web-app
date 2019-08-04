@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.stereotype.Component;
 
+import com.ms.encuestas.models.Posicion;
 import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.services.ProcesoServiceI;
@@ -31,7 +32,9 @@ public class InfoAdicionalToken implements TokenEnhancer {
 		additionalInformation.put("nombre", nombreCompleto.substring(0, nombreCompleto.indexOf(' ')));
 		additionalInformation.put("procesoId", proceso.getId());
 		additionalInformation.put("procesoNombre", proceso.getNombre());
-		additionalInformation.put("posicionCodigo", usuario.getPosicion().getCodigo());
+		Map<String, Object> posicion = new HashMap<>();
+		posicion.put("codigo", usuario.getPosicion().getCodigo());
+		additionalInformation.put("posicion", posicion);
 		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);		
 		return accessToken;
 	}
