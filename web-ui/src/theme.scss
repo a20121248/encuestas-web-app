@@ -1,6 +1,160 @@
 @import '~@angular/material/theming';
 @include mat-core();
 
+html, body {
+  height: 100%;
+}
+
+$color-1: rgba(0, 0, 0, 0.54);
+$color-2: #585a5b;
+$color-fondo: #f2f3f3;
+$fuente: "Foco","Arial",sans-serif;
+
+app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-linea, app-enc-linea-canal, app-enc-producto-subcanal, app-enc-producto-canal, app-mantenimientos {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 64px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-fondo;
+}
+
+.pacifico-page {
+  a {
+    text-decoration: none!important;
+    &:hover {
+      color: none;
+    }
+  }
+  .boton {
+    min-width: 36px;
+  }
+  .mat-raised-button {
+    min-width: 100px;
+    padding: 0;
+    font-family: $fuente;
+    .material-icons {
+      font-size: 18px;
+      margin-right: 8px;
+    }
+    &.sm {
+      min-width: 36px;
+    }
+  }
+
+  button + button {
+    margin-left: 15px;
+  }
+
+  h1 {
+    color: $color-1;
+    font-family: $fuente;
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+  h4 {
+    color: $color-2;
+    font-family: $fuente;
+    font-size: 17px;
+    font-weight: bold;
+  }
+
+  .encuesta {
+    padding: 0;
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      display: none;
+    }
+
+    .mat-footer-cell {
+      color: $color-2;
+      .mat-form-field-underline {
+        display: none;
+      }
+    }
+
+    .mat-table {
+      width: 100%;
+    }
+
+    td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+      padding-left: 7px;
+    }
+
+    td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:last-of-type {
+      padding-right: 7px;
+    }
+
+    td.mat-cell {
+      padding: 0 7px;
+    }
+
+    .mat-header-cell {
+      font-weight: bold;
+      font-size: 14.5px;
+      padding: 0 7px!important;
+    }
+
+    tr.mat-footer-row {
+      font-weight: bold;
+    }
+
+    .mat-form-field {
+      max-width: 50px!important;
+      text-align: right !important;
+    }
+
+    .mat-input-element:disabled {
+      color: rgba(0, 0, 0, 0.87)!important;
+    }
+  }
+
+  .campo {
+    color: $color-1!important;
+    text-align: left;
+    font-family: $fuente;
+    font-size: 14px;
+    font-weight: 600!important;
+  }
+
+  .cuadro {
+    position: relative;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    widows: 100%;
+    word-wrap: break-word;
+    padding: 1.25rem;
+  }
+
+  .mat-table {
+    width: 100%;
+  }
+
+  td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+    padding-left: 7px;
+  }
+
+  td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:last-of-type {
+    padding-right: 7px;
+  }
+
+  td.mat-cell {
+    padding: 0 7px;
+  }
+
+  .mat-header-cell {
+    font-weight: bold;
+    font-size: 14.5px;
+    padding: 0 7px;
+  }
+}
 $azul: (
     50 : #e0f3f9,
     100 : #b3e0f0,
@@ -100,8 +254,8 @@ $naranja: (
 
 // below creates a primary palette with three shades of blue
 $my-app-primary: mat-palette($azul);
-$my-app-accent:  mat-palette($verde);
-$my-app-warn:    mat-palette($naranja);
+$my-app-accent: mat-palette($verde, 700);
+$my-app-warn: mat-palette($naranja, 700);
 $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 @include angular-material-theme($my-app-theme);
 .alternate-theme {

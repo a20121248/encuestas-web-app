@@ -14,7 +14,7 @@ public interface EncuestaServiceI {
 	public void saveEmpresa(EncuestaEmpresa encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);	
 	
 	public EncuestaCentro getCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId, int nivel);
-	public void saveCentro(EncuestaCentro encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);
+	public void saveCentro(EncuestaCentro encuesta, Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId);
 	
 	public EncuestaLinea getLinea(Long procesoId, String posicionCodigo, Long encuestaTipoId);
 	public void saveLinea(EncuestaLinea encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);

@@ -28,7 +28,7 @@ import { LineaCanalComponent } from './modules/encuestas/components/linea-canal/
 import { ProductoCanalComponent } from './modules/encuestas/components/producto-canal/producto-canal.component';
 import { ProductoSubcanalComponent } from './modules/encuestas/components/producto-subcanal/producto-subcanal.component';
 import { RouterModule, Routes } from '@angular/router';
-import { EncProductoSubCanalComponent } from './modules/encuestas/pages/enc-producto-subcanal/enc-producto-subcanal.component';
+import { EncProductoSubcanalComponent } from './modules/encuestas/pages/enc-producto-subcanal/enc-producto-subcanal.component';
 import { EncProductoCanalComponent } from './modules/encuestas/pages/enc-producto-canal/enc-producto-canal.component';
 import { EncLineaCanalComponent } from './modules/encuestas/pages/enc-linea-canal/enc-linea-canal.component';
 
@@ -53,9 +53,8 @@ import { ReportesComponent } from './modules/reportes/pages/reportes/reportes.co
 import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 
 const routes: Routes = [
-  //{ path: '/', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: 'encuesta', pathMatch: 'full' },
+  { path: '', redirectTo: 'colaboradores', pathMatch: 'full' },
   { path: 'colaboradores', component: SeleccionarUsuarioComponent },
   { path: 'colaboradores/:codigo/encuesta', component: EncEmpresaComponent },
   {
@@ -63,27 +62,17 @@ const routes: Routes = [
     children: [
       { path: 'eps', component: EncEPSComponent },
       { path: 'centro', component: EncCentroComponent },
-      { path: 'linea-canal', component: EncLineaCanalComponent },
-      { path: 'linea', component: EncLineaComponent },
-      {
-        path: 'linea',
+      { path: 'linea-canal', component: EncLineaCanalComponent, // perfil provincia
         children: [
-          { path: 'producto-subcanal', component: EncProductoSubCanalComponent },
-          { path: 'producto-canal', component: EncCentroComponent },
+          { path: 'linea/:lineaCodigo/canal/:canalCodigo/producto-subcanal', component: EncProductoSubcanalComponent } // perfil provincia
         ]
       },
-    ]
-  },
-  { path:'encuestas', component: EncEmpresaComponent},
-  {
-    path: 'encuestas',
-    children: [
-      { path: 'eps', component: EncEPSComponent },
-      { path: 'centro', component: EncCentroComponent },
-      { path: 'linea', component: EncLineaComponent },
-      { path: 'canal', component: EncCanalComponent },
-      { path: 'linea-canal', component: EncLineaCanalComponent },
-      { path: 'producto-subcanal', component: EncProductoSubCanalComponent }
+      { path: 'lineas', component: EncLineaComponent, // perfil varias-lineas o canal
+        children: [
+          { path: ':lineaCodigo/producto-canal', component: EncProductoCanalComponent }, // perfil varias-lineas o una-linea
+          { path: ':lineaCodigo/:canalCodigo/producto-subcanal', component: EncProductoSubcanalComponent } // perfil canal
+        ]
+      }
     ]
   },
   { path: 'mantenimiento', component: MantenimientosComponent },
@@ -114,7 +103,7 @@ export function initializeApp(appConfig: AppConfig) {
     LineaCanalComponent,
     ProductoCanalComponent,
     ProductoSubcanalComponent,
-    EncProductoSubCanalComponent,
+    EncProductoSubcanalComponent,
     EncProductoCanalComponent,
     EncLineaCanalComponent,
     EncCentroComponent,

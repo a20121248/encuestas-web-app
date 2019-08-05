@@ -1,29 +1,29 @@
 <div class="card">
-    <h6 class="card-header text-left font-weight-bold text-uppercase py-4">Configuración de cierre de proceso</h6>
-    <div class="card-body tabla-container">
-        <div class="col-md-12 text-left ">
-            <mat-form-field>
-                <input matInput [matDatepicker]="periodoProceso" placeholder="Periodo del proceso">
-                <mat-datepicker-toggle matSuffix [for]="periodoProceso"></mat-datepicker-toggle>
-                <mat-datepicker #periodoProceso startView="multi-year">
-                </mat-datepicker>
-            </mat-form-field>
-        </div>
-
-        <div class="col-md-12 text-left ">
-            <mat-form-field>
-                <input matInput [matDatepicker]="fechaLimite" placeholder="Seleccione fecha límite">
-                <mat-datepicker-toggle matSuffix [for]="fechaLimite"></mat-datepicker-toggle>
-                <mat-datepicker #fechaLimite></mat-datepicker>
-            </mat-form-field>
-        </div>
-
-        <div class="col-md-12 text-right ">
-            <button mat-raised-button>Guardar</button>
-        </div>
+  <h6 class="card-header text-left font-weight-bold text-uppercase py-4">Configuración de cierre de proceso</h6>
+  <div class="card-body tabla-container">
+    <div class="col-md-12 text-left ">
+      <mat-form-field>
+        <input matInput [matDatepicker]="periodoProceso" placeholder="Periodo del proceso">
+        <mat-datepicker-toggle matSuffix [for]="periodoProceso"></mat-datepicker-toggle>
+        <mat-datepicker #periodoProceso startView="multi-year">
+        </mat-datepicker>
+      </mat-form-field>
     </div>
-    <div class="card-footer">
-        Nota: La fecha actual para el cierre de la encuesta es: {{getLastDateUpdate()}}.
+
+    <div class="col-md-12 text-left ">
+      <mat-form-field>
+        <input matInput [matDatepicker]="fechaLimite" placeholder="Seleccione fecha límite">
+        <mat-datepicker-toggle matSuffix [for]="fechaLimite"></mat-datepicker-toggle>
+        <mat-datepicker #fechaLimite></mat-datepicker>
+      </mat-form-field>
     </div>
+
+    <div class="col-md-12 text-right ">
+      <button mat-raised-button>Guardar</button>
+    </div>
+  </div>
+  <div class="card-footer">
+    Nota: La fecha actual para el cierre de la encuesta es: {{getLastDateUpdate()}}.
+  </div>
 
 </div>

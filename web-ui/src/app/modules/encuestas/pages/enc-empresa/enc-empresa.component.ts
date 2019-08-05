@@ -27,7 +27,6 @@ export class EncEmpresaComponent implements OnInit {
   posicionCodigo: string;
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
-
   @ViewChild(EmpresaComponent, { static: false })
   empresaComponent: EmpresaComponent;
   @ViewChild(JustificacionComponent, { static: false })
@@ -65,8 +64,12 @@ export class EncEmpresaComponent implements OnInit {
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.empresaComponent.lstEmpresas;
     this.encuesta.justificacion = this.justificacionComponent.justificacion;
+    if (this.encuesta.justificacion.detalle == null) {
+      this.encuesta.justificacion.detalle = 'Sin detalle.';
+    }
     this.encuesta.observaciones = this.justificacionComponent.observaciones;
-    this.empresaService.guardarEncuesta(this.encuesta, this.posicionCodigo).subscribe(response =>
+    console.log(this.encuesta);
+    this.empresaService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(response =>
       console.log(response), err => console.log(err)
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');

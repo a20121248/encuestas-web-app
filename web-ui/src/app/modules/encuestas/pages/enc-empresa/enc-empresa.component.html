@@ -1,29 +1,23 @@
-<div *ngIf="usuarioSeleccionado" class="container">
-  <div class="card mt-4 mb-3">
-    <div class="card-body text-center">
-      <h2 class="card-title mb-0">{{ titulo.toUpperCase() }}</h2>
-    </div>
-  </div>
-
-  <div class="card mt-4 mb-3">
+<div class="container pacifico-page">
+  <mat-card class="cuadro header mat-elevation-z4 mt-4 mb-4 text-center">
+    <h1>{{ titulo.toUpperCase() }}</h1>
+  </mat-card>
+  <mat-card class="cuadro mat-elevation-z4 mt-4">
     <app-usuario-datos [usuario]="usuarioSeleccionado"></app-usuario-datos>
-  </div>
-
-  <div class="card mt-3">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-6">
-          <app-form-empresa [lstEmpresas]="lstEmpresas"></app-form-empresa>
-        </div>
-        <div class="col-md-5 offset-md-1">
-          <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"></app-form-justificacion>
-        </div>
-        <div class="col-md-12 text-right">
-          <button mat-raised-button color="warn" (click)="goBack()">Atrás</button>
-          <button mat-raised-button color="accent" (click)="guardarEncuesta()">Guardar</button>
-        </div>
+  </mat-card>
+  <mat-card class="cuadro mat-elevation-z4 mt-4">
+    <div class="row">
+      <div class="col-md-6">
+        <app-form-empresa [lstEmpresas]="lstEmpresas"></app-form-empresa>
+      </div>
+      <div class="col-md-5 offset-md-1">
+        <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"></app-form-justificacion>
+      </div>
+      <div class="col-md-12 text-right mt-3">
+        <button mat-raised-button color="warn" (click)="goBack()"><i class="material-icons">reply</i>Atrás</button>
+        <button mat-raised-button color="warn" (click)="guardarEncuesta()"><i class="material-icons">save</i>Guardar</button>
       </div>
     </div>
-  </div>
+  </mat-card>
 </div>
 <br>

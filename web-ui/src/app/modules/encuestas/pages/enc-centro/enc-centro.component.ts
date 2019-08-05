@@ -31,7 +31,6 @@ export class EncCentroComponent implements OnInit {
   posicionCodigo: string;
   encuesta: Encuesta;
   usuarioSeleccionado: Usuario;
-
   @ViewChild(CentroComponent, { static: false })
   centroComponent: CentroComponent;
   @ViewChild(JustificacionComponent, { static: false })
@@ -66,10 +65,10 @@ export class EncCentroComponent implements OnInit {
     this.encuesta.lstItems = this.centroComponent.lstCentros;
     this.encuesta.justificacion = this.justificacionComponent.justificacion;
     this.encuesta.observaciones = this.justificacionComponent.observaciones;
-    this.centroService
-      .guardarEncuesta(this.encuesta, this.posicionCodigo)
-      .subscribe(response => console.log(response), err => console.log(err));
-    swal.fire("Guardar encuesta", "Se guardó la encuesta.", "success");
+    this.centroService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
+      response => console.log(response), err => console.log(err)
+    );
+    swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
   }
 
   goBack() {

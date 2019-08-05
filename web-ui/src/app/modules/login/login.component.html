@@ -1,10 +1,10 @@
-<div fxFlex fxLayout fxLayoutAlign="column" class="login" fxHide.xs>
-  <div fxFlex="33" class="logopage">
+<div class="login" fxLayout="column" style="height:100%">
+  <header fxFlex="0 0 auto">
     <img [src]="'assets/img/logo2.png'" alt="">
-  </div>
-  <div fxFlex="30" fxLayout="column wrap" fxLayoutAlign="center" class="login-main">
+  </header>
+  <main fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="center center">
     <form method="post">
-      <mat-card>
+      <mat-card class="mat-elevation-z5">
         <mat-card-content fxLayout="column">
           <div fxLayout="row" fxLayoutAlign="center center">
             <mat-icon matPrefix>person</mat-icon>
@@ -16,20 +16,12 @@
           <div fxLayout="row" fxLayoutAlign="center center">
             <mat-icon matPrefix>lock</mat-icon>
             <mat-form-field>
-              <input [(ngModel)]="usuario.contrasenha" matInput placeholder="Contraseña" [type]="hide ? 'password' : 'text'" name="password">
-              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <input [(ngModel)]="usuario.contrasenha" matInput placeholder="Contraseña"
+                [type]="hide ? 'password' : 'text'" name="password">
+              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide">
                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
-            </mat-form-field>
-          </div>
-          <div fxLayout="row" fxLayoutAlign="center center">
-            <mat-icon matPrefix>settings</mat-icon>
-            <mat-form-field>
-              <mat-select placeholder="Tipo" [formControl]="selectFormControl" required>
-                <mat-option value="1">Pacífico Vida</mat-option>
-                <mat-option value="2">Pacífico Generales</mat-option>
-              </mat-select>
-              <mat-error *ngIf="selectFormControl.hasError('required')">Por favor elija un tipo</mat-error>
             </mat-form-field>
           </div>
         </mat-card-content>
@@ -38,5 +30,7 @@
         </mat-card-actions>
       </mat-card>
     </form>
-  </div>
+  </main>
+  <footer fxFlex="0 0 auto">
+  </footer>
 </div>

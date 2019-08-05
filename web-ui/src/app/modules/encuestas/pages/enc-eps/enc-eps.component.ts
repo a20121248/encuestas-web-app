@@ -28,7 +28,6 @@ export class EncEPSComponent implements OnInit {
   posicionCodigo: string;
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
-
   @ViewChild(EpsComponent, { static: false })
   epsComponent: EpsComponent;
   @ViewChild(JustificacionComponent, { static: false })
@@ -46,7 +45,6 @@ export class EncEPSComponent implements OnInit {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
       this.usuarioSeleccionado = usuario;
-      console.log(this.usuarioSeleccionado);
       this.epsService.obtenerEncuesta(this.usuarioSeleccionado).subscribe(encuesta => {
         this.lstEps = encuesta.lstItems as Eps[];
       });
@@ -60,7 +58,7 @@ export class EncEPSComponent implements OnInit {
   guardarEncuesta() {
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.epsComponent.lstEps;
-    this.epsService.guardarEncuesta(this.encuesta, this.posicionCodigo).subscribe(
+    this.epsService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
       response => console.log(response), err => console.log(err)
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');

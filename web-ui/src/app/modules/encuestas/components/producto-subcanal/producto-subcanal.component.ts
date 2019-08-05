@@ -2,20 +2,19 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { ProductoSubcanal } from 'src/app/shared/models/producto-subcanal';
 
-
 @Component({
   selector: 'app-form-producto-subcanal',
   templateUrl: './producto-subcanal.component.html',
   styleUrls: ['./producto-subcanal.component.css']
 })
 export class ProductoSubcanalComponent implements OnInit {
-
   @Input() matriz: ProductoSubcanal[];
   @Input() usuarioSeleccionado: Usuario;
 
   lstCabeceraTableObtenida: string[];
   lstCabeceraTableDynamico: string[];
   sumaTotal: number;
+
   constructor(
   ) { }
 
@@ -31,13 +30,14 @@ export class ProductoSubcanalComponent implements OnInit {
       this.lstCabeceraTableObtenida.push('Total');
     }
   }
+
   obtenerSuma(element: any): number {
     if (element != null) {
       return Math.trunc(100000 * element.lstSubcanales.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0)) / 100000;
     }
-    else return 0;
-
+    return 0;
   }
+
   obtenerSumaTotal(): number {
     this.sumaTotal = 0;
     if (this.matriz != null) {
@@ -46,6 +46,6 @@ export class ProductoSubcanalComponent implements OnInit {
       });
       return Math.trunc(100000 * this.sumaTotal) / 100000;
     }
-    else return 0;
+    return 0;
   }
 }
