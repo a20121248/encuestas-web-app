@@ -1,4 +1,4 @@
-<div class="row">
+<div *ngIf="usuario" class="row">
   <label for="colaborador" class="col-md-2 col-form-label">COLABORADOR:</label>
   <div class="col-md-4">
     <input type="text" id="colaborador" readonly class="form-control" [ngModel]="usuario.nombreCompleto">

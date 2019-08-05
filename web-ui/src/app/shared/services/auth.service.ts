@@ -19,8 +19,8 @@ export class AuthService {
   public get usuario(): Usuario {
     if (this._usuario != null) {
       return this._usuario;
-    } else if (this._usuario == null && sessionStorage.getItem('usuario') != null) {
-      this._usuario = JSON.parse(sessionStorage.getItem('usuario')) as Usuario;
+    } else if (this._usuario == null && localStorage.getItem('usuario') != null) {
+      this._usuario = JSON.parse(localStorage.getItem('usuario')) as Usuario;
       return this._usuario;
     }
     return new Usuario();
@@ -29,8 +29,8 @@ export class AuthService {
   public get proceso(): Tipo {
     if (this._proceso != null) {
       return this._proceso;
-    } else if (this._proceso == null && sessionStorage.getItem('proceso') != null) {
-      this._proceso = JSON.parse(sessionStorage.getItem('proceso')) as Tipo;
+    } else if (this._proceso == null && localStorage.getItem('proceso') != null) {
+      this._proceso = JSON.parse(localStorage.getItem('proceso')) as Tipo;
       return this._proceso;
     }
     return new Tipo();
@@ -43,8 +43,8 @@ export class AuthService {
   public get token(): string {
     if (this._token != null) {
       return this._token;
-    } else if (this._token == null && sessionStorage.getItem('token') != null) {
-      this._token = sessionStorage.getItem('token');
+    } else if (this._token == null && localStorage.getItem('token') != null) {
+      this._token = localStorage.getItem('token');
       return this._token;
     }
     return null;
@@ -70,19 +70,16 @@ export class AuthService {
     this._usuario = new Usuario();
     this._usuario.codigo = payload.user_name;
     this._usuario.nombre = payload.nombre;
-    this._proceso = new Tipo();
-    this._proceso.id = payload.procesoId;
-    this._proceso.nombre = payload.procesoNombre;
-    this._usuario.posicionCodigo = payload.posicionCodigo;
+    this._proceso = payload.proceso;
     this._usuario.posicion = payload.posicion;
 
-    sessionStorage.setItem('usuario', JSON.stringify(this._usuario));
-    sessionStorage.setItem('proceso', JSON.stringify(this._proceso));
+    localStorage.setItem('usuario', JSON.stringify(this._usuario));
+    localStorage.setItem('proceso', JSON.stringify(this._proceso));
   }
 
   guardarToken(accessToken: string): void {
     this._token = accessToken;
-    sessionStorage.setItem('token', accessToken);
+    localStorage.setItem('token', accessToken);
   }
 
   obtenerDatosToken(accessToken: string): any {
@@ -103,9 +100,9 @@ export class AuthService {
   logout(): void {
     this._token = null;
     this._usuario = null;
-    //sessionStorage.clear();
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('usuario');
-    sessionStorage.removeItem('proceso');
+    //localStorage.clear();
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('proceso');
   }
 }

@@ -28,7 +28,7 @@
         <th mat-header-cell *matHeaderCellDef>DETALLE</th>
         <td mat-cell *matCellDef="let empresa">
           <ng-container *ngIf="revisarEmpresa(empresa.id)">
-            <button class="sm" mat-raised-button color="primary" (click)="irMasDetalle(empresa)">></button>
+            <a mat-raised-button class="sm" color="primary" [routerLink]="[tipo]">></a>
           </ng-container>
         </td>
         <td mat-footer-cell *matFooterCellDef></td>

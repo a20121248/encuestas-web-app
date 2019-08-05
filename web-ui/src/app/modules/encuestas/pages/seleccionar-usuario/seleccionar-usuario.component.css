@@ -1,20 +1,20 @@
 .mat-column-codigo {
-  width: 12%;
+  width: 5%;
   color: rgba(0, 0, 0, 0.54);
   font-weight: bold;
   text-align: center;
 }
 
 .mat-column-nombre {
-  width: 30%;
+  width: 35%;
 }
 
 .mat-column-posicion {
-  width: 24%;
+  width: 25%;
 }
 
 .mat-column-area {
-  width: 24%;
+  width: 25%;
 }
 
 .mat-column-completar {

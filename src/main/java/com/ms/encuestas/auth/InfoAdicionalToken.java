@@ -29,12 +29,17 @@ public class InfoAdicionalToken implements TokenEnhancer {
 		Usuario usuario = usuarioService.findByCodigo(authentication.getName(), proceso.getId());
 		Map<String, Object> additionalInformation = new HashMap<>();
 		String nombreCompleto = usuario.getNombreCompleto();
-		additionalInformation.put("nombre", nombreCompleto.substring(0, nombreCompleto.indexOf(' ')));
-		additionalInformation.put("procesoId", proceso.getId());
-		additionalInformation.put("procesoNombre", proceso.getNombre());
-		Map<String, Object> posicion = new HashMap<>();
-		posicion.put("codigo", usuario.getPosicion().getCodigo());
-		additionalInformation.put("posicion", posicion);
+		additionalInformation.put("nombre", nombreCompleto.substring(0, nombreCompleto.indexOf(' ')));		
+		
+		Map<String, Object> procesoResponse = new HashMap<>();
+		procesoResponse.put("id", proceso.getId());
+		procesoResponse.put("nombre", proceso.getNombre());
+		additionalInformation.put("proceso", procesoResponse);		
+		
+		Map<String, Object> posicionResponse = new HashMap<>();
+		posicionResponse.put("codigo", usuario.getPosicion().getCodigo());
+		additionalInformation.put("posicion", posicionResponse);
+		
 		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);		
 		return accessToken;
 	}

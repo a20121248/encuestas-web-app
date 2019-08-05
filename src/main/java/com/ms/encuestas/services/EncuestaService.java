@@ -68,7 +68,7 @@ public class EncuestaService implements EncuestaServiceI {
 	}
 	
 	@Override
-	public void saveCentro(EncuestaCentro encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+	public void saveCentro(EncuestaCentro encuesta, Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
 		if (encuesta.getJustificacion() == null) {
 			encuesta.setJustificacion(getJustificacionDefault());
 			encuesta.setObservaciones(getObservacionesDefault());
@@ -77,7 +77,7 @@ public class EncuestaService implements EncuestaServiceI {
 			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);
     	else
     		encuestaRepository.updateEncuestaCabecera(encuesta.getJustificacion(), encuesta.getObservaciones(), procesoId, posicionCodigo, encuestaTipoId);
-		encuestaRepository.insertLstCentros(encuesta.getLstItems(), procesoId, posicionCodigo);
+		encuestaRepository.insertLstCentros(encuesta.getLstItems(), empresaId, procesoId, posicionCodigo);
 	}
 	
 	@Override

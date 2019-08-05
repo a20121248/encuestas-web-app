@@ -18,7 +18,7 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './enc-producto-subcanal.component.html',
   styleUrls: ['./enc-producto-subcanal.component.css']
 })
-export class EncProductoSubCanalComponent implements OnInit {
+export class EncProductoSubcanalComponent implements OnInit {
   matriz: ProductoSubcanal[];
   titulo = 'Herramienta de encuestas';
   posicionCodigo: string;

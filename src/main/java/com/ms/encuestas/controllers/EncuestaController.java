@@ -56,7 +56,7 @@ public class EncuestaController {
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createEps(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaCentro encuesta) {
-		this.encuestaService.saveCentro(encuesta, procesoId, posicionCodigo, new Long(2));
+		this.encuestaService.saveCentro(encuesta, new Long(2), procesoId, posicionCodigo, new Long(2));
 	}
 	
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro/{nivel}")
@@ -68,7 +68,7 @@ public class EncuestaController {
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createCentro(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaCentro encuesta) {
-		this.encuestaService.saveCentro(encuesta, procesoId, posicionCodigo, new Long(3));
+		this.encuestaService.saveCentro(encuesta, new Long(1), procesoId, posicionCodigo, new Long(3));
 	}
 	
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea")

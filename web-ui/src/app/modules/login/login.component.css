@@ -1,40 +1,79 @@
-html, body, .contenedor {
-  height: 100%;
+.login header {
+  text-align: left;
+	background-image: url('../.././../assets/img/degrade_superior.jpg');
+	background-position: center top;
+  background-repeat: repeat-x;
+  background-color: white;
+  padding: 30px 0 0 50px;
 }
 
-body {
-  overflow: hidden;
+@media screen and (max-width: 600px) {
+  .login header {
+    text-align: center;
+    padding-left :0;
+  }
 }
 
-.contenedor {
-  display: flex;
-  flex-direction: column;
-  max-width: 1200px;
-  margin: 0 auto;
+.login main form {
+  margin-bottom: 60px;
+  width: 400px;
 }
 
-header {
-  flex: 0 0 auto;
-  color: white;
-  height: 100px;
-  line-height: 100px;
-  text-align: center;
-  background-color: darkblue;
+@media screen and (max-width: 400px) {
+  .login main form {
+    width: 100%;
+    padding: .75em;
+  }
 }
 
-.principal {
-  flex: 1 1 auto;
-  color: white;
-  position: relative;/* need this to position inner content */
-  overflow-y: auto;
-  background-color: red;
+.login main form mat-card {
+  padding: 40px 30px;
 }
 
-footer {
-  flex: 0 0 auto;
-  color: white;
-  text-align: center;
-  background-color: black;
-  height: 80px;
-  line-height: 80px;
+.login mat-option {
+  padding: 0 11px 0;
+  line-height: 15px;
+  height: 15px;
+  font-size: 14px!important;
+}
+
+mat-option {
+  padding: 0 11px 0;
+  line-height: 15px;
+  height: 15px;
+  font-size: 14px!important;
+}
+
+mat-form-field {
+  width: 280px;
+  font-size: 16px;
+}
+
+mat-card-content > div {
+  margin-top: 5px;
+}
+
+mat-card-content {
+  margin-bottom: 5px;
+}
+
+.login-main {
+  margin-top: 10%;
+}
+
+mat-card {
+  min-width: 50%;
+  background: rgba(242,242,242,0.3);
+  padding: 20px 0 35px;
+}
+
+mat-card mat-card-header mat-card-title {
+  font-size:23px;
+  font-weight: 600;
+  color: #09c;
+  margin: 4px;
+}
+
+mat-card-content > div > mat-icon {
+  margin-right:13px;
 }

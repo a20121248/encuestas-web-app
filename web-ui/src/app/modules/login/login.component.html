@@ -1,13 +1,36 @@
-<div class="contenedor">
-    <header>
-        Header: Título
-    </header>
-
-    <div class="principal">
-        Texto aleatorio.
-    </div>
-
-    <footer>
-        Footer: 2018
-    </footer>
+<div class="login" fxLayout="column" style="height:100%">
+  <header fxFlex="0 0 auto">
+    <img [src]="'assets/img/logo2.png'" alt="">
+  </header>
+  <main fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="center center">
+    <form method="post">
+      <mat-card class="mat-elevation-z5">
+        <mat-card-content fxLayout="column">
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-form-field>
+              <mat-label>Usuario de red</mat-label>
+              <input [(ngModel)]="usuario.codigo" matInput placeholder="Ej. S88748" name="username">
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon matPrefix>lock</mat-icon>
+            <mat-form-field>
+              <input [(ngModel)]="usuario.contrasenha" matInput placeholder="Contraseña"
+                [type]="hide ? 'password' : 'text'" name="password">
+              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+        <mat-card-actions align="center">
+          <button (click)='login()' mat-raised-button color="accent"><b>LOGIN</b></button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+  </main>
+  <footer fxFlex="0 0 auto">
+  </footer>
 </div>

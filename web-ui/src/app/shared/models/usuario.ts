@@ -5,10 +5,8 @@ export class Usuario {
   nombre: string;
   contrasenha: string;
   nombreCompleto: string;
-  posicionCodigo:string;
   usuarioRed: string;
   fechaCreacion: Date;
-  tipoEncuestaId: number;
   posicionResponsableCodigo: string;
   rolId: number;
   procesoId: number;

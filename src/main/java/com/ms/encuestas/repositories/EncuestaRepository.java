@@ -186,11 +186,16 @@ public class EncuestaRepository {
 		}
 	}
 	
-	public void insertLstCentros(List<Centro> lstCentros, Long procesoId, String posicionCodigo) {
-		String sql = "DELETE FROM encuesta_centro\n" +
-				 	 " WHERE proceso_id=:proceso_id\n" +
-				 	 "   AND posicion_codigo=:posicion_codigo";
+	public void insertLstCentros(List<Centro> lstCentros, Long empresaId, Long procesoId, String posicionCodigo) {
+		String sql = "DELETE FROM encuesta_centro A\n" + 
+					 " WHERE EXISTS (SELECT 1\n" + 
+					 "                 FROM centros B\n" + 
+					 "                WHERE B.empresa_id=:empresa_id\n" +
+					 "                  AND A.centro_id=B.id\n" +
+					 "                  AND A.proceso_id=:proceso_id\n" + 
+					 "                  AND A.posicion_codigo=:posicion_codigo)";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("empresa_id", empresaId);
 		paramMap.put("proceso_id", procesoId);
 		paramMap.put("posicion_codigo", posicionCodigo);
 		plantilla.update(sql,paramMap);

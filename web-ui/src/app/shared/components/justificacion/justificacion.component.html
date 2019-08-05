@@ -6,11 +6,11 @@
     </mat-option>
   </mat-select>
 </mat-form-field>
-<small id="emailHelp" class="form-text text-muted">
+<small *ngIf="justificacion" id="emailHelp" class="form-text text-muted">
   Enviar archivo asociado con el sustento a <a href="mailto:Ana.Lama@pacifico.com.pe">Ana.Lama@pacifico.com.pe</a>
 </small >
 
-<mat-form-field class="mt-5">
+<mat-form-field *ngIf="observaciones" class="mt-5">
   <textarea matInput placeholder="Observaciones" [(ngModel)]="observaciones"
             cdkTextareaAutosize
             cdkAutosizeMinRows="8"

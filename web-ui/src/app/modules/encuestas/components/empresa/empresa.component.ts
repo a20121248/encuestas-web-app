@@ -13,6 +13,7 @@ export class EmpresaComponent implements OnInit {
   @Input() lstEmpresas: Empresa[];
   @Input() usuarioSeleccionado: Usuario;
   dcEmpresa = ['nombre', 'porcentaje', 'ingresar'];
+  tipo = 'centro';
 
   constructor(
     private route: ActivatedRoute,
@@ -30,17 +31,13 @@ export class EmpresaComponent implements OnInit {
   }
 
   revisarEmpresa(codigo: string): boolean {
-    if (codigo == '1' || codigo == '2') {
+    if (codigo == '1') {
+      this.tipo = 'centro';
+      return true;
+    } else if (codigo == '2') {
+      this.tipo = 'eps';
       return true;
     }
     return false;
-  }
-
-  irMasDetalle(empresa: Empresa) {
-    if (empresa.nombre.toUpperCase().includes('PACÍFICO EPS')) {
-      this.router.navigate(['eps'], { relativeTo: this.route });
-    } else if (empresa.nombre.toUpperCase().includes('PACÍFICO SEGUROS')) {
-      this.router.navigate(['centro'], { relativeTo: this.route });
-    }
   }
 }

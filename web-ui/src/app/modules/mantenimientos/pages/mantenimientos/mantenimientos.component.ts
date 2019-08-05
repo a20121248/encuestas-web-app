@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-mantenimientos',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MantenimientosComponent implements OnInit {
   titulo = 'Módulo de Mantenimiento';
-  constructor() { }
+  constructor(
+    private titleService: Title) { }
 
   ngOnInit() {
+    this.titleService.setTitle('Encuestas | Mantenimiento');
   }
 
 }
