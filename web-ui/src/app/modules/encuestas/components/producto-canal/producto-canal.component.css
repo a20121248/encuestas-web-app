@@ -1,0 +1,18 @@
+.mat-column-nombreProducto {
+    font-weight: bold;
+    text-align: left;
+  }
+  
+  .mat-column-canal {
+    text-align: center;
+  }
+  
+  .mat-column-Total {
+    font-weight: bold;
+    text-align: right;
+  }
+  
+  th.mat-header-cell:first-of-type{
+    text-align: left;
+  }
+  
