@@ -63,11 +63,13 @@ const routes: Routes = [
       { path: 'eps', component: EncEPSComponent },
       { path: 'centro', component: EncCentroComponent },
       { path: 'linea-canal', component: EncLineaCanalComponent, // perfil provincia
+      { path: 'linea-canal',
         children: [
           { path: 'linea/:lineaCodigo/canal/:canalCodigo/producto-subcanal', component: EncProductoSubcanalComponent } // perfil provincia
         ]
       },
-      { path: 'lineas', component: EncLineaComponent, // perfil varias-lineas o canal
+      { path: 'lineas', component: EncLineaComponent },
+      { path: 'lineas', // perfil varias-lineas o canal
         children: [
           { path: ':lineaCodigo/producto-canal', component: EncProductoCanalComponent }, // perfil varias-lineas o una-linea
           { path: ':lineaCodigo/:canalCodigo/producto-subcanal', component: EncProductoSubcanalComponent } // perfil canal

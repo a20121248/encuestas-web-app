@@ -35,7 +35,6 @@ export class LineaService {
     return this.http.get<Encuesta>(`${this.urlServer.api}${url2}`);
   }
 
-
   guardarEncuesta(encuesta: Encuesta, usuario: Usuario): Observable<any> {
     const url = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/encuesta/centro`;
     return this.http.post<any>(this.urlServer.api + url, encuesta);
