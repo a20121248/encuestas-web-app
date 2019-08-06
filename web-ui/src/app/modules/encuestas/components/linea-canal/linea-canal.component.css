@@ -1,0 +1,17 @@
+.selected-row {
+  background: lightblue;
+}
+
+.mat-column-nombre {
+  width: 50%;
+  text-align: center;
+}
+
+.mat-column-codigo {
+  width: 20%;
+  text-align: center;
+}
+.mat-column-porcentaje {
+  width: 30%;
+  text-align: center;
+}
