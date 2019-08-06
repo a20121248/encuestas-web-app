@@ -10,20 +10,17 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import com.ms.encuestas.models.Canal;
 import com.ms.encuestas.models.Centro;
 import com.ms.encuestas.models.Empresa;
 import com.ms.encuestas.models.EncuestaCanal;
 import com.ms.encuestas.models.EncuestaCentro;
 import com.ms.encuestas.models.EncuestaEmpresa;
-import com.ms.encuestas.models.EncuestaEps;
 import com.ms.encuestas.models.EncuestaLinea;
 import com.ms.encuestas.models.EncuestaLineaCanal;
 import com.ms.encuestas.models.EncuestaProductoCanal;
 import com.ms.encuestas.models.EncuestaProductoSubcanal;
 import com.ms.encuestas.models.Justificacion;
 import com.ms.encuestas.models.Linea;
-import com.ms.encuestas.models.LineaCanal;
 import com.ms.encuestas.models.ProductoCanal;
 import com.ms.encuestas.models.ProductoSubcanal;
 
@@ -125,7 +122,7 @@ public class EncuestaRepository {
 		return encuesta;
 	}
 	
-	public EncuestaCentro getEncuestaCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId, int nivel) {
+	public EncuestaCentro getEncuestaCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId, int nivel, Long perfilId) {
 		String sql = "SELECT A.justificacion_id,\n" + 
 			         "       B.nombre justificacion_nombre,\n" +
 			         "       A.justificacion_detalle,\n" +
@@ -140,6 +137,7 @@ public class EncuestaRepository {
 		Map<String, Object> paramMap = new HashMap<String, Object>();		
 		paramMap.put("proceso_id", procesoId);
 		paramMap.put("empresa_id", empresaId);
+		paramMap.put("perfil_id", perfilId);
 		paramMap.put("posicion_codigo", posicionCodigo);
 		paramMap.put("encuesta_tipo_id", encuestaTipoId);
 		paramMap.put("nivel", nivel);
@@ -156,11 +154,15 @@ public class EncuestaRepository {
 			  "  LEFT JOIN encuesta_centro B\n" +
 			  "    ON A.id=B.centro_id\n" +
 			  "   AND B.proceso_id=:proceso_id\n" +
-			  "   AND B.posicion_codigo=:posicion_codigo\n" + 
+			  "   AND B.posicion_codigo=:posicion_codigo\n" +
+			  "  JOIN perfil_centro C\r\n" + 
+			  "    ON C.perfil_id=:perfil_id\r\n" + 
+			  "   AND A.id=C.centro_id" + 
 			  " WHERE A.empresa_id=:empresa_id\n" +
 			  "   AND A.nivel>:nivel\n" +
 			  "   AND A.fecha_eliminacion IS NULL\n" +
 			  " ORDER BY A.nivel,A.id";
+		System.out.println(sql);
 		encuesta.setLstItems(plantilla.query(sql, paramMap, new CentroMapper()));		
 		return encuesta;
 	}
@@ -212,43 +214,4 @@ public class EncuestaRepository {
 		}
 	}
 	
-	public EncuestaLinea getEncuestaLinea(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		return null;
-	}
-	
-	public void saveEncuestaLineaDetalle(List<Linea> lstCentros, Long procesoId, String posicionCodigo) {
-		
-	}	
-	
-	public EncuestaCanal getEncuestaCanal(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		return null;
-	}
-	
-	public void saveEncuestaCanalDetalle(List<Canal> lstCentros, Long procesoId, String posicionCodigo) {
-		
-	}
-	
-	public EncuestaLineaCanal getEncuestaLineaCanal(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		return null;
-	}
-	
-	public void saveEncuestaLineaCanalDetalle(List<LineaCanal> lstCentros, Long procesoId, String posicionCodigo) {
-		
-	}
-	
-	public EncuestaProductoCanal getEncuestaProductoCanal(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		return null;
-	}
-	
-	public void saveEncuestaProductoCanalDetalle(List<ProductoCanal> lstCentros, Long procesoId, String posicionCodigo) {
-		
-	}
-	
-	public EncuestaProductoSubcanal getEncuestaProductoSubcanal(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		return null;
-	}
-	
-	public void saveEncuestaProductoSubcanalDetalle(List<ProductoSubcanal> lstCentros, Long procesoId, String posicionCodigo) {
-		
-	}
 }

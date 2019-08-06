@@ -9,6 +9,7 @@ public class Posicion implements Serializable {
 	private String nombre;
 	private Centro centro;
 	private Area area;
+	private Perfil perfil;
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
 
@@ -42,6 +43,14 @@ public class Posicion implements Serializable {
 
 	public void setArea(Area area) {
 		this.area = area;
+	}
+	
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 
 	public Date getFechaCreacion() {

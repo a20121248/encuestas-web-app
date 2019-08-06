@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ms.encuestas.models.EncuestaEmpresa;
 import com.ms.encuestas.models.EncuestaCanal;
 import com.ms.encuestas.models.EncuestaCentro;
-import com.ms.encuestas.models.EncuestaEps;
 import com.ms.encuestas.models.EncuestaLinea;
 import com.ms.encuestas.models.EncuestaLineaCanal;
 import com.ms.encuestas.models.EncuestaProductoCanal;
@@ -50,7 +49,9 @@ public class EncuestaController {
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps")
 	@Transactional(readOnly = true)
 	public EncuestaCentro getEps(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
-		return encuestaService.getCentro(new Long(2), procesoId, posicionCodigo, new Long(2), 0);
+		int nivel = 0;
+		Long perfilId = new Long(1); // STAFF
+		return encuestaService.getCentro(new Long(2), procesoId, posicionCodigo, new Long(2), nivel, perfilId);
 	}
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps")
@@ -58,11 +59,11 @@ public class EncuestaController {
 	public void createEps(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaCentro encuesta) {
 		this.encuestaService.saveCentro(encuesta, new Long(2), procesoId, posicionCodigo, new Long(2));
 	}
-	
-	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro/{nivel}")
+
+	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro/{nivel}/{perfilId}")
 	@Transactional(readOnly = true)
-	public EncuestaCentro getCentro(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable int nivel) {
-		return encuestaService.getCentro(new Long(1), procesoId, posicionCodigo, new Long(3), nivel);
+	public EncuestaCentro getCentro(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable int nivel, @PathVariable Long perfilId) {
+		return encuestaService.getCentro(new Long(1), procesoId, posicionCodigo, new Long(3), nivel, perfilId);
 	}
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro")

@@ -3,11 +3,11 @@ package com.ms.encuestas.models;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Linea implements Serializable {
+public class ProductoSubcanales implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
-	private String codigo;
 	private String nombre;
+	private Date fechaCierre;
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
 
@@ -19,20 +19,20 @@ public class Linea implements Serializable {
 		this.id = id;
 	}
 
-	public String getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
-
 	public String getNombre() {
 		return nombre;
 	}
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public Date getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public void setFechaCierre(Date fechaCierre) {
+		this.fechaCierre = fechaCierre;
 	}
 
 	public Date getFechaCreacion() {

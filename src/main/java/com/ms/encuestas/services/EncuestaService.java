@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.ms.encuestas.models.EncuestaCanal;
 import com.ms.encuestas.models.EncuestaCentro;
 import com.ms.encuestas.models.EncuestaEmpresa;
-import com.ms.encuestas.models.EncuestaEps;
 import com.ms.encuestas.models.EncuestaLinea;
 import com.ms.encuestas.models.EncuestaLineaCanal;
 import com.ms.encuestas.models.EncuestaProductoCanal;
@@ -58,13 +57,13 @@ public class EncuestaService implements EncuestaServiceI {
 	}
 	
 	@Override
-	public EncuestaCentro getCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId, int nivel) {
+	public EncuestaCentro getCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId, int nivel, Long perfilId) {
     	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId)) {
     		if (!posicionRepository.exists(procesoId, posicionCodigo))
     			return null;
 			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);    		
     	}
-    	return encuestaRepository.getEncuestaCentro(empresaId, procesoId, posicionCodigo, encuestaTipoId, nivel);
+    	return encuestaRepository.getEncuestaCentro(empresaId, procesoId, posicionCodigo, encuestaTipoId, nivel, perfilId);
 	}
 	
 	@Override

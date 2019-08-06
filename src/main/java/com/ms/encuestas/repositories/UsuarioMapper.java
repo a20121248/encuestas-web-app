@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.ms.encuestas.models.Area;
 import com.ms.encuestas.models.Centro;
+import com.ms.encuestas.models.Perfil;
 import com.ms.encuestas.models.Posicion;
 import com.ms.encuestas.models.Tipo;
 import com.ms.encuestas.models.Usuario;
@@ -14,6 +15,23 @@ import com.ms.encuestas.models.Usuario;
 public class UsuarioMapper implements RowMapper<Usuario> {
 	@Override
 	public Usuario mapRow(ResultSet rs, int rowNum) throws SQLException {
+		Perfil perfil;
+		try {
+			perfil = new Perfil();
+			perfil.setId(rs.getLong("perfil_id"));
+			perfil.setNombre(rs.getString("perfil_nombre"));
+			perfil.setDescripcion(rs.getString("perfil_descripcion"));
+			
+			Tipo perfilTipo = new Tipo();
+			perfilTipo.setId(rs.getLong("perfil_tipo_id"));
+			perfilTipo.setNombre(rs.getString("perfil_tipo_nombre"));
+			
+			perfil.setPerfilTipo(perfilTipo);
+			
+		} catch (java.sql.SQLException e) {
+			perfil = null;
+		}
+		
 		Posicion posicion;
 		try {
 			posicion = new Posicion();
@@ -21,6 +39,7 @@ public class UsuarioMapper implements RowMapper<Usuario> {
 			posicion.setNombre(rs.getString("posicion_nombre"));
 			posicion.setFechaCreacion(rs.getDate("posicion_fecha_creacion"));
 			posicion.setFechaActualizacion(rs.getDate("posicion_fecha_actualizacion"));
+			posicion.setPerfil(perfil);
 		} catch (java.sql.SQLException e) {
 			posicion = null;
 		}

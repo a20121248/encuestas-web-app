@@ -27,7 +27,7 @@ export class CentroService {
 
   private isNoAutorizado(e): boolean {
     if (e.status == 401 || e.status == 403) {
-      this.router.navigate(["/login"]);
+      this.router.navigate(['/login']);
       return true;
     }
     return false;
@@ -38,8 +38,10 @@ export class CentroService {
   }
 
   obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {
-    const url = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/encuesta/centro/${usuario.posicion.centro.nivel}`;
-    return this.http.get<Encuesta>(this.urlServer.api + url);
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+    const url2 = `${url1}encuesta/centro/${usuario.posicion.centro.nivel}/${usuario.posicion.perfil.id}`;
+    console.log(`${this.urlServer.api}${url2}`);
+    return this.http.get<Encuesta>(`${this.urlServer.api}${url2}`);
     // return this.http.get<Encuesta>('https://api.myjson.com/bins/7oi9p');
   }
 

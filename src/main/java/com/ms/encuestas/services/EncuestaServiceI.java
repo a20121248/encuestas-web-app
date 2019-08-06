@@ -3,7 +3,6 @@ package com.ms.encuestas.services;
 import com.ms.encuestas.models.EncuestaEmpresa;
 import com.ms.encuestas.models.EncuestaCanal;
 import com.ms.encuestas.models.EncuestaCentro;
-import com.ms.encuestas.models.EncuestaEps;
 import com.ms.encuestas.models.EncuestaLinea;
 import com.ms.encuestas.models.EncuestaLineaCanal;
 import com.ms.encuestas.models.EncuestaProductoCanal;
@@ -13,7 +12,7 @@ public interface EncuestaServiceI {
 	public EncuestaEmpresa getEmpresa(Long procesoId, String posicionCodigo, Long encuestaTipoId);
 	public void saveEmpresa(EncuestaEmpresa encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId);	
 	
-	public EncuestaCentro getCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId, int nivel);
+	public EncuestaCentro getCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId, int nivel, Long perfilId);
 	public void saveCentro(EncuestaCentro encuesta, Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId);
 	
 	public EncuestaLinea getLinea(Long procesoId, String posicionCodigo, Long encuestaTipoId);

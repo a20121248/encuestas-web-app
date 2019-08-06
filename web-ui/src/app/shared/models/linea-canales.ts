@@ -1,4 +1,4 @@
-export class Centro {
+export class LineaCanales {
   id: number;
   codigo: string;
   nombre: string;

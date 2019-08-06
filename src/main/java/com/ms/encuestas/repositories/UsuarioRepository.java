@@ -146,7 +146,12 @@ public class UsuarioRepository {
 				     "       E.centro_grupo_id,\n" +
 				     "       G.nombre centro_grupo_nombre,\n" +
 				     "       G.fecha_creacion centro_grupo_fec_creacion,\n" +
-				     "       G.fecha_actualizacion centro_grupo_fec_actualizacion\n" +
+				     "       G.fecha_actualizacion centro_grupo_fec_actualizacion,\n" +
+				     "       H.id perfil_id,\n" +
+				     "       H.nombre perfil_nombre,\n" +
+				     "       H.descripcion perfil_descripcion,\n" +
+				     "       I.id perfil_tipo_id,\n" +
+				     "       I.nombre perfil_tipo_nombre\n" +
 					 "  FROM usuarios A\n" +
 					 "  LEFT JOIN posicion_datos B ON A.codigo=B.usuario_codigo\n" +
 					 "  LEFT JOIN posiciones C ON B.posicion_codigo=C.codigo\n" +
@@ -154,6 +159,8 @@ public class UsuarioRepository {
 					 "  LEFT JOIN centros E ON B.centro_id=E.id\n" +
 					 "  LEFT JOIN centro_tipos F ON E.centro_tipo_id=F.id\n" +
 					 "  LEFT JOIN centro_grupos G ON E.centro_grupo_id=G.id\n" +
+					 "  LEFT JOIN perfiles H ON B.perfil_id=H.id\n" +
+					 "  LEFT JOIN perfil_tipos I ON H.perfil_tipo_id=I.id\n" +
 				     " WHERE proceso_id=:procesoId\n" +
 					 "   AND B.posicion_codigo=:posicionCodigo\n" +
 					 "   AND A.fecha_eliminacion IS NULL";

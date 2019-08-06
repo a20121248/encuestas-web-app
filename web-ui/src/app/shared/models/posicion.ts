@@ -1,5 +1,6 @@
 import { Area } from './area';
 import { Centro } from './centro';
+import { Perfil } from './perfil';
 
 export class Posicion {
   codigo: string;
@@ -8,4 +9,5 @@ export class Posicion {
   fechaActualizacion: Date;
   area: Area;
   centro: Centro;
+  perfil: Perfil;
 }

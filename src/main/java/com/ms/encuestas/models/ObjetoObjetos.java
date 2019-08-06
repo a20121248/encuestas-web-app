@@ -2,31 +2,31 @@ package com.ms.encuestas.models;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-public class Eps implements Serializable {
+public class ObjetoObjetos implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Long id;
-	private String nombre;
+	private Objeto objeto;
+	private List<Objeto> lstObjetos;
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
-	private double porcentaje;
-	
-	public Long getId() {
-		return id;
+
+	public Objeto getObjeto() {
+		return objeto;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setObjeto(Objeto objeto) {
+		this.objeto = objeto;
 	}
 	
+	public List<Objeto> getLstObjetos() {
+		return lstObjetos;
+	}
+
+	public void setLstObjetos(List<Objeto> lstObjetos) {
+		this.lstObjetos = lstObjetos;
+	}
+
 	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}
@@ -34,20 +34,12 @@ public class Eps implements Serializable {
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
-	
+
 	public Date getFechaActualizacion() {
 		return fechaActualizacion;
 	}
 
 	public void setFechaActualizacion(Date fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
-	}
-	
-	public double getPorcentaje() {
-		return porcentaje;
-	}
-
-	public void setPorcentaje(double porcentaje) {
-		this.porcentaje = porcentaje;
 	}
 }
