@@ -1,24 +1,45 @@
 import { Injectable } from '@angular/core';
 import { LineaCanal } from '../models/linea-canal';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Usuario } from '../models/usuario';
+import { Encuesta } from '../models/encuesta';
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
+import { AppConfig } from './app.config';
+import { LINEA_CANAL_mock } from './linea-canal.json';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LineaCanalService {
+  
   private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas';
   private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
+  protected urlServer = AppConfig.settings.urlServer;
+  
+  constructor(
+    public authService: AuthService,
+    private http: HttpClient,
+    private router: Router
+  ) { }
 
-  constructor(private http: HttpClient) { }
-
-  getLineaCanal(): Observable<LineaCanal[]> {
-
-    return this.http.get<LineaCanal[]>(this.urlEndPoint);
-    
+  private isNoAutorizado(e): boolean {
+    if (e.status == 401 || e.status == 403) {
+      this.router.navigate(['/login']);
+      return true;
+    }
+    return false;
   }
-  getLineaCanalPorc(): Observable<LineaCanal[]> {
-    return this.http.get<LineaCanal[]>(this.urlEndPoint);
+
+  errorHandler(error: any): void {
+    console.log(error);
+  }
+
+  obtenerEncuesta(usuario: Usuario): Observable<LineaCanal[]> {
+    // const url = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/encuesta/empresas`;
+    // return this.http.get<Encuesta>(this.urlServer.api + url);
+    return of(LINEA_CANAL_mock);
   }
 
   postRespuesta(lstLineaCanal: LineaCanal[]):any {
