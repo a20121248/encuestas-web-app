@@ -62,7 +62,7 @@ const routes: Routes = [
     children: [
       { path: 'eps', component: EncEPSComponent },
       { path: 'centro', component: EncCentroComponent },
-      { path: 'linea-canal', component: EncLineaCanalComponent, // perfil provincia
+      { path: 'linea-canal', component: EncLineaCanalComponent}, // perfil provincia
       { path: 'linea-canal',
         children: [
           { path: 'linea/:lineaCodigo/canal/:canalCodigo/producto-subcanal', component: EncProductoSubcanalComponent } // perfil provincia

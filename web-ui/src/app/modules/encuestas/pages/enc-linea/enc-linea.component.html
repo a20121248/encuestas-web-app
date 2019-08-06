@@ -39,7 +39,10 @@
     <mat-card class="cuadro mat-elevation-z4 mt-4">
       <div class="row">
         <div class="col-md-7">
-          <app-form-linea [lstLineas]="lstLineas"></app-form-linea>
+          <app-form-linea *ngIf="usuarioSeleccionado && lstLineas"
+                          [usuario]="usuarioSeleccionado"
+                          [lstLineas]="lstLineas">
+          </app-form-linea>
         </div>
         <div class="col-md-5">
           <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"></app-form-justificacion>
@@ -52,4 +55,3 @@
     </mat-card>
   </div>
   <br>
-  

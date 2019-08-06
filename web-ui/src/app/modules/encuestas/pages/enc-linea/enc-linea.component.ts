@@ -27,7 +27,7 @@ export class EncLineaComponent implements OnInit {
   observaciones: string;
   justificacion: Justificacion;
 
-  titulo = "Herramienta de encuestas";
+  titulo = 'Herramienta de encuestas';
   posicionCodigo: string;
   encuesta: Encuesta;
 
@@ -48,7 +48,7 @@ export class EncLineaComponent implements OnInit {
     private usuarioService: UsuarioService,
     private titleService: Title
   ) {
-    this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get("codigo");
+    this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService
       .getUsuarioByPosicionCodigo(this.posicionCodigo)
       .subscribe(usuario => {
@@ -64,7 +64,7 @@ export class EncLineaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.titleService.setTitle("Encuestas | Linea");
+    this.titleService.setTitle('Encuestas | Línea');
   }
 
   guardarEncuesta() {
@@ -75,7 +75,7 @@ export class EncLineaComponent implements OnInit {
     this.lineaService
       .guardarEncuesta(this.encuesta, this.usuarioSeleccionado)
       .subscribe(response => console.log(response), err => console.log(err));
-    swal.fire("Guardar encuesta", "Se guardó la encuesta.", "success");
+    swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
   }
 
   goBack() {
