@@ -17,6 +17,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import {FileUploadModule} from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { UsuarioDatosComponent } from './shared/components/usuario-datos/usuario-datos.component';
@@ -147,7 +148,8 @@ export function initializeApp(appConfig: AppConfig) {
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    FileUploadModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

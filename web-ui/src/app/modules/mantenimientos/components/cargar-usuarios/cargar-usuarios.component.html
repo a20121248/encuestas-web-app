@@ -2,13 +2,17 @@
     <h6 class="card-header text-left font-weight-bold text-uppercase py-4">Carga Masiva de Usuarios</h6>
     <div class="card-body tabla-container">
         <div class="col-md-12 text-left ">
-            <input  type="file" />
+            <input #fileInput type="file" ng2FileSelect [uploader]="uploader" />
+            <!-- <div class="drop-box" ng2FileDrop [ngClass]="{'dragover': isDropOver}" [uploader]="uploader"
+                (fileOver)="fileOverAnother($event)" (click)="fileClicked()">
+                <span class="drag-in-title">Import or drag file here</span>
+                <span class="drag-over-title">Drop the file</span>
+            </div> -->
+            <button mat-raised-button color="primary"  (click)="upload(uploader)"><i class="material-icons"> cloud_upload</i>Subir </button>
         </div>
         <div class="col-md-12 text-left ">
             Descargar listado vigente
-            <button mat-icon-button color="primary">
-                <i class="material-icons">cloud_download</i>
-            </button>
+            <button mat-raised-button color="accent"><i class="material-icons">cloud_download</i>Descargar</button>
         </div>
     </div>
     <div class="card-footer">
