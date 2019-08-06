@@ -13,6 +13,9 @@ import { JustificacionComponent } from "src/app/shared/components/justificacion/
 import { Encuesta } from "src/app/shared/models/encuesta";
 import { UsuarioDatosComponent } from "src/app/shared/components/usuario-datos/usuario-datos.component";
 import { Justificacion } from "src/app/shared/models/justificacion";
+import { UsuarioService } from "src/app/shared/services/usuario.service";
+import { Title } from "@angular/platform-browser";
+import { Usuario } from "src/app/shared/models/usuario";
 
 @Component({
   selector: "app-enc-linea",
@@ -29,12 +32,7 @@ export class EncLineaComponent implements OnInit {
   encuesta: Encuesta;
 
   lineaSeleccionada: Linea;
-
-  constructor(
-    private lineaService: LineaService,
-    private activatedRoute: ActivatedRoute,
-    private location: Location
-  ) {}
+  usuarioSeleccionado: Usuario;
 
   @ViewChild(LineaComponent, { static: false })
   lineaComponent: LineaComponent;
@@ -43,24 +41,39 @@ export class EncLineaComponent implements OnInit {
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
 
-  ngOnInit() {
-    this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
-    this.lineaService
-      .obtenerEncuesta(this.posicionCodigo)
-      .subscribe(encuesta => {
-        this.lstLineas = encuesta.lstItems as Linea[];
-        this.observaciones = encuesta.observaciones;
-        this.justificacion = encuesta.justificacion;
+  constructor(
+    private lineaService: LineaService,
+    private activatedRoute: ActivatedRoute,
+    private location: Location,
+    private usuarioService: UsuarioService,
+    private titleService: Title
+  ) {
+    this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get("codigo");
+    this.usuarioService
+      .getUsuarioByPosicionCodigo(this.posicionCodigo)
+      .subscribe(usuario => {
+        this.usuarioSeleccionado = usuario;
+        this.lineaService
+          .obtenerEncuesta(this.usuarioSeleccionado)
+          .subscribe(encuesta => {
+            this.lstLineas = encuesta.lstItems as Linea[];
+            this.observaciones = encuesta.observaciones;
+            this.justificacion = encuesta.justificacion;
+          });
       });
   }
-  // Rest interaction
+
+  ngOnInit() {
+    this.titleService.setTitle("Encuestas | Linea");
+  }
+
   guardarEncuesta() {
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.lineaComponent.lstLineas;
     this.encuesta.justificacion = this.justificacionComponent.justificacion;
     this.encuesta.observaciones = this.justificacionComponent.observaciones;
     this.lineaService
-      .guardarEncuesta(this.encuesta, this.posicionCodigo)
+      .guardarEncuesta(this.encuesta, this.usuarioSeleccionado)
       .subscribe(response => console.log(response), err => console.log(err));
     swal.fire("Guardar encuesta", "Se guardó la encuesta.", "success");
   }
