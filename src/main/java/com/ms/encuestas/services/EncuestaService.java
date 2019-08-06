@@ -10,6 +10,7 @@ import com.ms.encuestas.models.EncuestaCentro;
 import com.ms.encuestas.models.EncuestaEmpresa;
 import com.ms.encuestas.models.EncuestaLinea;
 import com.ms.encuestas.models.EncuestaLineaCanal;
+import com.ms.encuestas.models.EncuestaObjeto;
 import com.ms.encuestas.models.EncuestaProductoCanal;
 import com.ms.encuestas.models.EncuestaProductoSubcanal;
 import com.ms.encuestas.models.Justificacion;
@@ -77,6 +78,21 @@ public class EncuestaService implements EncuestaServiceI {
     	else
     		encuestaRepository.updateEncuestaCabecera(encuesta.getJustificacion(), encuesta.getObservaciones(), procesoId, posicionCodigo, encuestaTipoId);
 		encuestaRepository.insertLstCentros(encuesta.getLstItems(), empresaId, procesoId, posicionCodigo);
+	}
+
+	@Override
+	public EncuestaObjeto getObjeto(Long procesoId, String posicionCodigo, Long encuestaTipoId, Long objetoTipoId, Long perfilId) {
+    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId)) {
+    		if (!posicionRepository.exists(procesoId, posicionCodigo))
+    			return null;
+			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);    		
+    	}
+    	return encuestaRepository.getEncuestaObjeto(procesoId, posicionCodigo, encuestaTipoId, objetoTipoId, perfilId);
+	}
+	
+	@Override
+	public void saveObjeto(EncuestaObjeto encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+		//encuestaRepository.saveLinea(encuesta, procesoId, posicionCodigo, encuestaTipoId);		
 	}
 	
 	@Override

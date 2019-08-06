@@ -19,6 +19,7 @@ import com.ms.encuestas.models.EncuestaCanal;
 import com.ms.encuestas.models.EncuestaCentro;
 import com.ms.encuestas.models.EncuestaLinea;
 import com.ms.encuestas.models.EncuestaLineaCanal;
+import com.ms.encuestas.models.EncuestaObjeto;
 import com.ms.encuestas.models.EncuestaProductoCanal;
 import com.ms.encuestas.models.EncuestaProductoSubcanal;
 import com.ms.encuestas.services.EncuestaServiceI;
@@ -72,10 +73,12 @@ public class EncuestaController {
 		this.encuestaService.saveCentro(encuesta, new Long(1), procesoId, posicionCodigo, new Long(3));
 	}
 	
-	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea")
+	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea/{perfilId}")
 	@Transactional(readOnly = true)
-	public EncuestaLinea getLinea(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
-		return encuestaService.getLinea(procesoId, posicionCodigo, new Long(4));
+	public EncuestaObjeto getLinea(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId) {
+		Long encuestaTipoId = new Long(4);
+		Long objetoTipoId = new Long(1);
+		return encuestaService.getObjeto(procesoId, posicionCodigo, encuestaTipoId, objetoTipoId, perfilId);
 	}
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea")

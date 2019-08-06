@@ -9,6 +9,7 @@ public class Objeto implements Serializable {
 	private String codigo;
 	private String nombre;
 	private Objeto objetoPadre;
+	private double porcentaje;
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
 
@@ -42,6 +43,14 @@ public class Objeto implements Serializable {
 
 	public void setObjetoPadre(Objeto objetoPadre) {
 		this.objetoPadre = objetoPadre;
+	}
+	
+	public double getPorcentaje() {
+		return porcentaje;
+	}
+
+	public void setPorcentaje(double porcentaje) {
+		this.porcentaje = porcentaje;
 	}
 	
 	public Date getFechaCreacion() {

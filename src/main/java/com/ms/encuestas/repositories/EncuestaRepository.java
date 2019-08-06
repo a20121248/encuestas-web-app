@@ -17,6 +17,7 @@ import com.ms.encuestas.models.EncuestaCentro;
 import com.ms.encuestas.models.EncuestaEmpresa;
 import com.ms.encuestas.models.EncuestaLinea;
 import com.ms.encuestas.models.EncuestaLineaCanal;
+import com.ms.encuestas.models.EncuestaObjeto;
 import com.ms.encuestas.models.EncuestaProductoCanal;
 import com.ms.encuestas.models.EncuestaProductoSubcanal;
 import com.ms.encuestas.models.Justificacion;
@@ -157,12 +158,11 @@ public class EncuestaRepository {
 			  "   AND B.posicion_codigo=:posicion_codigo\n" +
 			  "  JOIN perfil_centro C\r\n" + 
 			  "    ON C.perfil_id=:perfil_id\r\n" + 
-			  "   AND A.id=C.centro_id" + 
+			  "   AND A.id=C.centro_id" +
 			  " WHERE A.empresa_id=:empresa_id\n" +
 			  "   AND A.nivel>:nivel\n" +
 			  "   AND A.fecha_eliminacion IS NULL\n" +
 			  " ORDER BY A.nivel,A.id";
-		System.out.println(sql);
 		encuesta.setLstItems(plantilla.query(sql, paramMap, new CentroMapper()));		
 		return encuesta;
 	}
@@ -214,4 +214,49 @@ public class EncuestaRepository {
 		}
 	}
 	
+	public EncuestaObjeto getEncuestaObjeto(Long procesoId, String posicionCodigo, Long encuestaTipoId, Long objetoTipoId, Long perfilId) {			
+		String sql = "SELECT A.justificacion_id,\n" + 
+			         "       B.nombre justificacion_nombre,\n" +
+			         "       A.justificacion_detalle,\n" +
+			         "       B.fecha_creacion justificacion_fecha_cre,\n" + 
+			         "       B.fecha_actualizacion justificacion_fecha_act,\n" + 
+			         "       A.observaciones\n" + 
+			         "  FROM encuestas A\n" + 
+			         "  LEFT JOIN justificaciones B ON A.justificacion_id=B.id\n" + 
+			         " WHERE proceso_id=:proceso_id\n" + 
+			         "   AND posicion_codigo=:posicion_codigo\n" + 
+			         "   AND encuesta_tipo_id=:encuesta_tipo_id";
+		Map<String, Object> paramMap = new HashMap<String, Object>();		
+		paramMap.put("proceso_id", procesoId);
+		paramMap.put("posicion_codigo", posicionCodigo);
+		paramMap.put("encuesta_tipo_id", encuestaTipoId);
+		paramMap.put("objeto_tipo_id", objetoTipoId);
+		paramMap.put("perfil_id", perfilId);
+		EncuestaObjeto encuesta = plantilla.queryForObject(sql, paramMap, new EncuestaObjetoMapper());
+		
+		sql = "SELECT A.id,\n" + 
+		      "       A.nombre,\n" +
+		      "       A.codigo,\n" +
+		      "       A.fecha_creacion,\n" +
+		      "       A.fecha_actualizacion,\n" +
+		      "       NVL(B.porcentaje*100,0) porcentaje\n" + 
+		      "  FROM objetos A\n" + 
+			  "  LEFT JOIN encuesta_objeto B\n" +
+			  "    ON A.id=B.objeto_id\n" +
+			  "   AND B.proceso_id=:proceso_id\n" +
+			  "   AND B.posicion_codigo=:posicion_codigo\n"; 
+		
+		if (true) { // si quiero filtrar por linea
+			sql += "  JOIN (SELECT DISTINCT perfil_id, linea_id FROM perfil_linea_canal) X\n" + 
+				   "    ON X.perfil_id=:perfil_id\n" + 
+				   "   AND A.id=X.linea_id\n";
+		}
+			  
+		sql += " WHERE A.objeto_tipo_id=:objeto_tipo_id\n" +
+			   "   AND A.fecha_eliminacion IS NULL\n" +
+		       " ORDER BY A.id";
+		
+		encuesta.setLstItems(plantilla.query(sql, paramMap, new ObjetoMapper()));		
+		return encuesta;
+	}	
 }

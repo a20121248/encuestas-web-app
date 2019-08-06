@@ -32,13 +32,12 @@ export class EmpresaComponent implements OnInit {
 
   revisarEmpresa(codigo: string): boolean {
     let perfilTipoId = this.usuario.posicion.perfil.perfilTipo.id;
-    console.log(this.usuario.posicion.perfil);
     if (codigo == '1') {
       if (perfilTipoId == 1) { // Perfil STAFF: Pagina de centros de costos
         this.url = 'centro';
         return true;
       } else if ([2, 3].includes(perfilTipoId)) { // Perfil LINEA o CANAL: Pagina de linea
-        this.url = 'linea';
+        this.url = 'lineas';
         return true;
       } else if (perfilTipoId == 4) { // Perfil MIXTO: Pagina de linea-canal
         this.url = 'linea-canal';
