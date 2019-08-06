@@ -41,6 +41,4 @@ export class LineaComponent implements OnInit {
     }
     return 0;
   }
-
-
 }
