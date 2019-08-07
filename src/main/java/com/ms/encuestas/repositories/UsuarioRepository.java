@@ -38,6 +38,9 @@ public class UsuarioRepository {
 					 "  JOIN posiciones D ON A.posicion_codigo=D.codigo\n" +
 					 " WHERE proceso_id=:procesoId\n" + 
 					 "   AND responsable_posicion_codigo=:posicionCodigo";
+		//System.out.println(sql);
+		//System.out.println(procesoId);
+		//System.out.println(posicionCodigo);
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("procesoId", procesoId);
         paramMap.put("posicionCodigo", posicionCodigo);
