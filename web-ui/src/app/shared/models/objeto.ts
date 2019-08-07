@@ -5,4 +5,5 @@ export class Objeto {
   objetoPadre: Objeto;
   fechaCreacion: Date;
   fechaActualizacion: Date;
+  porcentaje: number;
 }

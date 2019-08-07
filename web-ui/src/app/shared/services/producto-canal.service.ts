@@ -8,6 +8,7 @@ import { ProductoCanal } from 'src/app/shared/models/producto-canal';
 import { MATRIZ } from './producto-canal.json';
 import { AppConfig } from './app.config';
 import { AuthService } from './auth.service';
+import { Encuesta } from '../models/encuesta.js';
 
 
 @Injectable({
@@ -35,20 +36,23 @@ export class ProductoCanalService {
     console.log(error);
   }
 
-  obtenerEncuesta(usuario: Usuario): Observable<ProductoCanal[]> {
+  obtenerEncuesta(usuario: Usuario, lineaId: string): Observable<Encuesta> {
     // const str1 = 'procesos/' + this.authService.proceso.id;
     // const str2 = 'colaboradores/' + usuario.posicion.codigo;
     // const str3 = 'encuesta/linea/producto-subcanal';
     // const url = this.urlServer.api + str1 + '/' + str2 + '/' + str3;
     // return this.http.get<Encuesta>(url, { headers: this.agregarAuthorizationHeader() });
-    return of(MATRIZ);
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+    const url2 = `${url1}encuesta/producto-canal/${lineaId}`;
+    console.log(`${this.urlServer.api}${url2}`);
+    return this.http.get<Encuesta>(`${this.urlServer.api}${url2}`);
   }
 
-  guardarEncuesta(matriz: ProductoCanal[], posicionCodigo: string): Observable<any> {
+  guardarEncuesta(encuesta: Encuesta, posicionCodigo: string): Observable<any> {
     const str1 = 'procesos/' + this.authService.proceso.id + '/';
     const str2 = 'colaboradores/' + posicionCodigo + '/';
     const str3 = 'encuesta/linea/producto-subcanal';
     const url = this.urlServer.api + str1 + str2 + str3;
-    return this.http.post<any>(url, matriz);
+    return this.http.post<any>(url, encuesta);
   }
 }

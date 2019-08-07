@@ -33,13 +33,17 @@ export class ProductoSubcanalService {
     console.log(error);
   }
 
-  obtenerMatriz(usuario: Usuario): Observable<ProductoSubcanal[]> {
+  obtenerEncuesta(usuario: Usuario, lineaId: string, canalId: string): Observable<Encuesta> {
     // const str1 = 'procesos/' + this.authService.proceso.id;
     // const str2 = 'colaboradores/' + usuario.posicion.codigo;
     // const str3 = 'encuesta/linea/producto-subcanal';
     // const url = this.urlServer.api + str1 + '/' + str2 + '/' + str3;
     // return this.http.get<Encuesta>(url, { headers: this.agregarAuthorizationHeader() });
-    return of(MATRIZ);
+    //return of(MATRIZ);
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+    const url2 = `${url1}encuesta/producto-subcanal/${lineaId}/${canalId}`;
+    console.log(`${this.urlServer.api}${url2}`);
+    return this.http.get<Encuesta>(`${this.urlServer.api}${url2}`);
   }
 
   guardarEncuesta(matriz: ProductoSubcanal[], posicionCodigo: string): Observable<any> {

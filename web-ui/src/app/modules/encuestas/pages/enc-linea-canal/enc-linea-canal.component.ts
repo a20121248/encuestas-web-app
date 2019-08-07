@@ -15,6 +15,7 @@ import { CanalComponent } from '../../components/canal/canal.component';
 import { JustificacionComponent } from 'src/app/shared/components/justificacion/justificacion.component';
 import { UsuarioDatosComponent } from 'src/app/shared/components/usuario-datos/usuario-datos.component';
 import { Justificacion } from 'src/app/shared/models/justificacion';
+import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 
 @Component({
   selector: 'app-enc-linea-canal',
@@ -23,6 +24,7 @@ import { Justificacion } from 'src/app/shared/models/justificacion';
 })
 export class EncLineaCanalComponent implements OnInit {
   lstLineaCanal: LineaCanal[];
+  lstObjetoObjetos: ObjetoObjetos[];
   justificacion: Justificacion;
   observaciones: string;
 
@@ -30,7 +32,7 @@ export class EncLineaCanalComponent implements OnInit {
   posicionCodigo: string;
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
-  lineaSeleccionada: LineaCanal;
+  lineaSeleccionada: ObjetoObjetos;
 
   @ViewChild(LineaCanalComponent, { static: false })
   lineaCanalComponent: LineaCanalComponent;
@@ -40,7 +42,7 @@ export class EncLineaCanalComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private lineaCanalService: LineaCanalService,
@@ -51,10 +53,10 @@ export class EncLineaCanalComponent implements OnInit {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
       this.usuarioSeleccionado = usuario;
-    });
-    this.lineaCanalService.obtenerEncuesta(this.usuarioSeleccionado).subscribe(encuesta => {
-      this.lstLineaCanal = encuesta;
-      console.log(this.lstLineaCanal);
+      this.lineaCanalService.obtenerEncuesta(this.usuarioSeleccionado).subscribe(encuesta => {
+        this.encuesta = encuesta;
+        this.lstObjetoObjetos = (encuesta.lstItems as ObjetoObjetos[]);
+      });
     });
   }
 
@@ -63,11 +65,11 @@ export class EncLineaCanalComponent implements OnInit {
   }
 
   guardarEncuesta() {
-    
+
   }
 
-  showCanalesByLinea(linea: LineaCanal) {
-    this.lineaSeleccionada = linea;
+  showCanalesByLinea(objeto: ObjetoObjetos) {
+    this.lineaSeleccionada = objeto;
   }
 
   goBack() {

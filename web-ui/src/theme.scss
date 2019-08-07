@@ -77,6 +77,10 @@ app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-l
       }
     }
 
+    table [class*='mat-column-'] {
+      font-size:13px!important;
+    }
+
     .mat-table {
       width: 100%;
     }

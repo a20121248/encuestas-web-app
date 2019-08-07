@@ -36,10 +36,10 @@ export class EmpresaComponent implements OnInit {
       if (perfilTipoId == 1) { // Perfil STAFF: Pagina de centros de costos
         this.url = 'centro';
         return true;
-      } else if ([2, 3].includes(perfilTipoId)) { // Perfil LINEA o CANAL: Pagina de linea
+      } else if (perfilTipoId == 2) { // Perfil LINEA: Pagina de linea
         this.url = 'lineas';
         return true;
-      } else if (perfilTipoId == 4) { // Perfil MIXTO: Pagina de linea-canal
+      } else if ([3, 4].includes(perfilTipoId)) { // Perfil Canal o Mixto: Pagina de linea-canal
         this.url = 'linea-canal';
         return true;
       }

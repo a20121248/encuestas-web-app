@@ -13,11 +13,11 @@ import { LINEA_CANAL_mock } from './linea-canal.json';
   providedIn: 'root'
 })
 export class LineaCanalService {
-  
+
   private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas';
   private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
   protected urlServer = AppConfig.settings.urlServer;
-  
+
   constructor(
     public authService: AuthService,
     private http: HttpClient,
@@ -36,13 +36,17 @@ export class LineaCanalService {
     console.log(error);
   }
 
-  obtenerEncuesta(usuario: Usuario): Observable<LineaCanal[]> {
-    // const url = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/encuesta/empresas`;
+  obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+    const url2 = `${url1}encuesta/linea-canal/${usuario.posicion.perfil.id}`;
+    console.log(`${this.urlServer.api}${url2}`);
+    return this.http.get<Encuesta>(`${this.urlServer.api}${url2}`);
+    //return this.http.get<LineaCanal[]>(`${this.urlServer.api}${url2}`);
     // return this.http.get<Encuesta>(this.urlServer.api + url);
-    return of(LINEA_CANAL_mock);
+    // return of(LINEA_CANAL_mock);
   }
 
-  postRespuesta(lstLineaCanal: LineaCanal[]):any {
+  postRespuesta(lstLineaCanal: LineaCanal[]): any {
     fetch(this.urlEndPoint,
       {
         headers: {

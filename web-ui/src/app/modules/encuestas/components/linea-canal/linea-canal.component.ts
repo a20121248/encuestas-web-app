@@ -5,6 +5,8 @@ import { Linea } from 'src/app/shared/models/linea';
 import { LineaService } from 'src/app/shared/services/linea.service';
 import { HttpClient } from '@angular/common/http';
 import { LineaCanal } from 'src/app/shared/models/linea-canal';
+import { Usuario } from 'src/app/shared/models/usuario';
+import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 
 @Component({
   selector: 'app-form-linea-canal',
@@ -20,10 +22,11 @@ import { LineaCanal } from 'src/app/shared/models/linea-canal';
 })
 export class LineaCanalComponent implements OnInit {
   @Input() lstLineaCanal: LineaCanal[];
+  @Input() lstObjetoObjetos: ObjetoObjetos[];
   @Output() sendLinea = new EventEmitter();
-  selectedElement: LineaCanal | null;
+  selectedElement: ObjetoObjetos | null;
 
-  dcLinea = ["codigo", "nombre", "porcentaje"];
+  dcLinea = ['codigo', 'nombre', 'porcentaje'];
 
   constructor(
     private lineaService: LineaService,
@@ -40,9 +43,9 @@ export class LineaCanalComponent implements OnInit {
     return 0;
   }
 
-  showCanalesBylineaBoton(linea: LineaCanal) {
-    this.sendLinea.emit(linea);
-    this.selectedElement = linea;
+  showCanalesBylineaBoton(objeto: ObjetoObjetos) {
+    this.sendLinea.emit(objeto);
+    this.selectedElement = objeto;
   }
 
   // setClickedRow = function (index: number) {

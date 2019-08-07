@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ɵConsole } from '@angular/core';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { ProductoSubcanal } from 'src/app/shared/models/producto-subcanal';
+import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 
 @Component({
   selector: 'app-form-producto-subcanal',
@@ -8,8 +9,7 @@ import { ProductoSubcanal } from 'src/app/shared/models/producto-subcanal';
   styleUrls: ['./producto-subcanal.component.css']
 })
 export class ProductoSubcanalComponent implements OnInit {
-  @Input() matriz: ProductoSubcanal[];
-  @Input() usuarioSeleccionado: Usuario;
+  @Input() lstProductoSubcanales: ObjetoObjetos[];
 
   lstCabeceraTableObtenida: string[];
   lstCabeceraTableDynamico: string[];
@@ -19,30 +19,35 @@ export class ProductoSubcanalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log(this.lstProductoSubcanales);
     this.obtenerNombresColumna();
   }
 
   obtenerNombresColumna() {
-    if (this.matriz != null) {
-      this.lstCabeceraTableDynamico = this.matriz[0].lstSubcanales.map(sC => sC.nombre);
-      this.lstCabeceraTableObtenida = ['nombreProducto'];
+    if (this.lstProductoSubcanales != null) {
+      this.lstCabeceraTableObtenida = ['productos'];
+      this.lstCabeceraTableDynamico = this.lstProductoSubcanales[0].lstObjetos.map(
+        (subcanal) => {
+          return subcanal.nombre;
+        }
+      );
       this.lstCabeceraTableObtenida.push(...this.lstCabeceraTableDynamico);
-      this.lstCabeceraTableObtenida.push('Total');
+      this.lstCabeceraTableObtenida.push('total');
     }
   }
 
-  obtenerSuma(element: any): number {
+  obtenerSuma(element: ObjetoObjetos): number {
     if (element != null) {
-      return Math.trunc(100000 * element.lstSubcanales.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0)) / 100000;
+      return Math.trunc(100000 * element.lstObjetos.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0)) / 100000;
     }
     return 0;
   }
 
   obtenerSumaTotal(): number {
     this.sumaTotal = 0;
-    if (this.matriz != null) {
-      this.matriz.forEach(element => {
-        this.sumaTotal += element.lstSubcanales.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+    if (this.lstProductoSubcanales != null) {
+      this.lstProductoSubcanales.forEach(element => {
+        this.sumaTotal += element.lstObjetos.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
       });
       return Math.trunc(100000 * this.sumaTotal) / 100000;
     }

@@ -3,9 +3,9 @@
     <div class="table-responsive cuadro">
         <mat-label>
             <span class=" font-weight-bold">> LINEA: </span>
-            {{lineaSeleccionada.linea.nombre}}
+            {{lineaSeleccionada.objeto.nombre}}
         </mat-label>
-        <table mat-table [dataSource]="lineaSeleccionada.lstCanales" class="design">
+        <table mat-table [dataSource]="lineaSeleccionada.lstObjetos" class="design">
             <ng-container matColumnDef="codigo">
                 <th mat-header-cell *matHeaderCellDef> CODIGO </th>
                 <td mat-cell *matCellDef="let item"> {{item.codigo}} </td>
@@ -35,7 +35,7 @@
                 <th mat-header-cell *matHeaderCellDef> CUMPLIMENTAR </th>
                 <td mat-cell *matCellDef="let item">
                     <a mat-raised-button class="sm" color="primary"
-                        [routerLink]="[lineaSeleccionada.linea.id,item.id,'producto-subcanal']">></a>
+                        [routerLink]="[lineaSeleccionada.objeto.id,item.id,'producto-subcanal']">></a>
                 </td>
                 <td mat-footer-cell *matFooterCellDef> </td>
             </ng-container>

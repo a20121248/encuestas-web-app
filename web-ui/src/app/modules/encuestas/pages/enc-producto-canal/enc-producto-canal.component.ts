@@ -3,16 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
 
-import { ProductoCanal } from "src/app/shared/models/producto-canal";
-import { Empresa } from 'src/app/shared/models/empresa';
-import { EmpresaComponent } from 'src/app/modules/encuestas/components/empresa/empresa.component';
-import { Encuesta } from 'src/app/shared/models/encuesta';
+import { ProductoCanal } from 'src/app/shared/models/producto-canal';
 import { UsuarioDatosComponent } from 'src/app/shared/components/usuario-datos/usuario-datos.component';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { Title } from '@angular/platform-browser';
 import { ProductoCanalService } from 'src/app/shared/services/producto-canal.service';
-import { ProductoCanalComponent } from '../../components/producto-canal/producto-canal.component';
+import { ProductoCanalComponent } from 'src/app/modules/encuestas/components/producto-canal/producto-canal.component';
+import { Encuesta } from 'src/app/shared/models/encuesta';
 
 @Component({
   selector: 'app-enc-producto-canal',
@@ -20,10 +18,11 @@ import { ProductoCanalComponent } from '../../components/producto-canal/producto
   styleUrls: ['./enc-producto-canal.component.css']
 })
 export class EncProductoCanalComponent implements OnInit {
-  matriz: ProductoCanal[];
   titulo = 'Herramienta de encuestas';
   posicionCodigo: string;
   usuarioSeleccionado: Usuario;
+  encuesta: Encuesta;
+  lineaId: string;
   @ViewChild(ProductoCanalComponent, { static: false })
   productoCanalComponent: ProductoCanalComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
@@ -37,11 +36,12 @@ export class EncProductoCanalComponent implements OnInit {
     private titleService: Title
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
+    this.lineaId = this.activatedRoute.snapshot.paramMap.get('lineaId');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
       this.usuarioSeleccionado = usuario;
-    });
-    this.productoCanalService.obtenerEncuesta(this.usuarioSeleccionado).subscribe(encuesta => {
-      this.matriz = encuesta;
+      this.productoCanalService.obtenerEncuesta(this.usuarioSeleccionado, this.lineaId).subscribe(encuesta => {
+        this.encuesta = encuesta;
+      });
     });
   }
 
@@ -54,7 +54,7 @@ export class EncProductoCanalComponent implements OnInit {
   }
 
   guardarEncuesta() {
-    this.productoCanalService.guardarEncuesta(this.matriz, this.posicionCodigo).subscribe(
+    this.productoCanalService.guardarEncuesta(this.encuesta, this.posicionCodigo).subscribe(
       response => console.log(response), err => console.log(err)
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');

@@ -4,7 +4,7 @@ export const MATRIZ: ProductoCanal[] = [
     codigo: 'PRO01',
     nombre: 'Producto 1',
     lstCanales: [
-      {id: 1, codigo: 'CAN01', nombre: 'canal 1', fechaCreacion: new Date("2019-08-01"), porcentaje: 1.1 },
+      {id: 1, codigo: 'CAN01', nombre: 'canal 21', fechaCreacion: new Date("2019-08-01"), porcentaje: 1.1 },
       {id: 2, codigo: 'CAN02', nombre: 'canal 2', fechaCreacion: new Date("2019-08-01"), porcentaje: 1.2 },
       {id: 3, codigo: 'CAN03', nombre: 'canal 3', fechaCreacion: new Date("2019-08-01"), porcentaje: 1.3 },
       {id: 4, codigo: 'CAN04', nombre: 'canal 4', fechaCreacion: new Date("2019-08-01"), porcentaje: 1.4 },
