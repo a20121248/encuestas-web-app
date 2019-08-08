@@ -22,7 +22,12 @@
             <span matSuffix>%</span>
           </mat-form-field>
         </td>
-        <td mat-footer-cell *matFooterCellDef>{{getTotalPorcentaje()}}</td>
+        <td mat-footer-cell *matFooterCellDef>
+          <mat-form-field>
+            <input disabled matInput type="number" value="{{ getTotalPorcentaje() }}">
+            <span matSuffix>%</span>
+          </mat-form-field>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="completar">

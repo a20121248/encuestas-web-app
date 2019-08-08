@@ -9,6 +9,7 @@ import { Encuesta } from 'src/app/shared/models/encuesta';
 import { MATRIZ } from 'src/app/shared/services/producto-subcanal.json'
 import { Usuario } from '../models/usuario';
 import { ProductoSubcanal } from '../models/producto-subcanal';
+import { ObjetoObjetos } from '../models/objeto-objetos';
 @Injectable({
   providedIn: 'root'
 })
@@ -46,11 +47,10 @@ export class ProductoSubcanalService {
     return this.http.get<Encuesta>(`${this.urlServer.api}${url2}`);
   }
 
-  guardarEncuesta(matriz: ProductoSubcanal[], posicionCodigo: string): Observable<any> {
-    const str1 = 'procesos/' + this.authService.proceso.id + '/';
-    const str2 = 'colaboradores/' + posicionCodigo + '/';
-    const str3 = 'encuesta/linea/producto-subcanal';
-    const url = this.urlServer.api + str1 + str2 + str3;
-    return this.http.post<any>(url, matriz);
+  guardarEncuesta(encuesta: Encuesta, usuario: Usuario): Observable<any> {
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+    const url2 = `${url1}encuesta/producto-subcanal`;
+    console.log(`${this.urlServer.api}${url2}`);
+    return this.http.post<any>(`${this.urlServer.api}${url2}`, encuesta);
   }
 }

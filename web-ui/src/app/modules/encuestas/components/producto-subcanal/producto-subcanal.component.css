@@ -1,13 +1,12 @@
 .mat-column-productos {
-  color: rgba(0, 0, 0, 0.54);
   font-weight: bold;
   text-align: left;
 }
 
 .mat-column-total {
   font-weight: bold;
-  color: #585a5b;
   text-align: right;
+  min-width: 62px;
 }
 
 th.mat-header-cell:first-of-type{

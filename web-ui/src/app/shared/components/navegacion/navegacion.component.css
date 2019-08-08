@@ -35,6 +35,10 @@
   min-width: auto;
 }
 
+.logout a i {
+  margin-right: 7px;
+}
+
 .logout a:hover {
   background-color: transparent;
   border: 0;
