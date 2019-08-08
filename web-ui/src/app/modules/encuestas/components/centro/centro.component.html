@@ -1,7 +1,7 @@
 <mat-card class="encuesta mat-elevation-z2">
   <h4 class="card-header text-center py-3">ASIGNACIÓN POR CENTRO DE COSTOS</h4>
   <div class="table-responsive cuadro">
-    <table mat-table [dataSource]="lstCentros" class="design">
+    <table mat-table [dataSource]="dataSource" class="design">
       <ng-container matColumnDef="codigo">
         <th mat-header-cell *matHeaderCellDef>CÓDIGO</th>
         <td mat-cell *matCellDef="let centro">{{centro.codigo}}</td>
@@ -39,6 +39,18 @@
       <tr mat-header-row *matHeaderRowDef="dcCentro"></tr>
       <tr mat-row *matRowDef="let row; columns: dcCentro;"></tr>
       <tr mat-footer-row *matFooterRowDef="dcCentro"></tr>
+
+	<!-- Group header -->
+	<ng-container matColumnDef="groupHeader">
+		<td colspan="999" mat-cell *matCellDef="let group">
+      <mat-icon *ngIf="group.expanded">expand_less</mat-icon>
+      <mat-icon *ngIf="!group.expanded">expand_more</mat-icon>
+			<strong>{{groupByColumns[group.level-1]}} = {{group[groupByColumns[group.level-1]]}}</strong>
+      </td>
+  </ng-container>
+
+  <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" (click)="groupHeaderClick(row)"> </tr>
+
     </table>
   </div>
 </mat-card>
