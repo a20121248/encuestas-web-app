@@ -15,7 +15,7 @@ export class CentroComponent implements OnInit {
   @Input() usuarioSeleccionado: Usuario;
   dcCentro = ['codigo', 'nombre', 'nivel', 'porcentaje'];
   dataSource = new MatTableDataSource<Centro | Group>([]);
-  groupByColumns: string[] = ['nivel'];
+  groupByColumns: string[] = ['grupo'];
 
   constructor() {
   }

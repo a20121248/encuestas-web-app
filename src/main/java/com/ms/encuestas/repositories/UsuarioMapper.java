@@ -66,19 +66,13 @@ public class UsuarioMapper implements RowMapper<Usuario> {
 			centroTipo.setFechaCreacion(rs.getDate("centro_tipo_fec_creacion"));
 			centroTipo.setFechaActualizacion(rs.getDate("centro_tipo_fec_actualizacion"));
 			
-			Tipo centroGrupo = new Tipo();
-			centroGrupo.setId(rs.getLong("centro_grupo_id"));
-			centroGrupo.setNombre(rs.getString("centro_grupo_nombre"));
-			centroGrupo.setFechaCreacion(rs.getDate("centro_grupo_fec_creacion"));
-			centroGrupo.setFechaActualizacion(rs.getDate("centro_grupo_fec_actualizacion"));
-			
 			centro = new Centro();
 			centro.setId(rs.getLong("centro_id"));
 			centro.setCodigo(rs.getString("centro_codigo"));
 			centro.setNombre(rs.getString("centro_nombre"));
 			centro.setNivel(rs.getInt("centro_nivel"));
 			centro.setTipo(centroTipo);
-			centro.setGrupo(centroGrupo);
+			centro.setGrupo(rs.getString("centro_grupo"));
 			centro.setFechaCreacion(rs.getDate("centro_fecha_creacion"));
 			centro.setFechaActualizacion(rs.getDate("centro_fecha_actualizacion"));
 			if (posicion != null)

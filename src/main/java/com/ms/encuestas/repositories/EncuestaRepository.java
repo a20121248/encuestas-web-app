@@ -155,6 +155,7 @@ public class EncuestaRepository {
 			  "       A.codigo,\n" +
 			  "       A.nombre,\n" +
 			  "       A.nivel,\n" +
+			  "       A.grupo,\n" +
 			  "       A.fecha_creacion,\n" +
 			  "       A.fecha_actualizacion,\n" +
 			  "       NVL(B.porcentaje*100,0) porcentaje\n" + 

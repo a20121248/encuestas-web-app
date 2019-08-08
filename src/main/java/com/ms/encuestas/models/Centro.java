@@ -10,11 +10,10 @@ public class Centro implements Serializable {
 	private String nombre;
 	private int nivel;
 	private Tipo tipo;
-	private Tipo grupo;
+	private String grupo;
+	private double porcentaje;
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
-
-	private double porcentaje;
 
 	public Long getId() {
 		return id;
@@ -72,14 +71,14 @@ public class Centro implements Serializable {
 		this.tipo = tipo;
 	}
 
-	public Tipo getGrupo() {
+	public String getGrupo() {
 		return grupo;
 	}
 
-	public void setGrupo(Tipo grupo) {
+	public void setGrupo(String grupo) {
 		this.grupo = grupo;
 	}
-	
+
 	public double getPorcentaje() {
 		return porcentaje;
 	}
