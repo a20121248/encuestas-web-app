@@ -51,9 +51,9 @@ export class EncProductoSubcanalComponent implements OnInit {
   }
 
   guardarEncuesta() {
-    /*this.productoSubcanalService.guardarEncuesta(this.encuesta, this.posicionCodigo).subscribe(
+    this.productoSubcanalService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
       response => console.log(response), err => console.log(err)
-    );*/
+    );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
   }
 
