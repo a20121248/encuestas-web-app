@@ -51,8 +51,10 @@ export class ProductoCanalService {
   guardarEncuesta(encuesta: Encuesta, posicionCodigo: string): Observable<any> {
     const str1 = 'procesos/' + this.authService.proceso.id + '/';
     const str2 = 'colaboradores/' + posicionCodigo + '/';
-    const str3 = 'encuesta/linea/producto-subcanal';
+    const str3 = 'encuesta/producto-canal';
     const url = this.urlServer.api + str1 + str2 + str3;
+    console.log(url);
+    console.log(encuesta);
     return this.http.post<any>(url, encuesta);
   }
 }

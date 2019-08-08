@@ -33,7 +33,7 @@ export class ProductoCanalComponent implements OnInit {
         }
       );
       this.lstCabeceraTableObtenida.push(...this.lstCabeceraTableDynamico);
-      this.lstCabeceraTableObtenida.push('Total');
+      this.lstCabeceraTableObtenida.push('total');
     }
     console.log(this.lstProductoCanales);
     console.log(this.lstCabeceraTableObtenida);

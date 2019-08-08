@@ -77,14 +77,14 @@ public class EncuestaController {
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea/{perfilId}")
 	@Transactional(readOnly = true)
 	public EncuestaObjeto getLinea(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId) {
-		Long encuestaTipoId = new Long(4);
+		Long encuestaTipoId = new Long(7); // 7: Linea
 		return encuestaService.getLinea(procesoId, posicionCodigo, encuestaTipoId, perfilId);
 	}
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea")
 	@ResponseStatus(HttpStatus.CREATED) 
 	public void createLinea(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaObjeto encuesta) {
-		Long encuestaTipoId = new Long(7);
+		Long encuestaTipoId = new Long(7); // 7: Linea
 		this.encuestaService.saveLinea(encuesta, procesoId, posicionCodigo, encuestaTipoId);
 	}
 	
@@ -92,7 +92,6 @@ public class EncuestaController {
 	@Transactional(readOnly = true)
 	public EncuestaObjetoObjetos getLineaCanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId) {
 		Long encuestaTipoId = new Long(4); // 4: Linea y Canal
-		Long objetoTipoId = new Long(1); // 1: Linea
 		return encuestaService.getLineaCanales(procesoId, posicionCodigo, encuestaTipoId, perfilId);
 	}
 	
@@ -100,7 +99,7 @@ public class EncuestaController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createLineaCanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaObjetoObjetos encuesta) {
 		Long encuestaTipoId = new Long(4); // 4: Linea y Canal
-		this.encuestaService.saveLineaCanales(encuesta, procesoId, posicionCodigo, new Long(4));
+		this.encuestaService.saveLineaCanales(encuesta, procesoId, posicionCodigo, encuestaTipoId);
 	}
 	
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-subcanal/{lineaId}/{canalId}")
