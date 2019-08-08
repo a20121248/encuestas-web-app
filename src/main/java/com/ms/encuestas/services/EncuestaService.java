@@ -170,6 +170,7 @@ public class EncuestaService implements EncuestaServiceI {
 			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);
     	else
     		encuestaRepository.updateEncuestaCabecera(encuesta.getJustificacion(), encuesta.getObservaciones(), procesoId, posicionCodigo, encuestaTipoId);
+    	System.out.println("AQUI en el SERVICE save producto subcanales");
 		encuestaRepository.insertLstProductoSubcanales(encuesta.getLstItems(), procesoId, posicionCodigo);
 	}
 }
