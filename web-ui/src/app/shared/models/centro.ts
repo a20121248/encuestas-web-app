@@ -1,12 +1,12 @@
 export class Centro {
-    id: number;
-    codigo: string;
-    nombre: string;
-    nivel: number;
-    grupoId: number;
-    tipoId: number;
-    empresaId: number;
-    fechaCreacion: Date;
-    porcentaje: number;
-    procesoId: number;
-  }
+  id: number;
+  codigo: string;
+  nombre: string;
+  nivel: number;
+  grupoId: number;
+  tipoId: number;
+  empresaId: number;
+  fechaCreacion: Date;
+  porcentaje: number;
+  procesoId: number;
+}

@@ -8,9 +8,10 @@ import org.springframework.stereotype.Service;
 import com.ms.encuestas.models.EncuestaCanal;
 import com.ms.encuestas.models.EncuestaCentro;
 import com.ms.encuestas.models.EncuestaEmpresa;
-import com.ms.encuestas.models.EncuestaEps;
 import com.ms.encuestas.models.EncuestaLinea;
 import com.ms.encuestas.models.EncuestaLineaCanal;
+import com.ms.encuestas.models.EncuestaObjeto;
+import com.ms.encuestas.models.EncuestaObjetoObjetos;
 import com.ms.encuestas.models.EncuestaProductoCanal;
 import com.ms.encuestas.models.EncuestaProductoSubcanal;
 import com.ms.encuestas.models.Justificacion;
@@ -58,13 +59,13 @@ public class EncuestaService implements EncuestaServiceI {
 	}
 	
 	@Override
-	public EncuestaCentro getCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId, int nivel) {
+	public EncuestaCentro getCentro(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId, int nivel, Long perfilId) {
+		if (!posicionRepository.exists(procesoId, posicionCodigo))
+			return null;
     	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId)) {
-    		if (!posicionRepository.exists(procesoId, posicionCodigo))
-    			return null;
 			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);    		
     	}
-    	return encuestaRepository.getEncuestaCentro(empresaId, procesoId, posicionCodigo, encuestaTipoId, nivel);
+    	return encuestaRepository.getEncuestaCentro(empresaId, procesoId, posicionCodigo, encuestaTipoId, nivel, perfilId);
 	}
 	
 	@Override
@@ -79,59 +80,66 @@ public class EncuestaService implements EncuestaServiceI {
     		encuestaRepository.updateEncuestaCabecera(encuesta.getJustificacion(), encuesta.getObservaciones(), procesoId, posicionCodigo, encuestaTipoId);
 		encuestaRepository.insertLstCentros(encuesta.getLstItems(), empresaId, procesoId, posicionCodigo);
 	}
-	
+
 	@Override
-	public EncuestaLinea getLinea(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		return null;
-		//return encuestaRepository.getLinea(procesoId, posicionCodigo, encuestaTipoId);
+	public EncuestaObjeto getLinea(Long procesoId, String posicionCodigo, Long encuestaTipoId, Long perfilId) {
+		if (!posicionRepository.exists(procesoId, posicionCodigo))
+			return null;
+    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId)) {
+			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);    		
+    	}
+    	return encuestaRepository.getEncuestaLinea(procesoId, posicionCodigo, encuestaTipoId, perfilId);
 	}
 	
 	@Override
-	public void saveLinea(EncuestaLinea encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+	public void saveLinea(EncuestaObjeto encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
 		//encuestaRepository.saveLinea(encuesta, procesoId, posicionCodigo, encuestaTipoId);		
 	}
-	
+
 	@Override
-	public EncuestaCanal getCanal(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		return null;
-		//return encuestaRepository.getLinea(procesoId, posicionCodigo, encuestaTipoId);
+	public EncuestaObjetoObjetos getLineaCanales(Long procesoId, String posicionCodigo, Long encuestaTipoId, Long perfilId) {
+		if (!posicionRepository.exists(procesoId, posicionCodigo))
+			return null;
+    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId)) {
+			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);    		
+    	}
+    	return encuestaRepository.getEncuestaLineaCanales(procesoId, posicionCodigo, encuestaTipoId, perfilId);
 	}
 	
 	@Override
-	public void saveCanal(EncuestaCanal encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		//encuestaRepository.saveLinea(encuesta, procesoId, posicionCodigo, encuestaTipoId);		
+	public void saveLineaCanales(EncuestaObjetoObjetos encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+		// TODO Auto-generated method stub		
 	}
-	
+
 	@Override
-	public EncuestaLineaCanal getLineaCanal(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		return null;
-		//return encuestaRepository.getLineaCanal(procesoId, posicionCodigo, encuestaTipoId);
+	public EncuestaObjetoObjetos getProductoCanales(Long procesoId, String posicionCodigo, Long encuestaTipoId, Long lineaId) {
+		if (!posicionRepository.exists(procesoId, posicionCodigo))
+			return null;
+    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId)) {
+			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);    		
+    	}
+    	return encuestaRepository.getEncuestaProductoCanales(procesoId, posicionCodigo, encuestaTipoId, lineaId);
 	}
-	
+
 	@Override
-	public void saveLineaCanal(EncuestaLineaCanal encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		//encuestaRepository.saveLineaCanal(encuesta, procesoId, posicionCodigo, encuestaTipoId);		
+	public void saveProductoCanales(EncuestaObjetoObjetos encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+		// TODO Auto-generated method stub
+		return;
 	}
-	
+
 	@Override
-	public EncuestaProductoSubcanal getProductoSubcanal(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		return null;
-		//return encuestaRepository.getProductoSubcanal(procesoId, posicionCodigo, encuestaTipoId);
+	public EncuestaObjetoObjetos getProductoSubcanales(Long procesoId, String posicionCodigo, Long encuestaTipoId, Long lineaId, Long canalId) {
+		if (!posicionRepository.exists(procesoId, posicionCodigo))
+			return null;
+    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId)) {
+			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);    		
+    	}
+    	return encuestaRepository.getEncuestaProductoSubcanales(procesoId, posicionCodigo, encuestaTipoId, lineaId, canalId);
 	}
-	
+
 	@Override
-	public void saveProductoSubcanal(EncuestaProductoSubcanal encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		//encuestaRepository.saveEncuestaProductoSubcanal(encuesta, procesoId, posicionCodigo, encuestaTipoId);		
-	}
-	
-	@Override
-	public EncuestaProductoCanal getProductoCanal(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		return null;
-		//return encuestaRepository.getProductoSubcanal(procesoId, posicionCodigo, encuestaTipoId);
-	}
-	
-	@Override
-	public void saveProductoCanal(EncuestaProductoCanal encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		//encuestaRepository.saveEncuestaProductoSubcanal(encuesta, procesoId, posicionCodigo, encuestaTipoId);		
+	public void saveProductoSubcanales(EncuestaObjetoObjetos encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+		// TODO Auto-generated method stub
+		
 	}
 }

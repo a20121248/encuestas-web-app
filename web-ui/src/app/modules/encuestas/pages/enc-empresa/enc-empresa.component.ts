@@ -44,6 +44,7 @@ export class EncEmpresaComponent implements OnInit {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
       this.usuarioSeleccionado = usuario;
+      console.log(usuario);
       this.empresaService.obtenerEncuesta(this.usuarioSeleccionado).subscribe(encuesta => {
         this.lstEmpresas = encuesta.lstItems as Empresa[];
         this.observaciones = encuesta.observaciones;

@@ -3,17 +3,17 @@ package com.ms.encuestas.models;
 import java.io.Serializable;
 import java.util.List;
 
-public class EncuestaEps implements Serializable {
+public class EncuestaObjetoObjetos implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private List<Empresa> lstItems;
+	private List<ObjetoObjetos> lstItems;
 	private Justificacion justificacion;
 	private String observaciones;
 
-	public List<Empresa> getLstItems() {
+	public List<ObjetoObjetos> getLstItems() {
 		return lstItems;
 	}
 
-	public void setLstItems(List<Empresa> lstItems) {
+	public void setLstItems(List<ObjetoObjetos> lstItems) {
 		this.lstItems = lstItems;
 	}
 

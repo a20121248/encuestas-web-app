@@ -1,59 +1,54 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
-import { LineaCanal } from 'src/app/shared/models/linea-canal';
-import { LineaCanalService } from 'src/app/shared/services/linea-canal.service';
 import { Linea } from 'src/app/shared/models/linea';
-import { Canal } from 'src/app/shared/models/canal';
 import { LineaService } from 'src/app/shared/services/linea.service';
-import { CanalService } from 'src/app/shared/services/canal.service';
+import { HttpClient } from '@angular/common/http';
+import { LineaCanal } from 'src/app/shared/models/linea-canal';
+import { Usuario } from 'src/app/shared/models/usuario';
+import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 
 @Component({
-  selector: 'app-linea-canal',
+  selector: 'app-form-linea-canal',
   templateUrl: './linea-canal.component.html',
-  styleUrls: ['./linea-canal.component.css']
+  styleUrls: ['./linea-canal.component.css'],
+  // animations: [
+  //   trigger('rowClicked', [
+  //     state('selected', style({ background: 'lightblue' })),
+  //     state('unselected', style({ background: 'yellow' })),
+  //     transition('selected <=> unselected', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+  //   ]),
+  // ],
 })
 export class LineaCanalComponent implements OnInit {
-  
-  private lstLineaCanal: LineaCanal[] = [] ;
-  private lstLinea: Linea[] =  [];
-  private lstCanal: Canal[] = [];
-  lstCabecera: string[]= ["nombreLinea"];
+  @Input() lstLineaCanal: LineaCanal[];
+  @Input() lstObjetoObjetos: ObjetoObjetos[];
+  @Output() sendLinea = new EventEmitter();
+  selectedElement: ObjetoObjetos | null;
+
+  dcLinea = ['codigo', 'nombre', 'porcentaje'];
+
   constructor(
-    private lineaCanalService: LineaCanalService,
     private lineaService: LineaService,
-    private canalService: CanalService
+    private http: HttpClient
   ) { }
 
   ngOnInit() {
-    // this.lineaService.getLinea().subscribe(linea => {
-    //   this.lstLinea = linea;
-    //   console.log(this.lstLinea);
-    // });
-    this.canalService.getCanal().subscribe(canal => {
-      this.lstCanal = canal;
-      this.setUpCabecera();
-      console.log(this.lstCabecera);
-    });
-    this.lineaCanalService.getLineaCanal().subscribe(lineaCanal=>{ 
-      this.lstLineaCanal=lineaCanal;
-    });
   }
 
-  setUpCabecera():void{
-    this.lstCanal.forEach(element => {
-      this.lstCabecera.push(element.nombre);
-    });
+  getTotalPorcentaje() {
+    if (this.lstLineaCanal != null) {
+      return this.lstLineaCanal.map(t => t.linea.porcentaje).reduce((acc, value) => acc + value, 0);
+    }
+    return 0;
   }
 
-  getLstLineaCanal(): LineaCanal[] {
-    return this.lstLineaCanal;
+  showCanalesBylineaBoton(objeto: ObjetoObjetos) {
+    this.sendLinea.emit(objeto);
+    this.selectedElement = objeto;
   }
 
-  getLstLinea(): Linea[] {
-    return this.lstLinea;
-  }
-
-  getLstCanal(): Canal[] {
-    return this.lstCanal;
-  }
+  // setClickedRow = function (index: number) {
+  //   this.selectedRow = index;
+  // }
 }

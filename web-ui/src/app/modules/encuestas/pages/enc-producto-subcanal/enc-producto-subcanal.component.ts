@@ -19,11 +19,12 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./enc-producto-subcanal.component.css']
 })
 export class EncProductoSubcanalComponent implements OnInit {
-  matriz: ProductoSubcanal[];
   titulo = 'Herramienta de encuestas';
   posicionCodigo: string;
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
+  lineaId: string;
+  canalId: string;
   @ViewChild(ProductoSubcanalComponent, { static: false })
   productoSubcanalComponent: ProductoSubcanalComponent;
 
@@ -35,11 +36,13 @@ export class EncProductoSubcanalComponent implements OnInit {
     private titleService: Title
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
+    this.lineaId = this.activatedRoute.snapshot.paramMap.get('lineaId');
+    this.canalId = this.activatedRoute.snapshot.paramMap.get('canalId');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
       this.usuarioSeleccionado = usuario;
-    });
-    this.productoSubcanalService.obtenerMatriz(this.usuarioSeleccionado).subscribe(matriz => {
-      this.matriz = matriz;
+      this.productoSubcanalService.obtenerEncuesta(this.usuarioSeleccionado, this.lineaId, this.canalId).subscribe(encuesta => {
+        this.encuesta = encuesta;
+      });
     });
   }
 
@@ -48,9 +51,9 @@ export class EncProductoSubcanalComponent implements OnInit {
   }
 
   guardarEncuesta() {
-    this.productoSubcanalService.guardarEncuesta(this.matriz, this.posicionCodigo).subscribe(
+    /*this.productoSubcanalService.guardarEncuesta(this.encuesta, this.posicionCodigo).subscribe(
       response => console.log(response), err => console.log(err)
-    );
+    );*/
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
   }
 

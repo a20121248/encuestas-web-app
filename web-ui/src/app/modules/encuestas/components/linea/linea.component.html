@@ -1,47 +1,41 @@
-<div class="card">
-    <h5 class="card-header text-center font-weight-bold text-uppercase">DETALLE LINEA</h5>
-    <div class="card-body">
-        <div id="table" class="table-editable">
-            <span class="table-add float-right mb-3 mr-2">
-                <a class="text-success" (click)="add()">
-                    <div fas icon="plus" size="2x"></div>
-                </a>
-            </span>
-            <table mat-table [dataSource]="lstLineas" class="design">
-                <ng-container matColumnDef="codigo">
-                    <th mat-header-cell *matHeaderCellDef> CODIGO </th>
-                    <td mat-cell *matCellDef="let linea"> {{linea.codigo}} </td>
-                    <td mat-footer-cell *matFooterCellDef> </td>
-                </ng-container>
-                <ng-container matColumnDef="nombre">
-                    <th mat-header-cell *matHeaderCellDef> LINEA </th>
-                    <td mat-cell *matCellDef="let linea"> {{linea.nombre}} </td>
-                    <td mat-footer-cell *matFooterCellDef> TOTAL </td>
-                </ng-container>
-                <ng-container matColumnDef="porcentaje">
-                    <th mat-header-cell *matHeaderCellDef> PORCENTAJE </th>
-                    <td mat-cell class="input-porcentaje" *matCellDef="let linea">
-                        <mat-form-field style="width: 40px;">
-                            <input type="number" matInput [(ngModel)]="linea.porcentaje">
-                        </mat-form-field>
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef> {{getTotalPorcentaje()}} </td>
-                </ng-container>
-                <ng-container matColumnDef="completar">
-                    <th mat-header-cell *matHeaderCellDef> COMPLETAR </th>
-                    <td mat-cell *matCellDef="let linea">
-                        <!-- <ng-container> -->
-                        <!-- <a mat-raised-button color="primary" [routerLink]="[linea.codigo]"><i
-                                class="material-icons">navigate_next</i></a> -->
-                        <!-- </ng-container> -->
-                        <button color="primary" (click)="showCanalesBylineaBoton(linea)" mat-button>></button>
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef> TOTAL </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="dcLinea"></tr>
-                <tr mat-row *matRowDef="let row; columns: dcLinea;"></tr>
-                <tr mat-footer-row *matFooterRowDef="dcLinea"></tr>
-            </table>
-        </div>
-    </div>
-</div>
+<mat-card class="encuesta mat-elevation-z2">
+  <h4 class="card-header text-center py-3">DETALLE LINEA</h4>
+  <div class="table-responsive cuadro">
+
+    <table mat-table [dataSource]="lstLineas" class="design">
+      <ng-container matColumnDef="codigo">
+        <th mat-header-cell *matHeaderCellDef> CODIGO </th>
+        <td mat-cell *matCellDef="let linea">{{linea.codigo}}</td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef> LINEA </th>
+        <td mat-cell *matCellDef="let linea">{{linea.nombre}}</td>
+        <td mat-footer-cell *matFooterCellDef> TOTAL </td>
+      </ng-container>
+      <ng-container matColumnDef="porcentaje">
+        <th mat-header-cell *matHeaderCellDef>PORCENTAJE</th>
+        <td mat-cell class="input-porcentaje" *matCellDef="let linea">
+          <mat-form-field style="width: 40px;">
+            <input type="number" matInput [(ngModel)]="linea.porcentaje">
+            <span matSuffix>%</span>
+          </mat-form-field>
+        </td>
+        <td mat-footer-cell *matFooterCellDef>{{getTotalPorcentaje()}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="completar">
+        <th mat-header-cell *matHeaderCellDef>COMPLETAR</th>
+        <td mat-cell *matCellDef="let linea">
+          <a mat-raised-button class="sm" color="primary" routerLink="{{linea.id + url}}">></a>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="dcLinea"></tr>
+      <tr mat-row *matRowDef="let row; columns: dcLinea;"></tr>
+      <tr mat-footer-row *matFooterRowDef="dcLinea"></tr>
+    </table>
+  </div>
+</mat-card>

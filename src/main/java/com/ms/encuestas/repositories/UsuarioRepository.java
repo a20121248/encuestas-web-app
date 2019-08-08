@@ -38,6 +38,9 @@ public class UsuarioRepository {
 					 "  JOIN posiciones D ON A.posicion_codigo=D.codigo\n" +
 					 " WHERE proceso_id=:procesoId\n" + 
 					 "   AND responsable_posicion_codigo=:posicionCodigo";
+		//System.out.println(sql);
+		//System.out.println(procesoId);
+		//System.out.println(posicionCodigo);
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("procesoId", procesoId);
         paramMap.put("posicionCodigo", posicionCodigo);
@@ -92,23 +95,19 @@ public class UsuarioRepository {
 				     "       E.codigo centro_codigo,\n" +
 				     "       E.nombre centro_nombre,\n" +
 				     "       E.nivel centro_nivel,\n" +
+				     "       E.grupo centro_grupo,\n" +
 				     "       E.fecha_creacion centro_fecha_creacion,\n" +
 				     "       E.fecha_actualizacion centro_fecha_actualizacion,\n" +
 				     "       E.centro_tipo_id,\n" +
 				     "       F.nombre centro_tipo_nombre,\n" +
 				     "       F.fecha_creacion centro_tipo_fec_creacion,\n" +
-				     "       F.fecha_actualizacion centro_tipo_fec_actualizacion,\n" +
-				     "       E.centro_grupo_id,\n" +
-				     "       G.nombre centro_grupo_nombre,\n" +
-				     "       G.fecha_creacion centro_grupo_fec_creacion,\n" +
-				     "       G.fecha_actualizacion centro_grupo_fec_actualizacion\n" +
+				     "       F.fecha_actualizacion centro_tipo_fec_actualizacion\n" +
 					 "  FROM usuarios A\n" +
 					 "  LEFT JOIN posicion_datos B ON A.codigo=B.usuario_codigo\n" +
 					 "  LEFT JOIN posiciones C ON B.posicion_codigo=C.codigo\n" +
 					 "  LEFT JOIN areas D ON B.area_id=D.id\n" +
 					 "  LEFT JOIN centros E ON B.centro_id=E.id\n" +
 					 "  LEFT JOIN centro_tipos F ON E.centro_tipo_id=F.id\n" +
-					 "  LEFT JOIN centro_grupos G ON E.centro_grupo_id=G.id\n" +
 				     " WHERE A.codigo=:codigo\n" +
 					 "   AND B.proceso_id=:proceso_id" +
 					 "   AND A.fecha_eliminacion IS NULL";
@@ -137,23 +136,26 @@ public class UsuarioRepository {
 				     "       E.codigo centro_codigo,\n" +
 				     "       E.nombre centro_nombre,\n" +
 				     "       E.nivel centro_nivel,\n" +
+				     "       E.grupo centro_grupo,\n" +
 				     "       E.fecha_creacion centro_fecha_creacion,\n" +
 				     "       E.fecha_actualizacion centro_fecha_actualizacion,\n" +
 				     "       E.centro_tipo_id,\n" +
 				     "       F.nombre centro_tipo_nombre,\n" +
 				     "       F.fecha_creacion centro_tipo_fec_creacion,\n" +
 				     "       F.fecha_actualizacion centro_tipo_fec_actualizacion,\n" +
-				     "       E.centro_grupo_id,\n" +
-				     "       G.nombre centro_grupo_nombre,\n" +
-				     "       G.fecha_creacion centro_grupo_fec_creacion,\n" +
-				     "       G.fecha_actualizacion centro_grupo_fec_actualizacion\n" +
+				     "       H.id perfil_id,\n" +
+				     "       H.nombre perfil_nombre,\n" +
+				     "       H.descripcion perfil_descripcion,\n" +
+				     "       I.id perfil_tipo_id,\n" +
+				     "       I.nombre perfil_tipo_nombre\n" +
 					 "  FROM usuarios A\n" +
 					 "  LEFT JOIN posicion_datos B ON A.codigo=B.usuario_codigo\n" +
 					 "  LEFT JOIN posiciones C ON B.posicion_codigo=C.codigo\n" +
 					 "  LEFT JOIN areas D ON B.area_id=D.id\n" +
 					 "  LEFT JOIN centros E ON B.centro_id=E.id\n" +
 					 "  LEFT JOIN centro_tipos F ON E.centro_tipo_id=F.id\n" +
-					 "  LEFT JOIN centro_grupos G ON E.centro_grupo_id=G.id\n" +
+					 "  LEFT JOIN perfiles H ON B.perfil_id=H.id\n" +
+					 "  LEFT JOIN perfil_tipos I ON H.perfil_tipo_id=I.id\n" +
 				     " WHERE proceso_id=:procesoId\n" +
 					 "   AND B.posicion_codigo=:posicionCodigo\n" +
 					 "   AND A.fecha_eliminacion IS NULL";

@@ -7,8 +7,14 @@
   </mat-card>
   <mat-card class="cuadro mat-elevation-z4 mt-4">
     <div class="row">
-      <div class="col-md-7">
-        <app-form-linea (sendLinea)="showCanalesByLinea($event)" [lstLineas]="lstLineas"></app-form-linea>
+      <div class="col-md-6">
+        <app-form-linea-canal *ngIf="lstObjetoObjetos"
+                              (sendLinea)="showCanalesByLinea($event)"
+                              [lstLineaCanal]="lstLineaCanal"
+                              [lstObjetoObjetos]="lstObjetoObjetos">
+        </app-form-linea-canal>
+      </div>
+      <div class="col-md-6">
         <app-form-canal *ngIf="lineaSeleccionada" [lineaSeleccionada]="lineaSeleccionada"></app-form-canal>
       </div>
       <div class="col-md-12 text-right">

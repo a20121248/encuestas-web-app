@@ -72,7 +72,7 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	@Override
 	@Transactional(readOnly = true)
 	public Usuario findByCodigo(String codigo, Long procesoId) {
-		return usuarioRepository.findByCodigo(codigo, new Long(2));
+		return usuarioRepository.findByCodigo(codigo, procesoId);
 	}
 	
 	@Override

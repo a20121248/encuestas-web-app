@@ -40,7 +40,7 @@ export class UsuarioService {
 
   getUsuarioByPosicionCodigo(codigo: string): Observable<Usuario> {
     return this.http.get<Usuario>(
-      this.urlServer.api + 'procesos/' + this.authService.proceso.id + '/usuarios/posicion/' + codigo
+      `${this.urlServer.api}procesos/${this.authService.proceso.id}/usuarios/posicion/${codigo}`
     );
   }
 

@@ -24,9 +24,6 @@ export class EpsComponent implements OnInit {
   this.lstEps = [];
   }
 
-  editField: number;
-  
-
   getTotalPorcentaje(){
     return this.lstEps.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
   }

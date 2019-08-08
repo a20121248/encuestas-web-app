@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Linea } from "src/app/shared/models/linea";
+import { LineaCanal } from 'src/app/shared/models/linea-canal';
+import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 
 @Component({
   selector: "app-form-canal",
@@ -8,9 +10,18 @@ import { Linea } from "src/app/shared/models/linea";
 })
 export class CanalComponent implements OnInit {
 
-  @Input() lineaSeleccionada: Linea;
-
+  @Input() lineaSeleccionada: ObjetoObjetos;
+  dcLinea = ["codigo", "nombre", "porcentaje","cumplimentar"];
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.lineaSeleccionada);
+  }
+
+  getTotalPorcentaje() {
+    if (this.lineaSeleccionada.lstObjetos != null) {
+      return this.lineaSeleccionada.lstObjetos.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+    }
+    return 0;
+  }
 }

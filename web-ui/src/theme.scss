@@ -10,6 +10,11 @@ $color-2: #585a5b;
 $color-fondo: #f2f3f3;
 $fuente: "Foco","Arial",sans-serif;
 
+.grupo {
+  display:flex;align-items:center;
+  color: $color-2;
+}
+
 app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-linea, app-enc-linea-canal, app-enc-producto-subcanal, app-enc-producto-canal, app-mantenimientos {
   overflow-y: auto;
   display: flex;
@@ -49,8 +54,12 @@ app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-l
     margin-left: 15px;
   }
 
+  .mat-header-cell {
+    color: $color-2;
+  }
+
   h1 {
-    color: $color-1;
+    color: $color-2;
     font-family: $fuente;
     font-size: 22px;
     font-weight: bold;
@@ -75,6 +84,10 @@ app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-l
       .mat-form-field-underline {
         display: none;
       }
+    }
+
+    table [class*='mat-column-'] {
+      font-size:13px!important;
     }
 
     .mat-table {
@@ -114,7 +127,7 @@ app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-l
   }
 
   .campo {
-    color: $color-1!important;
+    color: $color-2!important;
     text-align: left;
     font-family: $fuente;
     font-size: 14px;
