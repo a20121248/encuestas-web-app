@@ -21,8 +21,7 @@ import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
   // ],
 })
 export class LineaCanalComponent implements OnInit {
-  @Input() lstLineaCanal: LineaCanal[];
-  @Input() lstObjetoObjetos: ObjetoObjetos[];
+  @Input() lstLineaCanales: ObjetoObjetos[];
   @Output() sendLinea = new EventEmitter();
   selectedElement: ObjetoObjetos | null;
 
@@ -37,8 +36,8 @@ export class LineaCanalComponent implements OnInit {
   }
 
   getTotalPorcentaje() {
-    if (this.lstObjetoObjetos != null) {
-      return this.lstObjetoObjetos.map(t => t.objeto.porcentaje).reduce((acc, value) => acc + value, 0);
+    if (this.lstLineaCanales != null) {
+      return this.lstLineaCanales.map(t => t.objeto.porcentaje).reduce((acc, value) => acc + value, 0);
     }
     return 0;
   }
