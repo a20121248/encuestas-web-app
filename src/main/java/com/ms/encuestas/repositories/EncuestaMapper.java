@@ -29,7 +29,6 @@ public class EncuestaMapper implements RowMapper<EncuestaEmpresa> {
 		try {
 			encuesta = new EncuestaEmpresa();
 			String observaciones = rs.getString("observaciones");
-			System.out.println(observaciones.compareTo("NULL")==0);
 			encuesta.setObservaciones(observaciones.compareTo("NULL")==0 ? null : observaciones);
 			encuesta.setJustificacion(justificacion);
 		} catch (java.sql.SQLException e) {

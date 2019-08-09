@@ -68,8 +68,6 @@ export class EncLineaCanalComponent implements OnInit {
   guardarEncuesta() {
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.lineaCanalComponent.lstObjetoObjetos;
-    this.encuesta.justificacion = null;
-    this.encuesta.observaciones = null;
     this.lineaCanalService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
       response => console.log(response), err => console.log(err)
     );
