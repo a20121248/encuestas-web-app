@@ -99,11 +99,11 @@ public class EncuestaRepository {
 	
 	public EncuestaEmpresa getEncuestaEmpresa(Long procesoId, String posicionCodigo, Long encuestaTipoId) {			
 		String sql = "SELECT A.justificacion_id,\n" + 
-			         "       B.nombre justificacion_nombre,\n" +
-			         "       A.justificacion_detalle,\n" +
+			         "       NVL(B.nombre,'NULL') justificacion_nombre,\n" +
+			         "       NVL(A.justificacion_detalle,'NULL') justificacion_detalle,\n" +
 			         "       B.fecha_creacion justificacion_fecha_cre,\n" + 
 			         "       B.fecha_actualizacion justificacion_fecha_act,\n" + 
-			         "       A.observaciones\n" + 
+			         "       NVL(A.observaciones,'NULL') observaciones\n" + 
 			         "  FROM encuestas A\n" + 
 			         "  LEFT JOIN justificaciones B ON A.justificacion_id=B.id\n" + 
 			         " WHERE proceso_id=:proceso_id\n" + 

@@ -15,8 +15,10 @@ public class EncuestaMapper implements RowMapper<EncuestaEmpresa> {
 		try {
 			justificacion = new Justificacion();
 			justificacion.setId(rs.getLong("justificacion_id"));
-			justificacion.setNombre(rs.getString("justificacion_nombre"));
-			justificacion.setDetalle(rs.getString("justificacion_detalle"));
+			String justificacionNombre = rs.getString("justificacion_nombre");
+			justificacion.setNombre(justificacionNombre=="NULL" ? null : justificacionNombre);
+			String justificacionDetalle = rs.getString("justificacion_detalle");
+			justificacion.setDetalle(justificacionDetalle.compareTo("NULL")==0 ? null : justificacionDetalle);
 			justificacion.setFechaCreacion(rs.getDate("justificacion_fecha_cre"));
 			justificacion.setFechaActualizacion(rs.getDate("justificacion_fecha_act"));
 		} catch (java.sql.SQLException e) {
@@ -26,7 +28,9 @@ public class EncuestaMapper implements RowMapper<EncuestaEmpresa> {
 		EncuestaEmpresa encuesta;
 		try {
 			encuesta = new EncuestaEmpresa();
-			encuesta.setObservaciones(rs.getString("observaciones"));
+			String observaciones = rs.getString("observaciones");
+			System.out.println(observaciones.compareTo("NULL")==0);
+			encuesta.setObservaciones(observaciones.compareTo("NULL")==0 ? null : observaciones);
 			encuesta.setJustificacion(justificacion);
 		} catch (java.sql.SQLException e) {
 			encuesta = null;
