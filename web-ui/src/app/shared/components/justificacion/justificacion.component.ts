@@ -15,7 +15,6 @@ export interface Justificacion {
   styleUrls: ['./justificacion.component.css']
 })
 export class JustificacionComponent implements OnInit {
-  justificacionControl = new FormControl('', [Validators.required]);
   lstJustificaciones: Justificacion[];
   @Input() observaciones: string;
   @Input() justificacion: Justificacion;

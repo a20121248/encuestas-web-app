@@ -49,6 +49,8 @@ export class EncEmpresaComponent implements OnInit {
         this.lstEmpresas = encuesta.lstItems as Empresa[];
         this.observaciones = encuesta.observaciones;
         this.justificacion = encuesta.justificacion;
+        console.log(this.justificacion);
+        console.log('a');
       });
     });
   }
