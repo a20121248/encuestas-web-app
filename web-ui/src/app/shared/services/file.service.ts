@@ -12,8 +12,8 @@ export class FileService {
   constructor(private http: HttpClient) {
   }
 
-  downloadFile(fileName: string): Observable<any> {
-    const url = `${this.urlServer.api}procesos/2/reportes/control/${fileName}`;
+  downloadFile(): Observable<any> {
+    const url = `${this.urlServer.api}procesos/2/reportes/control`;
     console.log('enviando get:');
     return this.http.get(url, {
       responseType: 'blob'

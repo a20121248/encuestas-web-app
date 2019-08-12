@@ -19,17 +19,14 @@ export class ReportesComponent implements OnInit {
   }
 
   descargar() {
-    this.fileService.downloadFile('test.csv').subscribe(response => {
+    this.fileService.downloadFile().subscribe(response => {
       console.log('recibien el response:');
       console.log(response);
 
-      this.saveFile(response.body);
+      const blob = new Blob(
+        [JSON.stringify(response.body)],
+        { type: 'application/vnd.ms-excel;charset=utf-8' });
+      fileSaver.saveAs(blob, 'Report.xlsx');
     });
   }
-
-  saveFile(data: any) {
-    const blob = new Blob([data], {type: 'text/csv; charset=utf-8'});
-    fileSaver.saveAs(blob, 'aaa.csv');
-  }
-
 }

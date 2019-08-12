@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,13 +54,13 @@ public class ReporteController {
 	
 	private final Logger log = LoggerFactory.getLogger(ReporteController.class);
 
-	@GetMapping("/procesos/{procesoId}/reportes/control/{fileName:.+}")
+	@GetMapping("/procesos/{procesoId}/reportes/control")
 	@Transactional(readOnly = true)
-	public ResponseEntity<Resource> getControl(@PathVariable Long procesoId, @PathVariable String fileName, HttpServletRequest request) {
+	public ResponseEntity<Resource> getControl(@PathVariable Long procesoId, HttpServletRequest request) {
 		System.out.println("exitos"+ procesoId);
 
 		// Load file as Resource
-		Resource resource = reporteService.generarReporteControl(procesoId, fileName);
+		Resource resource = reporteService.generarReporteControl(procesoId);
 		if(resource==null) {
 			System.out.println("nulo");
 		} else {
@@ -67,7 +69,11 @@ public class ReporteController {
 		
 
         // Try to determine file's content type
-        String contentType = "application/octet-stream";
+        String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("mensaje", "Error al subir imagen del cliente.");
+                
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
