@@ -1,17 +1,24 @@
-<div class="card">
-    <h6 class="card-header text-left font-weight-bold text-uppercase py-4">Carga Masiva de Usuarios</h6>
-    <div class="card-body tabla-container">
+<mat-card class="encuesta mat-elevation-z2">
+    <h4 class="card-header text-center py-3">Carga Masiva de Usuarios</h4>
+    <div class="table-responsive ">
         <div class="col-md-12 text-left ">
-            <input  type="file" />
+            <div class="form-group">
+                <label>Seleccione Archivo para la carga masiva de usuarios</label>
+                <input type="file" id="file" (change)="handleFileInput($event.target.files)">
+            </div>
+            <button mat-raised-button color="accent" (click)="uploadFile()"><i class="material-icons">
+                    cloud_upload</i>Subir
+            </button>
         </div>
         <div class="col-md-12 text-left ">
             Descargar listado vigente
-            <button mat-icon-button color="primary">
-                <i class="material-icons">cloud_download</i>
+            <button mat-raised-button color="primary" (click)="downloadFile()">
+                Descargar <i class="material-icons">cloud_download</i>
             </button>
         </div>
     </div>
     <div class="card-footer">
         Nota: La ultima actualización del maestro de usuarios fue: {{getLastDateUpdate()}}.
     </div>
-</div>
+
+</mat-card>

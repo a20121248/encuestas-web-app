@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
@@ -27,6 +27,8 @@ export class EncEmpresaComponent implements OnInit {
   posicionCodigo: string;
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
+  estadoEmpresas: boolean;
+  estadoJustificion:boolean;
   @ViewChild(EmpresaComponent, { static: false })
   empresaComponent: EmpresaComponent;
   @ViewChild(JustificacionComponent, { static: false })
@@ -39,7 +41,8 @@ export class EncEmpresaComponent implements OnInit {
     private empresaService: EmpresaService,
     private location: Location,
     private usuarioService: UsuarioService,
-    private titleService: Title
+    private titleService: Title,
+    private changeDetector: ChangeDetectorRef
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
@@ -55,6 +58,14 @@ export class EncEmpresaComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('Encuestas | Empresas');
+  }
+
+  stateFormJustificacion(){
+
+  }
+
+  stateFormEmpresas(value:boolean,){
+    this.estadoEmpresas = value;
   }
 
   goBack() {
