@@ -23,7 +23,7 @@ export class ReportesComponent implements OnInit {
       console.log('recibien el response:');
       console.log(response);
 
-      this.saveFile(response.body, 'aa');
+      this.saveFile(response.body);
     });
   }
 
