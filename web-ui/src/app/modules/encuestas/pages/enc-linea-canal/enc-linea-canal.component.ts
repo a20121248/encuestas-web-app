@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
+import swal from 'sweetalert2';
 
 import { LineaCanalService } from 'src/app/shared/services/linea-canal.service';
 import { LineaCanalComponent } from 'src/app/modules/encuestas/components/linea-canal/linea-canal.component';
@@ -65,7 +66,14 @@ export class EncLineaCanalComponent implements OnInit {
   }
 
   guardarEncuesta() {
-
+    this.encuesta = new Encuesta();
+    this.encuesta.lstItems = this.lineaCanalComponent.lstObjetoObjetos;
+    this.encuesta.justificacion = null;
+    this.encuesta.observaciones = null;
+    this.lineaCanalService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
+      response => console.log(response), err => console.log(err)
+    );
+    swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
   }
 
   showCanalesByLinea(objeto: ObjetoObjetos) {

@@ -46,17 +46,10 @@ export class LineaCanalService {
     // return of(LINEA_CANAL_mock);
   }
 
-  postRespuesta(lstLineaCanal: LineaCanal[]): any {
-    fetch(this.urlEndPoint,
-      {
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify(lstLineaCanal)
-      })
-      .then(function(res){ console.log(res) })
-      .catch(function(res){ console.log(res) });
+  guardarEncuesta(encuesta: Encuesta, usuario: Usuario): Observable<any> {
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+    const url2 = `${url1}encuesta/linea-canal`;
+    console.log(`${this.urlServer.api}${url2}`);
+    return this.http.post<any>(`${this.urlServer.api}${url2}`, encuesta);
   }
 }

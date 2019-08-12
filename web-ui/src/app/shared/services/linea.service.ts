@@ -36,8 +36,14 @@ export class LineaService {
   }
 
   guardarEncuesta(encuesta: Encuesta, usuario: Usuario): Observable<any> {
-    const url = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/encuesta/centro`;
-    return this.http.post<any>(this.urlServer.api + url, encuesta);
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+    const url2 = `${url1}encuesta/linea`;
+    console.log(`${this.urlServer.api}${url2}`);
+    console.log('inicio guardar:');
+    console.log(encuesta);
+    console.log(usuario);
+    console.log('fin guardar:');
+    return this.http.post<any>(`${this.urlServer.api}${url2}`, encuesta);
   }
 
 }

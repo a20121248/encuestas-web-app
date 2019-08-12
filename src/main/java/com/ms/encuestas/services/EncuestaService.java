@@ -93,7 +93,15 @@ public class EncuestaService implements EncuestaServiceI {
 	
 	@Override
 	public void saveLinea(EncuestaObjeto encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		//encuestaRepository.saveLinea(encuesta, procesoId, posicionCodigo, encuestaTipoId);		
+		if (encuesta.getJustificacion() == null) {
+			encuesta.setJustificacion(getJustificacionDefault());
+			encuesta.setObservaciones(getObservacionesDefault());
+		}
+    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId))
+			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);
+    	else
+    		encuestaRepository.updateEncuestaCabecera(encuesta.getJustificacion(), encuesta.getObservaciones(), procesoId, posicionCodigo, encuestaTipoId);
+		encuestaRepository.insertLstLinea(encuesta.getLstItems(), procesoId, posicionCodigo);		
 	}
 
 	@Override
@@ -108,7 +116,15 @@ public class EncuestaService implements EncuestaServiceI {
 	
 	@Override
 	public void saveLineaCanales(EncuestaObjetoObjetos encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		// TODO Auto-generated method stub		
+		if (encuesta.getJustificacion() == null) {
+			encuesta.setJustificacion(getJustificacionDefault());
+			encuesta.setObservaciones(getObservacionesDefault());
+		}
+    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId))
+			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);
+    	else
+    		encuestaRepository.updateEncuestaCabecera(encuesta.getJustificacion(), encuesta.getObservaciones(), procesoId, posicionCodigo, encuestaTipoId);
+		encuestaRepository.insertLstLineaCanales(encuesta.getLstItems(), procesoId, posicionCodigo);		
 	}
 
 	@Override
@@ -123,8 +139,15 @@ public class EncuestaService implements EncuestaServiceI {
 
 	@Override
 	public void saveProductoCanales(EncuestaObjetoObjetos encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		// TODO Auto-generated method stub
-		return;
+		if (encuesta.getJustificacion() == null) {
+			encuesta.setJustificacion(getJustificacionDefault());
+			encuesta.setObservaciones(getObservacionesDefault());
+		}
+    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId))
+			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);
+    	else
+    		encuestaRepository.updateEncuestaCabecera(encuesta.getJustificacion(), encuesta.getObservaciones(), procesoId, posicionCodigo, encuestaTipoId);
+		encuestaRepository.insertLstProductoCanales(encuesta.getLstItems(), procesoId, posicionCodigo);
 	}
 
 	@Override
@@ -139,7 +162,15 @@ public class EncuestaService implements EncuestaServiceI {
 
 	@Override
 	public void saveProductoSubcanales(EncuestaObjetoObjetos encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
-		// TODO Auto-generated method stub
-		
+		if (encuesta.getJustificacion() == null) {
+			encuesta.setJustificacion(getJustificacionDefault());
+			encuesta.setObservaciones(getObservacionesDefault());
+		}
+    	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId))
+			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);
+    	else
+    		encuestaRepository.updateEncuestaCabecera(encuesta.getJustificacion(), encuesta.getObservaciones(), procesoId, posicionCodigo, encuestaTipoId);
+    	System.out.println("AQUI en el SERVICE save producto subcanales");
+		encuestaRepository.insertLstProductoSubcanales(encuesta.getLstItems(), procesoId, posicionCodigo);
 	}
 }

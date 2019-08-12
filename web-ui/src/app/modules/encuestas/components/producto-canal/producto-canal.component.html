@@ -3,24 +3,24 @@
   <div class="table-responsive mt-1">
     <table mat-table [dataSource]="lstProductoCanales">
       <ng-container matColumnDef="productos" sticky>
-        <th mat-header-cell *matHeaderCellDef>Productos</th>
+        <th mat-header-cell *matHeaderCellDef>PRODUCTOS</th>
         <td mat-cell *matCellDef="let element">{{element.objeto.nombre}}</td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
-      <ng-container *ngFor="let canal of lstCabeceraTableDynamico; let i = index" matColumnDef="{{ canal }}">
-        <th mat-header-cell *matHeaderCellDef>{{ canal }}</th>
+      <ng-container *ngFor="let canal of lstCabeceraTableDynamico; let i = index" matColumnDef="{{canal}}">
+        <th mat-header-cell *matHeaderCellDef>{{canal}}</th>
         <td mat-cell *matCellDef="let element">
           <mat-form-field>
             <input matInput type='number' [(ngModel)]='element.lstObjetos[i].porcentaje'>
             <span matSuffix>%</span>
           </mat-form-field>
         </td>
-        <td mat-footer-cell *matFooterCellDef> </td>
+        <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
-      <ng-container matColumnDef="Total" stickyEnd>
-        <th mat-header-cell *matHeaderCellDef>Total</th>
-        <td mat-cell *matCellDef="let element"> {{obtenerSuma(element)}} <span matSuffix>%</span></td>
-        <td mat-footer-cell *matFooterCellDef> Total {{obtenerSumaTotal()}} <span matSuffix>%</span></td>
+      <ng-container matColumnDef="total" stickyEnd>
+        <th mat-header-cell *matHeaderCellDef>TOTAL</th>
+        <td mat-cell *matCellDef="let element">{{obtenerSuma(element)}}<span matSuffix>%</span></td>
+        <td mat-footer-cell *matFooterCellDef>{{obtenerSumaTotal()}}<span matSuffix>%</span></td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="lstCabeceraTableObtenida; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: lstCabeceraTableObtenida;"></tr>
