@@ -58,7 +58,7 @@ public class ReporteRepository {
 					 "  JOIN areas E ON E.id=A.area_id\n" + 
 					 "  JOIN centros F ON F.id=A.centro_id\n" + 
 					 "  JOIN perfiles G ON G.id=A.perfil_id\n" + 
-					 " WHERE C.id=2";
+					 " WHERE C.id=:proceso_id";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("proceso_id", procesoId);
 		return plantilla.queryForList(sql, paramMap);
