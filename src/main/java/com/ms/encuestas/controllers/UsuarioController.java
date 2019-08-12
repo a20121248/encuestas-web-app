@@ -1,9 +1,15 @@
 package com.ms.encuestas.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,7 +20,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.services.UsuarioServiceI;
@@ -25,6 +33,26 @@ import com.ms.encuestas.services.UsuarioServiceI;
 public class UsuarioController {
 	@Autowired
 	private UsuarioServiceI usuarioService;
+	
+	private final Logger log = LoggerFactory.getLogger(UsuarioController.class);
+	
+	@PostMapping("usuarios/upload")
+	public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("procesoId") Long procesoId) {
+		Map<String, Object> response = new HashMap<>();
+		if (!archivo.isEmpty()) {
+			String nombreArchivo = archivo.getOriginalFilename();
+			Path rutaArchivo = Paths.get("storage").resolve(nombreArchivo).toAbsolutePath();
+			log.info(rutaArchivo.toString());
+			try {
+				Files.copy(archivo.getInputStream(), rutaArchivo);
+			} catch (IOException e) {
+				response.put("mensaje", "Error al subir imagen del cliente.");
+				return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}			
+		}
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	}
 
 	@GetMapping("/usuarios/cantidad")
 	public Long count() throws Exception {

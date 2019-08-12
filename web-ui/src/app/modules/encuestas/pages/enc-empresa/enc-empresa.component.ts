@@ -76,8 +76,8 @@ export class EncEmpresaComponent implements OnInit {
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.empresaComponent.lstEmpresas;
     this.encuesta.justificacion = this.justificacionComponent.justificacion;
-    if (this.encuesta.justificacion.detalle == null) {
-      this.encuesta.justificacion.detalle = 'Sin detalle.';
+    if (this.encuesta.justificacion.id != 5) {
+      this.encuesta.justificacion.detalle = null;
     }
     this.encuesta.observaciones = this.justificacionComponent.observaciones;
     console.log(this.encuesta);

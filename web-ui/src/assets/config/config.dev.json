@@ -3,7 +3,7 @@
     "name": "DEV"
   },
   "urlServer": {
-    "api": "http://hp840g-malfbl35:8080/api/",
-    "oauth": "http://hp840g-malfbl35:8080/oauth/"
+    "api": "http://localhost:8080/api/",
+    "oauth": "http://localhost:8080/oauth/"
   }
 }

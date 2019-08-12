@@ -35,9 +35,34 @@ import com.ms.encuestas.models.ProductoSubcanal;
 
 @CrossOrigin(origins={})
 @Repository
-public class EncuestaRepository {
+public class ReporteRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
+	
+	public List<Map<String,Object>> reporteControl(Long procesoId) {
+		String sql = "SELECT SYSDATE FECHA_DESCARGA,\r\n" + 
+					 "       C.ID PROCESO_ID,\n" +
+					 "       C.nombre PROCESO,\n" + 
+					 "       NVL(B.codigo,'VACANTE') MATRICULA,\n" + 
+					 "       NVL(B.nombre_completo,'VACANTE') COLABORADOR,\n" + 
+					 "       D.codigo NRO_POSICION,\n" + 
+					 "       D.nombre POSICION,\n" + 
+					 "       E.nombre AREA,\n" + 
+					 "       F.codigo CENTRO_CODIGO,\n" + 
+					 "       F.nombre CENTRO_NOMBRE,\n" + 
+					 "       G.nombre PERFIL\n" + 
+					 "  FROM posicion_datos A\n" + 
+					 "  LEFT JOIN usuarios B ON B.codigo=A.usuario_codigo\n" + 
+					 "  JOIN procesos C ON C.id=A.proceso_id\n" + 
+					 "  JOIN posiciones D ON D.codigo=A.posicion_codigo\n" + 
+					 "  JOIN areas E ON E.id=A.area_id\n" + 
+					 "  JOIN centros F ON F.id=A.centro_id\n" + 
+					 "  JOIN perfiles G ON G.id=A.perfil_id\n" + 
+					 " WHERE C.id=2";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("proceso_id", procesoId);
+		return plantilla.queryForList(sql, paramMap);
+	}
 	
 	public boolean hasEncuesta(Long procesoId, String posicionCodigo, Long encuestaTipoId) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();

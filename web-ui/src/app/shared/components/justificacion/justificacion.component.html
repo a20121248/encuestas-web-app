@@ -6,9 +6,12 @@
     </mat-option>
   </mat-select>
 </mat-form-field>
+<mat-form-field *ngIf="justificacion && justificacion.id==5" class="mt-2">
+  <input matInput placeholder="Detalle de la justificación" [(ngModel)]="justificacion.detalle">
+</mat-form-field>
 <small *ngIf="justificacion" id="emailHelp" class="form-text text-muted">
   Enviar archivo asociado con el sustento a <a href="mailto:Ana.Lama@pacifico.com.pe">Ana.Lama@pacifico.com.pe</a>
-</small >
+</small>
 
 <mat-form-field *ngIf="justificacion" class="mt-5">
   <textarea matInput placeholder="Observaciones" [(ngModel)]="observaciones"
