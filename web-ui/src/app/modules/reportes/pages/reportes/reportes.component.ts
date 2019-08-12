@@ -24,8 +24,9 @@ export class ReportesComponent implements OnInit {
       console.log(response);
 
       const blob = new Blob(
-        [JSON.stringify(response.body)],
-        { type: 'application/vnd.ms-excel;charset=utf-8' });
+        [response.body],
+        { type: 'application/vnd.ms-excel' }
+      );
       fileSaver.saveAs(blob, 'Report.xlsx');
     });
   }

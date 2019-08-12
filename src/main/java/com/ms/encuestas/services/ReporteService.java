@@ -3,6 +3,7 @@ package com.ms.encuestas.services;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
@@ -40,26 +41,30 @@ public class ReporteService implements ReporteServiceI {
 		List<String> alphabets = Arrays.asList(currentPath, "storage", "app", "reportes", "Reporte de control.xlsx");
 		String result = String.join(File.separator, alphabets);
 
-		System.out.println(result );
-		
         SXSSFWorkbook wb = new SXSSFWorkbook(-1);
-        SXSSFSheet sh = wb.createSheet();
+        SXSSFSheet sh = wb.createSheet();        
+
+        List<Map<String,Object>> data = reporteRepository.reporteControl(procesoId);        
         
         int rowNum = 0;
-        List<Map<String,Object>> data = reporteRepository.reporteControl(procesoId);
-        Map<String, String> campos = new HashMap<String, String>();
-        //map.put("FECHA_DESCARGA","String");
-        //map.put("PROCESO_ID","String");
-        //map.put("PROCESO","String");
-        //map.put("MATRICULA","String");
-        campos.put("COLABORADOR","String");
-        //map.put("NRO_POSICION","String");
-        //map.put("POSICION","String");
-        campos.put("AREA","String");
-        //map.put("CENTRO_CODIGO","String");
-        //map.put("CENTRO_NOMBRE","String");
-        //map.put("PERFIL","String");
-        for (Map<String, Object> fila : data) {
+        excelService.crearCabecera(sh, rowNum++, data);
+        for (Map<String, Object> fila: data) {
+    		Row row = sh.createRow(rowNum++);
+    		int colNum = 0;    		
+    		row.createCell(colNum++).setCellValue((Date) fila.get("FECHA_DESCARGA"));
+    		row.createCell(colNum++).setCellValue(((BigDecimal) fila.get("PROCESO_ID")).longValue());
+    		row.createCell(colNum++).setCellValue((String) fila.get("PROCESO"));
+    		row.createCell(colNum++).setCellValue((String) fila.get("MATRICULA"));
+    		row.createCell(colNum++).setCellValue((String) fila.get("COLABORADOR"));
+    		row.createCell(colNum++).setCellValue((String) fila.get("NRO_POSICION"));
+    		row.createCell(colNum++).setCellValue((String) fila.get("POSICION"));
+        	row.createCell(colNum++).setCellValue((String) fila.get("AREA"));
+        	row.createCell(colNum++).setCellValue((String) fila.get("CENTRO_CODIGO"));
+        	row.createCell(colNum++).setCellValue((String) fila.get("CENTRO_NOMBRE"));
+        	row.createCell(colNum++).setCellValue((String) fila.get("PERFIL"));
+        }
+        
+        /*for (Map<String, Object> fila : data) {
         	for (Entry<String, String> campo: campos.entrySet()) {
             	Object celda = fila.get("COLABORADOR");        	
                 Row row = sh.createRow(rowNum++);
@@ -67,11 +72,11 @@ public class ReporteService implements ReporteServiceI {
                 row.createCell(idxColumn++).setCellValue((String) celda);
         		
         	}
-        	/*campos.forEach((k,v) ->
+        	campos.forEach((k,v) ->
         		System.out.println("Key: " + k + ": Value: " + v)
-        	);*/
+        	);
         
-		}
+		}*/
         
         
         excelService.crearArchivo(wb, result);        	
