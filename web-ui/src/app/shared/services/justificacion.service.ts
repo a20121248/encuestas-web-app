@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Justificacion } from '../models/justificacion';
 import { throwError, of, Observable } from 'rxjs';
-import {HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { AppConfig } from './app.config';
+import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
 
 
 @Injectable({
@@ -9,31 +12,34 @@ import {HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 })
 
 export class JustificacionService {
-  private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/justificaciones';
-  private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
+  protected urlServer = AppConfig.settings.urlServer;
+  private urlEndPoint: string = 'http://hp840g-malfbl35:8080/api/justificaciones';
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    public authService: AuthService,
+    private http: HttpClient,
+    private router: Router
+  ) { }
   private handleError(error: HttpErrorResponse) {
     console.error(error);
     return throwError(error);
   }
 
-  getJustificaciones(): Observable<Justificacion[]> {
-
-    return this.http.get<Justificacion[]>(this.urlEndPoint);  
+  private isNoAutorizado(e): boolean {
+    if (e.status == 401 || e.status == 403) {
+      this.router.navigate(['/login']);
+      return true;
+    }
+    return false;
   }
 
-  postRespuesta(justificaciones: Justificacion[]):any {
-    fetch(this.urlEndPoint,
-      {
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify(justificaciones)
-      })
-      .then(function(res){ console.log(res) })
-      .catch(function(res){ console.log(res) });
+  errorHandler(error: any): void {
+    console.log(error);
+  }
+
+  getJustificaciones(): Observable<Justificacion[]> {
+    const url = 'justificaciones'
+    return this.http.get<Justificacion[]>(this.urlServer.api + url);
   }
 }
