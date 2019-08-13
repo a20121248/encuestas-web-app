@@ -15,11 +15,11 @@ export class CustomValidatorsService extends Validators{
     }
   }
 
-  static validateNoNegativo(control: FormControl){
-    if(control.value >0){
-       return {numberValid:true};
+  static validateNegativos(num: number[]){
+    if(num.filter(x => x < 0).length >0){
+       return {existNumNeg:true};
     } else {
-      return {numberValid:false};
+      return {existNumNeg:false};
     }
   }
 }
