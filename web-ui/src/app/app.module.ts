@@ -48,10 +48,11 @@ import { SeleccionarUsuarioComponent } from './modules/encuestas/pages/seleccion
 import { CargarUsuariosComponent } from './modules/mantenimientos/components/cargar-usuarios/cargar-usuarios.component';
 import { ProcesoComponent } from './modules/mantenimientos/components/proceso/proceso.component';
 import { MantenimientosComponent } from './modules/mantenimientos/pages/mantenimientos/mantenimientos.component';
-import { ReportesControlComponent } from './modules/reportes/components/reportes-control/reportes-control.component';
-import { ReportesResultadosComponent } from './modules/reportes/components/reportes-resultados/reportes-resultados.component';
 import { ReportesComponent } from './modules/reportes/pages/reportes/reportes.component';
 import { TokenInterceptor } from './shared/interceptors/token.interceptor';
+import { ReporteControlComponent } from './modules/reportes/components/reporte-control/reporte-control.component';
+import { ReporteEmpresasComponent } from './modules/reportes/components/reporte-empresas/reporte-empresas.component';
+import { ReporteConsolidadoComponent } from './modules/reportes/components/reporte-consolidado/reporte-consolidado.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -121,9 +122,10 @@ export function initializeApp(appConfig: AppConfig) {
     CargarUsuariosComponent,
     ProcesoComponent,
     MantenimientosComponent,
-    ReportesControlComponent,
-    ReportesResultadosComponent,
-    ReportesComponent
+    ReportesComponent,
+    ReporteControlComponent,
+    ReporteEmpresasComponent,
+    ReporteConsolidadoComponent
   ],
   imports: [
     BrowserAnimationsModule,
