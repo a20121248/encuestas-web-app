@@ -8,9 +8,13 @@ $color-2: #585a5b;
 $color-fondo: #f2f3f3;
 $fuente: "Foco","Arial",sans-serif;
 
-
 html, body {
   height: 100%;
+}
+
+mat-card.titulo {
+  background-color: red;
+  margin-top:-40px;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
@@ -19,23 +23,28 @@ html, body {
   min-height: 2.7em;
 }
 
-.ng-select.ng-select-focused .ng-select-container:after{
+.ng-select.ng-select-focused .ng-select-container:after {
   border-color: $color-azul;
 }
+
 .ng-select.ng-select-focused .ng-select-container .ng-value-container .ng-placeholder {
-	color: $color-azul;
+  color: $color-azul;
 }
+
 .ng-select.ng-select-focused .ng-select-container .ng-arrow-wrapper .ng-arrow {
-	color: $color-azul;
+  color: $color-azul;
 }
+
 .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
   background-color: $color-azul;
 }
+
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup.ng-option-selected {
-  background-color: $color-azul;
+  color: $color-azul;
 }
+
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
-	background-color: $color-azul;
+  color: $color-azul;
 }
 
 
@@ -295,6 +304,7 @@ $naranja: (
     )
 );
 
+
 // below creates a primary palette with three shades of blue
 $my-app-primary: mat-palette($azul);
 $my-app-accent: mat-palette($verde, 700);
@@ -307,3 +317,10 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
   $alternate-theme: mat-light-theme($alternate-primary, $alternate-accent);
   @include angular-material-theme($alternate-theme);
 }
+
+.login {
+  .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    color: $color-azul;
+  }
+}
+
