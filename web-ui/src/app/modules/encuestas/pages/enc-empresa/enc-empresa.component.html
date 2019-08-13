@@ -9,16 +9,17 @@
     <div class="row">
       <div class="col-md-6">
         <app-form-empresa [usuario]="usuarioSeleccionado" [lstEmpresas]="lstEmpresas"
-          (estado)="stateFormEmpresas($event)">
+          (sendEstadoFormEmpresaToParent)="estadoFormEmpresas($event)">
         </app-form-empresa>
       </div>
       <div class="col-md-5 offset-md-1">
-        <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones">
+        <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"
+          (sendEstadoFormJustificacionToParent)="estadoFormJustificacion($event)">
         </app-form-justificacion>
       </div>
       <div class="col-md-12 text-right mt-3">
         <button mat-raised-button color="warn" (click)="goBack()"><i class="material-icons">reply</i>Atrás</button>
-        <button mat-raised-button color="warn" [disabled]="!estadoEmpresas" (click)="guardarEncuesta()"><i
+        <button #btnGuardar mat-raised-button color="warn"  (click)="guardarEncuesta()"><i
             class="material-icons">save</i>Guardar</button>
       </div>
     </div>
