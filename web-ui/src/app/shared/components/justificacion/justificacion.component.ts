@@ -3,6 +3,7 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Justificacion } from 'src/app/shared/models/justificacion';
 import { JustificacionService } from 'src/app/shared/services/justificacion.service';
 import { Router } from '@angular/router';
+import { CustomValidatorsService } from '../../services/custom-validators.service';
 
 export interface Justificacion {
   nombre: string;
@@ -28,9 +29,9 @@ export class JustificacionComponent implements OnInit {
         this.lstJustificaciones = justificaciones;
       });
       this.myGroup = new FormGroup({
-        idJust: new FormControl('',Validators.required),
+        idJust: new FormControl('', Validators.compose([Validators.required,CustomValidatorsService.validarVacio])),
         detalleJust: new FormControl(null),
-        obs: new FormControl('',Validators.required)
+        obs: new FormControl('',Validators.compose([Validators.required]))
      });
     }
 
@@ -43,9 +44,21 @@ export class JustificacionComponent implements OnInit {
         this.myGroup.get('detalleJust').clearValidators();
         this.myGroup.get('detalleJust').setValue('');
       }
-      this.myGroup.get('detalleJust').updateValueAndValidity();
+      this.myGroup.updateValueAndValidity();
     });
     this.onChanges();
+  }
+
+  get idJustControl(){
+    return this.myGroup.get("idJust");
+  }
+
+  get detalleJustControl(){
+    return this.myGroup.get("detalleJust");
+  }
+
+  get obsJustControl(){
+    return this.myGroup.get("obs");
   }
 
   sendEstado(value: boolean) {
@@ -61,5 +74,9 @@ export class JustificacionComponent implements OnInit {
         this.sendEstado(false);
       }
     });
+  }
+
+  select(justificacion){
+    console.log(justificacion);
   }
 }

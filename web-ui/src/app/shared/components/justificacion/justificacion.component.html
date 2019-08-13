@@ -1,17 +1,20 @@
 <form [formGroup]="myGroup">
   <mat-form-field *ngIf="justificacion" class="mt-4">
-    <mat-label><span>Justificación</span></mat-label>
-    <mat-select [(value)]="justificacion.id" required formControlName="idJust">
-      <mat-option *ngFor="let item of lstJustificaciones" [value]="item.id">
+    <mat-select  placeholder="Justificación" [(ngModel)]="justificacion.id" formControlName="idJust"  required>
+      <mat-option *ngFor="let item of lstJustificaciones" [value]="item.id" >
         <span>{{ item.nombre }}</span>
       </mat-option>
     </mat-select>
+    <mat-error *ngIf="idJustControl.invalid && idJustControl.touched" >
+      Escoger opcion
+    </mat-error>
   </mat-form-field>
-  <!-- <span *ngIf="!justificacion.id">
-    Escoger opcion
-  </span> -->
+  
   <mat-form-field *ngIf="justificacion && justificacion.id==5" class="mt-2">
     <input matInput placeholder="Detalle de la justificación" [(ngModel)]="justificacion.detalle" required formControlName="detalleJust">
+    <mat-error *ngIf="detalleJustControl.invalid && detalleJustControl.touched" >
+      Escribir el detalle de la justificación.
+    </mat-error>
   </mat-form-field>
   <small *ngIf="justificacion" id="emailHelp" class="form-text text-muted">
     Enviar archivo asociado con el sustento a <a href="mailto:Ana.Lama@pacifico.com.pe">Ana.Lama@pacifico.com.pe</a>
@@ -20,5 +23,8 @@
   <mat-form-field *ngIf="justificacion" class="mt-5">
     <textarea matInput placeholder="Observaciones" [(ngModel)]="observaciones" cdkTextareaAutosize
       cdkAutosizeMinRows="8" cdkAutosizeMaxRows="14" required formControlName="obs"></textarea>
+      <mat-error *ngIf="obsJustControl.invalid && obsJustControl.touched" >
+        Escribir observaciones de la justificación. 
+      </mat-error>
   </mat-form-field>
 </form>

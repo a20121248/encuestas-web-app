@@ -7,6 +7,14 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class CustomValidatorsService extends Validators{
 
+  static validarVacio(control:FormControl){
+    if(control.value == 0 || control.value==null){
+      return{vacio:true}
+    } else {
+       return null;
+    }
+  }
+
   static validatePorcentajeTotal(percnt: number){
     if(percnt == 100){
        return {completo:true};
