@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -129,7 +130,6 @@ export function initializeApp(appConfig: AppConfig) {
     BrowserModule,
     FlexLayoutModule,
     FormsModule,
-    FormsModule,
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
@@ -143,6 +143,7 @@ export function initializeApp(appConfig: AppConfig) {
     MatTableModule,
     MatTableModule,
     MatToolbarModule,
+    NgSelectModule,
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
     MatDatepickerModule,

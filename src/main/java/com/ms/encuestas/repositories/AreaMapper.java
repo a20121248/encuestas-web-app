@@ -13,9 +13,9 @@ public class AreaMapper implements RowMapper<Area> {
 		Area area = new Area();
 		area.setId(rs.getLong("area_id"));
 		area.setNombre(rs.getString("area_nombre"));
+		area.setDivision(rs.getString("area_division"));
 		area.setFechaCreacion(rs.getDate("area_fecha_creacion"));
 		area.setFechaActualizacion(rs.getDate("area_fecha_actualizacion"));
-		area.setDivision(rs.getString("area_division"));
 		return area;
 	}
 }

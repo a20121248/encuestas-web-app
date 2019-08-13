@@ -45,85 +45,27 @@ import com.ms.encuestas.models.EncuestaProductoCanal;
 import com.ms.encuestas.models.EncuestaProductoSubcanal;
 import com.ms.encuestas.properties.FileProperties;
 import com.ms.encuestas.services.EncuestaServiceI;
-import com.ms.encuestas.services.FileServiceI;
 import com.ms.encuestas.services.ReporteServiceI;
+import com.ms.encuestas.services.utils.FileServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
 public class ReporteController {
-	public static final String TOKEN_PREFIX = "Bearer ";
-	public static final String HEADER_STRING = "Authorization";
-
 	@Autowired
 	private ReporteServiceI reporteService;
 	
 	private final Logger log = LoggerFactory.getLogger(ReporteController.class);
-	
-	@RequestMapping(value = "/convertFlatFileToExcel.do", method = RequestMethod.POST)
-	public HttpEntity<byte[]> convertFlatFileToExcel() throws IOException {
-	        ByteArrayOutputStream archivo = new ByteArrayOutputStream();
-	        XSSFWorkbook workbook = new XSSFWorkbook();
-	        workbook.write(archivo);
-	        if(null!=workbook && null!=archivo) {
-	            workbook.close();
-	                        archivo.close();
-	        }
-	    byte[] documentContent = archivo.toByteArray();
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-	    headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"myexcelfile.xls\"");
-	    headers.setContentLength(documentContent.length);
-	    return new ResponseEntity<byte[]>(documentContent, headers, HttpStatus.OK);
-	}
-
 
 	@GetMapping("/procesos/{procesoId}/reportes/control")
 	@Transactional(readOnly = true)
 	public ResponseEntity<?> getControl(@PathVariable Long procesoId, HttpServletRequest request) {
-		System.out.println("exitos"+ procesoId);
-
 		Resource resource = reporteService.generarReporteControl(procesoId);
-	
-
-        // Try to determine file's content type
         String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("mensaje", "Error al subir imagen del cliente.");
-                
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
 	}
-	
-	/*@GetMapping("/procesos/{procesoId}/reportes/control")
-	@Transactional(readOnly = true)
-	public ResponseEntity<Resource> getControl(@PathVariable Long procesoId, HttpServletRequest request) {
-		System.out.println("exitos"+ procesoId);
-
-		// Load file as Resource
-		Resource resource = reporteService.generarReporteControl(procesoId);
-		if(resource==null) {
-			System.out.println("nulo");
-		} else {
-			System.out.println("ok");
-		}
-		
-
-        // Try to determine file's content type
-        String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("mensaje", "Error al subir imagen del cliente.");
-                
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
-	}*/
-	
-	
 
 }

@@ -5,6 +5,29 @@
   <mat-card class="cuadro mat-elevation-z4 mt-4">
     <div class="row">
       <div class="col-md-12">
+          <ng-select [items]="procesos"
+          bindLabel="nombre"
+          autofocus
+          bindValue="id"
+          placeholder="Seleccione un proceso"
+          [(ngModel)]="selectedProceso">
+</ng-select>
+<ng-select [items]="centros"
+          [multiple]="true"
+          [closeOnSelect]="false"
+          [hideSelected]="true"
+          bindLabel="nombre"
+          placeholder="Seleccionar centros de costos"
+          [(ngModel)]="selectedCentros">
+</ng-select>
+<ng-select [items]="areas"
+          [multiple]="true"
+          [closeOnSelect]="false"
+          [hideSelected]="true"
+          bindLabel="nombre"
+          placeholder="Seleccionar áreas"
+          [(ngModel)]="selectedAreas">
+</ng-select>
         <button (click)="descargar()" mat-raised-button>Descargar</button>
       </div>
     </div>
@@ -12,7 +35,6 @@
   <mat-card class="cuadro mat-elevation-z4 mt-4">
     <div class="row">
       <div class="col-md-12">
-        a
       </div>
     </div>
   </mat-card>

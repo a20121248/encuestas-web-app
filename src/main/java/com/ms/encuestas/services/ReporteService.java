@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.poi.hpsf.SummaryInformation;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import com.ms.encuestas.repositories.ReporteRepository;
 import com.ms.encuestas.services.utils.ExcelServiceI;
+import com.ms.encuestas.services.utils.FileServiceI;
 
 @Service
 public class ReporteService implements ReporteServiceI {
@@ -40,12 +42,11 @@ public class ReporteService implements ReporteServiceI {
 		
 		List<String> alphabets = Arrays.asList(currentPath, "storage", "app", "reportes", "Reporte de control.xlsx");
 		String result = String.join(File.separator, alphabets);
-
-        SXSSFWorkbook wb = new SXSSFWorkbook(-1);
-        SXSSFSheet sh = wb.createSheet();        
+		
+        SXSSFWorkbook wb = excelService.crearLibro();
+        SXSSFSheet sh = wb.createSheet();
 
         List<Map<String,Object>> data = reporteRepository.reporteControl(procesoId);        
-        
         int rowNum = 0;
         excelService.crearCabecera(sh, rowNum++, data);
         for (Map<String, Object> fila: data) {
@@ -62,23 +63,7 @@ public class ReporteService implements ReporteServiceI {
         	row.createCell(colNum++).setCellValue((String) fila.get("CENTRO_CODIGO"));
         	row.createCell(colNum++).setCellValue((String) fila.get("CENTRO_NOMBRE"));
         	row.createCell(colNum++).setCellValue((String) fila.get("PERFIL"));
-        }
-        
-        /*for (Map<String, Object> fila : data) {
-        	for (Entry<String, String> campo: campos.entrySet()) {
-            	Object celda = fila.get("COLABORADOR");        	
-                Row row = sh.createRow(rowNum++);
-                int idxColumn = 0;
-                row.createCell(idxColumn++).setCellValue((String) celda);
-        		
-        	}
-        	campos.forEach((k,v) ->
-        		System.out.println("Key: " + k + ": Value: " + v)
-        	);
-        
-		}*/
-        
-        
+        }        
         excelService.crearArchivo(wb, result);        	
 		return fileService.loadFileAsResource(result);
 	}

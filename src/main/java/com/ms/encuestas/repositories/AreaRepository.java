@@ -22,12 +22,29 @@ public class AreaRepository {
 		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
 	}
 	
+
+	public Area findById(Long areaId) throws EmptyResultDataAccessException {
+		String queryStr = "SELECT id area_id,\n" +
+						  "       nombre area_nombre,\n" +
+						  "       division area_division,\n" +
+						  "       fecha_creacion area_fecha_creacion,\n" +
+						  "       fecha_actualizacion area_fecha_actualizacion\n" +
+						  "  FROM areas\n" +
+						  " WHERE id=:area_id";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("area_id", areaId);
+        return plantilla.queryForObject(queryStr, paramMap, new AreaMapper());
+	}
+	
 	public List<Area> findAll() throws EmptyResultDataAccessException {
-		String sql = "" +
-				"SELECT id area_id,\n" +
-				"       nombre area_nombre,\n" +
-				"       fecha_creacion area_fecha_creacion\n" +
-				"  FROM areas";
+		String sql = "SELECT id area_id,\n" +
+					 "       nombre area_nombre,\n" +
+					 "       division area_division,\n" +
+					 "       fecha_creacion area_fecha_creacion,\n" +
+					 "       fecha_creacion area_fecha_actualizacion\n" +
+					 "  FROM areas\n" +
+					 " WHERE fecha_eliminacion IS NULL\n" +
+					 " ORDER BY nombre";
 		return plantilla.query(sql, new AreaMapper());
 	}
 	
@@ -44,17 +61,6 @@ public class AreaRepository {
 				" WHERE A.fecha_eliminacion IS NULL\n" + 
 				"   AND B.fecha_eliminacion IS NULL";
 		return plantilla.query(sql, new AreaMapper());
-	}
-
-	public Area findById(Long id) throws EmptyResultDataAccessException {
-		String queryStr = "" +
-				"SELECT id area_id,\n" +
-				"       nombre area_nombre,\n" +
-				"       fecha_creacion area_fecha_creacion\n" +
-				"  FROM areas WHERE id=:id";
-        return plantilla.queryForObject(queryStr,
-        		new MapSqlParameterSource("id", id),
-        		new AreaMapper());
 	}
 	
 	public Area findByIdWithDivision(Long id) throws EmptyResultDataAccessException {

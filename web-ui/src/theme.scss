@@ -1,14 +1,44 @@
+@import "~@ng-select/ng-select/themes/material.theme.css";
 @import '~@angular/material/theming';
 @include mat-core();
+
+$color-azul: #09c;
+$color-1: rgba(0, 0, 0, 0.54);
+$color-2: #585a5b;
+$color-fondo: #f2f3f3;
+$fuente: "Foco","Arial",sans-serif;
+
 
 html, body {
   height: 100%;
 }
 
-$color-1: rgba(0, 0, 0, 0.54);
-$color-2: #585a5b;
-$color-fondo: #f2f3f3;
-$fuente: "Foco","Arial",sans-serif;
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  font-size: 14px;
+  line-height: 2.7em;
+  min-height: 2.7em;
+}
+
+.ng-select.ng-select-focused .ng-select-container:after{
+  border-color: $color-azul;
+}
+.ng-select.ng-select-focused .ng-select-container .ng-value-container .ng-placeholder {
+	color: $color-azul;
+}
+.ng-select.ng-select-focused .ng-select-container .ng-arrow-wrapper .ng-arrow {
+	color: $color-azul;
+}
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+  background-color: $color-azul;
+}
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup.ng-option-selected {
+  background-color: $color-azul;
+}
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
+	background-color: $color-azul;
+}
+
+
 
 .grupo {
   display:flex;align-items:center;
@@ -177,7 +207,7 @@ $azul: (
     500 : #0099cc,
     600 : #0091c7,
     700 : #0086c0,
-    800 : #007cb9,
+    800 : #a5a7a8,
     900 : #006bad,
     A100 : #d7edff,
     A200 : #a4d7ff,
