@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { FileService } from 'src/app/shared/services/file.service';
-import * as fileSaver from 'file-saver';
 import { AreaService } from 'src/app/shared/services/area.service';
 import { Area } from 'src/app/shared/models/area';
 import { ProcesoService } from 'src/app/shared/services/proceso.service';
 import { Proceso } from 'src/app/shared/models/proceso';
 import { CentroService } from 'src/app/shared/services/centro.service';
 import { Centro } from 'src/app/shared/models/centro';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { NgSelectConfig } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-reportes',
@@ -25,11 +25,15 @@ export class ReportesComponent implements OnInit {
 
   titulo = 'Reporting';
   constructor(
+    public authService: AuthService,
     private titleService: Title,
-    private fileService: FileService,
     private areaService: AreaService,
     private procesoService: ProcesoService,
-    private centroService: CentroService) {
+    private centroService: CentroService,
+    private config: NgSelectConfig) {
+      this.config.notFoundText = 'No se encontraron elementos.';
+
+      this.selectedProceso = this.authService.proceso;
       this.procesoService.findAll().subscribe(procesos => {
         this.procesos = procesos;
       });
@@ -43,13 +47,5 @@ export class ReportesComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('Encuestas | Reporting');
-  }
-
-  descargar() {
-    this.fileService.downloadFile().subscribe(response => {
-      fileSaver.saveAs(new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), 'Report.xlsx');
-    }, err => {
-      console.log(err);
-    });
   }
 }

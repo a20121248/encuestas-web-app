@@ -15,14 +15,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ms.encuestas.models.EncuestaEmpresa;
-import com.ms.encuestas.models.EncuestaCanal;
 import com.ms.encuestas.models.EncuestaCentro;
-import com.ms.encuestas.models.EncuestaLinea;
-import com.ms.encuestas.models.EncuestaLineaCanal;
 import com.ms.encuestas.models.EncuestaObjeto;
 import com.ms.encuestas.models.EncuestaObjetoObjetos;
-import com.ms.encuestas.models.EncuestaProductoCanal;
-import com.ms.encuestas.models.EncuestaProductoSubcanal;
 import com.ms.encuestas.services.EncuestaServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
@@ -38,22 +33,25 @@ public class EncuestaController {
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/empresas")
 	@Transactional(readOnly = true)
 	public EncuestaEmpresa getEmpresa(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
-		return encuestaService.getEmpresa(procesoId, posicionCodigo, new Long(1));
+		Long encuestaTipoId = new Long(1);
+		return encuestaService.getEmpresa(procesoId, posicionCodigo, encuestaTipoId);
 	}
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/empresas")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createEmpresa(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaEmpresa encuesta) {
 		//User user = (User) authentication.getPrincipal();
-		this.encuestaService.saveEmpresa(encuesta, procesoId, posicionCodigo, new Long(1));
+		Long encuestaTipoId = new Long(1);
+		this.encuestaService.saveEmpresa(encuesta, procesoId, posicionCodigo, encuestaTipoId);
 	}
 	
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps")
 	@Transactional(readOnly = true)
 	public EncuestaCentro getEps(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
+		Long encuestaTipoId = new Long(2);
 		int nivel = 0;
 		Long perfilId = new Long(1); // STAFF
-		return encuestaService.getCentro(new Long(2), procesoId, posicionCodigo, new Long(2), nivel, perfilId);
+		return encuestaService.getCentro(new Long(2), procesoId, posicionCodigo, encuestaTipoId, nivel, perfilId);
 	}
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps")

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ms.encuestas.models.Area;
 import com.ms.encuestas.models.Justificacion;
 import com.ms.encuestas.services.JustificacionServiceI;
 

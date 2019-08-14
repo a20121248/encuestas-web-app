@@ -18,6 +18,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
 import { UsuarioDatosComponent } from './shared/components/usuario-datos/usuario-datos.component';
@@ -53,6 +54,7 @@ import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 import { ReporteControlComponent } from './modules/reportes/components/reporte-control/reporte-control.component';
 import { ReporteEmpresasComponent } from './modules/reportes/components/reporte-empresas/reporte-empresas.component';
 import { ReporteConsolidadoComponent } from './modules/reportes/components/reporte-consolidado/reporte-consolidado.component';
+import { GraficoControlComponent } from './modules/reportes/components/grafico-control/grafico-control.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -125,11 +127,13 @@ export function initializeApp(appConfig: AppConfig) {
     ReportesComponent,
     ReporteControlComponent,
     ReporteEmpresasComponent,
-    ReporteConsolidadoComponent
+    ReporteConsolidadoComponent,
+    GraficoControlComponent
   ],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
+    ChartsModule,
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,

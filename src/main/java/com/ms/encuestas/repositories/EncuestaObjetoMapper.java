@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.ms.encuestas.models.EncuestaEmpresa;
 import com.ms.encuestas.models.EncuestaObjeto;
 import com.ms.encuestas.models.Justificacion;
 

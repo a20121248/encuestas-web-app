@@ -16,6 +16,7 @@ public class AreaMapper implements RowMapper<Area> {
 		area.setDivision(rs.getString("area_division"));
 		area.setFechaCreacion(rs.getDate("area_fecha_creacion"));
 		area.setFechaActualizacion(rs.getDate("area_fecha_actualizacion"));
+		area.setAgrupador("TODAS");
 		return area;
 	}
 }

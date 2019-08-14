@@ -24,15 +24,22 @@ public class CentroMapper implements RowMapper<Centro> {
 		centro.setNombre(rs.getString("centro_nombre"));
 		centro.setNivel(rs.getInt("centro_nivel"));
 		
-		Tipo centroTipo = new Tipo();
-		centroTipo.setId(rs.getLong("centro_id"));
-		centroTipo.setNombre(rs.getString("centro_nombre"));
-		centro.setTipo(centroTipo);
+		Tipo centroTipo;
+		try {
+			centroTipo = new Tipo();
+			centroTipo.setId(rs.getLong("centro_tipo_id"));
+			centroTipo.setNombre(rs.getString("centro_tipo_nombre"));
+			centro.setTipo(centroTipo);
+		} catch (java.sql.SQLException e) {
+			centroTipo = null;
+		}
+
 		
 		centro.setGrupo(rs.getString("centro_grupo"));
 		centro.setFechaCreacion(rs.getDate("centro_fecha_creacion"));
 		centro.setFechaActualizacion(rs.getDate("centro_fecha_actualizacion"));
 		centro.setPorcentaje(porcentaje);
+		centro.setAgrupador("TODOS");
 		return centro;
 	}
 }

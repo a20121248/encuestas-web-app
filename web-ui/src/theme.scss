@@ -12,11 +12,6 @@ html, body {
   height: 100%;
 }
 
-mat-card.titulo {
-  background-color: red;
-  margin-top:-40px;
-}
-
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
   font-size: 14px;
   line-height: 2.7em;
@@ -76,7 +71,16 @@ app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-l
   .boton {
     min-width: 36px;
   }
+  .ng-select.ng-select-multiple .ng-select-container.ng-has-value .ng-value-container {
+    padding-top:.25em;
+  }
   .mat-raised-button {
+    &.icono {
+      min-width: 36px;
+      .material-icons {
+        margin-right: 0;
+      }
+    }
     min-width: 100px;
     padding: 0;
     font-family: $fuente;
@@ -174,6 +178,14 @@ app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-l
   }
 
   .cuadro {
+    .titulo {
+      margin:-37px 0 17px 0!important;
+      color: white;
+      text-align: center;
+      background-color: $color-azul;
+      font-size: 18px;
+      padding: .75em;
+    }
     position: relative;
     display: -webkit-box;
     display: flex;
