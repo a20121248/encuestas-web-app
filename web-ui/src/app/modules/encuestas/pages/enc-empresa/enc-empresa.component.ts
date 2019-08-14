@@ -27,8 +27,8 @@ export class EncEmpresaComponent implements OnInit {
   posicionCodigo: string;
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
-  estadoEmpresas: boolean = false;
-  estadoJustificacion:boolean = false;
+  estadoEmpresas: boolean;
+  estadoJustificacion:boolean;
 
   @ViewChild(EmpresaComponent, { static: false })
   empresaComponent: EmpresaComponent;
@@ -73,6 +73,7 @@ export class EncEmpresaComponent implements OnInit {
   }
 
   setButtonGuardar(){
+    console.log(this.estadoEmpresas && this.estadoJustificacion);
     if(this.estadoEmpresas && this.estadoJustificacion){
       this.renderer.setProperty(this.btnGuardar,"disabled","false");
     } else {

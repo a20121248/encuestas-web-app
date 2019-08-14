@@ -23,6 +23,13 @@ export class CustomValidatorsService extends Validators{
     }
   }
 
+  static validarNegativo(control:FormControl){
+    if(control.value < 0){
+      return {negativo:true}
+    } else {
+      return null;
+    }
+  }
   static validateNegativos(num: number[]){
     if(num.filter(x => x < 0).length >0){
        return {existNumNeg:true};

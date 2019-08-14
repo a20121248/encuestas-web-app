@@ -36,17 +36,8 @@ export class JustificacionComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.myGroup.get('idJust').valueChanges
-    .subscribe(data =>{
-      if(data == 5){
-        this.myGroup.get('detalleJust').setValidators(([Validators.required]));
-      } else {
-        this.myGroup.get('detalleJust').clearValidators();
-        this.myGroup.get('detalleJust').setValue('');
-      }
-      this.myGroup.updateValueAndValidity();
-    });
-    this.onChanges();
+    this.onChangeOptions();
+    this.onChangesValue();
   }
 
   get idJustControl(){
@@ -65,9 +56,10 @@ export class JustificacionComponent implements OnInit {
     this.sendEstadoFormJustificacionToParent.emit(value);
   }
 
-  onChanges(): void {
+  onChangesValue(): void {
     this.myGroup.valueChanges
     .subscribe(data =>{
+      console.log(this.myGroup);
       if(this.myGroup.valid){
         this.sendEstado(true);
       } else {
@@ -76,7 +68,16 @@ export class JustificacionComponent implements OnInit {
     });
   }
 
-  select(justificacion){
-    console.log(justificacion);
+  onChangeOptions():void {
+    this.myGroup.get('idJust').valueChanges
+    .subscribe(data =>{
+      if(data != 5){
+        this.myGroup.get('detalleJust').clearValidators();
+        this.myGroup.get('detalleJust').setValue(null);
+      } else {
+        this.myGroup.get('detalleJust').setValidators(([Validators.required]));
+      }
+      this.myGroup.get('detalleJust').updateValueAndValidity();
+    });
   }
 }
