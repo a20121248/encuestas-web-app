@@ -67,7 +67,7 @@
         <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>{{item.agrupador}}
       </ng-template>
       <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>{{item.nombre}}
+        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/> {{item.nombre}}
       </ng-template>
     </ng-select>
     <div class="col-md-12 text-center mt-3">
