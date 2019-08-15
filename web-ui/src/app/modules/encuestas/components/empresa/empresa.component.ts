@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Empresa } from 'src/app/shared/models/empresa';
 import { Usuario } from 'src/app/shared/models/usuario';
-import { FormGroup, FormControl, Validators, Form, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators, Form, FormBuilder, AbstractControl } from '@angular/forms';
 import { CustomValidatorsService } from 'src/app/shared/services/custom-validators.service';
 
 @Component({
@@ -18,14 +18,9 @@ export class EmpresaComponent implements OnInit {
   dcEmpresa = ['nombre', 'porcentaje', 'ingresar'];
   url: string;
   porcTotal: number;
-  sumaValidada: boolean;
-  valNegativos: boolean;
-  groupFormEmpresas: FormGroup;
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private formBuilder: FormBuilder) {
-      this.groupFormEmpresas = new FormGroup({});
+  groupForm: FormGroup;
+  constructor() {
+      this.groupForm = new FormGroup({});
   }
 
   ngOnInit() {
@@ -67,10 +62,14 @@ export class EmpresaComponent implements OnInit {
     return false;
   }
 
+  validacionItemControl(value:number):AbstractControl{
+    return this.groupForm.get(String(value));
+  }
+
   onChanges():void{
-    this.groupFormEmpresas.valueChanges
+    this.groupForm.valueChanges
     .subscribe(data =>{
-      if(this.groupFormEmpresas.valid && this.porcTotal==100){
+      if(this.groupForm.valid && this.porcTotal==100){
         this.sendEstado(true);
       } else {
         this.sendEstado(false);
@@ -78,17 +77,16 @@ export class EmpresaComponent implements OnInit {
     });
   }
 
-  verificarlstEmpresas(): boolean {
-    if (this.lstEmpresas != null) {
+  verificarLista(): boolean {
+    if (this.lstEmpresas != null) { //Verifica la carga de informacion desde el Parent
       for (let empresa of this.lstEmpresas.map(t => t)) {
         let control: FormControl = new FormControl(null, Validators.compose([
-          Validators.required, CustomValidatorsService.validarNegativo]));
-        this.groupFormEmpresas.addControl(String(empresa.id), control);
+          Validators.required, CustomValidatorsService.validarNegativo, CustomValidatorsService.validarPatronPorcentaje]));
+        this.groupForm.addControl(String(empresa.id), control);
       }
       return true;
     } else {
       return false;
     }
   }
-  
 }

@@ -73,7 +73,6 @@ export class EncEmpresaComponent implements OnInit {
   }
 
   setButtonGuardar(){
-    console.log(this.estadoEmpresas && this.estadoJustificacion);
     if(this.estadoEmpresas && this.estadoJustificacion){
       this.renderer.setProperty(this.btnGuardar,"disabled","false");
     } else {

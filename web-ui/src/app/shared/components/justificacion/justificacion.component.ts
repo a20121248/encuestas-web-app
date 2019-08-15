@@ -59,7 +59,6 @@ export class JustificacionComponent implements OnInit {
   onChangesValue(): void {
     this.myGroup.valueChanges
     .subscribe(data =>{
-      console.log(this.myGroup);
       if(this.myGroup.valid){
         this.sendEstado(true);
       } else {
