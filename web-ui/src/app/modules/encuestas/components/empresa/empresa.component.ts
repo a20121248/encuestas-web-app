@@ -1,7 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Empresa } from 'src/app/shared/models/empresa';
 import { Usuario } from 'src/app/shared/models/usuario';
+import { FormGroup, FormControl, Validators, Form, FormBuilder, AbstractControl } from '@angular/forms';
+import { CustomValidatorsService } from 'src/app/shared/services/custom-validators.service';
 
 @Component({
   selector: 'app-form-empresa',
@@ -12,22 +14,32 @@ import { Usuario } from 'src/app/shared/models/usuario';
 export class EmpresaComponent implements OnInit {
   @Input() lstEmpresas: Empresa[];
   @Input() usuario: Usuario;
+  @Output() sendEstadoFormEmpresaToParent = new EventEmitter();
   dcEmpresa = ['nombre', 'porcentaje', 'ingresar'];
   url: string;
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router) {
+  porcTotal: number;
+  groupForm: FormGroup;
+  constructor() {
+      this.groupForm = new FormGroup({});
   }
 
   ngOnInit() {
+    this.onChanges();
   }
 
   getTotalPorcentaje() {
     if (this.lstEmpresas != null) {
-      return this.lstEmpresas.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+      this.porcTotal = this.lstEmpresas.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+      return this.porcTotal;
     }
-    return 0;
+    else {
+      this.porcTotal = 0;
+      return this.porcTotal;
+    }
+  }
+
+  sendEstado(value: boolean) {
+    this.sendEstadoFormEmpresaToParent.emit(value);
   }
 
   revisarEmpresa(codigo: string): boolean {
@@ -48,5 +60,33 @@ export class EmpresaComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  validacionItemControl(value:number):AbstractControl{
+    return this.groupForm.get(String(value));
+  }
+
+  onChanges():void{
+    this.groupForm.valueChanges
+    .subscribe(data =>{
+      if(this.groupForm.valid && this.porcTotal==100){
+        this.sendEstado(true);
+      } else {
+        this.sendEstado(false);
+      }
+    });
+  }
+
+  verificarLista(): boolean {
+    if (this.lstEmpresas != null) { //Verifica la carga de informacion desde el Parent
+      for (let empresa of this.lstEmpresas.map(t => t)) {
+        let control: FormControl = new FormControl(null, Validators.compose([
+          Validators.required, CustomValidatorsService.validarNegativo, CustomValidatorsService.validarPatronPorcentaje]));
+        this.groupForm.addControl(String(empresa.id), control);
+      }
+      return true;
+    } else {
+      return false;
+    }
   }
 }

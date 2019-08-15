@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
@@ -28,19 +28,24 @@ export class EncEPSComponent implements OnInit {
   posicionCodigo: string;
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
+  estadoEps: boolean;
+
   @ViewChild(EpsComponent, { static: false })
   epsComponent: EpsComponent;
   @ViewChild(JustificacionComponent, { static: false })
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-
+  @ViewChild("btnGuardar",{static: false}) 
+  btnGuardar: ElementRef;
+  
   constructor(
     private activatedRoute: ActivatedRoute,
     private epsService: EpsService,
     private location: Location,
     private usuarioService: UsuarioService,
-    private titleService: Title
+    private titleService: Title,
+    private renderer: Renderer2
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
@@ -53,6 +58,19 @@ export class EncEPSComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('Encuestas | Líneas EPS');
+  }
+
+  estadoFormEps(value:boolean){
+    this.estadoEps = value;
+    this.setButtonGuardar();
+  }
+
+  setButtonGuardar(){
+    if(this.estadoEps){
+      this.renderer.setProperty(this.btnGuardar,"disabled","false");
+    } else {
+      this.renderer.setProperty(this.btnGuardar,"disabled","true");
+    }
   }
 
   guardarEncuesta() {

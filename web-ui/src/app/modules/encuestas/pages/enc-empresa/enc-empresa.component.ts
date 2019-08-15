@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, ContentChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
@@ -27,24 +27,29 @@ export class EncEmpresaComponent implements OnInit {
   posicionCodigo: string;
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
+  estadoEmpresas: boolean;
+  estadoJustificacion:boolean;
+
   @ViewChild(EmpresaComponent, { static: false })
   empresaComponent: EmpresaComponent;
   @ViewChild(JustificacionComponent, { static: false })
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
+  @ViewChild("btnGuardar",{static: false}) 
+  btnGuardar: ElementRef;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private empresaService: EmpresaService,
     private location: Location,
     private usuarioService: UsuarioService,
-    private titleService: Title
+    private titleService: Title,
+    private renderer: Renderer2
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
       this.usuarioSeleccionado = usuario;
-      console.log(usuario);
       this.empresaService.obtenerEncuesta(this.usuarioSeleccionado).subscribe(encuesta => {
         this.lstEmpresas = encuesta.lstItems as Empresa[];
         this.observaciones = encuesta.observaciones;
@@ -55,6 +60,24 @@ export class EncEmpresaComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('Encuestas | Empresas');
+  }
+
+  estadoFormJustificacion(value:boolean){
+    this.estadoJustificacion = value;
+    this.setButtonGuardar();
+  }
+
+  estadoFormEmpresas(value:boolean){
+    this.estadoEmpresas = value;
+    this.setButtonGuardar();
+  }
+
+  setButtonGuardar(){
+    if(this.estadoEmpresas && this.estadoJustificacion){
+      this.renderer.setProperty(this.btnGuardar,"disabled","false");
+    } else {
+      this.renderer.setProperty(this.btnGuardar,"disabled","true");
+    }
   }
 
   goBack() {
@@ -69,7 +92,6 @@ export class EncEmpresaComponent implements OnInit {
       this.encuesta.justificacion.detalle = null;
     }
     this.encuesta.observaciones = this.justificacionComponent.observaciones;
-    console.log(this.encuesta);
     this.empresaService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(response =>
       console.log(response), err => console.log(err)
     );
