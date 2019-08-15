@@ -5,9 +5,10 @@ import java.util.List;
 
 public class Filtro implements Serializable {
 	private static final long serialVersionUID = 1L;
-	Proceso proceso;
-	List<Centro> centros;
-	List<Area> areas;
+	private Proceso proceso;
+	private List<Centro> centros;
+	private List<Area> areas;
+	private List<Tipo> estados;
 
 	public Proceso getProceso() {
 		return proceso;
@@ -31,5 +32,13 @@ public class Filtro implements Serializable {
 
 	public void setAreas(List<Area> areas) {
 		this.areas = areas;
+	}
+	
+	public List<Tipo> getEstados() {
+		return estados;
+	}
+
+	public void setEstados(List<Tipo> estados) {
+		this.estados = estados;
 	}
 }

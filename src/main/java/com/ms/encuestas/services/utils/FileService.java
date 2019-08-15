@@ -20,7 +20,6 @@ public class FileService implements FileServiceI {
 
 	@Autowired
 	public FileService(FileProperties fileStorageProperties) {
-		System.out.println("I'm here");
 		this.fileReportesLocation = Paths.get(fileStorageProperties.getReportesPath()).toAbsolutePath().normalize();
 		try {
 			Files.createDirectories(this.fileReportesLocation);
@@ -33,18 +32,13 @@ public class FileService implements FileServiceI {
 	public Resource loadFileAsResource(String fileName) {
 		try {
 			Path filePath = this.fileReportesLocation.resolve(fileName).normalize();
-			System.out.println("here");
-			System.out.println(filePath.toString());
 			Resource resource = new UrlResource(filePath.toUri());
 			if (resource.exists()) {
-				System.out.println("cool");
 				return resource;
 			} else {
-				System.out.println("not cool");
 				throw new FileNotFoundException("File not found " + fileName);
 			}
 		} catch (MalformedURLException ex) {
-			System.out.println("not not cool");
 			throw new FileNotFoundException("File not found " + fileName, ex);
 		}
 	}
