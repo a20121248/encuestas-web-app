@@ -8,11 +8,11 @@
   <mat-card class="cuadro mat-elevation-z4 mt-4">
     <div class="row">
       <div class="col-md-5">
-        <app-form-eps [lstEps]="lstEps"></app-form-eps>
+        <app-form-eps [lstEps]="lstEps" (sendestadoFormEpsToParent)="estadoFormEps($event)"></app-form-eps>
       </div>
       <div class="col-md-12 text-right mt-3">
         <button mat-raised-button color="warn" (click)="goBack()"><i class="material-icons">reply</i>Atrás</button>
-        <button mat-raised-button color="warn" (click)="guardarEncuesta()"><i class="material-icons">save</i>Guardar</button>
+        <button #btnGuardar mat-raised-button color="warn" disabled (click)="guardarEncuesta()"><i class="material-icons">save</i>Guardar</button>
       </div>
     </div>
   </mat-card>

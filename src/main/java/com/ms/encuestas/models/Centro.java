@@ -14,6 +14,7 @@ public class Centro implements Serializable {
 	private double porcentaje;
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
+	private String agrupador;
 
 	public Long getId() {
 		return id;
@@ -85,5 +86,13 @@ public class Centro implements Serializable {
 
 	public void setPorcentaje(double porcentaje) {
 		this.porcentaje = porcentaje;
+	}
+	
+	public String getAgrupador() {
+		return agrupador;
+	}
+
+	public void setAgrupador(String agrupador) {
+		this.agrupador = agrupador;
 	}
 }

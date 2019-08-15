@@ -24,8 +24,7 @@ import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
   styleUrls: ['./enc-linea-canal.component.css']
 })
 export class EncLineaCanalComponent implements OnInit {
-  lstLineaCanal: LineaCanal[];
-  lstObjetoObjetos: ObjetoObjetos[];
+  lstLineaCanales: ObjetoObjetos[];
   justificacion: Justificacion;
   observaciones: string;
 
@@ -56,7 +55,7 @@ export class EncLineaCanalComponent implements OnInit {
       this.usuarioSeleccionado = usuario;
       this.lineaCanalService.obtenerEncuesta(this.usuarioSeleccionado).subscribe(encuesta => {
         this.encuesta = encuesta;
-        this.lstObjetoObjetos = (encuesta.lstItems as ObjetoObjetos[]);
+        this.lstLineaCanales = (encuesta.lstItems as ObjetoObjetos[]);
       });
     });
   }
@@ -67,9 +66,7 @@ export class EncLineaCanalComponent implements OnInit {
 
   guardarEncuesta() {
     this.encuesta = new Encuesta();
-    this.encuesta.lstItems = this.lineaCanalComponent.lstObjetoObjetos;
-    this.encuesta.justificacion = null;
-    this.encuesta.observaciones = null;
+    this.encuesta.lstItems = this.lineaCanalComponent.lstLineaCanales;
     this.lineaCanalService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
       response => console.log(response), err => console.log(err)
     );

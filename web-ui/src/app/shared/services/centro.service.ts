@@ -37,6 +37,17 @@ export class CentroService {
     console.log(error);
   }
 
+  findById(centroId: number): Observable<Centro> {
+    const url = `${this.urlServer.api}centros/${centroId}`;
+    return this.http.get<Centro>(url);
+  }
+
+  findAll(): Observable<Centro[]> {
+    const url = `${this.urlServer.api}centros`;
+    console.log(url);
+    return this.http.get<Centro[]>(url);
+  }
+
   obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {
     const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
     const url2 = `${url1}encuesta/centro/${usuario.posicion.centro.nivel}/${usuario.posicion.perfil.id}`;

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Usuario } from 'src/app/shared/models/usuario';
-import { Tipo } from 'src/app/shared/models/tipo';
+import { Proceso } from 'src/app/shared/models/Proceso';
 import { AppConfig } from 'src/app/shared/services/app.config';
 
 @Injectable({
@@ -10,7 +10,7 @@ import { AppConfig } from 'src/app/shared/services/app.config';
 })
 export class AuthService {
   private _usuario: Usuario;
-  private _proceso: Tipo;
+  private _proceso: Proceso;
   private _token: string;
   protected urlServer = AppConfig.settings.urlServer;
 
@@ -26,17 +26,17 @@ export class AuthService {
     return new Usuario();
   }
 
-  public get proceso(): Tipo {
+  public get proceso(): Proceso {
     if (this._proceso != null) {
       return this._proceso;
     } else if (this._proceso == null && localStorage.getItem('proceso') != null) {
-      this._proceso = JSON.parse(localStorage.getItem('proceso')) as Tipo;
+      this._proceso = JSON.parse(localStorage.getItem('proceso')) as Proceso;
       return this._proceso;
     }
-    return new Tipo();
+    return new Proceso();
   }
 
-  setProceso(proceso: Tipo): void {
+  setProceso(proceso: Proceso): void {
     this._proceso = proceso;
   }
 

@@ -28,8 +28,8 @@ public class EncuestaService implements EncuestaServiceI {
     public Justificacion getJustificacionDefault() {
 		Justificacion justificacion = new Justificacion();
 		justificacion.setId(new Long(0));
-		justificacion.setNombre("Sin nombre");
-		justificacion.setDetalle("Sin detalle.");
+		justificacion.setNombre(null);
+		justificacion.setDetalle(null);
 		Date fecha = new Date();
 		justificacion.setFechaCreacion(fecha);
 		justificacion.setFechaActualizacion(fecha);
@@ -37,7 +37,7 @@ public class EncuestaService implements EncuestaServiceI {
     }
     
     public String getObservacionesDefault() {
-    	return "Sin observaciones.";
+    	return null;
     }
     
     @Override

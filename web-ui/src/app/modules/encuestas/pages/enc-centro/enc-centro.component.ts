@@ -64,6 +64,9 @@ export class EncCentroComponent implements OnInit {
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.centroComponent.lstCentros;
     this.encuesta.justificacion = this.justificacionComponent.justificacion;
+    if (this.encuesta.justificacion.id != 5) {
+      this.encuesta.justificacion.detalle = null;
+    }
     this.encuesta.observaciones = this.justificacionComponent.observaciones;
     this.centroService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
       response => console.log(response), err => console.log(err)

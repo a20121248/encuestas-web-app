@@ -4,4 +4,5 @@ export class Area {
   division: string;
   fechaCreacion: Date;
   fechaActualizacion: Date;
+  agrupador: string;
 }
