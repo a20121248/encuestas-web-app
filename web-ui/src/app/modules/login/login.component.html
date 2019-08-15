@@ -7,20 +7,21 @@
       <mat-card class="mat-elevation-z5">
         <mat-card-content fxLayout="column">
           <div fxLayout="row" fxLayoutAlign="center center">
-            <mat-icon matPrefix>person</mat-icon>
-            <mat-form-field>
+            <mat-icon [ngStyle]="{'color':'#607d8b'}" matPrefix>person</mat-icon>
+            <mat-form-field appearance="outline">
               <mat-label>Usuario de red</mat-label>
               <input [(ngModel)]="usuario.codigo" matInput placeholder="Ej. S88748" name="username">
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayoutAlign="center center">
-            <mat-icon matPrefix>lock</mat-icon>
-            <mat-form-field>
-              <input [(ngModel)]="usuario.contrasenha" matInput placeholder="Contraseña"
+            <mat-icon [ngStyle]="{'color':'#607d8b'}" matPrefix>lock</mat-icon>
+            <mat-form-field appearance="outline">
+              <mat-label>Ingresa tu contraseña</mat-label>
+              <input [(ngModel)]="usuario.contrasenha" matInput
                 [type]="hide ? 'password' : 'text'" name="password">
-              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+              <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Ocultar contraseña'"
                 [attr.aria-pressed]="hide">
-                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-icon [ngStyle]="{'color':'#607d8b'}">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
             </mat-form-field>
           </div>

@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.ms.encuestas.models.Area;
 import com.ms.encuestas.models.Centro;
 import com.ms.encuestas.models.Empresa;
 import com.ms.encuestas.models.EncuestaCanal;
@@ -39,28 +40,200 @@ public class ReporteRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 	
-	public List<Map<String,Object>> reporteControl(Long procesoId) {
-		String sql = "SELECT SYSDATE FECHA_DESCARGA,\r\n" + 
-					 "       C.ID PROCESO_ID,\n" +
-					 "       C.nombre PROCESO,\n" + 
-					 "       NVL(B.codigo,'VACANTE') MATRICULA,\n" + 
-					 "       NVL(B.nombre_completo,'VACANTE') COLABORADOR,\n" + 
-					 "       D.codigo NRO_POSICION,\n" + 
-					 "       D.nombre POSICION,\n" + 
-					 "       E.nombre AREA,\n" + 
-					 "       F.codigo CENTRO_CODIGO,\n" + 
-					 "       F.nombre CENTRO_NOMBRE,\n" + 
-					 "       G.nombre PERFIL\n" + 
-					 "  FROM posicion_datos A\n" + 
-					 "  LEFT JOIN usuarios B ON B.codigo=A.usuario_codigo\n" + 
-					 "  JOIN procesos C ON C.id=A.proceso_id\n" + 
-					 "  JOIN posiciones D ON D.codigo=A.posicion_codigo\n" + 
-					 "  JOIN areas E ON E.id=A.area_id\n" + 
-					 "  JOIN centros F ON F.id=A.centro_id\n" + 
-					 "  JOIN perfiles G ON G.id=A.perfil_id\n" + 
-					 " WHERE C.id=:proceso_id";
+	private String filtroAreas(List<Area> areas, String alias) {
+		if (areas == null) return "";
+		String sql = String.format("\n   AND %s.area_id IN (", alias);
+		for (int i = 0; i < areas.size(); ++i) {
+			if (i != areas.size()-1)
+				sql += String.format("%d,", areas.get(i).getId());
+			else 
+				sql += String.format("%d)\n", areas.get(i).getId());
+		}
+		return sql;
+	}
+	
+	private String filtroCentros(List<Centro> centros, String alias) {
+		if (centros == null) return "";
+		String sql = String.format("\n   AND %s.centro_id IN (", alias);
+		for (int i = 0; i < centros.size(); ++i)
+			if (i != centros.size()-1)
+				sql += String.format("%d,", centros.get(i).getId());
+			else 
+				sql += String.format("%d)", centros.get(i).getId());
+		return sql;
+	}
+	
+	public boolean hasData(Long procesoId, List<Area> areas, List<Centro> centros, List<Integer> estadoIds) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("proceso_id", procesoId);
+		
+		String sql = "SELECT COUNT(1)\n" +
+		             "  FROM posicion_datos A\n" +
+				     " WHERE A.proceso_id=:proceso_id";
+		sql += filtroAreas(areas, "A");
+		sql += filtroCentros(centros, "A");		
+		return plantilla.queryForObject(sql, paramMap, Long.class) != 0;
+	}
+	
+	public List<Map<String,Object>> reporteControl(Long procesoId, List<Area> areas, List<Centro> centros, List<Integer> estadoIds) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("proceso_id", procesoId);
+		
+		String sql;
+		if (!hasData(procesoId, areas, centros, estadoIds)) {
+	        sql = "SELECT NULL FECHA_DESCARGA,\n" + 
+	              "       NULL PROCESO,\n" + 
+	              "       NULL MATRICULA,\n" + 
+	              "       NULL COLABORADOR,\n" + 
+	              "       NULL NRO_POSICION,\n" + 
+	              "       NULL POSICION,\n" + 
+	              "       NULL AREA,\n" + 
+	              "       NULL CECO_CODIGO,\n" + 
+	              "       NULL CECO_NOMBRE,\n" + 
+	              "       NULL PERFIL,\n" + 
+	              "       NULL PERFIL_TIPO,\n" +
+	              "       NULL ETAPA_1,\n" + 
+	              "       NULL ETAPA_2,\n" + 
+	              "       NULL ETAPA_3,\n" + 
+	              "       NULL ETAPA_4,\n" + 
+	              "       NULL ESTADO_GLOBAL,\n" +
+	              "       NULL ULTIMA_MODIFICACION\n" +
+	              "  FROM DUAL";
+	  		return plantilla.queryForList(sql, paramMap);
+		}
+		
+		sql = "DELETE FROM REP_CONTROL_01";
+		plantilla.update(sql,paramMap);
+		sql = "DELETE FROM REP_CONTROL_02";
+		plantilla.update(sql,paramMap);
+		sql = "DELETE FROM REP_CONTROL_F";
+		plantilla.update(sql,paramMap);		
+				
+		sql = "INSERT INTO REP_CONTROL_01(proceso_id,proceso_nombre,usuario_codigo,usuario_nombre_completo,posicion_codigo,posicion_nombre,area_nombre,centro_codigo,centro_nombre,perfil_nombre,perfil_tipo_id,perfil_tipo_nombre)\n" +
+              "SELECT C.ID PROCESO_ID,\n" + 
+			  "       C.nombre PROCESO_NOMBRE,\n" + 
+			  "       NVL(B.codigo,'VACANTE') USUARIO_CODIGO,\n" + 
+	  		  "       NVL(B.nombre_completo,'VACANTE') USUARIO_NOMBRE_COMPLETO,\n" + 
+		      "       D.codigo POSICION_CODIGO,\n" + 
+			  "       D.nombre POSICION_NOMBRE,\n" + 
+			  "       E.nombre AREA_NOMBRE,\n" + 
+			  "       F.codigo CENTRO_CODIGO,\n" + 
+			  "       F.nombre CENTRO_NOMBRE,\n" + 
+			  "       G.nombre PERFIL_NOMBRE,\n" + 
+			  "       G.perfil_tipo_id,\n" +
+			  "       H.nombre perfil_tipo_nombre\n" + 
+			  "  FROM posicion_datos A\n" + 
+			  "  LEFT JOIN usuarios B ON B.codigo=A.usuario_codigo\n" + 
+			  "  JOIN procesos C ON C.id=A.proceso_id\n" + 
+			  "  JOIN posiciones D ON D.codigo=A.posicion_codigo\n" + 
+			  "  JOIN areas E ON E.id=A.area_id\n" + 
+			  "  JOIN centros F ON F.id=A.centro_id\n" + 
+			  "  JOIN perfiles G ON G.id=A.perfil_id\n" +
+			  "  JOIN perfil_tipos H ON H.id=G.perfil_tipo_id\n" +
+			  " WHERE A.proceso_id=:proceso_id";
+		
+		sql += filtroAreas(areas, "A");
+		sql += filtroCentros(centros, "A");
+		System.out.println(sql);
+		plantilla.update(sql,paramMap);
+		
+		sql = "INSERT INTO REP_CONTROL_02(proceso_id,proceso_nombre,usuario_codigo,usuario_nombre_completo,posicion_codigo,posicion_nombre,area_nombre,centro_codigo,centro_nombre,perfil_nombre,perfil_tipo_id,perfil_tipo_nombre,ult_fecha_actualizacion,tipo_1,tipo_2,tipo_3,tipo_4,tipo_5,tipo_6,tipo_7)\n" +
+		      "SELECT A.*,\n" + 
+		      "       MAX(B.FECHA_ACTUALIZACION) ULT_FECHA_ACTUALIZACION,\n" + 
+		      "       MAX(CASE WHEN B.ENCUESTA_TIPO_ID=1 AND B.ESTADO=1 THEN 2\n" + 
+		      "                WHEN B.ENCUESTA_TIPO_ID=1 AND B.ESTADO=0 THEN 1\n" + 
+		      "                ELSE 0\n" + 
+		      "       END) TIPO_1,\n" + 
+		      "       MAX(CASE WHEN B.ENCUESTA_TIPO_ID=2 AND B.ESTADO=1 THEN 2\n" + 
+		      "                WHEN B.ENCUESTA_TIPO_ID=2 AND B.ESTADO=0 THEN 1\n" + 
+		      "                ELSE 0\n" + 
+		      "       END) TIPO_2,\n" + 
+		      "       MAX(CASE WHEN B.ENCUESTA_TIPO_ID=3 AND B.ESTADO=1 THEN 2\n" + 
+		      "                WHEN B.ENCUESTA_TIPO_ID=3 AND B.ESTADO=0 THEN 1\n" + 
+		      "                ELSE 0\n" + 
+		      "       END) TIPO_3,\n" + 
+		      "       MAX(CASE WHEN B.ENCUESTA_TIPO_ID=4 AND B.ESTADO=1 THEN 2\n" + 
+		      "                WHEN B.ENCUESTA_TIPO_ID=4 AND B.ESTADO=0 THEN 1\n" + 
+		      "                ELSE 0\n" + 
+		      "       END) TIPO_4,\n" + 
+		      "       MAX(CASE WHEN B.ENCUESTA_TIPO_ID=5 AND B.ESTADO=1 THEN 2\n" + 
+		      "                WHEN B.ENCUESTA_TIPO_ID=5 AND B.ESTADO=0 THEN 1\n" + 
+		      "                ELSE 0\n" + 
+		      "       END) TIPO_5,\n" + 
+		      "       MAX(CASE WHEN B.ENCUESTA_TIPO_ID=6 AND B.ESTADO=1 THEN 2\n" + 
+		      "                WHEN B.ENCUESTA_TIPO_ID=6 AND B.ESTADO=0 THEN 1\n" + 
+		      "                ELSE 0\n" + 
+		      "       END) TIPO_6,\n" + 
+		      "       MAX(CASE WHEN B.ENCUESTA_TIPO_ID=7 AND B.ESTADO=1 THEN 2\n" + 
+		      "                WHEN B.ENCUESTA_TIPO_ID=7 AND B.ESTADO=0 THEN 1\n" + 
+		      "                ELSE 0\n" + 
+		      "       END) TIPO_7\n" + 
+		      "  FROM REP_CONTROL_01 A\n" + 
+		      "  LEFT JOIN ENCUESTAS B\n" + 
+		      "    ON B.PROCESO_ID=A.PROCESO_ID\n" + 
+		      "   AND B.POSICION_CODIGO=A.POSICION_CODIGO\n" + 
+		      " GROUP BY A.PROCESO_ID,A.PROCESO_NOMBRE,A.USUARIO_CODIGO,A.USUARIO_NOMBRE_COMPLETO,A.POSICION_CODIGO,A.POSICION_NOMBRE,A.AREA_NOMBRE,A.CENTRO_CODIGO,A.CENTRO_NOMBRE,A.PERFIL_NOMBRE,A.PERFIL_TIPO_ID,A.PERFIL_TIPO_NOMBRE\n" + 
+		      " ORDER BY A.PROCESO_ID,A.POSICION_CODIGO";
+		plantilla.update(sql,paramMap);
+			
+		sql = "INSERT INTO REP_CONTROL_F(proceso_id,proceso_nombre,usuario_codigo,usuario_nombre_completo,posicion_codigo,posicion_nombre,area_nombre,centro_codigo,centro_nombre,perfil_nombre,perfil_tipo_id,perfil_tipo_nombre,ult_fecha_actualizacion,tipo_1,tipo_2,tipo_3,tipo_4,tipo_5,tipo_6,tipo_7,etapa_1,etapa_2,etapa_3,etapa_4,etapa_total)\n" +
+		      "SELECT A.*,\n" + 
+		      "       TIPO_1 ETAPA_1,--EMPRESA\n" + 
+		      "       TIPO_2 ETAPA_2,--EPS\n" + 
+		      "       CASE WHEN TIPO_3=2 OR TIPO_4=2 OR TIPO_7=2 THEN 2\n" + 
+		      "            WHEN TIPO_3=1 OR TIPO_4=1 OR TIPO_7=1 THEN 1\n" + 
+		      "            ELSE 0\n" + 
+		      "       END ETAPA_3,--CECO, LINEA-CANAL, LINEA\n" + 
+		      "       CASE WHEN TIPO_5=2 OR TIPO_6=2 THEN 2\n" + 
+		      "            WHEN TIPO_5=1 OR TIPO_6=1 THEN 1\n" + 
+		      "            ELSE 0\n" + 
+		      "       END ETAPA_4,--PRODUCTO-SUBCANAL, PRODUCTO-CANAL\n" + 
+		      "       CASE WHEN PERFIL_TIPO_ID=1 AND (TIPO_1=2 AND TIPO_2=2 AND TIPO_3=2) THEN 2\n" + 
+		      "            WHEN PERFIL_TIPO_ID=1 AND (TIPO_1=1 OR  TIPO_2=1 OR  TIPO_3=1) THEN 1\n" + 
+		      "            WHEN PERFIL_TIPO_ID=2 AND (TIPO_1=2 AND TIPO_2=2 AND TIPO_7=2 AND TIPO_6=2) THEN 2\n" + 
+		      "            WHEN PERFIL_TIPO_ID=2 AND (TIPO_1=1 OR  TIPO_2=1 OR  TIPO_7=1 OR  TIPO_6=1) THEN 1\n" + 
+		      "            WHEN PERFIL_TIPO_ID=3 AND (TIPO_1=2 AND TIPO_2=2 AND TIPO_4=2 AND TIPO_5=2) THEN 2\n" + 
+		      "            WHEN PERFIL_TIPO_ID=3 AND (TIPO_1=1 OR  TIPO_2=1 OR  TIPO_4=1 OR  TIPO_5=1) THEN 1\n" + 
+		      "            WHEN PERFIL_TIPO_ID=4 AND (TIPO_1=2 AND TIPO_2=2 AND TIPO_4=2 AND TIPO_5=2) THEN 2\n" + 
+		      "            WHEN PERFIL_TIPO_ID=4 AND (TIPO_1=1 OR  TIPO_2=1 OR  TIPO_4=1 OR  TIPO_5=1) THEN 1\n" + 
+		      "            ELSE 0\n" + 
+		      "       END ETAPA_TOTAL\n" + 
+		      "  FROM REP_CONTROL_02 A";
+        plantilla.update(sql,paramMap);
+        
+        sql = "SELECT SYSDATE FECHA_DESCARGA,\n" + 
+              "       PROCESO_NOMBRE PROCESO,\n" + 
+              "       USUARIO_CODIGO MATRICULA,\n" + 
+              "       USUARIO_NOMBRE_COMPLETO COLABORADOR,\n" + 
+              "       POSICION_CODIGO NRO_POSICION,\n" + 
+              "       POSICION_NOMBRE POSICION,\n" + 
+              "       AREA_NOMBRE AREA,\n" + 
+              "       CENTRO_CODIGO CECO_CODIGO,\n" + 
+              "       CENTRO_NOMBRE CECO_NOMBRE,\n" + 
+              "       PERFIL_NOMBRE PERFIL,\n" + 
+              "       PERFIL_TIPO_NOMBRE PERFIL_TIPO,\n" +
+              "       CASE WHEN ETAPA_1=0 THEN 'NO INICIADA'\n" + 
+              "            WHEN ETAPA_1=1 THEN 'INICIADA'\n" + 
+              "            WHEN ETAPA_1=2 THEN 'COMPLETADA'\n" + 
+              "       END ETAPA_1,\n" + 
+              "       CASE WHEN ETAPA_2=0 THEN 'NO INICIADA'\n" + 
+              "            WHEN ETAPA_2=1 THEN 'INICIADA'\n" + 
+              "            WHEN ETAPA_2=2 THEN 'COMPLETADA'\n" + 
+              "       END ETAPA_2,\n" + 
+              "       CASE WHEN ETAPA_3=0 THEN 'NO INICIADA'\n" + 
+              "            WHEN ETAPA_3=1 THEN 'INICIADA'\n" + 
+              "            WHEN ETAPA_3=2 THEN 'COMPLETADA'\n" + 
+              "       END ETAPA_3,\n" + 
+              "       CASE WHEN ETAPA_4=0 THEN 'NO INICIADA'\n" + 
+              "            WHEN ETAPA_4=1 THEN 'INICIADA'\n" + 
+              "            WHEN ETAPA_4=2 THEN 'COMPLETADA'\n" + 
+              "       END ETAPA_4,\n" + 
+              "       CASE WHEN ETAPA_TOTAL=0 THEN 'NO INICIADA'\n" + 
+              "            WHEN ETAPA_TOTAL=1 THEN 'INICIADA'\n" + 
+              "            WHEN ETAPA_TOTAL=2 THEN 'COMPLETADA'\n" + 
+              "       END ESTADO_GLOBAL,\n" +
+              "       ULT_FECHA_ACTUALIZACION ULTIMA_MODIFICACION\n" +
+              "  FROM REP_CONTROL_F";
 		return plantilla.queryForList(sql, paramMap);
 	}
 	

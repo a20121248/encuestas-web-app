@@ -14,7 +14,13 @@ export class FileService {
 
   downloadFile(): Observable<any> {
     const url = `${this.urlServer.api}procesos/2/reportes/control`;
-    console.log('enviando get:');
+
+    /*return this.http.get(`${this.urlServer.api}convertFlatFileToExcel.do`,{
+      headers : {
+          'Content-Type' : undefined,
+          'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      }});*/
+
     return this.http.get(url, {
       responseType: 'blob'
     });

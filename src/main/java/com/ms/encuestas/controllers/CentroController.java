@@ -1,10 +1,15 @@
 package com.ms.encuestas.controllers;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,8 +42,20 @@ public class CentroController {
 	}
 	
 	@GetMapping("/centros/{id}")
-	public Centro show(@PathVariable Long id) {
-		return this.centroService.findById(id);
+	public ResponseEntity<?> show(@PathVariable Long id) {
+		Centro centro = null;
+		Map<String, Object> response = new HashMap<>();
+		try {
+			centro = this.centroService.findById(id);
+		} catch (EmptyResultDataAccessException er) {
+			response.put("mensaje", String.format("El centro %d no existe en la base de datos.", id));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		} catch (DataAccessException dae) {
+			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
+			response.put("error", String.format("%s. %s", dae.getMessage(), dae.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Centro>(centro, HttpStatus.OK);
 	}
 
 	@PostMapping("/centros")

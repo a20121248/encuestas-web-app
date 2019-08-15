@@ -19,58 +19,59 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ms.encuestas.models.Justificacion;
-import com.ms.encuestas.services.JustificacionServiceI;
+import com.ms.encuestas.models.Proceso;
+import com.ms.encuestas.services.ProcesoServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping("/api")
-public class JustificacionController {
+@RequestMapping("/api/procesos")
+public class ProcesoController {
 	@Autowired
-	private JustificacionServiceI justificacionService;
+	private ProcesoServiceI procesoService;
 	
-	@GetMapping("/justificaciones/cantidad")
+	@GetMapping("/cantidad")
 	public Long count() {
-		return justificacionService.count();
+		return procesoService.count();
 	}
 	
-	@GetMapping("/justificaciones")
-	public List<Justificacion> index() {
-		return justificacionService.findAll();
+	@GetMapping("")
+	public List<Proceso> index() {
+		return procesoService.findAll();
 	}
 
-	@GetMapping("/justificaciones/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id) {
-		Justificacion justificacion = null;
+		Proceso proceso = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			justificacion = this.justificacionService.findById(id);
+			proceso = this.procesoService.findById(id);
 		} catch (EmptyResultDataAccessException er) {
-			response.put("mensaje", String.format("La justificación %d no existe en la base de datos.", id));
+			response.put("mensaje", String.format("El proceso %d no existe en la base de datos.", id));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		} catch (DataAccessException dae) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
 			response.put("error", String.format("%s. %s", dae.getMessage(), dae.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<Justificacion>(justificacion, HttpStatus.OK);
+		return new ResponseEntity<Proceso>(proceso, HttpStatus.OK);
 	}
-	
-	@PutMapping("/justificaciones")
+/*
+	@PutMapping("/divisiones")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Justificacion update(@RequestBody Justificacion justificacion, @PathVariable Long id) {
-		Justificacion currentJustificacion = this.justificacionService.findById(id);
-		currentJustificacion.setNombre(justificacion.getNombre());
-		//currentJustificacion.setApellido(centro.get());
-		//currentJustificacion.setEmail(centro.getEmail());
-		this.justificacionService.save(currentJustificacion);
-		return currentJustificacion;
+	public Division update(@RequestBody Division area, @PathVariable Long id) {
+		Division currentDivision = this.divisionService.findById(id);
+		currentDivision.setNombre(area.getNombre());
+		//currentCentro.setApellido(centro.get());
+		//currentCentro.setEmail(centro.getEmail());
+		this.divisionService.save(currentDivision);
+		return currentDivision;
 	}
 
-	@DeleteMapping("/justificaciones/{id}")
+	@DeleteMapping("/divisiones/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
-		Justificacion currentJustificacion = this.justificacionService.findById(id);
-		this.justificacionService.delete(currentJustificacion);
+		Division currentDivision = this.divisionService.findById(id);
+		this.divisionService.delete(currentDivision);
 	}
+*/
 }

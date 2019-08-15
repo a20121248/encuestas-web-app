@@ -2,26 +2,37 @@
   <mat-card class="cuadro header mat-elevation-z4 mt-4 mb-4 text-center">
     <h1>{{ titulo.toUpperCase() }}</h1>
   </mat-card>
-  <mat-card class="cuadro mat-elevation-z4 mt-4">
-    <div class="row">
-      <div class="col-md-12">
-        <button (click)="descargar()" mat-raised-button>Descargar</button>
-      </div>
+  <div class="row">
+    <div class="col-md-6">
+      <app-reporte-control [procesos]="procesos"
+                           [areas]="areas"
+                           [centros]="centros"
+                           [selectedProceso]="selectedProceso">
+      </app-reporte-control>
     </div>
-  </mat-card>
-  <mat-card class="cuadro mat-elevation-z4 mt-4">
-    <div class="row">
-      <div class="col-md-12">
-        a
-      </div>
+    <div class="col-md-6">
+      <app-reporte-empresas [procesos]="procesos"
+                            [areas]="areas"
+                            [centros]="centros"
+                            [selectedProceso]="selectedProceso">
+      </app-reporte-empresas>
     </div>
-  </mat-card>
-  <mat-card class="cuadro mat-elevation-z4 mt-4">
-    <div class="row">
-      <div class="col-md-12">
-        a
-      </div>
+    <!--<div class="col-md-6">
+        <app-grafico-control [procesos]="procesos"
+                             [areas]="areas"
+                             [centros]="centros"
+                             [selectedProceso]="selectedProceso">
+        </app-grafico-control>
+      </div>-->
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-3 mt-4">
+      <app-reporte-consolidado [procesos]="procesos"
+                               [areas]="areas"
+                               [centros]="centros"
+                               [selectedProceso]="selectedProceso">
+      </app-reporte-consolidado>
     </div>
-  </mat-card>
+  </div>
 </div>
 <br>

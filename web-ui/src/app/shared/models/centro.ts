@@ -9,4 +9,5 @@ export class Centro {
   fechaCreacion: Date;
   porcentaje: number;
   procesoId: number;
+  agrupador: string;
 }

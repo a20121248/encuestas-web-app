@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +34,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ms.encuestas.models.EncuestaEmpresa;
+import com.ms.encuestas.models.Area;
 import com.ms.encuestas.models.EncuestaCanal;
 import com.ms.encuestas.models.EncuestaCentro;
 import com.ms.encuestas.models.EncuestaLinea;
@@ -43,87 +47,53 @@ import com.ms.encuestas.models.EncuestaObjeto;
 import com.ms.encuestas.models.EncuestaObjetoObjetos;
 import com.ms.encuestas.models.EncuestaProductoCanal;
 import com.ms.encuestas.models.EncuestaProductoSubcanal;
+import com.ms.encuestas.models.Filtro;
+import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.properties.FileProperties;
 import com.ms.encuestas.services.EncuestaServiceI;
-import com.ms.encuestas.services.FileServiceI;
 import com.ms.encuestas.services.ReporteServiceI;
+import com.ms.encuestas.services.utils.FileServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/reportes")
 public class ReporteController {
-	public static final String TOKEN_PREFIX = "Bearer ";
-	public static final String HEADER_STRING = "Authorization";
-
 	@Autowired
 	private ReporteServiceI reporteService;
 	
 	private final Logger log = LoggerFactory.getLogger(ReporteController.class);
-	
-	@RequestMapping(value = "/convertFlatFileToExcel.do", method = RequestMethod.POST)
-	public HttpEntity<byte[]> convertFlatFileToExcel() throws IOException {
-	        ByteArrayOutputStream archivo = new ByteArrayOutputStream();
-	        XSSFWorkbook workbook = new XSSFWorkbook();
-	        workbook.write(archivo);
-	        if(null!=workbook && null!=archivo) {
-	            workbook.close();
-	                        archivo.close();
-	        }
-	    byte[] documentContent = archivo.toByteArray();
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-	    headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"myexcelfile.xls\"");
-	    headers.setContentLength(documentContent.length);
-	    return new ResponseEntity<byte[]>(documentContent, headers, HttpStatus.OK);
-	}
 
-
-	@GetMapping("/procesos/{procesoId}/reportes/control")
+	@PostMapping("/control")
 	@Transactional(readOnly = true)
-	public ResponseEntity<?> getControl(@PathVariable Long procesoId, HttpServletRequest request) {
-		System.out.println("exitos"+ procesoId);
+	public ResponseEntity<?> getControl(@RequestBody Filtro filtro) {		
+		Resource resource = reporteService.generarReporteControl(filtro);
+		String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-		Resource resource = reporteService.generarReporteControl(procesoId);
-	
-
-        // Try to determine file's content type
-        String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("mensaje", "Error al subir imagen del cliente.");
-                
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
 	}
 	
-	/*@GetMapping("/procesos/{procesoId}/reportes/control")
+	@PostMapping("/empresas")
 	@Transactional(readOnly = true)
-	public ResponseEntity<Resource> getControl(@PathVariable Long procesoId, HttpServletRequest request) {
-		System.out.println("exitos"+ procesoId);
-
-		// Load file as Resource
-		Resource resource = reporteService.generarReporteControl(procesoId);
-		if(resource==null) {
-			System.out.println("nulo");
-		} else {
-			System.out.println("ok");
-		}
-		
-
-        // Try to determine file's content type
+	public ResponseEntity<?> getEmpresas(@RequestBody Filtro filtro) {
+		Resource resource = reporteService.generarReporteEmpresas(filtro);
         String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("mensaje", "Error al subir imagen del cliente.");
-                
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
-	}*/
+	}
 	
-	
-
+	@PostMapping("/consolidado")
+	@Transactional(readOnly = true)
+	public ResponseEntity<?> getConsolidado(@RequestBody Filtro filtro) {
+		Resource resource = reporteService.generarReporteConsolidado(filtro);
+        String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+	}
 }

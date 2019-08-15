@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.poi.ooxml.POIXMLProperties.CoreProperties;
+import org.apache.poi.ooxml.POIXMLProperties.ExtendedProperties;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -46,4 +48,17 @@ public class ExcelService implements ExcelServiceI {
     	}
         return 1;
     }
+	
+	@Override
+	@Transactional(readOnly = true)
+	public SXSSFWorkbook crearLibro() {
+		SXSSFWorkbook wb = new SXSSFWorkbook(-1);
+		CoreProperties coreProperties = wb.getXSSFWorkbook().getProperties().getCoreProperties();
+		coreProperties.setCreator("Administrator");
+		
+		ExtendedProperties extendedProperties = wb.getXSSFWorkbook().getProperties().getExtendedProperties();
+		extendedProperties.getUnderlyingProperties().setApplication("Encuestas Planeamiento");
+		extendedProperties.getUnderlyingProperties().setCompany("Pacífico Seguros");
+        return wb;
+	}
 }

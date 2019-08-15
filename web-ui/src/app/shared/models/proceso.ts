@@ -1,8 +1,7 @@
-export class Area {
+export class Proceso {
   id: number;
   nombre: string;
-  division: string;
+  fechaCierre: Date;
   fechaCreacion: Date;
   fechaActualizacion: Date;
-  agrupador: string;
 }

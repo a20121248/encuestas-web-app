@@ -75,5 +75,5 @@ mat-card mat-card-header mat-card-title {
 }
 
 mat-card-content > div > mat-icon {
-  margin-right:13px;
+  margin: 0 13px 16px 0;
 }

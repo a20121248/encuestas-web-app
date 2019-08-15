@@ -1,37 +1,24 @@
 package com.ms.encuestas.repositories;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.ms.encuestas.models.Centro;
 import com.ms.encuestas.models.Empresa;
-import com.ms.encuestas.models.EncuestaCanal;
 import com.ms.encuestas.models.EncuestaCentro;
 import com.ms.encuestas.models.EncuestaEmpresa;
-import com.ms.encuestas.models.EncuestaLinea;
-import com.ms.encuestas.models.EncuestaLineaCanal;
 import com.ms.encuestas.models.EncuestaObjeto;
 import com.ms.encuestas.models.EncuestaObjetoObjetos;
-import com.ms.encuestas.models.EncuestaProductoCanal;
-import com.ms.encuestas.models.EncuestaProductoSubcanal;
 import com.ms.encuestas.models.Justificacion;
-import com.ms.encuestas.models.Linea;
 import com.ms.encuestas.models.Objeto;
 import com.ms.encuestas.models.ObjetoObjetos;
-import com.ms.encuestas.models.ProductoCanal;
-import com.ms.encuestas.models.ProductoSubcanal;
 
 @CrossOrigin(origins={})
 @Repository
@@ -61,7 +48,7 @@ public class EncuestaRepository {
 		paramMap.put("proceso_id", procesoId);
 		paramMap.put("encuesta_tipo_id", encuestaTipoId);
 		paramMap.put("posicion_codigo", posicionCodigo);
-		paramMap.put("estado", 1);
+		paramMap.put("estado", 0);
 		paramMap.put("justificacion_id", justificacion.getId());
 		paramMap.put("justificacion_detalle", justificacion.getDetalle());
 		paramMap.put("observaciones", observaciones);
@@ -152,13 +139,13 @@ public class EncuestaRepository {
 		paramMap.put("nivel", nivel);
 		EncuestaCentro encuesta = plantilla.queryForObject(sql, paramMap, new EncuestaCentroMapper());
 		
-		sql = "SELECT A.id,\n" +
-			  "       A.codigo,\n" +
-			  "       A.nombre,\n" +
-			  "       A.nivel,\n" +
-			  "       A.grupo,\n" +
-			  "       A.fecha_creacion,\n" +
-			  "       A.fecha_actualizacion,\n" +
+		sql = "SELECT A.id centro_id,\n" +
+			  "       A.codigo centro_codigo,\n" +
+			  "       A.nombre centro_nombre,\n" +
+			  "       A.nivel centro_nivel,\n" +
+			  "       A.grupo centro_grupo,\n" +
+			  "       A.fecha_creacion centro_fecha_creacion,\n" +
+			  "       A.fecha_actualizacion centro_fecha_actualizacion,\n" +
 			  "       NVL(B.porcentaje,0)*100 porcentaje\n" + 
 			  "  FROM centros A\n" + 
 			  "  LEFT JOIN encuesta_centro B\n" +
