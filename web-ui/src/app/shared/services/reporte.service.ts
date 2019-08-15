@@ -24,6 +24,7 @@ export class ReporteService {
 
   generarReporteEmpresas(filtro: any): Observable<any> {
     const url = `${this.urlServer.api}reportes/empresas`;
+    console.log(url);
     return this.http.post(url, filtro, {
       responseType: 'blob',
       headers: new HttpHeaders().append('Content-Type', 'application/json')

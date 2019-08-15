@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Proceso } from 'src/app/shared/models/proceso';
 import { Centro } from 'src/app/shared/models/centro';
 import { Area } from 'src/app/shared/models/area';
+import { Tipo } from 'src/app/shared/models/tipo';
 
 @Component({
   selector: 'app-grafico-control',
@@ -10,11 +11,17 @@ import { Area } from 'src/app/shared/models/area';
 })
 export class GraficoControlComponent implements OnInit {
   @Input() procesos: Proceso[];
-  @Input() areas: Area[];
-  @Input() centros: Centro[];
   @Input() selectedProceso: Proceso;
+
+  @Input() areas: Area[];
   selectedAreas = [];
+
+  @Input() centros: Centro[];
   selectedCentros = [];
+
+  @Input() estados: Tipo[];
+  selectedEstados = [];
+
   titulo = 'GRÁFICO DE CONTROL';
 
   chartOptions = {
