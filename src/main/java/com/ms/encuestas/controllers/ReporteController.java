@@ -80,6 +80,7 @@ public class ReporteController {
 	public ResponseEntity<?> getEmpresas(@RequestBody Filtro filtro) {
 		Resource resource = reporteService.generarReporteEmpresas(filtro);
         String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")

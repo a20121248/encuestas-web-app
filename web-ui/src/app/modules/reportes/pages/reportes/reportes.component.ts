@@ -8,6 +8,7 @@ import { CentroService } from 'src/app/shared/services/centro.service';
 import { Centro } from 'src/app/shared/models/centro';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { NgSelectConfig } from '@ng-select/ng-select';
+import { Tipo } from 'src/app/shared/models/tipo';
 
 @Component({
   selector: 'app-reportes',
@@ -18,6 +19,7 @@ export class ReportesComponent implements OnInit {
   procesos: Proceso[];
   areas: Area[];
   centros: Centro[];
+  estados: Tipo[];
 
   selectedProceso: Proceso;
   selectedAreas = [];
@@ -32,7 +34,6 @@ export class ReportesComponent implements OnInit {
     private centroService: CentroService,
     private config: NgSelectConfig) {
       this.config.notFoundText = 'No se encontraron elementos.';
-
       this.selectedProceso = this.authService.proceso;
       this.procesoService.findAll().subscribe(procesos => {
         this.procesos = procesos;
@@ -43,6 +44,10 @@ export class ReportesComponent implements OnInit {
       this.centroService.findAll().subscribe(centros => {
         this.centros = centros;
       });
+      this.estados = new Array();
+      this.estados.push(new Tipo(2, 'COMPLETADA', 'TODOS'));
+      this.estados.push(new Tipo(1, 'INICIADA', 'TODOS'));
+      this.estados.push(new Tipo(0, 'NO INICIADA', 'TODOS'));
     }
 
   ngOnInit() {

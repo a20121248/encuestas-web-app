@@ -3,18 +3,10 @@
     {{ titulo }}
   </mat-card>
   <ng-select [items]="procesos"
-            bindLabel="nombre"
-            placeholder="Seleccione un proceso"
-            [(ngModel)]="selectedProceso">
+             bindLabel="nombre"
+             placeholder="Seleccione un proceso"
+             [(ngModel)]="selectedProceso">
   </ng-select>
-  <!--<ng-select [items]="centros"
-                 [multiple]="true"
-                 [closeOnSelect]="false"
-                 [hideSelected]="true"
-                 bindLabel="nombre"
-                 placeholder="Seleccionar centros de costos"
-                 [(ngModel)]="selectedCentros">
-  </ng-select>-->
   <ng-select [items]="areas"
              [multiple]="true"
              bindLabel="nombre"
@@ -24,10 +16,58 @@
              placeholder="Seleccionar áreas"
              [(ngModel)]="selectedAreas">
     <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-    <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/> {{item.agrupador}}
+      <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>{{item.agrupador}}
     </ng-template>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-    <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/> {{item.nombre}}
+      <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>{{item.nombre}}
+    </ng-template>
+  </ng-select>
+  <ng-select [items]="centros"
+             [multiple]="true"
+             bindLabel="nombre"
+             groupBy="agrupador"
+             [selectableGroup]="true"
+             [closeOnSelect]="false"
+             placeholder="Seleccionar centros de costos"
+             [(ngModel)]="selectedCentros">
+    <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+      <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>{{item.agrupador}}
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+      <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>{{item.nombre}}
+    </ng-template>
+    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+      <div class="ng-value" *ngFor="let item of items | slice:0:2">
+        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+        <span class="ng-value-label">{{item.nombre != null ? item.nombre : item.agrupador}}</span>
+      </div>
+      <div class="ng-value" *ngIf="items.length > 2">
+        <span class="ng-value-label">{{items.length - 2}} más...</span>
+      </div>
+    </ng-template>
+  </ng-select>
+  <ng-select [items]="estados"
+             [multiple]="true"
+             bindLabel="nombre"
+             groupBy="agrupador"
+             [selectableGroup]="true"
+             [closeOnSelect]="false"
+             placeholder="Seleccionar estado global de las encuestas"
+             [(ngModel)]="selectedEstados">
+    <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+      <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>{{item.agrupador}}
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+      <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>{{item.nombre}}
+    </ng-template>
+    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+      <div class="ng-value" *ngFor="let item of items | slice:0:2">
+        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+        <span class="ng-value-label">{{item.nombre != null ? item.nombre : item.agrupador}}</span>
+      </div>
+      <div class="ng-value" *ngIf="items.length > 2">
+        <span class="ng-value-label">{{items.length - 2}} más...</span>
+      </div>
     </ng-template>
   </ng-select>
   <div class="col-md-12 text-center mt-3">

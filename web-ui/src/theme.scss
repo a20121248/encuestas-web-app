@@ -71,6 +71,22 @@ app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-l
   .boton {
     min-width: 36px;
   }
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    input {
+      margin-right: 6px;
+    }
+  }
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+    display: flex;
+    align-items: center;
+    input {
+      margin-right: 6px;
+    }
+  }
   .ng-select.ng-select-multiple .ng-select-container.ng-has-value .ng-value-container {
     padding-top:.25em;
   }
