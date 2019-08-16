@@ -14,7 +14,7 @@
         </app-form-linea-canal>
       </div>
       <div class="col-md-6">
-        <app-form-canal *ngIf="lineaSeleccionada" [lineaSeleccionada]="lineaSeleccionada"></app-form-canal>
+        <app-form-canal *ngIf="lineaSeleccionada && porcentajePadre" [lineaSeleccionada]="lineaSeleccionada"></app-form-canal>
       </div>
       <div class="col-md-12 text-right">
         <button mat-raised-button color="warn" (click)="goBack()"><i class="material-icons">reply</i>Atrás</button>

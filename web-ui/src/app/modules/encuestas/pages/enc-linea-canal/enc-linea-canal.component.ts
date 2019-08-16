@@ -33,6 +33,7 @@ export class EncLineaCanalComponent implements OnInit {
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
   lineaSeleccionada: ObjetoObjetos;
+  porcentajePadre: boolean;
 
   @ViewChild(LineaCanalComponent, { static: false })
   lineaCanalComponent: LineaCanalComponent;
@@ -74,7 +75,14 @@ export class EncLineaCanalComponent implements OnInit {
   }
 
   showCanalesByLinea(objeto: ObjetoObjetos) {
-    this.lineaSeleccionada = objeto;
+    if(objeto.objeto.porcentaje==0){
+      this.lineaSeleccionada = null;
+      this.porcentajePadre = false;
+    } else {
+      this.lineaSeleccionada = objeto;
+      this.porcentajePadre = true;
+    }
+    
   }
 
   goBack() {
