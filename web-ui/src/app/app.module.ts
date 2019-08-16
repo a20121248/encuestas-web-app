@@ -55,6 +55,9 @@ import { ReporteControlComponent } from './modules/reportes/components/reporte-c
 import { ReporteEmpresasComponent } from './modules/reportes/components/reporte-empresas/reporte-empresas.component';
 import { ReporteConsolidadoComponent } from './modules/reportes/components/reporte-consolidado/reporte-consolidado.component';
 import { GraficoControlComponent } from './modules/reportes/components/grafico-control/grafico-control.component';
+import { ResumenComponent } from './modules/resumen/pages/resumen/resumen.component';
+import { GraficoCentroComponent } from './modules/resumen/components/grafico-centro/grafico-centro.component';
+import { GraficoLineaComponent } from './modules/resumen/components/grafico-linea/grafico-linea.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -80,8 +83,9 @@ const routes: Routes = [
       }
     ]
   },
+  { path: 'resumen', component: ResumenComponent },
+  { path: 'reporting', component: ReportesComponent },
   { path: 'mantenimiento', component: MantenimientosComponent },
-  { path: 'reporting', component: ReportesComponent }
 ];
 
 /*const routes: Routes = [
@@ -128,7 +132,10 @@ export function initializeApp(appConfig: AppConfig) {
     ReporteControlComponent,
     ReporteEmpresasComponent,
     ReporteConsolidadoComponent,
-    GraficoControlComponent
+    GraficoControlComponent,
+    ResumenComponent,
+    GraficoCentroComponent,
+    GraficoLineaComponent
   ],
   imports: [
     BrowserAnimationsModule,
