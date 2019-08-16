@@ -106,6 +106,10 @@ export class CentroComponent implements OnInit {
   getTotalPorcentaje() {
     return this.lstCentros.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
   }
+
+  getTotalPorcentajeByGrupo( grupo:string ){
+    return this.lstCentros.filter((item) => item.grupo == grupo).map(t => t.porcentaje).reduce((acc,value) => acc + value, 0);
+  }
 }
 
 export class Group {
