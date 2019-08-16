@@ -106,11 +106,10 @@
 						<phase>validate</phase>
 						<goals><goal>copy-resources</goal></goals>
 						<configuration>
-							<outputDirectory>${build.directory}/classes/static/</outputDirectory>
-							<!--<outputDirectory>${basedir}/classes/static/</outputDirectory>-->
+							<outputDirectory>${build.directory}/classes/static</outputDirectory>
 							<resources>
 								<resource>
-							  		<directory>${basedir}/web-ui/dist</directory>
+							  		<directory>web-ui/dist</directory>
 								</resource>
 							</resources>
 						</configuration>
