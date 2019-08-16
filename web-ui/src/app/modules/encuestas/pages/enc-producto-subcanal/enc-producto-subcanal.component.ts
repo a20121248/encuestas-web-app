@@ -10,7 +10,6 @@ import { ProductoSubcanalService } from 'src/app/shared/services/producto-subcan
 import { ProductoSubcanalComponent } from '../../components/producto-subcanal/producto-subcanal.component';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
-import { UsuarioSeleccionadoService } from 'src/app/shared/services/usuario-seleccionado.service';
 import { Title } from '@angular/platform-browser';
 
 @Component({

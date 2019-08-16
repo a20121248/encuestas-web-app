@@ -5,6 +5,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Eps } from 'src/app/shared/models/eps';
 import { FormGroup, AbstractControl, FormControl, Validators } from '@angular/forms';
 import { CustomValidatorsService } from 'src/app/shared/services/custom-validators.service';
+import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 
 
 
@@ -20,7 +21,9 @@ export class EpsComponent implements OnInit {
   porcTotal: number;
   groupForm: FormGroup;
 
-  constructor() {
+  constructor(
+    private sharedFormService: SharedFormService
+  ) {
     this.groupForm = new FormGroup({});
   }
 
@@ -54,6 +57,7 @@ export class EpsComponent implements OnInit {
       } else {
         this.sendEstado(false);
       }
+      this.sharedFormService.actualizarEstadoForm1(this.groupForm);
     });
   }
 
