@@ -91,6 +91,11 @@
 		    <artifactId>poi-ooxml</artifactId>
 		    <version>4.1.0</version>
 		</dependency>
+	    <dependency>
+      		<groupId>javax.servlet</groupId>
+	      	<artifactId>javax.servlet-api</artifactId>
+	      	<scope>provided</scope>
+	    </dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -109,7 +114,7 @@
 							<outputDirectory>${build.directory}/classes/static</outputDirectory>
 							<resources>
 								<resource>
-							  		<directory>web-ui/dist</directory>
+							  		<directory>web-ui/dist/web-ui</directory>
 								</resource>
 							</resources>
 						</configuration>
