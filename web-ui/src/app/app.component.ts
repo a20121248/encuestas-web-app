@@ -9,5 +9,5 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 export class AppComponent {
   title = 'Herramienta de encuestas';
   empresa = 'Pacífico';
-  constructor(private authService: AuthService) {}
+  constructor(public authService: AuthService) {}
 }
