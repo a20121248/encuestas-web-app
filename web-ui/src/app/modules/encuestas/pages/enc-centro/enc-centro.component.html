@@ -8,14 +8,19 @@
   <mat-card class="cuadro mat-elevation-z4 mt-4">
     <div class="row">
       <div class="col-md-7">
-        <app-form-centro *ngIf="lstCentros" [lstCentros]="lstCentros"></app-form-centro>
+        <app-form-centro *ngIf="lstCentros" [lstCentros]="lstCentros"
+          (estadoFormCentroToParent)="estadoFormCentros($event)">
+        </app-form-centro>
       </div>
       <div class="col-md-5">
-        <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"></app-form-justificacion>
+        <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"
+          (estadoFormJustToParent)="estadoFormJustificacion($event)">
+        </app-form-justificacion>
       </div>
       <div class="col-md-12 text-right mt-3">
-          <button mat-raised-button color="warn" (click)="goBack()"><i class="material-icons">reply</i>Atrás</button>
-          <button mat-raised-button color="warn" (click)="guardarEncuesta()"><i class="material-icons">save</i>Guardar</button>
+        <button mat-raised-button color="warn" (click)="goBack()"><i class="material-icons">reply</i>Atrás</button>
+        <button #btnGuardar mat-raised-button color="warn" (click)="guardarEncuesta()">
+          <i class="material-icons">save</i>Guardar</button>
       </div>
     </div>
   </mat-card>
