@@ -53,4 +53,8 @@ export class GraficoControlComponent implements OnInit {
   ngOnInit() {
   }
 
+  actualizar() {
+
+  }
+
 }
