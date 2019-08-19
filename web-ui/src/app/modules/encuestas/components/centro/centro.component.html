@@ -2,11 +2,6 @@
   <h4 class="card-header text-center py-3">ASIGNACIÓN POR CENTRO DE COSTOS</h4>
   <div class="table-responsive cuadro" style="overflow: auto; height: 70vh; padding-top: 0; padding-bottom: 0;">
     <table mat-table [dataSource]="dataSource" class="design">
-      <!-- <ng-container  matColumnDef="grupo">
-        <th mat-header-cell *matHeaderCellDef>GRUPO</th>
-        <td mat-cell *matCellDef="let centro"></td>
-        <td mat-footer-cell *matFooterCellDef></td>
-      </ng-container> -->
       <ng-container matColumnDef="codigo">
         <th mat-header-cell *matHeaderCellDef>CÓDIGO</th>
         <td mat-cell *matCellDef="let centro">{{centro.codigo}}</td>
