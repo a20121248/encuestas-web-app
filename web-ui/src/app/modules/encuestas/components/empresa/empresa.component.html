@@ -11,7 +11,7 @@
 
         <ng-container matColumnDef="porcentaje"  [formGroup]="groupForm">
           <th mat-header-cell *matHeaderCellDef>PORCENTAJE</th>
-          <td mat-cell *matCellDef="let empresa; let i=index">
+          <td mat-cell *matCellDef="let empresa">
             <mat-form-field>
               <input matInput type="number" maxlength="" [(ngModel)]="empresa.porcentaje"  [formControlName]="empresa.id">
               <span matSuffix>%</span>

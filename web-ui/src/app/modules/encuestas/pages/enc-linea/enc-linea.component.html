@@ -1,57 +1,28 @@
-<!-- <div class="container">
-    <div class="card mt-4 mb-3">
-        <div class="card-body text-center">
-            <h2 class="card-title mb-0">{{ titulo.toUpperCase() }}</h2>
-        </div>
-    </div>
-    <div class="card mt-4 mb-3">
-        <app-usuario-datos [usuario]="usuarioSeleccionado"></app-usuario-datos>
-    </div>
-    <div class="card mt-3">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-7">
-                    <app-form-linea (sendLinea)="showCanalesByLinea($event)" [lstLineas]="lstLineas"></app-form-linea>
-                </div>lineaSeleccionada
-                <app-form-canal *ngIf="lineaSeleccionada" [lineaSeleccionada]="lineaSeleccionada"></app-form-canal>
-
-                <div class="col-md-5">
-                    <app-form-justificacion *ngIf="lineaSeleccionada" [justificacion]="justificacion" [observaciones]="observaciones">
-                        </app-form-justificacion>
-                </div> -->
-                <!-- <div class="col-md-12 text-right">
-                    <button mat-raised-button (click)="goBack()">Atrás</button>
-                    <button mat-raised-button (click)="guardarEncuesta()">Guardar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<br> -->
-
 <div class="container pacifico-page">
-    <mat-card class="cuadro header mat-elevation-z4 mt-4 mb-4 text-center">
-      <h1>{{ titulo.toUpperCase() }}</h1>
-    </mat-card>
-    <mat-card class="cuadro mat-elevation-z4 mt-4">
-      <app-usuario-datos [usuario]="usuarioSeleccionado"></app-usuario-datos>
-    </mat-card>
-    <mat-card class="cuadro mat-elevation-z4 mt-4">
-      <div class="row">
-        <div class="col-md-7">
-          <app-form-linea *ngIf="usuarioSeleccionado && lstLineas"
-                          [usuario]="usuarioSeleccionado"
-                          [lstLineas]="lstLineas">
-          </app-form-linea>
-        </div>
-        <div class="col-md-5">
-          <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"></app-form-justificacion>
-        </div>
-        <div class="col-md-12 text-right mt-3">
-            <button mat-raised-button color="warn" (click)="goBack()"><i class="material-icons">reply</i>Atrás</button>
-            <button mat-raised-button color="warn" (click)="guardarEncuesta()"><i class="material-icons">save</i>Guardar</button>
-        </div>
+  <mat-card class="cuadro header mat-elevation-z4 mt-4 mb-4 text-center">
+    <h1>{{ titulo.toUpperCase() }}</h1>
+  </mat-card>
+  <mat-card class="cuadro mat-elevation-z4 mt-4">
+    <app-usuario-datos [usuario]="usuarioSeleccionado"></app-usuario-datos>
+  </mat-card>
+  <mat-card class="cuadro mat-elevation-z4 mt-4">
+    <div class="row">
+      <div class="col-md-7">
+        <app-form-linea *ngIf="usuarioSeleccionado && lstLineas" [usuario]="usuarioSeleccionado" [lstLineas]="lstLineas" [haGuardado]="haGuardado"
+          (estadoFormLineaToParent)="estadoFormLineas($event)">
+        </app-form-linea>
       </div>
-    </mat-card>
-  </div>
-  <br>
+      <div class="col-md-5">
+        <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"
+          (estadoFormJustToParent)="estadoFormJustificacion($event)">
+        </app-form-justificacion>
+      </div>
+      <div class="col-md-12 text-right mt-3">
+        <button mat-raised-button color="warn" (click)="goBack()"><i class="material-icons">reply</i>Atrás</button>
+        <button #btnGuardar mat-raised-button disabled color="warn" (click)="guardarEncuesta()">
+          <i class="material-icons">save</i>Guardar</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<br>
