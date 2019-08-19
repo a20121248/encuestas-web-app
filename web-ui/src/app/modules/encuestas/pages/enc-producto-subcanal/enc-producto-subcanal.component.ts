@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
@@ -11,6 +11,7 @@ import { ProductoSubcanalComponent } from '../../components/producto-subcanal/pr
 import { Usuario } from 'src/app/shared/models/usuario';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { Title } from '@angular/platform-browser';
+import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 
 @Component({
   selector: 'app-enc-producto-subcanal',
@@ -24,15 +25,22 @@ export class EncProductoSubcanalComponent implements OnInit {
   encuesta: Encuesta;
   lineaId: string;
   canalId: string;
+  estadoCentros: boolean;
+  haGuardado: boolean;
+
   @ViewChild(ProductoSubcanalComponent, { static: false })
   productoSubcanalComponent: ProductoSubcanalComponent;
-
+  @ViewChild("btnGuardar",{static: false}) 
+  btnGuardar: ElementRef;
+  
   constructor(
     private activatedRoute: ActivatedRoute,
     private productoSubcanalService: ProductoSubcanalService,
     private location: Location,
     private usuarioService: UsuarioService,
-    private titleService: Title
+    private titleService: Title,
+    private renderer: Renderer2,
+    private sharedFormService: SharedFormService
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.lineaId = this.activatedRoute.snapshot.paramMap.get('lineaId');
@@ -49,7 +57,21 @@ export class EncProductoSubcanalComponent implements OnInit {
     this.titleService.setTitle('Encuestas | Productos - Subcanales');
   }
 
+  estadoFormProductoSubcanal(value:boolean){
+    this.estadoCentros = value;
+    this.setButtonGuardar();
+  }
+
+  setButtonGuardar(){
+    if(this.estadoCentros ){
+      this.renderer.setProperty(this.btnGuardar,"disabled","false");
+    } else {
+      this.renderer.setProperty(this.btnGuardar,"disabled","true");
+    }
+  }
+
   guardarEncuesta() {
+    this.haGuardado = true;
     this.productoSubcanalService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
       response => console.log(response), err => console.log(err)
     );
@@ -57,6 +79,30 @@ export class EncProductoSubcanalComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    let form1dirty:boolean;
+    let form2dirty:boolean;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1dirty = data.dirty;
+    });
+    this.sharedFormService.form2Actual.subscribe(data => {
+      form2dirty = data.dirty;
+    });
+    console.log(form1dirty);
+    console.log(form2dirty);
+    if(this.haGuardado){
+      this.location.back();
+    } else {
+      if( form1dirty || form2dirty ){
+        swal.fire({
+          title: 'Cambios detectados',
+          text: "Primero guarde antes de continuar.",
+          type: "warning"
+        });
+      } else {
+        if( !form1dirty && !form2dirty ){
+          this.location.back();
+        }
+      }
+    }  
   }
 }
