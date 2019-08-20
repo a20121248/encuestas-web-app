@@ -3,7 +3,7 @@
     "name": "#{envName}"
   },
   "urlServer": {
-    "api": "http://hp840g-malfbl35:8080/api/",
-    "oauth": "http://hp840g-malfbl35:8080/oauth/"
+    "api": "https://psjbsdes0100.ppsdes.com.pe:7008/api/",
+    "oauth": "https://psjbsdes0100.ppsdes.com.pe:7008/oauth/"
   }
 }
