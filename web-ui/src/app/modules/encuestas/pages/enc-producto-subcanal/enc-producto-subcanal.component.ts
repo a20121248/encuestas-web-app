@@ -12,6 +12,7 @@ import { Usuario } from 'src/app/shared/models/usuario';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { Title } from '@angular/platform-browser';
 import { SharedFormService } from 'src/app/shared/services/shared-form.service';
+import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 
 @Component({
   selector: 'app-enc-producto-subcanal',
@@ -19,6 +20,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
   styleUrls: ['./enc-producto-subcanal.component.css']
 })
 export class EncProductoSubcanalComponent implements OnInit {
+  lstItems: ObjetoObjetos[];
   titulo = 'Herramienta de encuestas';
   posicionCodigo: string;
   usuarioSeleccionado: Usuario;
@@ -49,6 +51,7 @@ export class EncProductoSubcanalComponent implements OnInit {
       this.usuarioSeleccionado = usuario;
       this.productoSubcanalService.obtenerEncuesta(this.usuarioSeleccionado, this.lineaId, this.canalId).subscribe(encuesta => {
         this.encuesta = encuesta;
+        this.lstItems = encuesta.lstItems as ObjetoObjetos[];
       });
     });
   }

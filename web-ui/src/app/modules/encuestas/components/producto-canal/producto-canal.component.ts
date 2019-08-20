@@ -36,7 +36,7 @@ export class ProductoCanalComponent implements OnInit {
   }
 
   obtenerNombresColumna() {
-    if (this.lstProductoCanales != null) {
+    if (this.lstProductoCanales != null && this.lstProductoCanales.length >0 ) {
       this.lstCabeceraTableObtenida = ['productos'];
       this.lstCabeceraTableDynamico = this.lstProductoCanales[0].lstObjetos.map(
         (subcanal) => {
