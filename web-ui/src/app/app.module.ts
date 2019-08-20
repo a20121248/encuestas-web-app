@@ -1,10 +1,12 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
+import {MatRippleModule} from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -18,6 +20,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatBadgeModule } from '@angular/material/badge';
 import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
@@ -58,6 +61,16 @@ import { GraficoControlComponent } from './modules/reportes/components/grafico-c
 import { ResumenComponent } from './modules/resumen/pages/resumen/resumen.component';
 import { GraficoCentroComponent } from './modules/resumen/components/grafico-centro/grafico-centro.component';
 import { GraficoLineaComponent } from './modules/resumen/components/grafico-linea/grafico-linea.component';
+import { UsuariosComponent } from './modules/mantenimientos/pages/usuarios/usuarios.component';
+import { PosicionesComponent } from './modules/mantenimientos/pages/posiciones/posiciones.component';
+import { PerfilesComponent } from './modules/mantenimientos/pages/perfiles/perfiles.component';
+import { CentrosComponent } from './modules/mantenimientos/pages/centros/centros.component';
+import { PosicionDatosComponent } from './modules/mantenimientos/pages/posicion-datos/posicion-datos.component';
+import { AreasComponent } from './modules/mantenimientos/pages/areas/areas.component';
+import { LineasComponent } from './modules/mantenimientos/pages/lineas/lineas.component';
+import { CanalesComponent } from './modules/mantenimientos/pages/canales/canales.component';
+import { ProductosComponent } from './modules/mantenimientos/pages/productos/productos.component';
+import { SubcanalesComponent } from './modules/mantenimientos/pages/subcanales/subcanales.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -86,6 +99,21 @@ const routes: Routes = [
   { path: 'resumen', component: ResumenComponent },
   { path: 'reporting', component: ReportesComponent },
   { path: 'mantenimiento', component: MantenimientosComponent },
+  { path: 'mantenimiento',
+    children: [
+      { path: 'areas', component: AreasComponent },
+      { path: 'centros-de-costos', component: CentrosComponent },
+      { path: 'datos-posicion', component: PosicionDatosComponent },
+      { path: 'lineas', component: LineasComponent },
+      { path: 'canales', component: CanalesComponent },
+      { path: 'productos', component: ProductosComponent },
+      { path: 'subcanales', component: SubcanalesComponent },
+      { path: 'perfiles', component: PerfilesComponent },
+      { path: 'posiciones', component: PosicionesComponent },
+      { path: 'usuarios', component: UsuariosComponent },
+    ]
+  },
+
 ];
 
 /*const routes: Routes = [
@@ -135,7 +163,17 @@ export function initializeApp(appConfig: AppConfig) {
     GraficoControlComponent,
     ResumenComponent,
     GraficoCentroComponent,
-    GraficoLineaComponent
+    GraficoLineaComponent,
+    UsuariosComponent,
+    PosicionesComponent,
+    PerfilesComponent,
+    CentrosComponent,
+    PosicionDatosComponent,
+    AreasComponent,
+    LineasComponent,
+    CanalesComponent,
+    ProductosComponent,
+    SubcanalesComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -160,7 +198,10 @@ export function initializeApp(appConfig: AppConfig) {
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatStepperModule,
+    MatBadgeModule,
+    MatRippleModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
