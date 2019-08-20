@@ -82,11 +82,6 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-ooxml</artifactId>
 		    <version>4.1.0</version>
@@ -111,7 +106,7 @@
 						<phase>validate</phase>
 						<goals><goal>copy-resources</goal></goals>
 						<configuration>
-							<outputDirectory>${build.directory}/classes/static</outputDirectory>
+							<outputDirectory>${project.build.directory}/classes/static</outputDirectory>
 							<resources>
 								<resource>
 							  		<directory>web-ui/dist/web-ui</directory>
