@@ -1,6 +1,5 @@
 package com.ms.encuestas.controllers;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,11 +41,6 @@ public class ProcesoController {
 	
 	@GetMapping("")
 	public List<Proceso> index() {
-        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
-
-        logger.debug("Hello from Logback {}", data);
-
-
 		return procesoService.findAll();
 	}
 
