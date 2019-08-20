@@ -13,8 +13,6 @@ import { AuthService } from './auth.service';
 
 export class JustificacionService {
   protected urlServer = AppConfig.settings.urlServer;
-  private urlEndPoint: string = 'http://hp840g-malfbl35:8080/api/justificaciones';
-  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   constructor(
     public authService: AuthService,
@@ -39,7 +37,7 @@ export class JustificacionService {
   }
 
   getJustificaciones(): Observable<Justificacion[]> {
-    const url = 'justificaciones'
+    const url = 'justificaciones';
     return this.http.get<Justificacion[]>(this.urlServer.api + url);
   }
 }

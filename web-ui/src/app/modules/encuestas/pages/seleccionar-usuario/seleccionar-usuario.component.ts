@@ -5,7 +5,6 @@ import { UsuarioService } from '../../../../shared/services/usuario.service';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import swal from 'sweetalert2';
-import { UsuarioSeleccionadoService } from 'src/app/shared/services/usuario-seleccionado.service';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -22,7 +21,6 @@ export class SeleccionarUsuarioComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private router: Router,
-    private usuarioSeleccionadoService: UsuarioSeleccionadoService,
     private titleService: Title
   ) {}
 

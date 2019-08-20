@@ -3,7 +3,7 @@ export class Centro {
   codigo: string;
   nombre: string;
   nivel: number;
-  grupoId: number;
+  grupo: string;
   tipoId: number;
   empresaId: number;
   fechaCreacion: Date;

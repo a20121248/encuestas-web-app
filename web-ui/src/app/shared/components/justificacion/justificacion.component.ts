@@ -1,9 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
+
 import { Justificacion } from 'src/app/shared/models/justificacion';
 import { JustificacionService } from 'src/app/shared/services/justificacion.service';
-import { Router } from '@angular/router';
-import { CustomValidatorsService } from '../../services/custom-validators.service';
+import { CustomValidatorsService } from 'src/app/shared/services/custom-validators.service';
+import { SharedFormService } from 'src/app/shared/services/shared-form.service';
+
 
 export interface Justificacion {
   nombre: string;
@@ -20,11 +22,11 @@ export class JustificacionComponent implements OnInit {
   @Input() observaciones: string;
   @Input() justificacion: Justificacion;
   myGroup: FormGroup;
-  @Output() sendEstadoFormJustificacionToParent =  new EventEmitter();
+  @Output() estadoFormJustToParent =  new EventEmitter();
   
   constructor(
     private justificacionService: JustificacionService,
-    private router: Router) {
+    private sharedFormService: SharedFormService) {
       this.justificacionService.getJustificaciones().subscribe(justificaciones => {
         this.lstJustificaciones = justificaciones;
       });
@@ -53,17 +55,14 @@ export class JustificacionComponent implements OnInit {
   }
 
   sendEstado(value: boolean) {
-    this.sendEstadoFormJustificacionToParent.emit(value);
+    this.estadoFormJustToParent.emit(value);
   }
 
   onChangesValue(): void {
     this.myGroup.valueChanges
     .subscribe(data =>{
-      if(this.myGroup.valid){
-        this.sendEstado(true);
-      } else {
-        this.sendEstado(false);
-      }
+      this.sendEstado(this.myGroup.valid);
+      this.sharedFormService.actualizarEstadoForm2(this.myGroup);
     });
   }
 

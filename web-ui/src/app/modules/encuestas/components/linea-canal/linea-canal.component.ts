@@ -43,8 +43,8 @@ export class LineaCanalComponent implements OnInit {
   }
 
   showCanalesBylineaBoton(objeto: ObjetoObjetos) {
-    this.sendLinea.emit(objeto);
-    this.selectedElement = objeto;
+      this.sendLinea.emit(objeto);
+      this.selectedElement = objeto;
   }
 
   // setClickedRow = function (index: number) {

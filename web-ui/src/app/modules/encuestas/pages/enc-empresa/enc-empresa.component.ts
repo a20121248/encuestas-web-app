@@ -13,6 +13,8 @@ import { Justificacion } from 'src/app/shared/models/justificacion';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { Title } from '@angular/platform-browser';
+import { FormGroup } from '@angular/forms';
+import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 
 @Component({
   selector: 'app-enc-empresa',
@@ -29,6 +31,7 @@ export class EncEmpresaComponent implements OnInit {
   encuesta: Encuesta;
   estadoEmpresas: boolean;
   estadoJustificacion:boolean;
+  haGuardado: boolean;
 
   @ViewChild(EmpresaComponent, { static: false })
   empresaComponent: EmpresaComponent;
@@ -45,7 +48,8 @@ export class EncEmpresaComponent implements OnInit {
     private location: Location,
     private usuarioService: UsuarioService,
     private titleService: Title,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private sharedFormService: SharedFormService
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
@@ -81,10 +85,35 @@ export class EncEmpresaComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    let form1dirty:boolean;
+    let form2dirty:boolean;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1dirty = data.dirty;
+    });
+    this.sharedFormService.form2Actual.subscribe(data => {
+      form2dirty = data.dirty;
+    });
+    console.log(form1dirty);
+    console.log(form2dirty);
+    if(this.haGuardado){
+      this.location.back();
+    } else {
+      if( form1dirty || form2dirty ){
+        swal.fire({
+          title: 'Cambios detectados',
+          text: "Primero guarde antes de continuar.",
+          type: "warning"
+        });
+      } else {
+        if( !form1dirty && !form2dirty ){
+          this.location.back();
+        }
+      }
+    }  
   }
 
   guardarEncuesta() {
+    this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.empresaComponent.lstEmpresas;
     this.encuesta.justificacion = this.justificacionComponent.justificacion;

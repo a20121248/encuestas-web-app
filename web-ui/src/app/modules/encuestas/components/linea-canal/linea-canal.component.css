@@ -15,3 +15,7 @@
   width: 30%;
   text-align: center;
 }
+
+tr.mat-row{
+  cursor: pointer;
+}
