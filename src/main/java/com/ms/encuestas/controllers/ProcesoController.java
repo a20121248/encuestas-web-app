@@ -1,11 +1,14 @@
 package com.ms.encuestas.controllers;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,6 +29,9 @@ import com.ms.encuestas.services.ProcesoServiceI;
 @RestController
 @RequestMapping("/api/procesos")
 public class ProcesoController {
+    private static final Logger logger = LoggerFactory.getLogger(ProcesoController.class);
+
+	
 	@Autowired
 	private ProcesoServiceI procesoService;
 	
@@ -36,6 +42,11 @@ public class ProcesoController {
 	
 	@GetMapping("")
 	public List<Proceso> index() {
+        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
+
+        logger.debug("Hello from Logback {}", data);
+
+
 		return procesoService.findAll();
 	}
 
