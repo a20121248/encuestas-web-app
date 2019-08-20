@@ -19,3 +19,7 @@
 tr.mat-row{
   cursor: pointer;
 }
+
+.invalid{
+  color: red;
+}

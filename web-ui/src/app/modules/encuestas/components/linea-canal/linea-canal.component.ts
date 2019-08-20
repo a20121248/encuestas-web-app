@@ -11,14 +11,7 @@ import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 @Component({
   selector: 'app-form-linea-canal',
   templateUrl: './linea-canal.component.html',
-  styleUrls: ['./linea-canal.component.css'],
-  // animations: [
-  //   trigger('rowClicked', [
-  //     state('selected', style({ background: 'lightblue' })),
-  //     state('unselected', style({ background: 'yellow' })),
-  //     transition('selected <=> unselected', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-  //   ]),
-  // ],
+  styleUrls: ['./linea-canal.component.css']
 })
 export class LineaCanalComponent implements OnInit {
   @Input() lstLineaCanales: ObjetoObjetos[];
@@ -43,11 +36,12 @@ export class LineaCanalComponent implements OnInit {
   }
 
   showCanalesBylineaBoton(objeto: ObjetoObjetos) {
+      if(objeto.objeto.porcentaje == 0){
+        objeto.lstObjetos.map(t => {
+          t.porcentaje = 0;
+        })
+      }
       this.sendLinea.emit(objeto);
       this.selectedElement = objeto;
   }
-
-  // setClickedRow = function (index: number) {
-  //   this.selectedRow = index;
-  // }
 }
