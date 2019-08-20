@@ -20,12 +20,13 @@ public class FileService implements FileServiceI {
 
 	@Autowired
 	public FileService(FileProperties fileStorageProperties) {
-		this.fileReportesLocation = Paths.get(fileStorageProperties.getReportesPath()).toAbsolutePath().normalize();
+		fileReportesLocation = null;
+		/*this.fileReportesLocation = Paths.get(fileStorageProperties.getReportesPath()).toAbsolutePath().normalize();
 		try {
 			Files.createDirectories(this.fileReportesLocation);
 		} catch (Exception ex) {
 			throw new FileException("Could not create the directory where the uploaded files will be stored.", ex);
-		}
+		}*/
 	}
 
 	@Override
