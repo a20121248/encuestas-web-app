@@ -10,6 +10,7 @@
       <div class="col-md-6">
         <app-form-linea-canal *ngIf="lstLineaCanales"
                               (sendLinea)="showCanalesByLinea($event)"
+                              (estadoFormLineaToParent) = "estadoFormLinea($event)"
                               [lstLineaCanales]="lstLineaCanales">
         </app-form-linea-canal>
       </div>

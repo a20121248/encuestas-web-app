@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
 
@@ -17,6 +17,7 @@ import { JustificacionComponent } from 'src/app/shared/components/justificacion/
 import { UsuarioDatosComponent } from 'src/app/shared/components/usuario-datos/usuario-datos.component';
 import { Justificacion } from 'src/app/shared/models/justificacion';
 import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
+import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 
 @Component({
   selector: 'app-enc-linea-canal',
@@ -34,6 +35,9 @@ export class EncLineaCanalComponent implements OnInit {
   encuesta: Encuesta;
   lineaSeleccionada: ObjetoObjetos;
   porcentajePadre: boolean;
+  estadoLineas: boolean;
+  estadoCanales:boolean;
+  haGuardado: boolean;
 
   @ViewChild(LineaCanalComponent, { static: false })
   lineaCanalComponent: LineaCanalComponent;
@@ -43,13 +47,17 @@ export class EncLineaCanalComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
+  @ViewChild("btnGuardar",{static: false}) 
+  btnGuardar: ElementRef;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private lineaCanalService: LineaCanalService,
     private location: Location,
     private usuarioService: UsuarioService,
-    private titleService: Title
+    private titleService: Title,
+    private renderer: Renderer2,
+    private sharedFormService: SharedFormService
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
@@ -65,7 +73,28 @@ export class EncLineaCanalComponent implements OnInit {
     this.titleService.setTitle('Encuestas | Línea - Canal');
   }
 
+  estadoFormLinea(value:boolean){
+    this.estadoLineas = value;
+    this.setButtonGuardar();
+  }
+
+  setButtonGuardar(){
+    this.sharedFormService.form2Actual.subscribe(data =>{
+      if(data!=null){
+        this.estadoCanales = data.valid;
+      } else {
+        this.estadoCanales = true;
+      }
+    });
+    if(this.estadoLineas && this.estadoCanales){
+      this.renderer.setProperty(this.btnGuardar,"disabled","false");
+    } else {
+      this.renderer.setProperty(this.btnGuardar,"disabled","true");
+    }
+  }
+
   guardarEncuesta() {
+    this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.lineaCanalComponent.lstLineaCanales;
     this.lineaCanalService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
@@ -86,6 +115,28 @@ export class EncLineaCanalComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    let form1dirty:boolean;
+    let form2dirty:boolean;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1dirty = data.dirty;
+    });
+    this.sharedFormService.form2Actual.subscribe(data => {
+      form2dirty = data.dirty;
+    });
+    if(this.haGuardado){
+      this.location.back();
+    } else {
+      if( form1dirty || form2dirty ){
+        swal.fire({
+          title: 'Cambios detectados',
+          text: "Primero guarde antes de continuar.",
+          type: "warning"
+        });
+      } else {
+        if( !form1dirty && !form2dirty ){
+          this.location.back();
+        }
+      }
+    }  
   }
 }

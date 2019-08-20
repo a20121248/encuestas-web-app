@@ -9,7 +9,7 @@ import { FormGroup } from '@angular/forms';
 export class SharedFormService {
   private form1 = new BehaviorSubject<FormGroup>(null);
   private form2 = new BehaviorSubject<FormGroup>(null);
-  private fomr2Porcentaje = new BehaviorSubject<number>(0);
+  private fomr2Porcentaje = new BehaviorSubject<number>(-1);
 
   form1Actual = this.form1.asObservable();
   form2Actual = this.form2.asObservable();
