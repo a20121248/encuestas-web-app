@@ -38,6 +38,7 @@ export class EncLineaCanalComponent implements OnInit {
   estadoLineas: boolean;
   estadoCanales:boolean;
   haGuardado: boolean;
+  habilitarButton: boolean = false;
 
   @ViewChild(LineaCanalComponent, { static: false })
   lineaCanalComponent: LineaCanalComponent;
@@ -47,8 +48,6 @@ export class EncLineaCanalComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  @ViewChild("btnGuardar",{static: false}) 
-  btnGuardar: ElementRef;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -87,9 +86,9 @@ export class EncLineaCanalComponent implements OnInit {
       }
     });
     if(this.estadoLineas && this.estadoCanales){
-      this.renderer.setProperty(this.btnGuardar,"disabled","false");
+      this.habilitarButton = true;
     } else {
-      this.renderer.setProperty(this.btnGuardar,"disabled","true");
+      this.habilitarButton = false;
     }
   }
 
