@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { ProcesoService } from 'src/app/shared/services/proceso.service';
 
 @Component({
   selector: 'app-mantenimientos',
@@ -20,7 +21,8 @@ export class MantenimientosComponent implements OnInit {
            ['Mantenimiento de datos de la posición', 'posiciones']];
 
   constructor(
-    private titleService: Title) { }
+    private titleService: Title,
+    private procesoService: ProcesoService) { }
 
   ngOnInit() {
     this.titleService.setTitle('Encuestas | Mantenimiento');

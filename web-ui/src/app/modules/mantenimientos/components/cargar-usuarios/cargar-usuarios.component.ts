@@ -49,7 +49,7 @@ export class CargarUsuariosComponent implements OnInit {
     });
   }
 
-  getLastDateUpdate():any{
+  getLastDateUpdate():any {
     return 0;
   }
 }
