@@ -37,6 +37,7 @@ export class EncLineaComponent implements OnInit {
   estadoLineas: boolean;
   estadoJustificacion: boolean;
   haGuardado: boolean;
+  habilitarButton: boolean = false;
 
   @ViewChild(LineaComponent, { static: false })
   lineaComponent: LineaComponent;
@@ -44,8 +45,7 @@ export class EncLineaComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  @ViewChild("btnGuardar", { static: false })
-  btnGuardar: ElementRef;
+
 
   constructor(
     private lineaService: LineaService,
@@ -87,9 +87,9 @@ export class EncLineaComponent implements OnInit {
 
   setButtonGuardar() {
     if (this.estadoLineas && this.estadoJustificacion) {
-      this.renderer.setProperty(this.btnGuardar, "disabled", "false");
+      this.habilitarButton = true;
     } else {
-      this.renderer.setProperty(this.btnGuardar, "disabled", "true");
+      this.habilitarButton = false;
     }
   }
 
