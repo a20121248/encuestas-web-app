@@ -1,24 +1,14 @@
-<mat-card class="encuesta mat-elevation-z2">
-    <h4 class="card-header text-center py-3">Carga Masiva de Usuarios</h4>
-    <div class="table-responsive ">
-        <div class="col-md-12 text-left ">
-            <div class="form-group">
-                <label>Seleccione Archivo para la carga masiva de usuarios</label>
-                <input type="file" id="file" (change)="handleFileInput($event.target.files)">
-            </div>
-            <button mat-raised-button color="accent" (click)="uploadFile()"><i class="material-icons">
-                    cloud_upload</i>Subir
-            </button>
-        </div>
-        <div class="col-md-12 text-left ">
-            Descargar listado vigente
-            <button mat-raised-button color="primary" (click)="downloadFile()">
-                Descargar <i class="material-icons">cloud_download</i>
-            </button>
-        </div>
-    </div>
-    <div class="card-footer">
-        Nota: La ultima actualización del maestro de usuarios fue: {{getLastDateUpdate()}}.
-    </div>
-
+<mat-card class="cuadro mt-5">
+  <mat-card class="titulo mat-elevation-z4">
+    {{ titulo }}
+  </mat-card>
+  <ng-select [items]="procesos"
+             bindLabel="nombre"
+             placeholder="Seleccione un proceso"
+             [(ngModel)]="selectedProceso">
+  </ng-select>
+  <div class="col-md-12 text-center mt-3">
+    <button mat-raised-button color="accent" (click)="uploadFile()"><i class="material-icons">cloud_upload</i>Subir</button>
+    <button mat-raised-button color="primary" (click)="downloadFile()"><i class="material-icons">cloud_download</i>Descargar</button>
+  </div>
 </mat-card>

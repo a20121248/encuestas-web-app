@@ -71,6 +71,9 @@ import { LineasComponent } from './modules/mantenimientos/pages/lineas/lineas.co
 import { CanalesComponent } from './modules/mantenimientos/pages/canales/canales.component';
 import { ProductosComponent } from './modules/mantenimientos/pages/productos/productos.component';
 import { SubcanalesComponent } from './modules/mantenimientos/pages/subcanales/subcanales.component';
+import { CargarPerfilesComponent } from './modules/mantenimientos/components/cargar-perfiles/cargar-perfiles.component';
+import { CargarPosicionesComponent } from './modules/mantenimientos/components/cargar-posiciones/cargar-posiciones.component';
+import { CargarPosicionDatosComponent } from './modules/mantenimientos/components/cargar-posicion-datos/cargar-posicion-datos.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -173,7 +176,10 @@ export function initializeApp(appConfig: AppConfig) {
     LineasComponent,
     CanalesComponent,
     ProductosComponent,
-    SubcanalesComponent
+    SubcanalesComponent,
+    CargarPerfilesComponent,
+    CargarPosicionesComponent,
+    CargarPosicionDatosComponent
   ],
   imports: [
     BrowserAnimationsModule,

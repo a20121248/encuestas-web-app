@@ -51,10 +51,10 @@ public class FileService implements FileServiceI {
 			if (resource.exists()) {
 				return resource;
 			} else {
-				throw new FileNotFoundException("File not found " + fileName);
+				throw new FileNotFoundException("Archivo no encontrado " + fileName);
 			}
 		} catch (MalformedURLException ex) {
-			throw new FileNotFoundException("File not found " + fileName, ex);
+			throw new FileNotFoundException("Archivo no encontrado " + fileName, ex);
 		}
 	}
 }
