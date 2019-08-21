@@ -14,6 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -21,9 +22,11 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatMenuModule } from '@angular/material/menu';
 import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
+import { ProcesoDialogComponent } from './modules/mantenimientos/components/proceso/proceso.component';
 import { UsuarioDatosComponent } from './shared/components/usuario-datos/usuario-datos.component';
 import { JustificacionComponent } from './shared/components/justificacion/justificacion.component';
 import { EmpresaComponent } from './modules/encuestas/components/empresa/empresa.component';
@@ -179,7 +182,8 @@ export function initializeApp(appConfig: AppConfig) {
     SubcanalesComponent,
     CargarPerfilesComponent,
     CargarPosicionesComponent,
-    CargarPosicionDatosComponent
+    CargarPosicionDatosComponent,
+    ProcesoDialogComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -207,7 +211,9 @@ export function initializeApp(appConfig: AppConfig) {
     MatNativeDateModule,
     MatStepperModule,
     MatBadgeModule,
-    MatRadioModule
+    MatRadioModule,
+    MatDialogModule,
+    MatMenuModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
@@ -219,6 +225,9 @@ export function initializeApp(appConfig: AppConfig) {
       deps: [AppConfig], multi: true
     },
     MatDatepickerModule
+  ],
+  entryComponents: [
+    ProcesoDialogComponent
   ],
   bootstrap: [AppComponent]
 })
