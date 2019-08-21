@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -12,6 +14,8 @@ import com.ms.encuestas.models.Objeto;
 import com.ms.encuestas.models.ObjetoObjetos;
 
 public class EncuestaLineaCanalesExtractor implements ResultSetExtractor<List<ObjetoObjetos>> {
+	private Logger logger = LoggerFactory.getLogger(EncuestaLineaCanalesExtractor.class);
+	
 	@Override
 	public List<ObjetoObjetos> extractData(ResultSet rs) throws SQLException, DataAccessException {
 	  List<ObjetoObjetos> list = new ArrayList<ObjetoObjetos>();

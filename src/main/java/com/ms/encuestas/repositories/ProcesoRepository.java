@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -15,6 +17,7 @@ import com.ms.encuestas.models.Proceso;
 
 @Repository
 public class ProcesoRepository {
+	private Logger logger = LoggerFactory.getLogger(ProcesoRepository.class);
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 
@@ -41,14 +44,18 @@ public class ProcesoRepository {
 	}
 	
 	public List<Proceso> findAll() throws EmptyResultDataAccessException {
-		String sql = "SELECT id proceso_id,\n" + 
-					 "       nombre proceso_nombre,\n" + 
-					 "       fecha_cierre proceso_fecha_cierre,\n" + 
-					 "       fecha_creacion proceso_fecha_creacion,\n" + 
-					 "       fecha_actualizacion proceso_fecha_actualizacion\n" + 
-					 "  FROM procesos\n" + 
-					 " WHERE fecha_eliminacion IS NULL\n" + 
-					 " ORDER BY ID";
+		String sql = "SELECT A.id proceso_id,\n" +
+					 "       A.nombre proceso_nombre,\n" +
+					 "       B.codigo usuario_codigo,\n" +
+					 "       B.nombre_completo usuario_nombre_completo,\n" +
+					 "       A.fecha_cierre proceso_fecha_cierre,\n" +
+					 "       A.fecha_creacion proceso_fecha_creacion,\n" +
+					 "       A.fecha_actualizacion proceso_fecha_actualizacion\n" + 
+					 "  FROM procesos A\n" +
+					 "  LEFT JOIN usuarios B\n" +
+					 "    ON A.usuario_codigo=B.codigo\n" +
+					 " WHERE A.fecha_eliminacion IS NULL\n" + 
+					 " ORDER BY A.ID";
 		return plantilla.query(sql, new ProcesoMapper());
 	}
 	

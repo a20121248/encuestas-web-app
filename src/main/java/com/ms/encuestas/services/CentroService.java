@@ -2,14 +2,19 @@ package com.ms.encuestas.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ms.encuestas.models.Centro;
 import com.ms.encuestas.repositories.CentroRepository;
+import com.ms.encuestas.repositories.JustificacionRepository;
 
 @Service
 public class CentroService implements CentroServiceI {
+	private Logger logger = LoggerFactory.getLogger(CentroService.class);
+	
 	@Autowired
 	private CentroRepository centroRepository;
 

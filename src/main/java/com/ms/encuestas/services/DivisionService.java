@@ -2,6 +2,8 @@ package com.ms.encuestas.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,8 @@ import com.ms.encuestas.repositories.DivisionRepository;
 
 @Service
 public class DivisionService implements DivisionServiceI {
+	private Logger logger = LoggerFactory.getLogger(DivisionService.class);
+	
 	@Autowired
 	private DivisionRepository divisionRepository;
 
