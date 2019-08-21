@@ -33,7 +33,7 @@ export class JustificacionComponent implements OnInit {
       this.myGroup = new FormGroup({
         idJust: new FormControl('', Validators.compose([Validators.required,CustomValidatorsService.validarVacio])),
         detalleJust: new FormControl(null),
-        obs: new FormControl('',Validators.compose([Validators.required]))
+        obs: new FormControl('')
      });
     }
 
