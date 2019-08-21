@@ -32,6 +32,7 @@ export class EncEmpresaComponent implements OnInit {
   estadoEmpresas: boolean;
   estadoJustificacion: boolean;
   haGuardado: boolean;
+  habilitarButton: boolean = false;
 
   @ViewChild(EmpresaComponent, { static: false })
   empresaComponent: EmpresaComponent;
@@ -39,8 +40,7 @@ export class EncEmpresaComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  @ViewChild("btnGuardar", { static: false })
-  btnGuardar: ElementRef;
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -78,9 +78,9 @@ export class EncEmpresaComponent implements OnInit {
 
   setButtonGuardar() {
     if (this.estadoEmpresas && this.estadoJustificacion) {
-      this.renderer.setProperty(this.btnGuardar, "disabled", "false");
+      this.habilitarButton = true;
     } else {
-      this.renderer.setProperty(this.btnGuardar, "disabled", "true");
+      this.habilitarButton = false;
     }
   }
 
@@ -93,8 +93,6 @@ export class EncEmpresaComponent implements OnInit {
     this.sharedFormService.form2Actual.subscribe(data => {
       form2dirty = data.dirty;
     });
-    console.log(form1dirty);
-    console.log(form2dirty);
     if (this.haGuardado) {
       this.location.back();
     } else {
