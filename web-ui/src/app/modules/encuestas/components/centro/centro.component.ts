@@ -149,6 +149,7 @@ export class CentroComponent implements OnInit {
         this.sendEstado(false);
       }
       this.sharedFormService.actualizarEstadoForm1(this.groupForm);
+      this.sharedFormService.actualizarPorcentajeForm1(this.porcTotal);
     });
   }
 

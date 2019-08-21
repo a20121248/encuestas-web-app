@@ -33,8 +33,9 @@ export class EncCentroComponent implements OnInit {
   encuesta: Encuesta;
   usuarioSeleccionado: Usuario;
   estadoCentros: boolean;
-  estadoJustificacion:boolean;
+  estadoJustificacion: boolean;
   haGuardado: boolean;
+  habilitarButton: boolean = false;
 
   @ViewChild(CentroComponent, { static: false })
   centroComponent: CentroComponent;
@@ -42,9 +43,7 @@ export class EncCentroComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  @ViewChild("btnGuardar",{static: false}) 
-  btnGuardar: ElementRef;
-  
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private centroService: CentroService,
@@ -56,8 +55,8 @@ export class EncCentroComponent implements OnInit {
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
-        this.usuarioSeleccionado = usuario;
-        this.centroService.obtenerEncuesta(this.usuarioSeleccionado).subscribe(encuesta => {
+      this.usuarioSeleccionado = usuario;
+      this.centroService.obtenerEncuesta(this.usuarioSeleccionado).subscribe(encuesta => {
         this.lstCentros = encuesta.lstItems as Centro[];
         this.observaciones = encuesta.observaciones;
         this.justificacion = encuesta.justificacion;
@@ -69,21 +68,46 @@ export class EncCentroComponent implements OnInit {
     this.titleService.setTitle('Encuestas | Centros de costos');
   }
 
-  estadoFormJustificacion(value:boolean){
+  // onChanges() {
+  //   let validForm1: boolean;
+  //   let validForm2: boolean;
+  //   let completeForm1: number;
+  //   this.sharedFormService.form1Actual
+  //     .subscribe(data => {
+  //       if(data == null) validForm1 = false;
+  //       else validForm1 = data.valid;
+  //     });
+  //   this.sharedFormService.form2Actual
+  //     .subscribe(data => {
+  //       if(data == null) validForm2 = false;
+  //       else validForm2 = data.valid;
+  //     });
+  //   this.sharedFormService.form1PorcentajeActual
+  //   .subscribe( data => {
+  //     completeForm1 = data;
+  //   });
+  //   console.log(validForm1 && validForm2 && completeForm1 == 100);
+  //   if(validForm1 && validForm2 && completeForm1 == 100){
+  //     if(this.btnGuardar != null) this.setButtonGuardar(true);
+  //   } else {
+  //     if(this.btnGuardar != null) this.setButtonGuardar(false);
+  //   }
+  // }
+  estadoFormJustificacion(value: boolean) {
     this.estadoJustificacion = value;
     this.setButtonGuardar();
   }
 
-  estadoFormCentros(value:boolean){
+  estadoFormCentros(value: boolean) {
     this.estadoCentros = value;
     this.setButtonGuardar();
   }
 
   setButtonGuardar(){
     if(this.estadoCentros && this.estadoJustificacion){
-      this.renderer.setProperty(this.btnGuardar,"disabled","false");
+      this.habilitarButton = true;
     } else {
-      this.renderer.setProperty(this.btnGuardar,"disabled","true");
+      this.habilitarButton = false; 
     }
   }
 
@@ -103,30 +127,28 @@ export class EncCentroComponent implements OnInit {
   }
 
   goBack() {
-    let form1dirty:boolean;
-    let form2dirty:boolean;
+    let form1dirty: boolean;
+    let form2dirty: boolean;
     this.sharedFormService.form1Actual.subscribe(data => {
       form1dirty = data.dirty;
     });
     this.sharedFormService.form2Actual.subscribe(data => {
       form2dirty = data.dirty;
     });
-    console.log(form1dirty);
-    console.log(form2dirty);
-    if(this.haGuardado){
+    if (this.haGuardado) {
       this.location.back();
     } else {
-      if( form1dirty || form2dirty ){
+      if (form1dirty || form2dirty) {
         swal.fire({
           title: 'Cambios detectados',
           text: "Primero guarde antes de continuar.",
           type: "warning"
         });
       } else {
-        if( !form1dirty && !form2dirty ){
+        if (!form1dirty && !form2dirty) {
           this.location.back();
         }
       }
-    }  
+    }
   }
 }
