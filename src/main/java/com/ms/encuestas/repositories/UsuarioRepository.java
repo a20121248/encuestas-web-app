@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -14,6 +16,7 @@ import com.ms.encuestas.models.Usuario;
 
 @Repository
 public class UsuarioRepository {
+	private Logger logger = LoggerFactory.getLogger(UsuarioRepository.class);
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 

@@ -49,19 +49,13 @@
       <!-- Group header -->
       <ng-container matColumnDef="groupHeader">
         <td colspan="999" mat-cell *matCellDef="let group" style="flex-direction: row;">
-          <div>
-            <span class="grupo"
-              style="justify-content: flex-start; align-items: flex-start; text-align: left; width: 100%; "
-              colspan="50%">
+          <div fxFlex fxLayout>
+            <span class="grupo">
               <mat-icon *ngIf="group.expanded">expand_less</mat-icon>
               <mat-icon *ngIf="!group.expanded">expand_more</mat-icon>
-              <strong>{{group[groupByColumns[group.level-1]]}}</strong>
+              <strong style="width: 400px;">{{group[groupByColumns[group.level-1]]}}</strong>
             </span>
-          </div>
-          <div>
-            <span class="grupo"
-              style="justify-content: flex-end; align-items: flex-end; text-align: right; width: 100%; padding-right: 14px"
-              colspan="50%">
+            <span class="grupo" fxLayoutAlign="flex-end" style="width: 100%; padding-right: 14px">
               <strong>{{ getTotalPorcentajeByGrupo(group.grupo)}} <span matSuffix>%</span></strong>
             </span>
           </div>

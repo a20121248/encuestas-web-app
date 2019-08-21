@@ -1,5 +1,7 @@
 package com.ms.encuestas.repositories;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -9,6 +11,7 @@ import com.ms.encuestas.models.Proceso;
 
 @Repository
 public class PerfilRepository {
+	private Logger logger = LoggerFactory.getLogger(PerfilRepository.class);
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 

@@ -3,6 +3,7 @@
 @include mat-core();
 
 $color-azul: #09c;
+$color-verde: #00af3f;
 $color-1: rgba(0, 0, 0, 0.54);
 $color-2: #585a5b;
 $color-fondo: #f2f3f3;
@@ -62,6 +63,23 @@ app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-l
 }
 
 .pacifico-page {
+  .mat-nav-list .mat-list-item.circular {
+    line-height: 23px;
+    span {
+      height: 23px;
+      width: 23px;
+      background-color: #00af3f;
+      color: #fff;
+      border-radius: 50%;
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 7px;
+    }
+  }
   a {
     text-decoration: none!important;
     &:hover {

@@ -2,6 +2,8 @@ package com.ms.encuestas.repositories;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -11,6 +13,7 @@ import com.ms.encuestas.models.Rol;
 
 @Repository
 public class RolRepository {
+	private Logger logger = LoggerFactory.getLogger(RolRepository.class);
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 	

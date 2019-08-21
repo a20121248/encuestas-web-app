@@ -13,9 +13,6 @@ import { LINEA_CANAL_mock } from './linea-canal.json';
   providedIn: 'root'
 })
 export class LineaCanalService {
-
-  private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas';
-  private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
   protected urlServer = AppConfig.settings.urlServer;
 
   constructor(

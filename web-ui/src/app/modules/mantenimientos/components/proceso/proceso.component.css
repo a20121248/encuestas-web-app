@@ -1,8 +1,35 @@
-.mat-raised-button{
-    color: white;
-    background-color:#ff6319;
-    margin-left: 10px;
-    width: 80px !important;
-    margin-top: 15px; 
-    /* padding: 0px 20px 0px 20px; */
+.selected-row {
+  background: lightblue;
+}
+
+tr.mat-row {
+  cursor: pointer;
+}
+
+.mat-column-codigo {
+  width: 10%;
+  text-align: center;
+}
+
+.mat-column-nombre {
+  width: 25%;
+}
+
+.mat-column-creador {
+  width: 35%;
+}
+
+.mat-column-fechaCierre {
+  width: 10%;
+  text-align: center;
+}
+
+.mat-column-fechaCreacion {
+  width: 10%;
+  text-align: center;
+}
+
+.mat-column-fechaActualizacion {
+  width: 10%;
+  text-align: center;
 }

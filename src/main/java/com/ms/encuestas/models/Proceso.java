@@ -7,6 +7,7 @@ public class Proceso implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String nombre;
+	private Usuario usuario;
 	private Date fechaCierre;
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
@@ -25,6 +26,14 @@ public class Proceso implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public Date getFechaCierre() {
