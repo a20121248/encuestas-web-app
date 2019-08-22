@@ -27,13 +27,12 @@ export class EncProductoCanalComponent implements OnInit {
 
   estadoProductoCanal: boolean;
   haGuardado: boolean;
+  habilitarButton: boolean = false;
 
   @ViewChild(ProductoCanalComponent, { static: false })
   productoCanalComponent: ProductoCanalComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  @ViewChild("btnGuardar", { static: false })
-  btnGuardar: ElementRef;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -65,9 +64,9 @@ export class EncProductoCanalComponent implements OnInit {
 
   setButtonGuardar() {
     if (this.estadoProductoCanal) {
-      this.renderer.setProperty(this.btnGuardar, "disabled", "false");
+      this.habilitarButton = true;
     } else {
-      this.renderer.setProperty(this.btnGuardar, "disabled", "true");
+      this.habilitarButton = false;
     }
   }
   

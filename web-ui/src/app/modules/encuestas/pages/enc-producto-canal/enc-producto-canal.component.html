@@ -14,7 +14,10 @@
       </div>
       <div class="col-md-12 text-right mt-3">
         <button mat-raised-button color="warn" (click)="goBack()"><i class="material-icons">reply</i>Atrás</button>
-        <button #btnGuardar mat-raised-button disabled color="warn" (click)="guardarEncuesta()"><i class="material-icons">save</i>Guardar</button>
+        <button mat-raised-button color="warn" disabled *ngIf="!habilitarButton">
+          <i class="material-icons">save</i>Guardar</button>
+        <button mat-raised-button color="warn" *ngIf="habilitarButton" (click)="guardarEncuesta()">
+          <i class="material-icons">save</i>Guardar</button>
       </div>
     </div>
   </mat-card>
