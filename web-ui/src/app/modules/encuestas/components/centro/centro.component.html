@@ -60,7 +60,7 @@
                 <mat-icon *ngIf="!group.expanded">expand_more</mat-icon>
                 <strong style="width: 400px;">{{group[groupByColumns[group.level-1]]}}</strong>
               </span>
-              <span class="grupo" fxLayoutAlign="flex-end" style="width: 100%; padding-right: 14px">
+              <span class="grupo" fxLayoutAlign="flex-end">
                 <strong>{{ getTotalPorcentajeByGrupo(group.grupo)}} <span matSuffix>%</span></strong>
               </span>
             </div>

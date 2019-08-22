@@ -39,15 +39,15 @@ export class LoginComponent implements OnInit {
       contrasenha: new FormControl('', Validators.required),
       dominio: new FormControl('', Validators.required)
     });
-    /*if (this.authService.isAuthenticated()) {
+    if (this.authService.isAuthenticated()) {
       swal.fire('Login', `Hola ${this.authService.usuario.nombre}, ya iniciaste sesión anteriormente.`, 'info');
       this.router.navigate(['/colaboradores']);
-    }*/
+    }
   }
 
   get codigo() { return this.loginForm.get('codigo'); }
   get contrasenha() { return this.loginForm.get('contrasenha'); }
-  get dominio() { return this.loginForm.get('dominio'); }  
+  get dominio() { return this.loginForm.get('dominio'); }
 
   login(): void {
     if (this.codigo.value == "" || this.contrasenha.value == "") {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ProcesoService } from 'src/app/shared/services/proceso.service';
+import { Proceso } from 'src/app/shared/models/Proceso';
 
 @Component({
   selector: 'app-mantenimientos',
@@ -19,10 +20,15 @@ export class MantenimientosComponent implements OnInit {
            ['Mantenimiento de subcanales', 'subcanales'],
            ['Mantenimiento de perfiles', 'perfiles'],
            ['Mantenimiento de datos de la posición', 'posiciones']];
+  procesos: Proceso[];
 
   constructor(
     private titleService: Title,
-    private procesoService: ProcesoService) { }
+    private procesoService: ProcesoService) {
+      this.procesoService.findAll().subscribe(procesos => {
+        this.procesos = procesos;
+      });
+    }
 
   ngOnInit() {
     this.titleService.setTitle('Encuestas | Mantenimiento');
