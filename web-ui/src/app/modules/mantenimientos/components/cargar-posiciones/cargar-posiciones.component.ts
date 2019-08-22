@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Proceso } from 'src/app/shared/models/Proceso';
 
 @Component({
   selector: 'app-cargar-posiciones',
@@ -7,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CargarPosicionesComponent implements OnInit {
   titulo = 'CARGAR POSICIONES';
-
+  @Input() procesos: Proceso[];
+  @Input() selectedProceso: Proceso;
   constructor() { }
 
   ngOnInit() {

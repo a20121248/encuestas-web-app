@@ -21,12 +21,14 @@ export class MantenimientosComponent implements OnInit {
            ['Mantenimiento de perfiles', 'perfiles'],
            ['Mantenimiento de datos de la posición', 'posiciones']];
   procesos: Proceso[];
+  selectedProceso: Proceso;
 
   constructor(
     private titleService: Title,
     private procesoService: ProcesoService) {
       this.procesoService.findAll().subscribe(procesos => {
         this.procesos = procesos;
+        this.selectedProceso = procesos[procesos.length - 1];
       });
     }
 
