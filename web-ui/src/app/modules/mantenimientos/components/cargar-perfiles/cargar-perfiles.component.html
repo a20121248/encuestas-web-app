@@ -7,8 +7,11 @@
              placeholder="Seleccione un proceso"
              [(ngModel)]="selectedProceso">
   </ng-select>
-  <div class="col-md-12 text-center mt-3">
+  <mat-card-actions>
     <button mat-raised-button color="accent" (click)="uploadFile()"><i class="material-icons">cloud_upload</i>Subir</button>
+  </mat-card-actions>
+  <mat-card-footer class="cuadro">
+    Existen {{ cantPerfiles }} perfiles.
     <button mat-raised-button color="primary" (click)="downloadFile()"><i class="material-icons">cloud_download</i>Descargar</button>
-  </div>
+  </mat-card-footer>
 </mat-card>
