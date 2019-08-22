@@ -45,7 +45,6 @@
       <tr mat-header-row *matHeaderRowDef="dcCentro;  sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: dcCentro;"></tr>
       <tr mat-footer-row *matFooterRowDef="dcCentro; sticky:true"></tr>
-
       <!-- Group header -->
       <ng-container matColumnDef="groupHeader">
         <td colspan="999" mat-cell *matCellDef="let group" style="flex-direction: row;">
@@ -61,9 +60,7 @@
           </div>
         </td>
       </ng-container>
-
       <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" (click)="groupHeaderClick(row)"> </tr>
-
     </table>
   </div>
 </mat-card>
