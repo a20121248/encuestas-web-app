@@ -29,11 +29,10 @@ export class EncProductoSubcanalComponent implements OnInit {
   canalId: string;
   estadoCentros: boolean;
   haGuardado: boolean;
+  habilitarButton: boolean;
 
   @ViewChild(ProductoSubcanalComponent, { static: false })
   productoSubcanalComponent: ProductoSubcanalComponent;
-  @ViewChild("btnGuardar",{static: false}) 
-  btnGuardar: ElementRef;
   
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -67,9 +66,9 @@ export class EncProductoSubcanalComponent implements OnInit {
 
   setButtonGuardar(){
     if(this.estadoCentros ){
-      this.renderer.setProperty(this.btnGuardar,"disabled","false");
+      this.habilitarButton = true;
     } else {
-      this.renderer.setProperty(this.btnGuardar,"disabled","true");
+      this.habilitarButton = false;
     }
   }
 
@@ -90,8 +89,6 @@ export class EncProductoSubcanalComponent implements OnInit {
     this.sharedFormService.form2Actual.subscribe(data => {
       form2dirty = data.dirty;
     });
-    console.log(form1dirty);
-    console.log(form2dirty);
     if(this.haGuardado){
       this.location.back();
     } else {

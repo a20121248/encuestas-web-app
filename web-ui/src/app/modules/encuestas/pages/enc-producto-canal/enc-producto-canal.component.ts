@@ -75,7 +75,6 @@ export class EncProductoCanalComponent implements OnInit {
     this.sharedFormService.form1Actual.subscribe(data => {
       form1dirty = data.dirty;
     });
-    console.log(form1dirty);
     if (this.haGuardado) {
       this.location.back();
     } else {
