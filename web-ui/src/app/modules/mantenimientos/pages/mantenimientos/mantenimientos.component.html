@@ -4,23 +4,26 @@
   </mat-card>
   <div class="row">
     <div class="col-md-12">
-      <app-proceso>
-      </app-proceso>
+      <app-proceso></app-proceso>
     </div>
     <div class="col-md-6 mt-4">
-      <app-cargar-perfiles>
+      <app-cargar-perfiles [procesos]="procesos"
+                           [selectedProceso]="selectedProceso">
       </app-cargar-perfiles>
     </div>
     <div class="col-md-6 mt-4">
-      <app-cargar-usuarios>
+      <app-cargar-usuarios [procesos]="procesos"
+                           [selectedProceso]="selectedProceso">
       </app-cargar-usuarios>
     </div>
     <div class="col-md-6 mt-4">
-      <app-cargar-posiciones>
+      <app-cargar-posiciones [procesos]="procesos"
+                             [selectedProceso]="selectedProceso">
       </app-cargar-posiciones>
     </div>
     <div class="col-md-6 mt-4">  <!--offset-md-3-->
-      <app-cargar-posicion-datos>
+      <app-cargar-posicion-datos [procesos]="procesos"
+                                 [selectedProceso]="selectedProceso">
       </app-cargar-posicion-datos>
     </div>
   </div>

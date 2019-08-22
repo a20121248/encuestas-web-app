@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FileUploadService } from 'src/app/shared/services/file-upload.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ProcesoService } from 'src/app/shared/services/proceso.service';
+import { Proceso } from 'src/app/shared/models/Proceso';
 
 @Component({
   selector: 'app-cargar-usuarios',
@@ -10,14 +11,15 @@ import { ProcesoService } from 'src/app/shared/services/proceso.service';
 })
 export class CargarUsuariosComponent implements OnInit {
   titulo = 'CARGAR USUARIOS';
+  @Input() procesos: Proceso[];
+  @Input() selectedProceso: Proceso;
   fileToUpload: File;
   fileToDownload: File;
   fileURL: SafeResourceUrl;
 
   constructor(
     private fileUploadService: FileUploadService,
-    private sanitizer: DomSanitizer,
-    private procesoService: ProcesoService
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
