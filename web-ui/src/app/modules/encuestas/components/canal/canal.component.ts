@@ -18,7 +18,7 @@ export class CanalComponent implements OnInit {
   @Input() haGuardado: boolean;
 
   @Output() estadoFormCanalToParent = new EventEmitter();
-  dcLinea = ["codigo", "nombre", "porcentaje","cumplimentar"];
+  dcLinea = ["codigo", "nombre", "porcentaje", 'estado', "ir"];
   groupForm: FormGroup;
   porcTotal: number;
   url: string;

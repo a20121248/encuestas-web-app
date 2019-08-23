@@ -21,9 +21,11 @@
             <input type="number" matInput [(ngModel)]="item.objeto.porcentaje" [formControlName]="item.objeto.codigo">
             <span matSuffix>%</span>
           </mat-form-field>
-          <mat-error *ngIf="validacionItemControl(item.objeto.codigo).hasError('negativo')" class="invalid"> Valor negativo
+          <mat-error *ngIf="validacionItemControl(item.objeto.codigo).hasError('negativo')" class="invalid"> Valor
+            negativo
           </mat-error>
-          <mat-error *ngIf="validacionItemControl(item.objeto.codigo).hasError('invalidNumber')" class="invalid"> Número Invalido
+          <mat-error *ngIf="validacionItemControl(item.objeto.codigo).hasError('invalidNumber')" class="invalid"> Número
+            Invalido
           </mat-error>
         </td>
         <td mat-footer-cell *matFooterCellDef>
@@ -37,21 +39,22 @@
       </ng-container>
 
       <ng-container matColumnDef="estado">
-          <th mat-header-cell *matHeaderCellDef>ESTADO</th>
-          <td mat-cell *matCellDef="let item">
-            <ng-container *ngIf=" item.objeto.porcentaje>0">
-              <span  *ngIf="!item.objeto.estado" class="pendiente" >
-                <i class="material-icons">report</i>
-                <span>PENDIENTE</span>
+        <th mat-header-cell *matHeaderCellDef>ESTADO</th>
+        <td mat-cell *matCellDef="let item">
+          <ng-container *ngIf=" item.objeto.porcentaje>0">
+            <span *ngIf="!item.objeto.estado" class="pendiente">
+              <i class="material-icons">report</i>
+              <span>PENDIENTE</span>
             </span>
-            <span  *ngIf="item.objeto.estado" class="terminado" >
-                <i class="material-icons">check_circle</i>
-                <span>TERMINADO</span>
+            <span *ngIf="item.objeto.estado" class="terminado">
+              <i class="material-icons">check_circle</i>
+              <span>TERMINADO</span>
             </span>
-            </ng-container>
-          </td>
-          <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
+          </ng-container>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      
       <tr mat-header-row *matHeaderRowDef="dcLinea"></tr>
       <tr mat-row *matRowDef="let row; columns: dcLinea;" [class.selected-row]="row === selectedElement"
         (click)="showCanalesBylineaBoton(row)"></tr>
