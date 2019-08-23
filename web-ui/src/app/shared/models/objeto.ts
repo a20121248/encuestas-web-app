@@ -6,4 +6,5 @@ export class Objeto {
   fechaCreacion: Date;
   fechaActualizacion: Date;
   porcentaje: number;
+  estado: boolean;
 }
