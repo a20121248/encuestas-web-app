@@ -11,4 +11,5 @@ export class Usuario {
   rolId: number;
   procesoId: number;
   posicion: Posicion;
+  estado: boolean = true;
 }
