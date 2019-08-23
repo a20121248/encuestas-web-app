@@ -11,8 +11,14 @@
   width: 20%;
   text-align: center;
 }
+
 .mat-column-porcentaje {
-  width: 30%;
+  width: 20%;
+  text-align: center;
+}
+
+.mat-column-estado {
+  width: 10%;
   text-align: center;
 }
 
@@ -22,4 +28,22 @@ tr.mat-row{
 
 .invalid{
   color: red;
+}
+
+.terminado{
+  color: green;
+  font-size: 75%;
+  display: flex; 
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.pendiente{
+  color: red;
+  font-size: 80%;
+  display: flex; 
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }

@@ -24,7 +24,7 @@ export class LineaCanalComponent implements OnInit {
   @Output() sendLinea = new EventEmitter();
   selectedElement: ObjetoObjetos | null;
 
-  dcLinea = ['codigo', 'nombre', 'porcentaje'];
+  dcLinea = ['codigo', 'nombre', 'porcentaje', 'estado'];
   groupForm: FormGroup;
   porcTotal: number;
   lineasCompletas: boolean[];
