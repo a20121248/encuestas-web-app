@@ -40,8 +40,9 @@
             <ng-container matColumnDef="cumplimentar">
                 <th mat-header-cell *matHeaderCellDef> CUMPLIMENTAR </th>
                 <td mat-cell *matCellDef="let item">
-                    <button *ngIf="item.porcentaje > 0" mat-raised-button class="sm" color="primary"
-                        [routerLink]="[lineaSeleccionada.objeto.id,item.id,'producto-subcanal']">></button>
+                    <ng-container *ngIf="item.porcentaje > 0">
+                            <button  mat-raised-button class="sm" color="primary" (click) = "revisarEdicionFormulario(lineaSeleccionada.objeto.id,item.id)">></button>
+                    </ng-container>
                 </td>
                 <td mat-footer-cell *matFooterCellDef> </td>
             </ng-container>

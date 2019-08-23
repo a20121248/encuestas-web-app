@@ -12,7 +12,7 @@ import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { ActivatedRoute } from '@angular/router';
 import { Encuesta } from 'src/app/shared/models/encuesta';
 import { Usuario } from 'src/app/shared/models/usuario';
-import { CanalComponent } from '../../components/canal/canal.component';
+import { CanalComponent } from 'src/app/modules/encuestas/components/canal/canal.component';
 import { JustificacionComponent } from 'src/app/shared/components/justificacion/justificacion.component';
 import { UsuarioDatosComponent } from 'src/app/shared/components/usuario-datos/usuario-datos.component';
 import { Justificacion } from 'src/app/shared/models/justificacion';

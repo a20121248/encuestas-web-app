@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { FormGroup, AbstractControl, FormControl, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import swal from 'sweetalert2';
 
 import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 import { SharedFormService } from 'src/app/shared/services/shared-form.service';
@@ -19,10 +21,13 @@ export class CanalComponent implements OnInit {
   dcLinea = ["codigo", "nombre", "porcentaje","cumplimentar"];
   groupForm: FormGroup;
   porcTotal: number;
+  url: string;
   
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private sharedFormService: SharedFormService
-  ) {
+    ) {
     this.groupForm = new FormGroup({});
   }
 
@@ -72,6 +77,28 @@ export class CanalComponent implements OnInit {
       return true;
     } else {
       return false;
+    }
+  }
+
+  revisarEdicionFormulario(lineaID: number, canalID: number){
+    let form1Valid:boolean;
+    let form1Dirty:boolean;
+    this.url = lineaID+"/"+canalID+"/producto-subcanal";
+    console.log(this.url);
+    this.sharedFormService.form1Actual.subscribe( data => {
+      form1Valid = data.valid;
+      form1Dirty = data.dirty;
+    } );
+    if((this.haGuardado && this.groupForm.valid && form1Valid) || (this.groupForm.valid && !this.groupForm.dirty && form1Valid && !form1Dirty)){
+      this.router.navigate([this.url], { relativeTo: this.route });
+    } else {
+      if((this.groupForm.valid && this.groupForm.dirty)|| (form1Valid && form1Dirty)){
+        swal.fire({
+          title: 'Cambios detectados',
+          text: "Primero guarde antes de continuar.",
+          type: "warning"
+        });
+      }
     }
   }
 }
