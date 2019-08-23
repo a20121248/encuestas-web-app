@@ -22,7 +22,7 @@ export class LineaComponent implements OnInit {
   
   @Output() estadoFormLineaToParent = new EventEmitter();
 
-  dcLinea = ['codigo', 'nombre', 'porcentaje', 'completar'];
+  dcLinea = ['codigo', 'nombre', 'porcentaje', 'estado', 'ir'];
   url: string;
   porcTotal: number;
   groupForm: FormGroup;
