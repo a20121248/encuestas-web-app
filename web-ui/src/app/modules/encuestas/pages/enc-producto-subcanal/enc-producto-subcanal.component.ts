@@ -29,7 +29,7 @@ export class EncProductoSubcanalComponent implements OnInit {
   canalId: string;
   estadoCentros: boolean;
   haGuardado: boolean;
-  habilitarButton: boolean;
+  habilitarButton: boolean = false;
 
   @ViewChild(ProductoSubcanalComponent, { static: false })
   productoSubcanalComponent: ProductoSubcanalComponent;
@@ -82,24 +82,21 @@ export class EncProductoSubcanalComponent implements OnInit {
 
   goBack() {
     let form1dirty:boolean;
-    let form2dirty:boolean;
     this.sharedFormService.form1Actual.subscribe(data => {
       form1dirty = data.dirty;
     });
-    this.sharedFormService.form2Actual.subscribe(data => {
-      form2dirty = data.dirty;
-    });
+
     if(this.haGuardado){
       this.location.back();
     } else {
-      if( form1dirty || form2dirty ){
+      if( form1dirty ){
         swal.fire({
           title: 'Cambios detectados',
           text: "Primero guarde antes de continuar.",
           type: "warning"
         });
       } else {
-        if( !form1dirty && !form2dirty ){
+        if( !form1dirty ){
           this.location.back();
         }
       }

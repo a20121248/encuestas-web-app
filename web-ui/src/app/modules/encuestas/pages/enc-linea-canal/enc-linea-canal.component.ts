@@ -18,6 +18,7 @@ import { UsuarioDatosComponent } from 'src/app/shared/components/usuario-datos/u
 import { Justificacion } from 'src/app/shared/models/justificacion';
 import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 import { SharedFormService } from 'src/app/shared/services/shared-form.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-enc-linea-canal',
@@ -38,6 +39,8 @@ export class EncLineaCanalComponent implements OnInit {
   estadoLineas: boolean;
   estadoCanales:boolean;
   haGuardado: boolean;
+  private estadoButton = new BehaviorSubject<boolean>(false);
+  estadoButtonActual =  this.estadoButton.asObservable();
   habilitarButton: boolean = false;
 
   @ViewChild(LineaCanalComponent, { static: false })
@@ -77,14 +80,12 @@ export class EncLineaCanalComponent implements OnInit {
     this.setButtonGuardar();
   }
 
+  estadoFormCanal(value:boolean){
+    this.estadoCanales = value;
+    this.setButtonGuardar();
+  }
+
   setButtonGuardar(){
-    this.sharedFormService.form2Actual.subscribe(data =>{
-      if(data!=null){
-        this.estadoCanales = data.valid;
-      } else {
-        this.estadoCanales = true;
-      }
-    });
     if(this.estadoLineas && this.estadoCanales){
       this.habilitarButton = true;
     } else {
@@ -106,9 +107,11 @@ export class EncLineaCanalComponent implements OnInit {
     if(objeto.objeto.porcentaje==0){
       this.lineaSeleccionada = null;
       this.porcentajePadre = false;
+      // this.setButtonGuardar();
     } else {
       this.lineaSeleccionada = objeto;
       this.porcentajePadre = true;
+      // this.setButtonGuardar();
     }
     
   }

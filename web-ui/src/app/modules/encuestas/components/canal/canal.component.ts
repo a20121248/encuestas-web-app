@@ -27,7 +27,6 @@ export class CanalComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.lineaSeleccionada);
     this.onChanges();
   }
 

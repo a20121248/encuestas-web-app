@@ -38,7 +38,7 @@
       <ng-container matColumnDef="completar">
         <th mat-header-cell *matHeaderCellDef>COMPLETAR</th>
         <td mat-cell *matCellDef="let linea">
-          <button mat-raised-button class="sm" color="primary" (click) = "revisarEdicionFormulario(linea.id)" >></button>
+          <button mat-raised-button class="sm" *ngIf = "linea.porcentaje > 0" color="primary" (click) = "revisarEdicionFormulario(linea.id)" >></button>
         </td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
