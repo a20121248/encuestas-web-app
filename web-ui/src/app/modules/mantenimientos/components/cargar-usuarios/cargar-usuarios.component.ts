@@ -3,6 +3,8 @@ import { FileUploadService } from 'src/app/shared/services/file-upload.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ProcesoService } from 'src/app/shared/services/proceso.service';
 import { Proceso } from 'src/app/shared/models/Proceso';
+import { UsuarioService } from 'src/app/shared/services/usuario.service';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-cargar-usuarios',
@@ -10,7 +12,10 @@ import { Proceso } from 'src/app/shared/models/Proceso';
   styleUrls: ['./cargar-usuarios.component.css']
 })
 export class CargarUsuariosComponent implements OnInit {
-  titulo = 'CARGAR USUARIOS';
+  titulo: string;
+  cantUsuarios: number;
+  fileForm: FormGroup;
+  ruta: string;
   @Input() procesos: Proceso[];
   @Input() selectedProceso: Proceso;
   fileToUpload: File;
@@ -19,10 +24,21 @@ export class CargarUsuariosComponent implements OnInit {
 
   constructor(
     private fileUploadService: FileUploadService,
-    private sanitizer: DomSanitizer
-  ) { }
+    private sanitizer: DomSanitizer,
+    private usuarioService: UsuarioService
+  ) {
+    this.titulo = 'CARGAR USUARIOS';
+    this.usuarioService.count().subscribe(cantUsuarios => {
+      this.cantUsuarios = cantUsuarios;
+    });
+  }
 
   ngOnInit() {
+  }
+
+  seleccionarArchivo(e) {
+    const rutaArr = e.target.value.split('\\');
+    this.ruta = rutaArr[rutaArr.length - 1];
   }
 
   handleFileInput(file: FileList) {

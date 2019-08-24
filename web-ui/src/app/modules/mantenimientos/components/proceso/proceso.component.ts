@@ -11,7 +11,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
   styleUrls: ['./proceso.component.css']
 })
 export class ProcesoComponent implements OnInit {
-  titulo = 'CONFIGURACIÓN DE PROCESOS';
+  titulo: string;
   procesos: Proceso[];
   selectedProceso: Proceso;
   dcProcesos = ['codigo', 'nombre', 'creador', 'fechaCierre', 'fechaCreacion', 'fechaActualizacion'];
@@ -22,13 +22,14 @@ export class ProcesoComponent implements OnInit {
   constructor(
     private procesoService: ProcesoService,
     public dialog: MatDialog
-  ) {}
+  ) {
+    this.titulo = 'CONFIGURACIÓN DE PROCESOS';
+  }
 
   ngOnInit() {
     this.procesoService.findAll().subscribe(procesos => {
       this.procesos = procesos;
     });
-    console.log(this.procesos);
   }
 
   crear(): void {
@@ -102,5 +103,4 @@ export class ProcesoDialogComponent {
   save() {
     this.dialogRef.close(this.form.value);
   }
-
 }

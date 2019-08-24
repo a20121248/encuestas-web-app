@@ -10,6 +10,8 @@ import {
 import { AuthService } from "src/app/shared/services/auth.service";
 import { Router } from "@angular/router";
 import { AppConfig } from "src/app/shared/services/app.config";
+import { Linea } from '../models/linea';
+import { Objeto } from '../models/objeto';
 
 @Injectable({
   providedIn: "root"
@@ -26,6 +28,12 @@ export class LineaService {
 
   errorHandler(error: any): void {
     console.log(error);
+  }
+
+  findAll(): Observable<Objeto[]> {
+    const url = `${this.urlServer.api}lineas`;
+    console.log(url);
+    return this.http.get<Objeto[]>(url);
   }
 
   obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {

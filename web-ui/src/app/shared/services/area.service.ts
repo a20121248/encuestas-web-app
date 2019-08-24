@@ -12,6 +12,11 @@ export class AreaService {
 
   constructor(private http: HttpClient) { }
 
+  count(): Observable<number> {
+    const url = `areas/cantidad`;
+    return this.http.get<number>(`${this.urlServer.api}${url}`);
+  }
+
   findById(areaId: number): Observable<Area> {
     const url = `${this.urlServer.api}areas/${areaId}`;
     return this.http.get<Area>(url);

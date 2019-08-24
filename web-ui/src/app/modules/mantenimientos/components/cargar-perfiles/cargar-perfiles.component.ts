@@ -10,6 +10,7 @@ import { PerfilService } from 'src/app/shared/services/perfil.service';
 export class CargarPerfilesComponent implements OnInit {
   titulo: string;
   cantPerfiles: number;
+  ruta: string;
   @Input() procesos: Proceso[];
   @Input() selectedProceso: Proceso;
 
@@ -21,6 +22,11 @@ export class CargarPerfilesComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  seleccionarArchivo(e) {
+    const rutaArr = e.target.value.split('\\');
+    this.ruta = rutaArr[rutaArr.length - 1];
   }
 
 }

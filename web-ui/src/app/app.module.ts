@@ -23,6 +23,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
@@ -77,6 +78,8 @@ import { SubcanalesComponent } from './modules/mantenimientos/pages/subcanales/s
 import { CargarPerfilesComponent } from './modules/mantenimientos/components/cargar-perfiles/cargar-perfiles.component';
 import { CargarPosicionesComponent } from './modules/mantenimientos/components/cargar-posiciones/cargar-posiciones.component';
 import { CargarPosicionDatosComponent } from './modules/mantenimientos/components/cargar-posicion-datos/cargar-posicion-datos.component';
+import { CargarCentrosComponent } from './modules/mantenimientos/components/cargar-centros/cargar-centros.component';
+import { CargarAreasComponent } from './modules/mantenimientos/components/cargar-areas/cargar-areas.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -183,7 +186,9 @@ export function initializeApp(appConfig: AppConfig) {
     CargarPerfilesComponent,
     CargarPosicionesComponent,
     CargarPosicionDatosComponent,
-    ProcesoDialogComponent
+    ProcesoDialogComponent,
+    CargarCentrosComponent,
+    CargarAreasComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -213,7 +218,8 @@ export function initializeApp(appConfig: AppConfig) {
     MatBadgeModule,
     MatRadioModule,
     MatDialogModule,
-    MatMenuModule
+    MatMenuModule,
+    MatProgressBarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

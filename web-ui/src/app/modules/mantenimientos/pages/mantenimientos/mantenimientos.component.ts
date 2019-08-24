@@ -29,11 +29,12 @@ export class MantenimientosComponent implements OnInit {
       this.procesoService.findAll().subscribe(procesos => {
         this.procesos = procesos;
         this.selectedProceso = procesos[procesos.length - 1];
+        console.log(this.selectedProceso);
       });
     }
 
   ngOnInit() {
-    this.titleService.setTitle('Encuestas | Mantenimiento');
+    this.titleService.setTitle('Mantenimiento');
   }
 
 }

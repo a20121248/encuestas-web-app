@@ -3,12 +3,13 @@ import { throwError, of, Observable } from 'rxjs';
 import {
   HttpClient,
   HttpHeaders,
-  HttpErrorResponse
+  HttpErrorResponse,
+  HttpEventType
 } from '@angular/common/http';
 import { AppConfig } from 'src/app/shared/services/app.config';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Router } from '@angular/router';
-
+import { map } from 'rxjs/operators';
 import { Centro } from 'src/app/shared/models/centro';
 import { Encuesta } from 'src/app/shared/models/encuesta';
 import { Usuario } from '../models/usuario';
@@ -24,6 +25,11 @@ export class CentroService {
     private http: HttpClient,
     private router: Router
   ) {}
+
+  count(): Observable<number> {
+    const url = `centros/cantidad`;
+    return this.http.get<number>(`${this.urlServer.api}${url}`);
+  }
 
   private isNoAutorizado(e): boolean {
     if (e.status == 401 || e.status == 403) {
@@ -46,6 +52,24 @@ export class CentroService {
     const url = `${this.urlServer.api}centros`;
     console.log(url);
     return this.http.get<Centro[]>(url);
+  }
+
+  upload(formData: FormData): Observable<any> {
+    const url = `${this.urlServer.api}centros/cargar`;
+    return this.http.post<any>(url, formData, {
+      reportProgress: true,
+      observe: 'events'
+    }).pipe(map((event) => {
+      switch (event.type) {
+        case HttpEventType.UploadProgress:
+          return { porcentaje: event.loaded / event.total };
+        case HttpEventType.Response:
+          return event.body;
+        default:
+          return `Unhandled event: ${event.type}`;
+      }
+    })
+    );
   }
 
   obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {

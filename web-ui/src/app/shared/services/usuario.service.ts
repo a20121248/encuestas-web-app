@@ -34,6 +34,11 @@ export class UsuarioService {
     return false;
   }
 
+  count(): Observable<number> {
+    const url = `usuarios/cantidad`;
+    return this.http.get<number>(`${this.urlServer.api}${url}`);
+  }
+
   getUsuario(codigo: string): Observable<Usuario> {
     return this.http.get<Usuario>(this.urlServer.api + 'usuarios/' + codigo);
   }

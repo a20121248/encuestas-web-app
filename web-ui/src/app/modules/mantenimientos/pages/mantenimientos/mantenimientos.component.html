@@ -2,7 +2,7 @@
   <mat-card class="cuadro mat-elevation-z4 mt-4 mb-4 text-center">
     <h1>{{ titulo.toUpperCase() }}</h1>
   </mat-card>
-  <div class="row">
+  <div class="row" *ngIf="selectedProceso">
     <div class="col-md-12">
       <app-proceso></app-proceso>
     </div>
@@ -20,6 +20,16 @@
       <app-cargar-posiciones [procesos]="procesos"
                              [selectedProceso]="selectedProceso">
       </app-cargar-posiciones>
+    </div>
+    <div class="col-md-6 mt-4">
+      <app-cargar-areas [procesos]="procesos"
+                        [selectedProceso]="selectedProceso">
+      </app-cargar-areas>
+    </div>
+    <div class="col-md-6 mt-4">
+      <app-cargar-centros [procesos]="procesos"
+                          [selectedProceso]="selectedProceso">
+      </app-cargar-centros>
     </div>
     <div class="col-md-6 mt-4">  <!--offset-md-3-->
       <app-cargar-posicion-datos [procesos]="procesos"
