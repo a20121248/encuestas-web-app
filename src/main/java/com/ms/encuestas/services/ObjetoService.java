@@ -8,51 +8,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ms.encuestas.models.Division;
+import com.ms.encuestas.models.Objeto;
 import com.ms.encuestas.models.Proceso;
+import com.ms.encuestas.repositories.ObjetoRepository;
 import com.ms.encuestas.repositories.ProcesoRepository;
 
 @Service
-public class ProcesoService implements ProcesoServiceI {
-	private Logger logger = LoggerFactory.getLogger(ProcesoService.class);
+public class ObjetoService implements ObjetoServiceI {
+	private Logger logger = LoggerFactory.getLogger(ObjetoService.class);
 
 	@Autowired
-	private ProcesoRepository procesoRepository;
+	private ObjetoRepository objetoRepository;
 	
 	@Override
-	public Proceso getCurrentProceso() {
-		return procesoRepository.getCurrentProceso();
-	}
-	
-	@Override
-	public long count() {
-		return procesoRepository.count();
+	public Long count(Long objetoTipoId) {
+		return objetoRepository.count(objetoTipoId);
 	}
 
 	@Override
-	public List<Proceso> findAll() {
-		return procesoRepository.findAll();
-	}
-	
-	@Override
-	public Proceso findById(Long id) {
-		return procesoRepository.findById(id);
+	public List<Objeto> findAll(Long objetoTipoId) {
+		return objetoRepository.findAll(objetoTipoId);
 	}
 
 	@Override
-	public int save(Proceso proceso) {
+	public Objeto findById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int save(Objeto objeto) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public void delete(Proceso proceso) {
+	public void delete(Objeto objeto) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
-
+		
 	}
 }

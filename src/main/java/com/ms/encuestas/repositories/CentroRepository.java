@@ -1,5 +1,6 @@
 package com.ms.encuestas.repositories;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.ms.encuestas.models.Centro;
+import com.ms.encuestas.models.Justificacion;
+import com.ms.encuestas.models.Tipo;
 
 @Repository
 public class CentroRepository {
@@ -63,7 +66,25 @@ public class CentroRepository {
         return plantilla.queryForObject(sql, paramMap, new CentroMapper());
 	}
 
-	public Centro save(Centro centro) {
+	public Centro insert(Centro centro) {
+		Long empresaId = new Long(1);
+		String sql = "INSERT INTO centros(codigo,nombre,nivel,centro_tipo_id,grupo,empresa_id,fecha_creacion,fecha_actualizacion)\n" +
+                     "VALUES(:codigo,:nombre,:nivel,:centro_tipo_id,:grupo,:empresa_id,:fecha_creacion,:fecha_actualizacion)";		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("codigo", centro.getCodigo());
+		paramMap.put("nombre", centro.getNombre());
+		paramMap.put("nivel", centro.getNivel());
+		paramMap.put("centro_tipo_id", centro.getTipo().getId());
+		paramMap.put("grupo", centro.getGrupo());
+		paramMap.put("empresa_id", empresaId);
+		Date fecha = new Date();
+		paramMap.put("fecha_creacion", fecha);
+		paramMap.put("fecha_actualizacion", fecha);        
+		plantilla.update(sql,paramMap);
+		return null;
+	}
+	
+	public Centro update(Centro centro) {
 		return null;
 	}
 
