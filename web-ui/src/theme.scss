@@ -61,7 +61,9 @@ app-lineas,
 app-canales,
 app-subcanales,
 app-productos,
-app-centros {
+app-centros,
+app-areas,
+app-reportes {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -71,6 +73,9 @@ app-centros {
   left: 0;
   right: 0;
   background-color: $color-fondo;
+  .pacifico-page {
+    flex: 1 1 auto;
+  }
 }
 
 .pacifico-page {
@@ -435,63 +440,6 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 }
 
 .docs-footer {
-  padding: 12px;
-  font-size: 12px;
-  margin-top: 40px;
   background: mat-color($my-app-primary);
   color: mat-color($my-app-primary, default-contrast);
-}
-
-.docs-footer-list {
-  align-items: center;
-  display: flex;
-  flex-flow: row wrap;
-  padding: 8px;
-}
-
-.docs-footer-logo {
-  flex: 1;
-}
-
-.docs-footer-angular-logo {
-  height: 50px;
-}
-
-.docs-footer-version {
-  flex: 1;
-  text-align: center;
-}
-
-.docs-footer-copyright {
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
-  flex-direction: column;
-  min-width: 225px;
-  text-align: center;
-}
-
-.docs-footer-logo span {
-  display: inline-block;
-  line-height: 50px;
-  margin: 0 40px;
-  vertical-align: bottom;
-
-  a {
-    font-size: 16px;
-    padding: 0;
-  }
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.is-next-version {
-  background: mat-color($my-app-accent, 900) !important;
 }

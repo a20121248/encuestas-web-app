@@ -6,8 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./areas.component.scss']
 })
 export class AreasComponent implements OnInit {
+  titulo: string;
 
-  constructor() { }
+  constructor() {
+    this.titulo = 'LISTADO DE ÁREAS';
+  }
 
   ngOnInit() {
   }

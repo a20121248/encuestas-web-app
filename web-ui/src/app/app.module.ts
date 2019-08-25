@@ -80,6 +80,9 @@ import { CargarPosicionDatosComponent } from './modules/mantenimientos/component
 import { CargarCentrosComponent } from './modules/mantenimientos/components/cargar-centros/cargar-centros.component';
 import { CargarAreasComponent } from './modules/mantenimientos/components/cargar-areas/cargar-areas.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
+import { ModalCrearComponent } from './modules/mantenimientos/components/modal-crear/modal-crear.component';
+import { ModalEditarComponent } from './modules/mantenimientos/components/modal-editar/modal-editar.component';
+import { ModalEliminarComponent } from './modules/mantenimientos/components/modal-eliminar/modal-eliminar.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -188,7 +191,10 @@ export function initializeApp(appConfig: AppConfig) {
     ProcesoDialogComponent,
     CargarCentrosComponent,
     CargarAreasComponent,
-    FooterComponent
+    FooterComponent,
+    ModalCrearComponent,
+    ModalEditarComponent,
+    ModalEliminarComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -233,7 +239,10 @@ export function initializeApp(appConfig: AppConfig) {
     MatDatepickerModule
   ],
   entryComponents: [
-    ProcesoDialogComponent
+    ProcesoDialogComponent,
+    ModalCrearComponent,
+    ModalEditarComponent,
+    ModalEliminarComponent
   ],
   bootstrap: [AppComponent]
 })
