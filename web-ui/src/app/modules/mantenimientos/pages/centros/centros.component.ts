@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Centro } from 'src/app/shared/models/centro';
+import { Title } from '@angular/platform-browser';
+import { CentroService } from 'src/app/shared/services/centro.service';
 
 @Component({
   selector: 'app-centros',
@@ -6,10 +9,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./centros.component.css']
 })
 export class CentrosComponent implements OnInit {
+  tituloPagina: string;
+  titulo: string;
+  centros: Centro[];
+  selectedCentro: Centro;
+  dcCentros = ['codigo', 'nombre', 'nivel', 'tipo', 'grupo', 'fechaCreacion', 'fechaActualizacion'];
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private titleService: Title,
+              private centroService: CentroService) {
+    this.tituloPagina = 'MANTENIMIENTO';
+    this.titulo = 'LISTADO DE CENTROS';
   }
 
+  ngOnInit() {
+    this.titleService.setTitle('Mantenimiento | Centros');
+    this.centroService.findAll().subscribe(centros => {
+      this.centros = centros;
+    });
+  }
+
+  setSelected(centro: Centro) {
+    this.selectedCentro = centro;
+  }
 }

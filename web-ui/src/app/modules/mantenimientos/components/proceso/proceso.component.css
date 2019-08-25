@@ -1,7 +1,3 @@
-.selected-row {
-  background: lightblue;
-}
-
 tr.mat-row {
   cursor: pointer;
 }

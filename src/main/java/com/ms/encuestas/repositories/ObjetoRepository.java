@@ -43,7 +43,7 @@ public class ObjetoRepository {
 					 "    ON A.padre_objeto_id=B.id\n" +
 					 " WHERE A.fecha_eliminacion IS NULL\n" +
 					 "   AND A.objeto_tipo_id=:objeto_tipo_id\n" + 
-					 " ORDER BY A.nombre";
+					 " ORDER BY B.nombre,A.nombre";
 		return plantilla.query(sql, new MapSqlParameterSource("objeto_tipo_id", objetoTipoId), new ObjetoMapper());
 	}
 	

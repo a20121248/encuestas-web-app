@@ -9,7 +9,7 @@ import { Proceso } from 'src/app/shared/models/Proceso';
   styleUrls: ['./mantenimientos.component.css']
 })
 export class MantenimientosComponent implements OnInit {
-  titulo = 'Módulo de Mantenimiento';
+  titulo = 'MANTENIMIENTO';
   links = [['Mantenimiento de usuarios', 'usuarios'],
            ['Mantenimiento de posiciones', 'posiciones'],
            ['Mantenimiento de áreas', 'areas'],

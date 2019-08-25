@@ -4,6 +4,7 @@ import { Proceso } from 'src/app/shared/models/Proceso';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig} from '@angular/material/dialog';
 import swal from 'sweetalert2';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Usuario } from 'src/app/shared/models/usuario';
 
 @Component({
   selector: 'app-proceso',
@@ -17,7 +18,6 @@ export class ProcesoComponent implements OnInit {
   dcProcesos = ['codigo', 'nombre', 'creador', 'fechaCierre', 'fechaCreacion', 'fechaActualizacion'];
 
   description: string;
-
 
   constructor(
     private procesoService: ProcesoService,
@@ -79,7 +79,7 @@ export class ProcesoComponent implements OnInit {
   templateUrl: 'dialog.html',
 })
 export class ProcesoDialogComponent {
-  form: FormGroup;
+  formGroup: FormGroup;
   description: string;
 
   constructor(
@@ -91,8 +91,11 @@ export class ProcesoDialogComponent {
   }
 
   ngOnInit() {
-    this.form = this.fb.group({
-      description: [this.description, []]
+    this.formGroup = this.fb.group({
+      codigo: [, []],
+      nombre: [, []],
+      creador: [, []],
+      fechaCierre: [, []]
     });
   }
 
@@ -101,6 +104,6 @@ export class ProcesoDialogComponent {
   }
 
   save() {
-    this.dialogRef.close(this.form.value);
+    this.dialogRef.close(this.formGroup.value);
   }
 }

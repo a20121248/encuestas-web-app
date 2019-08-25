@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import { throwError, of, Observable } from 'rxjs';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpErrorResponse,
-  HttpEventType
-} from '@angular/common/http';
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { AppConfig } from 'src/app/shared/services/app.config';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Router } from '@angular/router';
@@ -50,7 +45,6 @@ export class CentroService {
 
   findAll(): Observable<Centro[]> {
     const url = `${this.urlServer.api}centros`;
-    console.log(url);
     return this.http.get<Centro[]>(url);
   }
 

@@ -9,6 +9,7 @@ import { LineaService } from 'src/app/shared/services/linea.service';
   styleUrls: ['./lineas.component.css']
 })
 export class LineasComponent implements OnInit {
+  tituloPagina: string;
   titulo: string;
   lineas: Objeto[];
   selectedLinea: Objeto;
@@ -16,6 +17,7 @@ export class LineasComponent implements OnInit {
 
   constructor(private titleService: Title,
               private lineaService: LineaService) {
+    this.tituloPagina = 'MANTENIMIENTO';
     this.titulo = 'LISTADO DE LÍNEAS';
   }
 

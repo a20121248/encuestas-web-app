@@ -48,10 +48,6 @@ html, body {
   color: $color-2;
 }
 
-.selected-row {
-  background: lightblue;
-}
-
 app-seleccionar-usuario,
 app-enc-empresa,
 app-enc-centro,
@@ -61,7 +57,11 @@ app-enc-linea-canal,
 app-enc-producto-subcanal,
 app-enc-producto-canal,
 app-mantenimientos,
-app-lineas {
+app-lineas,
+app-canales,
+app-subcanales,
+app-productos,
+app-centros {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -74,6 +74,10 @@ app-lineas {
 }
 
 .pacifico-page {
+  .selected-row {
+    background: lightblue;
+  }
+
   .cuadro {
     .ng-select {
       .ng-select-container {

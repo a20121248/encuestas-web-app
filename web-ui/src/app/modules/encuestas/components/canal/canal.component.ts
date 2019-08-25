@@ -1,17 +1,15 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { Linea } from "src/app/shared/models/linea";
-import { LineaCanal } from 'src/app/shared/models/linea-canal';
+import { Component, OnInit, Input } from '@angular/core';
 import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 
 @Component({
-  selector: "app-form-canal",
-  templateUrl: "./canal.component.html",
-  styleUrls: ["./canal.component.css"]
+  selector: 'app-form-canal',
+  templateUrl: './canal.component.html',
+  styleUrls: ['./canal.component.css']
 })
 export class CanalComponent implements OnInit {
 
   @Input() lineaSeleccionada: ObjetoObjetos;
-  dcLinea = ["codigo", "nombre", "porcentaje","cumplimentar"];
+  dcLinea = ['codigo', 'nombre', 'porcentaje', 'cumplimentar'];
   constructor() {}
 
   ngOnInit() {

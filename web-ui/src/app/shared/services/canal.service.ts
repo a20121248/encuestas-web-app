@@ -13,7 +13,7 @@ import { Objeto } from '../models/objeto';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductoService {
+export class CanalService {
   protected urlServer = AppConfig.settings.urlServer;
 
   constructor(
@@ -28,7 +28,7 @@ export class ProductoService {
   }
 
   findAll(): Observable<Objeto[]> {
-    const url = `${this.urlServer.api}productos`;
+    const url = `${this.urlServer.api}canales`;
     return this.http.get<Objeto[]>(url);
   }
 }
