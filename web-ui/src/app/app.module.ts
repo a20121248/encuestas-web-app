@@ -80,6 +80,7 @@ import { CargarPosicionesComponent } from './modules/mantenimientos/components/c
 import { CargarPosicionDatosComponent } from './modules/mantenimientos/components/cargar-posicion-datos/cargar-posicion-datos.component';
 import { CargarCentrosComponent } from './modules/mantenimientos/components/cargar-centros/cargar-centros.component';
 import { CargarAreasComponent } from './modules/mantenimientos/components/cargar-areas/cargar-areas.component';
+import { FooterComponent } from './shared/components/footer/footer.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -188,7 +189,8 @@ export function initializeApp(appConfig: AppConfig) {
     CargarPosicionDatosComponent,
     ProcesoDialogComponent,
     CargarCentrosComponent,
-    CargarAreasComponent
+    CargarAreasComponent,
+    FooterComponent
   ],
   imports: [
     BrowserAnimationsModule,
