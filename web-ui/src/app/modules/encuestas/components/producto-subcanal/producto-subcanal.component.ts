@@ -6,7 +6,7 @@ import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 @Component({
   selector: 'app-form-producto-subcanal',
   templateUrl: './producto-subcanal.component.html',
-  styleUrls: ['./producto-subcanal.component.css']
+  styleUrls: ['./producto-subcanal.component.scss']
 })
 export class ProductoSubcanalComponent implements OnInit {
   @Input() lstProductoSubcanales: ObjetoObjetos[];

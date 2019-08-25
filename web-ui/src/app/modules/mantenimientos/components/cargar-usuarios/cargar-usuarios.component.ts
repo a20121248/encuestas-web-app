@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 @Component({
   selector: 'app-cargar-usuarios',
   templateUrl: './cargar-usuarios.component.html',
-  styleUrls: ['./cargar-usuarios.component.css']
+  styleUrls: ['./cargar-usuarios.component.scss']
 })
 export class CargarUsuariosComponent implements OnInit {
   titulo: string;

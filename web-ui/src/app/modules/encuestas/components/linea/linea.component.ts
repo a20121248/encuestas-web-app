@@ -8,7 +8,7 @@ import { Usuario } from 'src/app/shared/models/usuario';
 @Component({
   selector: 'app-form-linea',
   templateUrl: './linea.component.html',
-  styleUrls: ['./linea.component.css']
+  styleUrls: ['./linea.component.scss']
 })
 export class LineaComponent implements OnInit {
   @Input() lstLineas: Linea[];

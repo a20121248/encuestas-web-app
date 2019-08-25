@@ -6,7 +6,7 @@ import { LineaService } from 'src/app/shared/services/linea.service';
 @Component({
   selector: 'app-lineas',
   templateUrl: './lineas.component.html',
-  styleUrls: ['./lineas.component.css']
+  styleUrls: ['./lineas.component.scss']
 })
 export class LineasComponent implements OnInit {
   tituloPagina: string;

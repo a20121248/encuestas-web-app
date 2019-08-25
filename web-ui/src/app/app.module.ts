@@ -51,7 +51,6 @@ import { NavegacionComponent } from './shared/components/navegacion/navegacion.c
 import { LineaComponent } from './modules/encuestas/components/linea/linea.component';
 import { CanalComponent } from './modules/encuestas/components/canal/canal.component';
 import { EncLineaComponent } from './modules/encuestas/pages/enc-linea/enc-linea.component';
-import { EncCanalComponent } from './modules/encuestas/pages/enc-canal/enc-canal.component';
 import { SeleccionarUsuarioComponent } from './modules/encuestas/pages/seleccionar-usuario/seleccionar-usuario.component';
 import { CargarUsuariosComponent } from './modules/mantenimientos/components/cargar-usuarios/cargar-usuarios.component';
 import { ProcesoComponent } from './modules/mantenimientos/components/proceso/proceso.component';
@@ -161,7 +160,6 @@ export function initializeApp(appConfig: AppConfig) {
     LineaComponent,
     CanalComponent,
     EncLineaComponent,
-    EncCanalComponent,
     SeleccionarUsuarioComponent,
     CargarUsuariosComponent,
     ProcesoComponent,

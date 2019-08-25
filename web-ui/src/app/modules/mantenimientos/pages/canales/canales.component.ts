@@ -6,7 +6,7 @@ import { CanalService } from 'src/app/shared/services/canal.service';
 @Component({
   selector: 'app-canales',
   templateUrl: './canales.component.html',
-  styleUrls: ['./canales.component.css']
+  styleUrls: ['./canales.component.scss']
 })
 export class CanalesComponent implements OnInit {
   tituloPagina: string;

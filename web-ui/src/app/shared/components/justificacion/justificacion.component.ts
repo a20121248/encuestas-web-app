@@ -15,7 +15,7 @@ export interface Justificacion {
 @Component({
   selector: 'app-form-justificacion',
   templateUrl: './justificacion.component.html',
-  styleUrls: ['./justificacion.component.css']
+  styleUrls: ['./justificacion.component.scss']
 })
 export class JustificacionComponent implements OnInit {
   lstJustificaciones: Justificacion[];
@@ -23,7 +23,7 @@ export class JustificacionComponent implements OnInit {
   @Input() justificacion: Justificacion;
   myGroup: FormGroup;
   @Output() estadoFormJustToParent =  new EventEmitter();
-  
+
   constructor(
     private justificacionService: JustificacionService,
     private sharedFormService: SharedFormService) {

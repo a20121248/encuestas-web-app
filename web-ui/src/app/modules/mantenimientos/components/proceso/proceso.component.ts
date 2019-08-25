@@ -9,7 +9,7 @@ import { Usuario } from 'src/app/shared/models/usuario';
 @Component({
   selector: 'app-proceso',
   templateUrl: './proceso.component.html',
-  styleUrls: ['./proceso.component.css']
+  styleUrls: ['./proceso.component.scss']
 })
 export class ProcesoComponent implements OnInit {
   titulo: string;

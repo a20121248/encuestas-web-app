@@ -20,7 +20,7 @@ import { Usuario } from "src/app/shared/models/usuario";
 @Component({
   selector: "app-enc-linea",
   templateUrl: "./enc-linea.component.html",
-  styleUrls: ["./enc-linea.component.css"]
+  styleUrls: ["./enc-linea.component.scss"]
 })
 export class EncLineaComponent implements OnInit {
   lstLineas: Linea[];

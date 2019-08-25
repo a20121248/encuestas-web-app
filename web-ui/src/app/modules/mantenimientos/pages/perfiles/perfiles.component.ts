@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-perfiles',
   templateUrl: './perfiles.component.html',
-  styleUrls: ['./perfiles.component.css']
+  styleUrls: ['./perfiles.component.scss']
 })
 export class PerfilesComponent implements OnInit {
 

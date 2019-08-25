@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 @Component({
   selector: 'app-cargar-posiciones',
   templateUrl: './cargar-posiciones.component.html',
-  styleUrls: ['./cargar-posiciones.component.css']
+  styleUrls: ['./cargar-posiciones.component.scss']
 })
 export class CargarPosicionesComponent implements OnInit {
   titulo: string;

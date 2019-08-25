@@ -15,7 +15,7 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-enc-producto-subcanal',
   templateUrl: './enc-producto-subcanal.component.html',
-  styleUrls: ['./enc-producto-subcanal.component.css']
+  styleUrls: ['./enc-producto-subcanal.component.scss']
 })
 export class EncProductoSubcanalComponent implements OnInit {
   titulo = 'Herramienta de encuestas';

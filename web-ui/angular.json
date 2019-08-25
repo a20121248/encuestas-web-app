@@ -24,7 +24,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
+              "src/styles.scss",
               "src/theme.scss",
               "node_modules/material-design-icons/iconfont/material-icons.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
@@ -124,6 +124,12 @@
           }
         }
       }
-    }},
-  "defaultProject": "web-ui"
+    }
+  },
+  "defaultProject": "web-ui",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

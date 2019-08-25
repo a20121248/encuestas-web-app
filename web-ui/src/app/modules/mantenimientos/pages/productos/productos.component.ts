@@ -6,7 +6,7 @@ import { ProductoService } from 'src/app/shared/services/producto.service';
 @Component({
   selector: 'app-productos',
   templateUrl: './productos.component.html',
-  styleUrls: ['./productos.component.css']
+  styleUrls: ['./productos.component.scss']
 })
 export class ProductosComponent implements OnInit {
   tituloPagina: string;

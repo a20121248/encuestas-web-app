@@ -6,7 +6,7 @@ import { SubcanalService } from 'src/app/shared/services/subcanal.service';
 @Component({
   selector: 'app-subcanales',
   templateUrl: './subcanales.component.html',
-  styleUrls: ['./subcanales.component.css']
+  styleUrls: ['./subcanales.component.scss']
 })
 export class SubcanalesComponent implements OnInit {
   tituloPagina: string;

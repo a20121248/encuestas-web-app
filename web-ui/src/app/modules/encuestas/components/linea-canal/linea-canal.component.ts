@@ -11,7 +11,7 @@ import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 @Component({
   selector: 'app-form-linea-canal',
   templateUrl: './linea-canal.component.html',
-  styleUrls: ['./linea-canal.component.css'],
+  styleUrls: ['./linea-canal.component.scss'],
   // animations: [
   //   trigger('rowClicked', [
   //     state('selected', style({ background: 'lightblue' })),

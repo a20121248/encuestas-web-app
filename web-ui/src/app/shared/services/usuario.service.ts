@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { HttpClient, HttpEventType, HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppConfig } from 'src/app/shared/services/app.config';

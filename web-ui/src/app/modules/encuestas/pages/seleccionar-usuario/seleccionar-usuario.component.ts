@@ -10,7 +10,7 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-seleccionar-usuario',
   templateUrl: './seleccionar-usuario.component.html',
-  styleUrls: ['./seleccionar-usuario.component.css']
+  styleUrls: ['./seleccionar-usuario.component.scss']
 })
 export class SeleccionarUsuarioComponent implements OnInit {
 

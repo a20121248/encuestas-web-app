@@ -22,7 +22,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 @Component({
   selector: 'app-enc-centro',
   templateUrl: './enc-centro.component.html',
-  styleUrls: ['./enc-centro.component.css']
+  styleUrls: ['./enc-centro.component.scss']
 })
 export class EncCentroComponent implements OnInit {
   lstCentros: Centro[];
@@ -42,9 +42,9 @@ export class EncCentroComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  @ViewChild("btnGuardar",{static: false}) 
+  @ViewChild("btnGuardar",{static: false})
   btnGuardar: ElementRef;
-  
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private centroService: CentroService,
@@ -127,6 +127,6 @@ export class EncCentroComponent implements OnInit {
           this.location.back();
         }
       }
-    }  
+    }
   }
 }

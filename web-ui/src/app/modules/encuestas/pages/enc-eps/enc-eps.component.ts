@@ -19,7 +19,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 @Component({
   selector: 'app-enc-eps',
   templateUrl: './enc-eps.component.html',
-  styleUrls: ['./enc-eps.component.css']
+  styleUrls: ['./enc-eps.component.scss']
 })
 export class EncEPSComponent implements OnInit {
   lstEps: Eps[];
@@ -38,9 +38,9 @@ export class EncEPSComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  @ViewChild("btnGuardar",{static: false}) 
+  @ViewChild("btnGuardar",{static: false})
   btnGuardar: ElementRef;
-  
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private epsService: EpsService,
