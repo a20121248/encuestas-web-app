@@ -60,4 +60,7 @@ export class CargarCentrosComponent implements OnInit {
       (err) => this.error = err
     );
   }
+
+  descargar(): void {
+  }
 }

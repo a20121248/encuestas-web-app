@@ -60,4 +60,7 @@ export class CargarAreasComponent implements OnInit {
       (err) => this.error = err
     );
   }
+
+  descargar(): void {
+  }
 }

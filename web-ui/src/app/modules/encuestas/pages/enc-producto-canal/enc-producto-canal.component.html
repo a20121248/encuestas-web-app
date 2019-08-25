@@ -8,11 +8,16 @@
   <mat-card class="cuadro mat-elevation-z4 mt-4">
     <div class="row">
       <div class="col-md-12">
-        <app-form-producto-canal *ngIf="encuesta" [lstProductoCanales]="encuesta.lstItems"></app-form-producto-canal>
+        <app-form-producto-canal *ngIf="encuesta" [lstProductoCanales]="encuesta.lstItems" [haGuardado]="haGuardado" 
+        (estadoFormProdCanToParent)="estadoFormProductoCanal($event)"></app-form-producto-canal 
+          >
       </div>
       <div class="col-md-12 text-right mt-3">
         <button mat-raised-button color="warn" (click)="goBack()"><i class="material-icons">reply</i>Atrás</button>
-        <button mat-raised-button color="warn" (click)="guardarEncuesta()"><i class="material-icons">save</i>Guardar</button>
+        <button mat-raised-button color="warn" disabled *ngIf="!habilitarButton">
+          <i class="material-icons">save</i>Guardar</button>
+        <button mat-raised-button color="warn" *ngIf="habilitarButton" (click)="guardarEncuesta()">
+          <i class="material-icons">save</i>Guardar</button>
       </div>
     </div>
   </mat-card>

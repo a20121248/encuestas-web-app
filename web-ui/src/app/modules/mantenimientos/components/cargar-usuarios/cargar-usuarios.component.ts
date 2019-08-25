@@ -63,4 +63,7 @@ export class CargarUsuariosComponent implements OnInit {
       (err) => this.error = err
     );
   }
+
+  descargar(): void {
+  }
 }

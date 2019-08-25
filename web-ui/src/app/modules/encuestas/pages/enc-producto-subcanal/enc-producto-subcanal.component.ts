@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
@@ -11,6 +11,8 @@ import { ProductoSubcanalComponent } from '../../components/producto-subcanal/pr
 import { Usuario } from 'src/app/shared/models/usuario';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { Title } from '@angular/platform-browser';
+import { SharedFormService } from 'src/app/shared/services/shared-form.service';
+import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 
 @Component({
   selector: 'app-enc-producto-subcanal',
@@ -18,21 +20,28 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./enc-producto-subcanal.component.scss']
 })
 export class EncProductoSubcanalComponent implements OnInit {
+  lstItems: ObjetoObjetos[];
   titulo = 'Herramienta de encuestas';
   posicionCodigo: string;
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
   lineaId: string;
   canalId: string;
+  estadoCentros: boolean;
+  haGuardado: boolean;
+  habilitarButton: boolean = false;
+
   @ViewChild(ProductoSubcanalComponent, { static: false })
   productoSubcanalComponent: ProductoSubcanalComponent;
-
+  
   constructor(
     private activatedRoute: ActivatedRoute,
     private productoSubcanalService: ProductoSubcanalService,
     private location: Location,
     private usuarioService: UsuarioService,
-    private titleService: Title
+    private titleService: Title,
+    private renderer: Renderer2,
+    private sharedFormService: SharedFormService
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.lineaId = this.activatedRoute.snapshot.paramMap.get('lineaId');
@@ -41,6 +50,7 @@ export class EncProductoSubcanalComponent implements OnInit {
       this.usuarioSeleccionado = usuario;
       this.productoSubcanalService.obtenerEncuesta(this.usuarioSeleccionado, this.lineaId, this.canalId).subscribe(encuesta => {
         this.encuesta = encuesta;
+        this.lstItems = encuesta.lstItems as ObjetoObjetos[];
       });
     });
   }
@@ -49,7 +59,21 @@ export class EncProductoSubcanalComponent implements OnInit {
     this.titleService.setTitle('Encuestas | Productos - Subcanales');
   }
 
+  estadoFormProductoSubcanal(value:boolean){
+    this.estadoCentros = value;
+    this.setButtonGuardar();
+  }
+
+  setButtonGuardar(){
+    if(this.estadoCentros ){
+      this.habilitarButton = true;
+    } else {
+      this.habilitarButton = false;
+    }
+  }
+
   guardarEncuesta() {
+    this.haGuardado = true;
     this.productoSubcanalService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
       response => console.log(response), err => console.log(err)
     );
@@ -57,6 +81,25 @@ export class EncProductoSubcanalComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    let form1dirty:boolean;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1dirty = data.dirty;
+    });
+
+    if(this.haGuardado){
+      this.location.back();
+    } else {
+      if( form1dirty ){
+        swal.fire({
+          title: 'Cambios detectados',
+          text: "Primero guarde antes de continuar.",
+          type: "warning"
+        });
+      } else {
+        if( !form1dirty ){
+          this.location.back();
+        }
+      }
+    }  
   }
 }

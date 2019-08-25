@@ -31,6 +31,7 @@ export class EncEPSComponent implements OnInit {
   encuesta: Encuesta;
   estadoEps: boolean;
   haGuardado:boolean;
+  habilitarButton: boolean = false;
 
   @ViewChild(EpsComponent, { static: false })
   epsComponent: EpsComponent;
@@ -70,9 +71,9 @@ export class EncEPSComponent implements OnInit {
 
   setButtonGuardar(){
     if(this.estadoEps){
-      this.renderer.setProperty(this.btnGuardar,"disabled","false");
+      this.habilitarButton = true;
     } else {
-      this.renderer.setProperty(this.btnGuardar,"disabled","true");
+      this.habilitarButton = false;
     }
   }
 

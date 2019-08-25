@@ -60,4 +60,7 @@ export class CargarPosicionesComponent implements OnInit {
       (err) => this.error = err
     );
   }
+
+  descargar(): void {
+  }
 }

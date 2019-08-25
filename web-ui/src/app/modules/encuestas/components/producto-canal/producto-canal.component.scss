@@ -35,3 +35,7 @@ table [class*='mat-column-']:not(:first-child):not(:last-child) {
   -webkit-hyphens: auto;
   hyphens: auto;
 }
+
+.invalid{
+  color: red;
+}

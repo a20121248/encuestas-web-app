@@ -28,6 +28,15 @@ export class LineasComponent implements OnInit {
     });
   }
 
+  crear(): void {
+  }
+
+  editar(): void {
+  }
+
+  eliminar(): void {
+  }
+
   setSelected(linea: Objeto) {
     this.selectedLinea = linea;
   }

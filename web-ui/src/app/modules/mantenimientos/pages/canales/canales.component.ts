@@ -28,6 +28,15 @@ export class CanalesComponent implements OnInit {
     });
   }
 
+  crear(): void {
+  }
+
+  editar(): void {
+  }
+
+  eliminar(): void {
+  }
+
   setSelected(canal: Objeto) {
     this.selectedCanal = canal;
   }

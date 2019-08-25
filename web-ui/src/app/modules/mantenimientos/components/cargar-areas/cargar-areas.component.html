@@ -11,7 +11,7 @@
     </ng-select>
     <mat-form-field class="archivo">
       <mat-label>Seleccionar archivo</mat-label>
-      <input (click)="fileInput.click()" matInput [type]="text" name="ruta" [(ngModel)]="ruta" readonly>
+      <input matInput (click)="fileInput.click()" name="ruta" [(ngModel)]="ruta" readonly>
       <input name="archivo" hidden type="file" #fileInput (change)="seleccionarArchivo($event)">
       <button (click)="fileInput.click()" type="button" mat-icon-button matSuffix>
         <mat-icon [ngStyle]="{'color':'#607d8b'}">folder</mat-icon>
@@ -29,7 +29,7 @@
   <mat-card-footer class="footer">
     <div fxFlex fxLayoutAlign="center center" fxLayout="column">
       Existen {{ cantAreas }} áreas registradas.
-      <button mat-raised-button color="primary" (click)="downloadFile()"><i class="material-icons">cloud_download</i>Descargar</button>
+      <button mat-raised-button color="primary" (click)="descargar()"><i class="material-icons">cloud_download</i>Descargar</button>
     </div>
   </mat-card-footer>
 </mat-card>

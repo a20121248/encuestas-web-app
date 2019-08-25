@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
@@ -11,6 +11,7 @@ import { Title } from '@angular/platform-browser';
 import { ProductoCanalService } from 'src/app/shared/services/producto-canal.service';
 import { ProductoCanalComponent } from 'src/app/modules/encuestas/components/producto-canal/producto-canal.component';
 import { Encuesta } from 'src/app/shared/models/encuesta';
+import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 
 @Component({
   selector: 'app-enc-producto-canal',
@@ -23,6 +24,11 @@ export class EncProductoCanalComponent implements OnInit {
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
   lineaId: string;
+
+  estadoProductoCanal: boolean;
+  haGuardado: boolean;
+  habilitarButton: boolean = false;
+
   @ViewChild(ProductoCanalComponent, { static: false })
   productoCanalComponent: ProductoCanalComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
@@ -33,7 +39,9 @@ export class EncProductoCanalComponent implements OnInit {
     private productoCanalService: ProductoCanalService,
     private location: Location,
     private usuarioService: UsuarioService,
-    private titleService: Title
+    private titleService: Title,
+    private renderer: Renderer2,
+    private sharedFormService: SharedFormService
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.lineaId = this.activatedRoute.snapshot.paramMap.get('lineaId');
@@ -49,11 +57,43 @@ export class EncProductoCanalComponent implements OnInit {
     this.titleService.setTitle('Encuestas | Producto - Canal');
   }
 
+  estadoFormProductoCanal(value: boolean) {
+    this.estadoProductoCanal = value;
+    this.setButtonGuardar();
+  }
+
+  setButtonGuardar() {
+    if (this.estadoProductoCanal) {
+      this.habilitarButton = true;
+    } else {
+      this.habilitarButton = false;
+    }
+  }
+  
   goBack() {
-    this.location.back();
+    let form1dirty: boolean;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1dirty = data.dirty;
+    });
+    if (this.haGuardado) {
+      this.location.back();
+    } else {
+      if (form1dirty) {
+        swal.fire({
+          title: 'Cambios detectados',
+          text: "Primero guarde antes de continuar.",
+          type: "warning"
+        });
+      } else {
+        if (!form1dirty) {
+          this.location.back();
+        }
+      }
+    }
   }
 
   guardarEncuesta() {
+    this.haGuardado = true;
     this.productoCanalService.guardarEncuesta(this.encuesta, this.posicionCodigo).subscribe(
       response => console.log(response), err => console.log(err)
     );

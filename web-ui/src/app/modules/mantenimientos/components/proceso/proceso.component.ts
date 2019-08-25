@@ -33,7 +33,6 @@ export class ProcesoComponent implements OnInit {
   }
 
   crear(): void {
-
   }
 
   editar() {

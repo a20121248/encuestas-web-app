@@ -28,6 +28,15 @@ export class SubcanalesComponent implements OnInit {
     });
   }
 
+  crear(): void {
+  }
+
+  editar(): void {
+  }
+
+  eliminar(): void {
+  }
+
   setSelected(subcanal: Objeto) {
     this.selectedSubcanal = subcanal;
   }

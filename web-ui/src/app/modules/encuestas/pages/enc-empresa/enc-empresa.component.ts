@@ -30,8 +30,9 @@ export class EncEmpresaComponent implements OnInit {
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
   estadoEmpresas: boolean;
-  estadoJustificacion:boolean;
+  estadoJustificacion: boolean;
   haGuardado: boolean;
+  habilitarButton: boolean = false;
 
   @ViewChild(EmpresaComponent, { static: false })
   empresaComponent: EmpresaComponent;
@@ -39,8 +40,6 @@ export class EncEmpresaComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  @ViewChild("btnGuardar",{static: false})
-  btnGuardar: ElementRef;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -66,46 +65,44 @@ export class EncEmpresaComponent implements OnInit {
     this.titleService.setTitle('Encuestas | Empresas');
   }
 
-  estadoFormJustificacion(value:boolean){
+  estadoFormJustificacion(value: boolean) {
     this.estadoJustificacion = value;
     this.setButtonGuardar();
   }
 
-  estadoFormEmpresas(value:boolean){
+  estadoFormEmpresas(value: boolean) {
     this.estadoEmpresas = value;
     this.setButtonGuardar();
   }
 
-  setButtonGuardar(){
-    if(this.estadoEmpresas && this.estadoJustificacion){
-      this.renderer.setProperty(this.btnGuardar,"disabled","false");
+  setButtonGuardar() {
+    if (this.estadoEmpresas && this.estadoJustificacion) {
+      this.habilitarButton = true;
     } else {
-      this.renderer.setProperty(this.btnGuardar,"disabled","true");
+      this.habilitarButton = false;
     }
   }
 
   goBack() {
-    let form1dirty:boolean;
-    let form2dirty:boolean;
+    let form1dirty: boolean;
+    let form2dirty: boolean;
     this.sharedFormService.form1Actual.subscribe(data => {
       form1dirty = data.dirty;
     });
     this.sharedFormService.form2Actual.subscribe(data => {
       form2dirty = data.dirty;
     });
-    console.log(form1dirty);
-    console.log(form2dirty);
-    if(this.haGuardado){
+    if (this.haGuardado) {
       this.location.back();
     } else {
-      if( form1dirty || form2dirty ){
+      if (form1dirty || form2dirty) {
         swal.fire({
           title: 'Cambios detectados',
           text: "Primero guarde antes de continuar.",
           type: "warning"
         });
       } else {
-        if( !form1dirty && !form2dirty ){
+        if (!form1dirty && !form2dirty) {
           this.location.back();
         }
       }

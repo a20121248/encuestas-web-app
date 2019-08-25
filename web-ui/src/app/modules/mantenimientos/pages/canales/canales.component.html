@@ -37,7 +37,7 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="dcCanales"></tr>
-            <tr mat-row *matRowDef="let row; columns: dcCanales;" [class.selected-row]="row === selectedLinea" (click)="setSelected(row)"></tr>
+            <tr mat-row *matRowDef="let row; columns: dcCanales;" [class.selected-row]="row === selectedCanal" (click)="setSelected(row)"></tr>
           </table>
         </div>
       </mat-card>

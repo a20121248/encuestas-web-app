@@ -60,4 +60,7 @@ export class CargarPosicionDatosComponent implements OnInit {
       (err) => this.error = err
     );
   }
+
+  descargar(): void {
+  }
 }

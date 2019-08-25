@@ -60,4 +60,7 @@ export class CargarPerfilesComponent implements OnInit {
       (err) => this.error = err
     );
   }
+
+  descargar(): void {
+  }
 }

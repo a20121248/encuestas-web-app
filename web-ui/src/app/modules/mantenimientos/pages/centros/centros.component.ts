@@ -28,6 +28,15 @@ export class CentrosComponent implements OnInit {
     });
   }
 
+  crear(): void {
+  }
+
+  editar(): void {
+  }
+
+  eliminar(): void {
+  }
+
   setSelected(centro: Centro) {
     this.selectedCentro = centro;
   }
