@@ -6,7 +6,7 @@ import { CentroService } from 'src/app/shared/services/centro.service';
 @Component({
   selector: 'app-centros',
   templateUrl: './centros.component.html',
-  styleUrls: ['./centros.component.css']
+  styleUrls: ['./centros.component.scss']
 })
 export class CentrosComponent implements OnInit {
   tituloPagina: string;
@@ -26,6 +26,15 @@ export class CentrosComponent implements OnInit {
     this.centroService.findAll().subscribe(centros => {
       this.centros = centros;
     });
+  }
+
+  crear(): void {
+  }
+
+  editar(): void {
+  }
+
+  eliminar(): void {
   }
 
   setSelected(centro: Centro) {

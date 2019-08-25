@@ -19,7 +19,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 @Component({
   selector: 'app-enc-eps',
   templateUrl: './enc-eps.component.html',
-  styleUrls: ['./enc-eps.component.css']
+  styleUrls: ['./enc-eps.component.scss']
 })
 export class EncEPSComponent implements OnInit {
   lstEps: Eps[];
@@ -31,6 +31,7 @@ export class EncEPSComponent implements OnInit {
   encuesta: Encuesta;
   estadoEps: boolean;
   haGuardado:boolean;
+  habilitarButton: boolean = false;
 
   @ViewChild(EpsComponent, { static: false })
   epsComponent: EpsComponent;
@@ -38,9 +39,9 @@ export class EncEPSComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  @ViewChild("btnGuardar",{static: false}) 
+  @ViewChild("btnGuardar",{static: false})
   btnGuardar: ElementRef;
-  
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private epsService: EpsService,
@@ -70,9 +71,9 @@ export class EncEPSComponent implements OnInit {
 
   setButtonGuardar(){
     if(this.estadoEps){
-      this.renderer.setProperty(this.btnGuardar,"disabled","false");
+      this.habilitarButton = true;
     } else {
-      this.renderer.setProperty(this.btnGuardar,"disabled","true");
+      this.habilitarButton = false;
     }
   }
 

@@ -5,19 +5,24 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig} from '@angul
 import swal from 'sweetalert2';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Usuario } from 'src/app/shared/models/usuario';
+import { filter } from 'rxjs/operators';
+import { ModalCrearComponent } from '../modal-crear/modal-crear.component';
+import { ModalEditarComponent } from '../modal-editar/modal-editar.component';
+import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.component';
 
 @Component({
   selector: 'app-proceso',
   templateUrl: './proceso.component.html',
-  styleUrls: ['./proceso.component.css']
+  styleUrls: ['./proceso.component.scss']
 })
 export class ProcesoComponent implements OnInit {
   titulo: string;
   procesos: Proceso[];
   selectedProceso: Proceso;
   dcProcesos = ['codigo', 'nombre', 'creador', 'fechaCierre', 'fechaCreacion', 'fechaActualizacion'];
-
-  description: string;
+  crearDialogRef: MatDialogRef<ModalCrearComponent>;
+  editarDialogRef: MatDialogRef<ModalEditarComponent>;
+  eliminarDialogRef: MatDialogRef<ModalEliminarComponent>;
 
   constructor(
     private procesoService: ProcesoService,
@@ -33,7 +38,18 @@ export class ProcesoComponent implements OnInit {
   }
 
   crear(): void {
-
+    const param = {
+      hasBackdrop: true,
+      width: '500px',
+    };
+    this.crearDialogRef = this.dialog.open(ModalCrearComponent, param);
+    this.crearDialogRef
+        .afterClosed()
+        .pipe(filter(name => name))
+        .subscribe(name => {
+          console.log(name);
+          // this.files.push({name, content: '' });
+        });
   }
 
   editar() {
@@ -42,21 +58,24 @@ export class ProcesoComponent implements OnInit {
       return;
     }
 
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.data = {
-      id: 1,
-      title: 'Angular For Beginners'
+    const data = {
+      titulo: 'titulo'
     };
-
-    this.dialog.open(ProcesoDialogComponent, dialogConfig);
-
-    const dialogRef = this.dialog.open(ProcesoDialogComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(
-      data => console.log('Dialog output:', data)
-    );
+    const param = {
+      hasBackdrop: true,
+      width: '500px',
+      data: {
+        titulo: 'titulo'
+      }
+    };
+    this.editarDialogRef = this.dialog.open(ModalCrearComponent, param);
+    this.editarDialogRef
+        .afterClosed()
+        .pipe(filter(name => name))
+        .subscribe(name => {
+          console.log(name);
+          // this.files.push({name, content: '' });
+        });
   }
 
   eliminar() {

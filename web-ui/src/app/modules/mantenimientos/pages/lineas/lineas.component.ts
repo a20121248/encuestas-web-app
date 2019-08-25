@@ -6,7 +6,7 @@ import { LineaService } from 'src/app/shared/services/linea.service';
 @Component({
   selector: 'app-lineas',
   templateUrl: './lineas.component.html',
-  styleUrls: ['./lineas.component.css']
+  styleUrls: ['./lineas.component.scss']
 })
 export class LineasComponent implements OnInit {
   tituloPagina: string;
@@ -26,6 +26,15 @@ export class LineasComponent implements OnInit {
     this.lineaService.findAll().subscribe(lineas => {
       this.lineas = lineas;
     });
+  }
+
+  crear(): void {
+  }
+
+  editar(): void {
+  }
+
+  eliminar(): void {
   }
 
   setSelected(linea: Objeto) {

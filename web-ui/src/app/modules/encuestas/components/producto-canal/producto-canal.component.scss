@@ -1,0 +1,41 @@
+.mat-column-productos {
+  font-weight: bold;
+  text-align: left;
+}
+
+.mat-column-total {
+  font-weight: bold;
+  text-align: right;
+  min-width: 62px;
+}
+
+th.mat-header-cell:first-of-type{
+  text-align: left;
+}
+
+.mat-column-subcanal {
+  font-weight: bold;
+  text-align: right;
+}
+
+table [class*='mat-column-'] {
+  font-size:12px!important;
+}
+
+table [class*='mat-column-']:not(:first-child):not(:last-child) {
+  min-width: 120px;
+  text-align: center;
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.invalid{
+  color: red;
+}

@@ -51,7 +51,6 @@ import { NavegacionComponent } from './shared/components/navegacion/navegacion.c
 import { LineaComponent } from './modules/encuestas/components/linea/linea.component';
 import { CanalComponent } from './modules/encuestas/components/canal/canal.component';
 import { EncLineaComponent } from './modules/encuestas/pages/enc-linea/enc-linea.component';
-import { EncCanalComponent } from './modules/encuestas/pages/enc-canal/enc-canal.component';
 import { SeleccionarUsuarioComponent } from './modules/encuestas/pages/seleccionar-usuario/seleccionar-usuario.component';
 import { CargarUsuariosComponent } from './modules/mantenimientos/components/cargar-usuarios/cargar-usuarios.component';
 import { ProcesoComponent } from './modules/mantenimientos/components/proceso/proceso.component';
@@ -80,6 +79,10 @@ import { CargarPosicionesComponent } from './modules/mantenimientos/components/c
 import { CargarPosicionDatosComponent } from './modules/mantenimientos/components/cargar-posicion-datos/cargar-posicion-datos.component';
 import { CargarCentrosComponent } from './modules/mantenimientos/components/cargar-centros/cargar-centros.component';
 import { CargarAreasComponent } from './modules/mantenimientos/components/cargar-areas/cargar-areas.component';
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { ModalCrearComponent } from './modules/mantenimientos/components/modal-crear/modal-crear.component';
+import { ModalEditarComponent } from './modules/mantenimientos/components/modal-editar/modal-editar.component';
+import { ModalEliminarComponent } from './modules/mantenimientos/components/modal-eliminar/modal-eliminar.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -160,7 +163,6 @@ export function initializeApp(appConfig: AppConfig) {
     LineaComponent,
     CanalComponent,
     EncLineaComponent,
-    EncCanalComponent,
     SeleccionarUsuarioComponent,
     CargarUsuariosComponent,
     ProcesoComponent,
@@ -188,7 +190,11 @@ export function initializeApp(appConfig: AppConfig) {
     CargarPosicionDatosComponent,
     ProcesoDialogComponent,
     CargarCentrosComponent,
-    CargarAreasComponent
+    CargarAreasComponent,
+    FooterComponent,
+    ModalCrearComponent,
+    ModalEditarComponent,
+    ModalEliminarComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -233,7 +239,10 @@ export function initializeApp(appConfig: AppConfig) {
     MatDatepickerModule
   ],
   entryComponents: [
-    ProcesoDialogComponent
+    ProcesoDialogComponent,
+    ModalCrearComponent,
+    ModalEditarComponent,
+    ModalEliminarComponent
   ],
   bootstrap: [AppComponent]
 })

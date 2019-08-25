@@ -11,7 +11,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 @Component({
   selector: 'app-form-empresa',
   templateUrl: './empresa.component.html',
-  styleUrls: ['./empresa.component.css']
+  styleUrls: ['./empresa.component.scss']
 })
 
 export class EmpresaComponent implements OnInit {
@@ -20,7 +20,7 @@ export class EmpresaComponent implements OnInit {
   @Input() haGuardado:boolean;
 
   @Output() estadoFormEmpresaToParent = new EventEmitter();
-  dcEmpresa = ['nombre', 'porcentaje', 'ingresar'];
+  dcEmpresa = ['nombre', 'porcentaje', 'estado','ir'];
   url: string;
   porcTotal: number;
   groupForm: FormGroup;

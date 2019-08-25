@@ -6,7 +6,7 @@ import { Proceso } from 'src/app/shared/models/Proceso';
 @Component({
   selector: 'app-mantenimientos',
   templateUrl: './mantenimientos.component.html',
-  styleUrls: ['./mantenimientos.component.css']
+  styleUrls: ['./mantenimientos.component.scss']
 })
 export class MantenimientosComponent implements OnInit {
   titulo = 'MANTENIMIENTO';

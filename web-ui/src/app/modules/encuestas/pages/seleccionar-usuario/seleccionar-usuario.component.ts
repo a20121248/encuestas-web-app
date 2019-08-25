@@ -10,11 +10,11 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-seleccionar-usuario',
   templateUrl: './seleccionar-usuario.component.html',
-  styleUrls: ['./seleccionar-usuario.component.css']
+  styleUrls: ['./seleccionar-usuario.component.scss']
 })
 export class SeleccionarUsuarioComponent implements OnInit {
 
-  dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'completar'];
+  dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'estado','ir'];
   lstUsuario: Usuario[];
 
   titulo = 'Colaboradores';
@@ -27,7 +27,8 @@ export class SeleccionarUsuarioComponent implements OnInit {
   ngOnInit() {
     this.titleService.setTitle('Encuestas | Colaboradores');
     this.usuarioService.getUsuariosDependientes().subscribe(usuarios => {
-      this.lstUsuario = usuarios;
+      console.log(usuarios.map(t => t.estado = true));
+      this.lstUsuario = usuarios as Usuario[];
     });
   }
 }

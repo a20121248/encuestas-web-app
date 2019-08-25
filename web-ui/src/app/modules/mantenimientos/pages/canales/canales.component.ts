@@ -6,7 +6,7 @@ import { CanalService } from 'src/app/shared/services/canal.service';
 @Component({
   selector: 'app-canales',
   templateUrl: './canales.component.html',
-  styleUrls: ['./canales.component.css']
+  styleUrls: ['./canales.component.scss']
 })
 export class CanalesComponent implements OnInit {
   tituloPagina: string;
@@ -26,6 +26,15 @@ export class CanalesComponent implements OnInit {
     this.canalService.findAll().subscribe(canales => {
       this.canales = canales;
     });
+  }
+
+  crear(): void {
+  }
+
+  editar(): void {
+  }
+
+  eliminar(): void {
   }
 
   setSelected(canal: Objeto) {

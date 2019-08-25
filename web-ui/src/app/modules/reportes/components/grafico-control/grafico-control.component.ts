@@ -7,7 +7,7 @@ import { Tipo } from 'src/app/shared/models/tipo';
 @Component({
   selector: 'app-grafico-control',
   templateUrl: './grafico-control.component.html',
-  styleUrls: ['./grafico-control.component.css']
+  styleUrls: ['./grafico-control.component.scss']
 })
 export class GraficoControlComponent implements OnInit {
   @Input() procesos: Proceso[];

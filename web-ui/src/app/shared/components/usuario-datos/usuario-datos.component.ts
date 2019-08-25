@@ -7,7 +7,7 @@ import { UsuarioService } from 'src/app/shared/services/usuario.service';
 @Component({
   selector: 'app-usuario-datos',
   templateUrl: './usuario-datos.component.html',
-  styleUrls: ['./usuario-datos.component.css']
+  styleUrls: ['./usuario-datos.component.scss']
 })
 export class UsuarioDatosComponent implements OnInit {
   @Input() usuario: Usuario;

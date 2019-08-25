@@ -1,0 +1,35 @@
+.mat-column-nombre {
+  width: 50%;
+}
+
+.mat-column-porcentaje {
+  width: 30%;
+  text-align: center;
+}
+
+.mat-column-ingresar {
+  width: 20%;
+  text-align: center;
+}
+
+.invalid{
+  color: red;
+}
+
+.terminado{
+  color: green;
+  font-size: 75%;
+  display: flex; 
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.pendiente{
+  color: red;
+  font-size: 80%;
+  display: flex; 
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}

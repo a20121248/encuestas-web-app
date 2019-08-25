@@ -10,7 +10,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 @Component({
   selector: 'app-form-centro',
   templateUrl: './centro.component.html',
-  styleUrls: ['./centro.component.css']
+  styleUrls: ['./centro.component.scss']
 })
 
 export class CentroComponent implements OnInit {
@@ -24,7 +24,7 @@ export class CentroComponent implements OnInit {
   groupByColumns: string[] = ['grupo'];
   groupForm: FormGroup;
   porcTotal: number;
-  
+
 
   constructor(
     private sharedFormService: SharedFormService
@@ -35,6 +35,9 @@ export class CentroComponent implements OnInit {
   ngOnInit() {
     this.dataSource.data = this.addGroups(this.lstCentros,this.groupByColumns);
     this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
+    this.dataSource.data.map(row => {
+      this.groupHeaderClick(row);
+    });
     this.onChanges();
 
   }
@@ -149,6 +152,7 @@ export class CentroComponent implements OnInit {
         this.sendEstado(false);
       }
       this.sharedFormService.actualizarEstadoForm1(this.groupForm);
+      this.sharedFormService.actualizarPorcentajeForm1(this.porcTotal);
     });
   }
 

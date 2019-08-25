@@ -11,20 +11,25 @@
     </ng-select>
     <mat-form-field class="archivo">
       <mat-label>Seleccionar archivo</mat-label>
-      <input (click)="fileInput.click()" matInput [type]="text" name="ruta" [(ngModel)]="ruta" readonly>
+      <input matInput (click)="fileInput.click()" name="ruta" [(ngModel)]="ruta" readonly>
       <input name="archivo" hidden type="file" #fileInput (change)="seleccionarArchivo($event)">
       <button (click)="fileInput.click()" type="button" mat-icon-button matSuffix>
         <mat-icon [ngStyle]="{'color':'#607d8b'}">folder</mat-icon>
       </button>
     </mat-form-field>
   </mat-card-content>
-  <mat-card-actions fxLayoutAlign="center center">
-    <button mat-raised-button color="accent" (click)="uploadFile()"><i class="material-icons">cloud_upload</i>Subir</button>
+  <mat-card-actions fxLayoutAlign="center center" fxLayout="column">
+    <div class="cargar">
+      <div class="info">{{ porcentaje.toFixed(2) }} %</div>
+      <mat-progress-bar color="accent" mode="determinate" value="{{ porcentaje }}"></mat-progress-bar>
+      <div class="info"> {{ tamanhoCargado.toFixed(2) }} KB de {{ tamanhoTotal.toFixed(2) }} KB</div>
+    </div>
+    <button (click)="subir()" mat-raised-button color="accent"><i class="material-icons">cloud_upload</i>Subir</button>
   </mat-card-actions>
   <mat-card-footer class="footer">
     <div fxFlex fxLayoutAlign="center center" fxLayout="column">
       Existen {{ cantPosiciones }} posiciones con datos registrados.
-      <button mat-raised-button color="primary" (click)="downloadFile()"><i class="material-icons">cloud_download</i>Descargar</button>
+      <button mat-raised-button color="primary" (click)="descargar()"><i class="material-icons">cloud_download</i>Descargar</button>
     </div>
   </mat-card-footer>
 </mat-card>

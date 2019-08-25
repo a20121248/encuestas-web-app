@@ -6,7 +6,7 @@ import { SubcanalService } from 'src/app/shared/services/subcanal.service';
 @Component({
   selector: 'app-subcanales',
   templateUrl: './subcanales.component.html',
-  styleUrls: ['./subcanales.component.css']
+  styleUrls: ['./subcanales.component.scss']
 })
 export class SubcanalesComponent implements OnInit {
   tituloPagina: string;
@@ -26,6 +26,15 @@ export class SubcanalesComponent implements OnInit {
     this.subcanalService.findAll().subscribe(subcanales => {
       this.subcanales = subcanales;
     });
+  }
+
+  crear(): void {
+  }
+
+  editar(): void {
+  }
+
+  eliminar(): void {
   }
 
   setSelected(subcanal: Objeto) {

@@ -3,7 +3,7 @@
     "name": "DEV"
   },
   "urlServer": {
-    "api": "http://localhost:8080/api/",
-    "oauth": "http://localhost:8080/oauth/"
+    "api": "http://desktop-74clkop:8080/api/",
+    "oauth": "http://desktop-74clkop:8080/oauth/"
   }
 }

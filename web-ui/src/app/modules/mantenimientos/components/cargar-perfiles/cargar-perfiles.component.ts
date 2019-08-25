@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 @Component({
   selector: 'app-cargar-perfiles',
   templateUrl: './cargar-perfiles.component.html',
-  styleUrls: ['./cargar-perfiles.component.css']
+  styleUrls: ['./cargar-perfiles.component.scss']
 })
 export class CargarPerfilesComponent implements OnInit {
   titulo: string;
@@ -59,5 +59,8 @@ export class CargarPerfilesComponent implements OnInit {
       },
       (err) => this.error = err
     );
+  }
+
+  descargar(): void {
   }
 }

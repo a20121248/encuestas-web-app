@@ -1,31 +1,42 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ProductoCanal } from 'src/app/shared/models/producto-canal';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
+import { FormGroup, AbstractControl, FormControl, Validators } from '@angular/forms';
+import { SharedFormService } from 'src/app/shared/services/shared-form.service';
+import { CustomValidatorsService } from 'src/app/shared/services/custom-validators.service';
 
 
 @Component({
   selector: 'app-form-producto-canal',
   templateUrl: './producto-canal.component.html',
-  styleUrls: ['./producto-canal.component.css']
+  styleUrls: ['./producto-canal.component.scss']
 })
 export class ProductoCanalComponent implements OnInit {
   @Input() lstProductoCanales: ObjetoObjetos[];
   @Input() usuarioSeleccionado: Usuario;
+  @Input() haGuardado:boolean;
 
+  @Output() estadoFormProdCanToParent = new EventEmitter();
   lstCabeceraTableObtenida: string[];
   lstCabeceraTableDynamico: string[];
   sumaTotal: number;
+  porcTotal: number;
+  groupForm: FormGroup;
 
   constructor(
-  ) { }
+    private sharedFormService: SharedFormService
+  ) {
+    this.groupForm = new FormGroup({});
+  }
 
   ngOnInit() {
     this.obtenerNombresColumna();
+    this.onChanges();
   }
 
   obtenerNombresColumna() {
-    if (this.lstProductoCanales != null) {
+    if (this.lstProductoCanales != null && this.lstProductoCanales.length >0 ) {
       this.lstCabeceraTableObtenida = ['productos'];
       this.lstCabeceraTableDynamico = this.lstProductoCanales[0].lstObjetos.map(
         (subcanal) => {
@@ -35,8 +46,6 @@ export class ProductoCanalComponent implements OnInit {
       this.lstCabeceraTableObtenida.push(...this.lstCabeceraTableDynamico);
       this.lstCabeceraTableObtenida.push('total');
     }
-    console.log(this.lstProductoCanales);
-    console.log(this.lstCabeceraTableObtenida);
   }
 
   obtenerSuma(element: any): number {
@@ -52,8 +61,46 @@ export class ProductoCanalComponent implements OnInit {
       this.lstProductoCanales.forEach(element => {
         this.sumaTotal += element.lstObjetos.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
       });
-      return Math.trunc(100000 * this.sumaTotal) / 100000;
+      this.porcTotal = Math.trunc(100000 * this.sumaTotal) / 100000;
+      return this.porcTotal;
+    } else {
+      this.porcTotal = 0;
+      return this.porcTotal;
     }
-    return 0;
+  }
+
+  sendEstado(value: boolean) {
+    this.estadoFormProdCanToParent.emit(value);
+  }
+
+  validacionItemControl(value:string):AbstractControl{
+    return this.groupForm.get(String(value));
+  }
+
+  onChanges():void{
+    this.groupForm.valueChanges
+    .subscribe(data =>{
+      if(this.groupForm.valid && this.porcTotal==100){
+        this.sendEstado(true);
+      } else {
+        this.sendEstado(false);
+      }
+      this.sharedFormService.actualizarEstadoForm1(this.groupForm);
+    });
+  }
+
+  verificarLista(): boolean {
+    if (this.lstProductoCanales != null) { //Verifica la carga de informacion desde el Parent
+      this.lstProductoCanales.forEach(producto => {
+        for(let canal of producto.lstObjetos.map(t => t)){
+          let control: FormControl = new FormControl(canal.porcentaje, Validators.compose([
+            Validators.required, CustomValidatorsService.validarNegativo, CustomValidatorsService.validarPatronPorcentaje]));
+            this.groupForm.addControl(producto.objeto.codigo+canal.codigo,control);
+        }  
+      });
+      return true;
+    } else {
+      return false;
+    }
   }
 }
