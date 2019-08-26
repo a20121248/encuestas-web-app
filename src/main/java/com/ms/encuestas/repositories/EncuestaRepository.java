@@ -86,7 +86,7 @@ public class EncuestaRepository {
 		Date fecha = new Date();
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);        
-		plantilla.update(sql,paramMap);
+		plantilla.update(sql, paramMap);
 	}
 	
 	public EncuestaEmpresa getEncuestaEmpresa(Long procesoId, String posicionCodigo, Long encuestaTipoId) {			

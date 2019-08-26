@@ -6,6 +6,7 @@ import java.util.Date;
 public class Proceso implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
+	private String codigo;
 	private String nombre;
 	private Usuario usuario;
 	private Date fechaCierre;
@@ -18,6 +19,14 @@ public class Proceso implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	public String getNombre() {
