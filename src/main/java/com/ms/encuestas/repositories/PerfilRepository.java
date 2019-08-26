@@ -98,7 +98,7 @@ public class PerfilRepository {
 		for (LineaCanal lineaCanal : lstLineasCanales) {
 			paramMap.put("linea_id", lineaCanal.getLinea().getId());			
 			paramMap.put("canal_id", lineaCanal.getCanal().getId());
-			return plantilla.update(sql,paramMap);
+			plantilla.update(sql,paramMap);
 		}
 		return 1;
 	}

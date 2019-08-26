@@ -79,6 +79,9 @@ public class PerfilService implements PerfilServiceI {
 		List<Centro> centros = centroRepository.findAll();
 		List<Objeto> lineas = objetoRepository.findAllLineas();
 		List<Objeto> canales = objetoRepository.findAllCanales();
+		
+		System.out.println(String.format("Existen %d líneas", lineas.size()));
+		System.out.println(String.format("Existen %d canales", canales.size()));
         try (XSSFWorkbook libro = new XSSFWorkbook(file)) {
            XSSFSheet hoja = libro.getSheet("PERFILES");
            Iterator<Row> filas = hoja.iterator();
@@ -156,7 +159,7 @@ public class PerfilService implements PerfilServiceI {
 
             Centro centro = centros.stream().filter(item -> codigo.equals(item.getCodigo())).findAny().orElse(null);
             if (centro == null) {
-            	logger.error(String.format("El centro de costos con código {} no existe.", codigo));
+            	logger.error(String.format("El centro de costos con código %s no existe.", codigo));
             	continue;
             }
             lstCentros.add(centro);            	
@@ -177,19 +180,21 @@ public class PerfilService implements PerfilServiceI {
             String lineaNombre = dataFormatter.formatCellValue(celdas.next());
             String canalCodigo = dataFormatter.formatCellValue(celdas.next());
             String canalNombre = dataFormatter.formatCellValue(celdas.next());
-
+            
             Objeto linea = lineas.stream().filter(item -> lineaCodigo.equals(item.getCodigo())).findAny().orElse(null);
             Objeto canal = canales.stream().filter(item -> canalCodigo.equals(item.getCodigo())).findAny().orElse(null);
             if (linea == null) {
-            	logger.error(String.format("La línea con código {} no existe.", lineaCodigo));
+            	logger.error(String.format("La línea con código %s no existe.", lineaCodigo));
             	continue;
             }
             if (canal == null) {
-            	logger.error(String.format("El canal con código {} no existe.", canalCodigo));
+            	logger.error(String.format("El canal con código %s no existe.", canalCodigo));
             	continue;
             }
             lstLineasCanales.add(new LineaCanal(linea, canal));
         }
+        logger.info("Para el perfil " + perfilId);
+        logger.info("tamanho=" + lstLineasCanales.size());
 		return lstLineasCanales;
 	}
 	

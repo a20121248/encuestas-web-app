@@ -19,7 +19,7 @@ export class LineaComponent implements OnInit {
   @Input() lstLineas: Linea[];
   @Input() usuario: Usuario;
   @Input() haGuardado: boolean;
-  
+
   @Output() estadoFormLineaToParent = new EventEmitter();
 
   dcLinea = ['codigo', 'nombre', 'porcentaje', 'estado', 'ir'];
@@ -77,10 +77,10 @@ export class LineaComponent implements OnInit {
       this.porcTotal = 0;
       return this.porcTotal;
     }
-  }  
+  }
 
   setRuta(lineaId:number){
-    let perfilTipoId = this.usuario.posicion.perfil.perfilTipo.id;
+    let perfilTipoId = this.usuario.posicion.perfil.tipo.id;
     if (perfilTipoId == 2) { // Es una Linea, ir a Producto-Canal
       this.url = lineaId + '/producto-canal';
     } else if (perfilTipoId == 3) { // Es un Canal, ir a Producto-Subcanal

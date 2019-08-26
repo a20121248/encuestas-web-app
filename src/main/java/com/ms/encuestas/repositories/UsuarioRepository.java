@@ -162,7 +162,6 @@ public class UsuarioRepository {
 				     "       F.fecha_actualizacion centro_tipo_fec_actualizacion,\n" +
 				     "       H.id perfil_id,\n" +
 				     "       H.nombre perfil_nombre,\n" +
-				     "       H.descripcion perfil_descripcion,\n" +
 				     "       I.id perfil_tipo_id,\n" +
 				     "       I.nombre perfil_tipo_nombre\n" +
 					 "  FROM usuarios A\n" +
