@@ -27,7 +27,6 @@ export class SeleccionarUsuarioComponent implements OnInit {
   ngOnInit() {
     this.titleService.setTitle('Encuestas | Colaboradores');
     this.usuarioService.getUsuariosDependientes().subscribe(usuarios => {
-      console.log(usuarios.map(t => t.estado = true));
       this.lstUsuario = usuarios as Usuario[];
     });
   }
