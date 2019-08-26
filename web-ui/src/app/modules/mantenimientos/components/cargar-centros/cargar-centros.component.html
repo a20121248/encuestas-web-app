@@ -1,15 +1,8 @@
-<mat-card class="cuadro mt-5  mat-elevation-z1">
+<mat-card class="cuadro mt-5 mat-elevation-z1">
   <mat-card class="titulo mat-elevation-z4">
     {{ titulo }}
   </mat-card>
   <mat-card-content [formGroup]="formGroup">
-    <ng-select [items]="procesos"
-                bindLabel="nombre"
-                placeholder="Seleccione un proceso"
-                [(ngModel)]="selectedProceso"
-                [ngModelOptions]="{standalone: true}"
-                name="proceso">
-    </ng-select>
     <mat-form-field class="archivo">
       <mat-label>Seleccionar archivo</mat-label>
       <input matInput (click)="fileInput.click()" name="ruta" [(ngModel)]="ruta" [ngModelOptions]="{standalone: true}" readonly>

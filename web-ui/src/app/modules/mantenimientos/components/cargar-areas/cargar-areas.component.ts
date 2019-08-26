@@ -12,12 +12,9 @@ export class CargarAreasComponent implements OnInit {
   titulo: string;
   cantAreas: number;
   ruta: string;
-  @Input() procesos: Proceso[];
-  @Input() selectedProceso: Proceso;
   formGroup: FormGroup;
   selectedFile: File;
   error: string;
-
   porcentaje: number;
   tamanhoCargado: number;
   tamanhoTotal: number;
