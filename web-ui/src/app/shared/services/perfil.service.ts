@@ -21,8 +21,8 @@ export class PerfilService {
     return this.http.get<number>(`${this.urlServer.api}${url}`);
   }
 
-  upload(formData: FormData): Observable<any> {
-    const url = `${this.urlServer.api}centros/cargar`;
+  upload(formData: FormData, procesoId: number): Observable<any> {
+    const url = `${this.urlServer.api}perfiles/cargar`;
     return this.http.post<any>(url, formData, {
       reportProgress: true,
       observe: 'events'
