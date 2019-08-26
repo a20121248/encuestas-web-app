@@ -26,8 +26,23 @@
           <td mat-cell *matCellDef="let usuario">{{usuario.posicion.area.nombre}}</td>
         </ng-container>
 
-        <ng-container matColumnDef="completar">
-          <th mat-header-cell *matHeaderCellDef>COMPLETAR</th>
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>ESTADO</th>
+          <td mat-cell *matCellDef="let usuario">
+            <span  *ngIf="!usuario.estado" class="pendiente" >
+                <i class="material-icons">report</i>
+                <span>PENDIENTE</span>
+            </span>
+            <span  *ngIf="usuario.estado" class="terminado" >
+                <i class="material-icons">check_circle</i>
+                <span>TERMINADO</span>
+            </span>
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="ir">
+          <th mat-header-cell *matHeaderCellDef>IR</th>
           <td mat-cell *matCellDef="let usuario">
             <a mat-raised-button class="sm" color="primary" [routerLink]="[usuario.posicion.codigo,'encuesta']">></a>
           </td>
@@ -40,4 +55,4 @@
     </div>
   </mat-card>
 </div>
-<br>
+<app-footer></app-footer>

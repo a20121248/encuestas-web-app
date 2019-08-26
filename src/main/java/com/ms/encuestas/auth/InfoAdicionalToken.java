@@ -40,7 +40,7 @@ public class InfoAdicionalToken implements TokenEnhancer {
 		posicionResponse.put("codigo", usuario.getPosicion().getCodigo());
 		additionalInformation.put("posicion", posicionResponse);
 		
-		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);		
+		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
 		return accessToken;
 	}
 }

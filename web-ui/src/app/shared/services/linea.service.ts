@@ -1,18 +1,19 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { Usuario } from '../models/usuario';
-import { Encuesta } from "src/app/shared/models/encuesta";
-import { throwError, of, Observable } from "rxjs";
+import { Encuesta } from 'src/app/shared/models/encuesta';
+import { throwError, of, Observable } from 'rxjs';
 import {
   HttpClient,
   HttpHeaders,
   HttpErrorResponse
-} from "@angular/common/http";
-import { AuthService } from "src/app/shared/services/auth.service";
-import { Router } from "@angular/router";
-import { AppConfig } from "src/app/shared/services/app.config";
+} from '@angular/common/http';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { Router } from '@angular/router';
+import { AppConfig } from 'src/app/shared/services/app.config';
+import { Objeto } from '../models/objeto';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class LineaService {
   protected urlServer = AppConfig.settings.urlServer;
@@ -26,6 +27,11 @@ export class LineaService {
 
   errorHandler(error: any): void {
     console.log(error);
+  }
+
+  findAll(): Observable<Objeto[]> {
+    const url = `${this.urlServer.api}lineas`;
+    return this.http.get<Objeto[]>(url);
   }
 
   obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {

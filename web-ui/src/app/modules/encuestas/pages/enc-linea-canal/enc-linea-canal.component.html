@@ -10,15 +10,21 @@
       <div class="col-md-6">
         <app-form-linea-canal *ngIf="lstLineaCanales"
                               (sendLinea)="showCanalesByLinea($event)"
+                              (estadoFormLineaToParent) = "estadoFormLinea($event)"
                               [lstLineaCanales]="lstLineaCanales">
         </app-form-linea-canal>
       </div>
       <div class="col-md-6">
-        <app-form-canal *ngIf="lineaSeleccionada" [lineaSeleccionada]="lineaSeleccionada"></app-form-canal>
+        <app-form-canal *ngIf="lineaSeleccionada && porcentajePadre" [lineaSeleccionada]="lineaSeleccionada" 
+        (estadoFormCanalToParent) = "estadoFormCanal($event)">
+      </app-form-canal>
       </div>
       <div class="col-md-12 text-right">
         <button mat-raised-button color="warn" (click)="goBack()"><i class="material-icons">reply</i>Atrás</button>
-        <button mat-raised-button color="warn" (click)="guardarEncuesta()"><i class="material-icons">save</i>Guardar</button>
+        <button mat-raised-button color="warn" disabled *ngIf="!habilitarButton">
+          <i class="material-icons">save</i>Guardar</button>
+        <button mat-raised-button color="warn" *ngIf="habilitarButton" (click)="guardarEncuesta()">
+          <i class="material-icons">save</i>Guardar</button>
       </div>
     </div>
   </mat-card>

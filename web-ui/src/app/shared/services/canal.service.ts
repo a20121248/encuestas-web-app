@@ -1,32 +1,34 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Canal } from '../models/canal';
+import { throwError, of, Observable } from 'rxjs';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse
+} from '@angular/common/http';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { Router } from '@angular/router';
+import { AppConfig } from 'src/app/shared/services/app.config';
+import { Objeto } from '../models/objeto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CanalService {
-  private urlEndPoint:string = 'http://hp840g-malfbl35:8080/api/encuesta/empresas/2/centros';
-  private httpHeaders =  new HttpHeaders({'Content-Type':'application/json'});
+  protected urlServer = AppConfig.settings.urlServer;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    public authService: AuthService,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
-  getCanal(): Observable<Canal[]> {
-    return this.http.get<Canal[]>(this.urlEndPoint);  
+
+  errorHandler(error: any): void {
+    console.log(error);
   }
 
-  postRespuesta(lstCanal: Canal[]):any {
-    fetch(this.urlEndPoint,
-      {
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify(lstCanal)
-      })
-      .then(function(res){ console.log(res) })
-      .catch(function(res){ console.log(res) });
+  findAll(): Observable<Objeto[]> {
+    const url = `${this.urlServer.api}canales`;
+    return this.http.get<Objeto[]>(url);
   }
 }

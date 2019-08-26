@@ -1,28 +1,45 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 
 import { Centro } from 'src/app/shared/models/centro';
 import { Usuario } from 'src/app/shared/models/usuario';
-import { MatTableDataSource } from '@angular/material/table';
+import { CustomValidatorsService } from 'src/app/shared/services/custom-validators.service';
+import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 
 @Component({
   selector: 'app-form-centro',
   templateUrl: './centro.component.html',
-  styleUrls: ['./centro.component.css']
+  styleUrls: ['./centro.component.scss']
 })
 
 export class CentroComponent implements OnInit {
   @Input() lstCentros: Centro[];
   @Input() usuarioSeleccionado: Usuario;
+  @Input() haGuardado: boolean;
+
+  @Output() estadoFormCentroToParent = new EventEmitter();
   dcCentro = ['codigo', 'nombre', 'nivel', 'porcentaje'];
   dataSource = new MatTableDataSource<Centro | Group>([]);
   groupByColumns: string[] = ['grupo'];
+  groupForm: FormGroup;
+  porcTotal: number;
 
-  constructor() {
+
+  constructor(
+    private sharedFormService: SharedFormService
+  ) {
+    this.groupForm = new FormGroup({});
   }
 
   ngOnInit() {
     this.dataSource.data = this.addGroups(this.lstCentros,this.groupByColumns);
     this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
+    this.dataSource.data.map(row => {
+      this.groupHeaderClick(row);
+    });
+    this.onChanges();
+
   }
 
   customFilterPredicate(data: Centro | Group, filter: string): boolean {
@@ -103,10 +120,57 @@ export class CentroComponent implements OnInit {
     return item.level;
   }
 
+  validacionItemControl(value:number):AbstractControl{
+    return this.groupForm.get(String(value));
+  }
+
   getTotalPorcentaje() {
-    return this.lstCentros.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+    if (this.lstCentros != null) {
+      this.porcTotal = this.lstCentros.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+      return this.porcTotal;
+    }
+    else {
+      this.porcTotal = 0;
+      return this.porcTotal;
+    }
+  }
+
+  getTotalPorcentajeByGrupo( grupo:string ){
+    return this.lstCentros.filter((item) => item.grupo == grupo).map(t => t.porcentaje).reduce((acc,value) => acc + value, 0);
+  }
+
+  sendEstado(value: boolean) {
+    this.estadoFormCentroToParent.emit(value);
+  }
+
+  onChanges():void{
+    this.groupForm.valueChanges
+    .subscribe(data =>{
+      if(this.groupForm.valid && this.porcTotal==100){
+        this.sendEstado(true);
+      } else {
+        this.sendEstado(false);
+      }
+      this.sharedFormService.actualizarEstadoForm1(this.groupForm);
+      this.sharedFormService.actualizarPorcentajeForm1(this.porcTotal);
+    });
+  }
+
+  verificarLista(): boolean {
+    if (this.lstCentros != null) { //Verifica la carga de informacion desde el Parent
+      for (let centro of this.lstCentros.map(t => t)) {
+        let control: FormControl = new FormControl(centro.porcentaje, Validators.compose([
+          Validators.required, CustomValidatorsService.validarNegativo, CustomValidatorsService.validarPatronPorcentaje]));
+        this.groupForm.addControl(String(centro.id), control);
+      }
+      return true;
+    } else {
+      return false;
+    }
   }
 }
+
+
 
 export class Group {
   level: number = 0;

@@ -14,11 +14,12 @@ import { UsuarioDatosComponent } from 'src/app/shared/components/usuario-datos/u
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { Title } from '@angular/platform-browser';
+import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 
 @Component({
   selector: 'app-enc-eps',
   templateUrl: './enc-eps.component.html',
-  styleUrls: ['./enc-eps.component.css']
+  styleUrls: ['./enc-eps.component.scss']
 })
 export class EncEPSComponent implements OnInit {
   lstEps: Eps[];
@@ -29,6 +30,8 @@ export class EncEPSComponent implements OnInit {
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
   estadoEps: boolean;
+  haGuardado:boolean;
+  habilitarButton: boolean = false;
 
   @ViewChild(EpsComponent, { static: false })
   epsComponent: EpsComponent;
@@ -36,16 +39,17 @@ export class EncEPSComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  @ViewChild("btnGuardar",{static: false}) 
+  @ViewChild("btnGuardar",{static: false})
   btnGuardar: ElementRef;
-  
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private epsService: EpsService,
     private location: Location,
     private usuarioService: UsuarioService,
     private titleService: Title,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private sharedFormService: SharedFormService
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
@@ -67,13 +71,14 @@ export class EncEPSComponent implements OnInit {
 
   setButtonGuardar(){
     if(this.estadoEps){
-      this.renderer.setProperty(this.btnGuardar,"disabled","false");
+      this.habilitarButton = true;
     } else {
-      this.renderer.setProperty(this.btnGuardar,"disabled","true");
+      this.habilitarButton = false;
     }
   }
 
   guardarEncuesta() {
+    this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.epsComponent.lstEps;
     this.epsService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
@@ -83,6 +88,24 @@ export class EncEPSComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    let form1dirty:boolean;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1dirty = data.dirty;
+    });
+    if(this.haGuardado){
+      this.location.back();
+    } else {
+      if(form1dirty){
+        swal.fire({
+          title: 'Cambios detectados',
+          text: "Primero guarde antes de continuar.",
+          type: "warning"
+        });
+      } else {
+        if( !form1dirty){
+          this.location.back();
+        }
+      }
+    }
   }
 }

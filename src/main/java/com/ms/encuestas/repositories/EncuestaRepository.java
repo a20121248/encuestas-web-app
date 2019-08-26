@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -19,10 +21,13 @@ import com.ms.encuestas.models.EncuestaObjetoObjetos;
 import com.ms.encuestas.models.Justificacion;
 import com.ms.encuestas.models.Objeto;
 import com.ms.encuestas.models.ObjetoObjetos;
+import com.ms.encuestas.services.UsuarioService;
 
 @CrossOrigin(origins={})
 @Repository
 public class EncuestaRepository {
+	private Logger logger = LoggerFactory.getLogger(EncuestaRepository.class);
+	
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 	
@@ -81,7 +86,7 @@ public class EncuestaRepository {
 		Date fecha = new Date();
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);        
-		plantilla.update(sql,paramMap);
+		plantilla.update(sql, paramMap);
 	}
 	
 	public EncuestaEmpresa getEncuestaEmpresa(Long procesoId, String posicionCodigo, Long encuestaTipoId) {			
@@ -151,14 +156,18 @@ public class EncuestaRepository {
 			  "  LEFT JOIN encuesta_centro B\n" +
 			  "    ON A.id=B.centro_id\n" +
 			  "   AND B.proceso_id=:proceso_id\n" +
-			  "   AND B.posicion_codigo=:posicion_codigo\n" +
-			  "  JOIN perfil_centro C\r\n" + 
-			  "    ON C.perfil_id=:perfil_id\r\n" + 
-			  "   AND A.id=C.centro_id" +
+			  "   AND B.posicion_codigo=:posicion_codigo\n";
+			  if (empresaId.intValue() != 2) {
+				  sql += "  JOIN perfil_centro C\n" +
+                         "    ON C.perfil_id=:perfil_id\n" + 
+                         "   AND A.id=C.centro_id\n";
+			  }
+			  sql +=
 			  " WHERE A.empresa_id=:empresa_id\n" +
 			  "   AND A.nivel>:nivel\n" +
 			  "   AND A.fecha_eliminacion IS NULL\n" +
 			  " ORDER BY A.nivel,A.id";
+		logger.info(sql);
 		encuesta.setLstItems(plantilla.query(sql, paramMap, new CentroMapper()));		
 		return encuesta;
 	}

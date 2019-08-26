@@ -1,5 +1,6 @@
 package com.ms.encuestas.services;
 
+import java.io.InputStream;
 import java.util.List;
 
 import com.ms.encuestas.models.Centro;
@@ -11,4 +12,5 @@ public interface CentroServiceI {
 	public Centro save(Centro centro);
 	public void delete(Centro centro);
 	public void deleteById(Long id);
+	public void processExcel(InputStream file);
 }

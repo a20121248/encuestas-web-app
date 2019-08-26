@@ -13,11 +13,13 @@ import { Justificacion } from 'src/app/shared/models/justificacion';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { Title } from '@angular/platform-browser';
+import { FormGroup } from '@angular/forms';
+import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 
 @Component({
   selector: 'app-enc-empresa',
   templateUrl: './enc-empresa.component.html',
-  styleUrls: ['./enc-empresa.component.css']
+  styleUrls: ['./enc-empresa.component.scss']
 })
 export class EncEmpresaComponent implements OnInit {
   lstEmpresas: Empresa[];
@@ -28,7 +30,9 @@ export class EncEmpresaComponent implements OnInit {
   usuarioSeleccionado: Usuario;
   encuesta: Encuesta;
   estadoEmpresas: boolean;
-  estadoJustificacion:boolean;
+  estadoJustificacion: boolean;
+  haGuardado: boolean;
+  habilitarButton: boolean = false;
 
   @ViewChild(EmpresaComponent, { static: false })
   empresaComponent: EmpresaComponent;
@@ -36,8 +40,6 @@ export class EncEmpresaComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  @ViewChild("btnGuardar",{static: false}) 
-  btnGuardar: ElementRef;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -45,7 +47,8 @@ export class EncEmpresaComponent implements OnInit {
     private location: Location,
     private usuarioService: UsuarioService,
     private titleService: Title,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private sharedFormService: SharedFormService
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
@@ -62,29 +65,52 @@ export class EncEmpresaComponent implements OnInit {
     this.titleService.setTitle('Encuestas | Empresas');
   }
 
-  estadoFormJustificacion(value:boolean){
+  estadoFormJustificacion(value: boolean) {
     this.estadoJustificacion = value;
     this.setButtonGuardar();
   }
 
-  estadoFormEmpresas(value:boolean){
+  estadoFormEmpresas(value: boolean) {
     this.estadoEmpresas = value;
     this.setButtonGuardar();
   }
 
-  setButtonGuardar(){
-    if(this.estadoEmpresas && this.estadoJustificacion){
-      this.renderer.setProperty(this.btnGuardar,"disabled","false");
+  setButtonGuardar() {
+    if (this.estadoEmpresas && this.estadoJustificacion) {
+      this.habilitarButton = true;
     } else {
-      this.renderer.setProperty(this.btnGuardar,"disabled","true");
+      this.habilitarButton = false;
     }
   }
 
   goBack() {
-    this.location.back();
+    let form1dirty: boolean;
+    let form2dirty: boolean;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1dirty = data.dirty;
+    });
+    this.sharedFormService.form2Actual.subscribe(data => {
+      form2dirty = data.dirty;
+    });
+    if (this.haGuardado) {
+      this.location.back();
+    } else {
+      if (form1dirty || form2dirty) {
+        swal.fire({
+          title: 'Cambios detectados',
+          text: "Primero guarde antes de continuar.",
+          type: "warning"
+        });
+      } else {
+        if (!form1dirty && !form2dirty) {
+          this.location.back();
+        }
+      }
+    }
   }
 
   guardarEncuesta() {
+    this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.empresaComponent.lstEmpresas;
     this.encuesta.justificacion = this.justificacionComponent.justificacion;

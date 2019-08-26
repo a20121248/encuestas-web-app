@@ -1,10 +1,12 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -12,12 +14,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
@@ -44,7 +50,6 @@ import { NavegacionComponent } from './shared/components/navegacion/navegacion.c
 import { LineaComponent } from './modules/encuestas/components/linea/linea.component';
 import { CanalComponent } from './modules/encuestas/components/canal/canal.component';
 import { EncLineaComponent } from './modules/encuestas/pages/enc-linea/enc-linea.component';
-import { EncCanalComponent } from './modules/encuestas/pages/enc-canal/enc-canal.component';
 import { SeleccionarUsuarioComponent } from './modules/encuestas/pages/seleccionar-usuario/seleccionar-usuario.component';
 import { CargarUsuariosComponent } from './modules/mantenimientos/components/cargar-usuarios/cargar-usuarios.component';
 import { ProcesoComponent } from './modules/mantenimientos/components/proceso/proceso.component';
@@ -55,6 +60,28 @@ import { ReporteControlComponent } from './modules/reportes/components/reporte-c
 import { ReporteEmpresasComponent } from './modules/reportes/components/reporte-empresas/reporte-empresas.component';
 import { ReporteConsolidadoComponent } from './modules/reportes/components/reporte-consolidado/reporte-consolidado.component';
 import { GraficoControlComponent } from './modules/reportes/components/grafico-control/grafico-control.component';
+import { ResumenComponent } from './modules/resumen/pages/resumen/resumen.component';
+import { GraficoCentroComponent } from './modules/resumen/components/grafico-centro/grafico-centro.component';
+import { GraficoLineaComponent } from './modules/resumen/components/grafico-linea/grafico-linea.component';
+import { UsuariosComponent } from './modules/mantenimientos/pages/usuarios/usuarios.component';
+import { PosicionesComponent } from './modules/mantenimientos/pages/posiciones/posiciones.component';
+import { PerfilesComponent } from './modules/mantenimientos/pages/perfiles/perfiles.component';
+import { CentrosComponent } from './modules/mantenimientos/pages/centros/centros.component';
+import { PosicionDatosComponent } from './modules/mantenimientos/pages/posicion-datos/posicion-datos.component';
+import { AreasComponent } from './modules/mantenimientos/pages/areas/areas.component';
+import { LineasComponent } from './modules/mantenimientos/pages/lineas/lineas.component';
+import { CanalesComponent } from './modules/mantenimientos/pages/canales/canales.component';
+import { ProductosComponent } from './modules/mantenimientos/pages/productos/productos.component';
+import { SubcanalesComponent } from './modules/mantenimientos/pages/subcanales/subcanales.component';
+import { CargarPerfilesComponent } from './modules/mantenimientos/components/cargar-perfiles/cargar-perfiles.component';
+import { CargarPosicionesComponent } from './modules/mantenimientos/components/cargar-posiciones/cargar-posiciones.component';
+import { CargarPosicionDatosComponent } from './modules/mantenimientos/components/cargar-posicion-datos/cargar-posicion-datos.component';
+import { CargarCentrosComponent } from './modules/mantenimientos/components/cargar-centros/cargar-centros.component';
+import { CargarAreasComponent } from './modules/mantenimientos/components/cargar-areas/cargar-areas.component';
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { ModalCrearComponent } from './modules/mantenimientos/components/modal-crear/modal-crear.component';
+import { ModalEditarComponent } from './modules/mantenimientos/components/modal-editar/modal-editar.component';
+import { ModalEliminarComponent } from './modules/mantenimientos/components/modal-eliminar/modal-eliminar.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -80,8 +107,24 @@ const routes: Routes = [
       }
     ]
   },
+  { path: 'resumen', component: ResumenComponent },
+  { path: 'reporting', component: ReportesComponent },
   { path: 'mantenimiento', component: MantenimientosComponent },
-  { path: 'reporting', component: ReportesComponent }
+  { path: 'mantenimiento',
+    children: [
+      { path: 'areas', component: AreasComponent },
+      { path: 'centros-de-costos', component: CentrosComponent },
+      { path: 'datos-posicion', component: PosicionDatosComponent },
+      { path: 'lineas', component: LineasComponent },
+      { path: 'canales', component: CanalesComponent },
+      { path: 'productos', component: ProductosComponent },
+      { path: 'subcanales', component: SubcanalesComponent },
+      { path: 'perfiles', component: PerfilesComponent },
+      { path: 'posiciones', component: PosicionesComponent },
+      { path: 'usuarios', component: UsuariosComponent },
+    ]
+  },
+
 ];
 
 /*const routes: Routes = [
@@ -119,7 +162,6 @@ export function initializeApp(appConfig: AppConfig) {
     LineaComponent,
     CanalComponent,
     EncLineaComponent,
-    EncCanalComponent,
     SeleccionarUsuarioComponent,
     CargarUsuariosComponent,
     ProcesoComponent,
@@ -128,7 +170,29 @@ export function initializeApp(appConfig: AppConfig) {
     ReporteControlComponent,
     ReporteEmpresasComponent,
     ReporteConsolidadoComponent,
-    GraficoControlComponent
+    GraficoControlComponent,
+    ResumenComponent,
+    GraficoCentroComponent,
+    GraficoLineaComponent,
+    UsuariosComponent,
+    PosicionesComponent,
+    PerfilesComponent,
+    CentrosComponent,
+    PosicionDatosComponent,
+    AreasComponent,
+    LineasComponent,
+    CanalesComponent,
+    ProductosComponent,
+    SubcanalesComponent,
+    CargarPerfilesComponent,
+    CargarPosicionesComponent,
+    CargarPosicionDatosComponent,
+    CargarCentrosComponent,
+    CargarAreasComponent,
+    FooterComponent,
+    ModalCrearComponent,
+    ModalEditarComponent,
+    ModalEliminarComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -153,7 +217,13 @@ export function initializeApp(appConfig: AppConfig) {
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatStepperModule,
+    MatBadgeModule,
+    MatRadioModule,
+    MatDialogModule,
+    MatMenuModule,
+    MatProgressBarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
@@ -165,6 +235,11 @@ export function initializeApp(appConfig: AppConfig) {
       deps: [AppConfig], multi: true
     },
     MatDatepickerModule
+  ],
+  entryComponents: [
+    ModalCrearComponent,
+    ModalEditarComponent,
+    ModalEliminarComponent
   ],
   bootstrap: [AppComponent]
 })

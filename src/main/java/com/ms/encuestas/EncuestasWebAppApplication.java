@@ -4,13 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
-public class EncuestasWebAppApplication implements CommandLineRunner {
+public class EncuestasWebAppApplication extends SpringBootServletInitializer implements CommandLineRunner {
 	private static final LoggerWrapper LOGGER = LoggerWrapper.getLogger(EncuestasWebAppApplication.class);	
 	
 	//@Autowired
@@ -19,6 +21,11 @@ public class EncuestasWebAppApplication implements CommandLineRunner {
 	public static void main(String[] args) {
 		SpringApplication.run(EncuestasWebAppApplication.class, args);
 	}
+	
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(EncuestasWebAppApplication.class);
+    }
 
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {

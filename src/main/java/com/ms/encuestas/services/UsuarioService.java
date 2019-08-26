@@ -40,7 +40,7 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String codigo) throws UsernameNotFoundException {
-		Usuario usuario = usuarioRepository.findByCodigo(codigo, new Long(2));
+		Usuario usuario = usuarioRepository.findByCodigo(codigo);
 		
 		if (usuario == null) {
 			logger.error("Error en el login: no existe el usuario " + codigo +" en el sistema.");
@@ -72,7 +72,7 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	@Override
 	@Transactional(readOnly = true)
 	public Usuario findByCodigo(String codigo, Long procesoId) {
-		return usuarioRepository.findByCodigo(codigo, procesoId);
+		return usuarioRepository.findByCodigoAndProceso(codigo, procesoId);
 	}
 	
 	@Override

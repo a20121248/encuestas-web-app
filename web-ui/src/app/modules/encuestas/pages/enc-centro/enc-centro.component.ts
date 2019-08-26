@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ElementRef, Renderer2 } from "@angular/core";
 import { ViewChild } from "@angular/core";
 import { Location } from "@angular/common";
 
@@ -17,11 +17,12 @@ import { JustificacionComponent } from 'src/app/shared/components/justificacion/
 import { Usuario } from 'src/app/shared/models/usuario';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { Title } from '@angular/platform-browser';
+import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 
 @Component({
   selector: 'app-enc-centro',
   templateUrl: './enc-centro.component.html',
-  styleUrls: ['./enc-centro.component.css']
+  styleUrls: ['./enc-centro.component.scss']
 })
 export class EncCentroComponent implements OnInit {
   lstCentros: Centro[];
@@ -31,6 +32,11 @@ export class EncCentroComponent implements OnInit {
   posicionCodigo: string;
   encuesta: Encuesta;
   usuarioSeleccionado: Usuario;
+  estadoCentros: boolean;
+  estadoJustificacion: boolean;
+  haGuardado: boolean;
+  habilitarButton: boolean = false;
+
   @ViewChild(CentroComponent, { static: false })
   centroComponent: CentroComponent;
   @ViewChild(JustificacionComponent, { static: false })
@@ -43,12 +49,14 @@ export class EncCentroComponent implements OnInit {
     private centroService: CentroService,
     private location: Location,
     private usuarioService: UsuarioService,
-    private titleService: Title
+    private titleService: Title,
+    private renderer: Renderer2,
+    private sharedFormService: SharedFormService
   ) {
     this.posicionCodigo = this.activatedRoute.snapshot.paramMap.get('codigo');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
-        this.usuarioSeleccionado = usuario;
-        this.centroService.obtenerEncuesta(this.usuarioSeleccionado).subscribe(encuesta => {
+      this.usuarioSeleccionado = usuario;
+      this.centroService.obtenerEncuesta(this.usuarioSeleccionado).subscribe(encuesta => {
         this.lstCentros = encuesta.lstItems as Centro[];
         this.observaciones = encuesta.observaciones;
         this.justificacion = encuesta.justificacion;
@@ -60,7 +68,51 @@ export class EncCentroComponent implements OnInit {
     this.titleService.setTitle('Encuestas | Centros de costos');
   }
 
+  // onChanges() {
+  //   let validForm1: boolean;
+  //   let validForm2: boolean;
+  //   let completeForm1: number;
+  //   this.sharedFormService.form1Actual
+  //     .subscribe(data => {
+  //       if(data == null) validForm1 = false;
+  //       else validForm1 = data.valid;
+  //     });
+  //   this.sharedFormService.form2Actual
+  //     .subscribe(data => {
+  //       if(data == null) validForm2 = false;
+  //       else validForm2 = data.valid;
+  //     });
+  //   this.sharedFormService.form1PorcentajeActual
+  //   .subscribe( data => {
+  //     completeForm1 = data;
+  //   });
+  //   console.log(validForm1 && validForm2 && completeForm1 == 100);
+  //   if(validForm1 && validForm2 && completeForm1 == 100){
+  //     if(this.btnGuardar != null) this.setButtonGuardar(true);
+  //   } else {
+  //     if(this.btnGuardar != null) this.setButtonGuardar(false);
+  //   }
+  // }
+  estadoFormJustificacion(value: boolean) {
+    this.estadoJustificacion = value;
+    this.setButtonGuardar();
+  }
+
+  estadoFormCentros(value: boolean) {
+    this.estadoCentros = value;
+    this.setButtonGuardar();
+  }
+
+  setButtonGuardar(){
+    if(this.estadoCentros && this.estadoJustificacion){
+      this.habilitarButton = true;
+    } else {
+      this.habilitarButton = false;
+    }
+  }
+
   guardarEncuesta() {
+    this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.centroComponent.lstCentros;
     this.encuesta.justificacion = this.justificacionComponent.justificacion;
@@ -75,6 +127,28 @@ export class EncCentroComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    let form1dirty: boolean;
+    let form2dirty: boolean;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1dirty = data.dirty;
+    });
+    this.sharedFormService.form2Actual.subscribe(data => {
+      form2dirty = data.dirty;
+    });
+    if (this.haGuardado) {
+      this.location.back();
+    } else {
+      if (form1dirty || form2dirty) {
+        swal.fire({
+          title: 'Cambios detectados',
+          text: "Primero guarde antes de continuar.",
+          type: "warning"
+        });
+      } else {
+        if (!form1dirty && !form2dirty) {
+          this.location.back();
+        }
+      }
+    }
   }
 }

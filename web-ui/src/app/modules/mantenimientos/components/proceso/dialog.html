@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>titulo</h2>
+
+<mat-dialog-content [formGroup]="formGroup">
+  <mat-form-field>
+    <mat-label>Código</mat-label>
+    <input matInput formControlName="codigo">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="nombre">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Creador</mat-label>
+    <input matInput formControlName="creador">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Fecha de cierre</mat-label>
+    <input matInput formControlName="fechaCierre">
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button"(click)="close()">Close</button>
+    <button class="mat-raised-button mat-primary"(click)="save()">Save</button>
+</mat-dialog-actions>

@@ -6,6 +6,10 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -13,19 +17,24 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ms.encuestas.models.EncuestaEmpresa;
 import com.ms.encuestas.models.Proceso;
+import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.services.ProcesoServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api/procesos")
 public class ProcesoController {
+    private static final Logger logger = LoggerFactory.getLogger(ProcesoController.class);
+
 	@Autowired
 	private ProcesoServiceI procesoService;
 	
@@ -55,23 +64,39 @@ public class ProcesoController {
 		}
 		return new ResponseEntity<Proceso>(proceso, HttpStatus.OK);
 	}
-/*
-	@PutMapping("/divisiones")
+
+	@PostMapping("")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Division update(@RequestBody Division area, @PathVariable Long id) {
-		Division currentDivision = this.divisionService.findById(id);
-		currentDivision.setNombre(area.getNombre());
-		//currentCentro.setApellido(centro.get());
-		//currentCentro.setEmail(centro.getEmail());
-		this.divisionService.save(currentDivision);
-		return currentDivision;
+	public Proceso create(Authentication authentication, @RequestBody Proceso proceso) {
+		User user = (User) authentication.getPrincipal();
+		Usuario usuario = new Usuario();
+		usuario.setCodigo(user.getUsername());
+		proceso.setUsuario(usuario);
+		this.procesoService.store(proceso);
+		return this.procesoService.findByCodigo(proceso.getCodigo());
+	}	
+	
+	@PutMapping("")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Proceso update(Authentication authentication, @RequestBody Proceso proceso) {
+		User user = (User) authentication.getPrincipal();
+		Usuario usuario = new Usuario();
+		usuario.setCodigo(user.getUsername());
+		
+		Proceso currentProceso = this.procesoService.findById(proceso.getId());
+		currentProceso.setCodigo(proceso.getCodigo());
+		currentProceso.setNombre(proceso.getNombre());
+		currentProceso.setUsuario(usuario);
+		currentProceso.setFechaCierre(proceso.getFechaCierre());
+		this.procesoService.update(currentProceso);
+		return currentProceso;
 	}
 
-	@DeleteMapping("/divisiones/{id}")
+	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long id) {
-		Division currentDivision = this.divisionService.findById(id);
-		this.divisionService.delete(currentDivision);
+	public void delete(Authentication authentication, @PathVariable Long id) {
+		Proceso proceso = this.procesoService.findById(id);
+		this.procesoService.delete(proceso);
 	}
-*/
+
 }

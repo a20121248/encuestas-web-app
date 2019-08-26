@@ -1,0 +1,46 @@
+.mat-column-codigo {
+  width: 5%;
+  color: #585a5b;
+  font-weight: bold;
+  text-align: center;
+}
+
+.mat-column-nombre {
+  width: 35%;
+}
+
+.mat-column-posicion {
+  width: 20%;
+}
+
+.mat-column-area {
+  width: 25%;
+}
+
+.mat-column-estado {
+  width: 10%;
+  text-align: center;
+}
+
+.mat-column-ir {
+  width: 10%;
+  text-align: center;
+}
+
+.terminado{
+  color: green;
+  font-size: 75%;
+  display: flex; 
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.pendiente{
+  color: red;
+  font-size: 80%;
+  display: flex; 
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
