@@ -13,7 +13,7 @@ import { CustomValidatorsService } from 'src/app/shared/services/custom-validato
 @Component({
   selector: 'app-form-linea',
   templateUrl: './linea.component.html',
-  styleUrls: ['./linea.component.css']
+  styleUrls: ['./linea.component.scss']
 })
 export class LineaComponent implements OnInit {
   @Input() lstLineas: Linea[];

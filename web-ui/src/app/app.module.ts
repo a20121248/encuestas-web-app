@@ -23,10 +23,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
-import { ProcesoDialogComponent } from './modules/mantenimientos/components/proceso/proceso.component';
 import { UsuarioDatosComponent } from './shared/components/usuario-datos/usuario-datos.component';
 import { JustificacionComponent } from './shared/components/justificacion/justificacion.component';
 import { EmpresaComponent } from './modules/encuestas/components/empresa/empresa.component';
@@ -50,7 +50,6 @@ import { NavegacionComponent } from './shared/components/navegacion/navegacion.c
 import { LineaComponent } from './modules/encuestas/components/linea/linea.component';
 import { CanalComponent } from './modules/encuestas/components/canal/canal.component';
 import { EncLineaComponent } from './modules/encuestas/pages/enc-linea/enc-linea.component';
-import { EncCanalComponent } from './modules/encuestas/pages/enc-canal/enc-canal.component';
 import { SeleccionarUsuarioComponent } from './modules/encuestas/pages/seleccionar-usuario/seleccionar-usuario.component';
 import { CargarUsuariosComponent } from './modules/mantenimientos/components/cargar-usuarios/cargar-usuarios.component';
 import { ProcesoComponent } from './modules/mantenimientos/components/proceso/proceso.component';
@@ -77,6 +76,12 @@ import { SubcanalesComponent } from './modules/mantenimientos/pages/subcanales/s
 import { CargarPerfilesComponent } from './modules/mantenimientos/components/cargar-perfiles/cargar-perfiles.component';
 import { CargarPosicionesComponent } from './modules/mantenimientos/components/cargar-posiciones/cargar-posiciones.component';
 import { CargarPosicionDatosComponent } from './modules/mantenimientos/components/cargar-posicion-datos/cargar-posicion-datos.component';
+import { CargarCentrosComponent } from './modules/mantenimientos/components/cargar-centros/cargar-centros.component';
+import { CargarAreasComponent } from './modules/mantenimientos/components/cargar-areas/cargar-areas.component';
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { ModalCrearComponent } from './modules/mantenimientos/components/modal-crear/modal-crear.component';
+import { ModalEditarComponent } from './modules/mantenimientos/components/modal-editar/modal-editar.component';
+import { ModalEliminarComponent } from './modules/mantenimientos/components/modal-eliminar/modal-eliminar.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -157,7 +162,6 @@ export function initializeApp(appConfig: AppConfig) {
     LineaComponent,
     CanalComponent,
     EncLineaComponent,
-    EncCanalComponent,
     SeleccionarUsuarioComponent,
     CargarUsuariosComponent,
     ProcesoComponent,
@@ -183,7 +187,12 @@ export function initializeApp(appConfig: AppConfig) {
     CargarPerfilesComponent,
     CargarPosicionesComponent,
     CargarPosicionDatosComponent,
-    ProcesoDialogComponent
+    CargarCentrosComponent,
+    CargarAreasComponent,
+    FooterComponent,
+    ModalCrearComponent,
+    ModalEditarComponent,
+    ModalEliminarComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -213,7 +222,8 @@ export function initializeApp(appConfig: AppConfig) {
     MatBadgeModule,
     MatRadioModule,
     MatDialogModule,
-    MatMenuModule
+    MatMenuModule,
+    MatProgressBarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
@@ -227,7 +237,9 @@ export function initializeApp(appConfig: AppConfig) {
     MatDatepickerModule
   ],
   entryComponents: [
-    ProcesoDialogComponent
+    ModalCrearComponent,
+    ModalEditarComponent,
+    ModalEliminarComponent
   ],
   bootstrap: [AppComponent]
 })

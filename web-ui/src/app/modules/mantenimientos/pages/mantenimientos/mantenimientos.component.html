@@ -1,33 +1,30 @@
 <div class="container pacifico-page">
   <mat-card class="cuadro mat-elevation-z4 mt-4 mb-4 text-center">
-    <h1>{{ titulo.toUpperCase() }}</h1>
+    <h1>{{ titulo }}</h1>
   </mat-card>
-  <div class="row">
+  <div class="row" *ngIf="selectedProceso">
     <div class="col-md-12">
       <app-proceso></app-proceso>
     </div>
-    <div class="col-md-6 mt-4">
-      <app-cargar-perfiles [procesos]="procesos"
-                           [selectedProceso]="selectedProceso">
-      </app-cargar-perfiles>
+    <div class="col-md-4 mt-4">
+      <app-cargar-perfiles></app-cargar-perfiles>
     </div>
-    <div class="col-md-6 mt-4">
-      <app-cargar-usuarios [procesos]="procesos"
-                           [selectedProceso]="selectedProceso">
-      </app-cargar-usuarios>
+    <div class="col-md-4 mt-4">
+      <app-cargar-usuarios></app-cargar-usuarios>
     </div>
-    <div class="col-md-6 mt-4">
-      <app-cargar-posiciones [procesos]="procesos"
-                             [selectedProceso]="selectedProceso">
-      </app-cargar-posiciones>
+    <div class="col-md-4 mt-4">
+      <app-cargar-posiciones></app-cargar-posiciones>
     </div>
-    <div class="col-md-6 mt-4">  <!--offset-md-3-->
-      <app-cargar-posicion-datos [procesos]="procesos"
-                                 [selectedProceso]="selectedProceso">
-      </app-cargar-posicion-datos>
+    <div class="col-md-4 mt-4 offset-md-2">
+      <app-cargar-areas></app-cargar-areas>
+    </div>
+    <div class="col-md-4 mt-4">
+      <app-cargar-centros></app-cargar-centros>
+    </div>
+    <div class="col-md-4 mt-4 offset-md-4"><!--offset-md-3-->
+      <app-cargar-posicion-datos [procesos]="procesos" [selectedProceso]="selectedProceso"></app-cargar-posicion-datos>
     </div>
   </div>
-
   <!--mat-card class="cuadro mat-elevation-z4 mt-5">
     <mat-card class="titulo mat-elevation-z4">
       LISTADO DE MANTENIMIENTOS
@@ -43,6 +40,6 @@
         </div>
       </div>
     </div>
-  </mat-card>
-</div-->
-<br>
+  </mat-card-->
+</div>
+<app-footer></app-footer>

@@ -9,7 +9,7 @@ import { Tipo } from 'src/app/shared/models/tipo';
 @Component({
   selector: 'app-reporte-consolidado',
   templateUrl: './reporte-consolidado.component.html',
-  styleUrls: ['./reporte-consolidado.component.css']
+  styleUrls: ['./reporte-consolidado.component.scss']
 })
 export class ReporteConsolidadoComponent implements OnInit {
   @Input() procesos: Proceso[];

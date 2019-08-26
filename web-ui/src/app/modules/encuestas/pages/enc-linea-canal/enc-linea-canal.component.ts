@@ -23,7 +23,7 @@ import { BehaviorSubject } from 'rxjs';
 @Component({
   selector: 'app-enc-linea-canal',
   templateUrl: './enc-linea-canal.component.html',
-  styleUrls: ['./enc-linea-canal.component.css']
+  styleUrls: ['./enc-linea-canal.component.scss']
 })
 export class EncLineaCanalComponent implements OnInit {
   lstLineaCanales: ObjetoObjetos[];
@@ -113,7 +113,7 @@ export class EncLineaCanalComponent implements OnInit {
       this.porcentajePadre = true;
       // this.setButtonGuardar();
     }
-    
+
   }
 
   goBack() {

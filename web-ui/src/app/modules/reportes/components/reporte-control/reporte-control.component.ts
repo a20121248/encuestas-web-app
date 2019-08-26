@@ -11,7 +11,7 @@ import { Tipo } from 'src/app/shared/models/tipo';
 @Component({
   selector: 'app-reporte-control',
   templateUrl: './reporte-control.component.html',
-  styleUrls: ['./reporte-control.component.css']
+  styleUrls: ['./reporte-control.component.scss']
 })
 export class ReporteControlComponent implements OnInit {
   @Input() procesos: Proceso[];

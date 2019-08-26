@@ -10,7 +10,7 @@ import { CustomValidatorsService } from 'src/app/shared/services/custom-validato
 @Component({
   selector: "app-form-canal",
   templateUrl: "./canal.component.html",
-  styleUrls: ["./canal.component.css"]
+  styleUrls: ["./canal.component.scss"]
 })
 export class CanalComponent implements OnInit {
 
@@ -22,7 +22,7 @@ export class CanalComponent implements OnInit {
   groupForm: FormGroup;
   porcTotal: number;
   url: string;
-  
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,

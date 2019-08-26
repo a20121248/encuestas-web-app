@@ -10,7 +10,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 @Component({
   selector: 'app-form-centro',
   templateUrl: './centro.component.html',
-  styleUrls: ['./centro.component.css']
+  styleUrls: ['./centro.component.scss']
 })
 
 export class CentroComponent implements OnInit {
@@ -24,7 +24,7 @@ export class CentroComponent implements OnInit {
   groupByColumns: string[] = ['grupo'];
   groupForm: FormGroup;
   porcTotal: number;
-  
+
 
   constructor(
     private sharedFormService: SharedFormService

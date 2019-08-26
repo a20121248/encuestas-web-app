@@ -17,7 +17,7 @@ import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 @Component({
   selector: 'app-enc-producto-subcanal',
   templateUrl: './enc-producto-subcanal.component.html',
-  styleUrls: ['./enc-producto-subcanal.component.css']
+  styleUrls: ['./enc-producto-subcanal.component.scss']
 })
 export class EncProductoSubcanalComponent implements OnInit {
   lstItems: ObjetoObjetos[];

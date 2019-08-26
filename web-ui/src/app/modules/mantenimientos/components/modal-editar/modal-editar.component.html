@@ -1,0 +1,23 @@
+<form class="pacifico" [formGroup]="formGroup" (ngSubmit)="submit()">
+  <h1 mat-dialog-title>{{ titulo }}</h1>
+  <mat-dialog-content fxLayout="column">
+    <mat-form-field>
+      <mat-label>Código</mat-label>
+      <input matInput formControlName="codigo">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Fecha de cierre</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fechaCierre" readonly>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end">
+    <button mat-raised-button mat-dialog-close><i class="material-icons">reply</i>Cancelar</button>
+    <button mat-raised-button color="accent" type="submit"><i class="material-icons">save</i>Guardar</button>
+  </mat-dialog-actions>
+</form>

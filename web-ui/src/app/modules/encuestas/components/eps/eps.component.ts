@@ -12,7 +12,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 @Component({
   selector: 'app-form-eps',
   templateUrl: './eps.component.html',
-  styleUrls: ['./eps.component.css']
+  styleUrls: ['./eps.component.scss']
 })
 export class EpsComponent implements OnInit {
   @Input() lstEps: Eps[];

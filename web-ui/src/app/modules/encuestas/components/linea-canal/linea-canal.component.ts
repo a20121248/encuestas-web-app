@@ -14,7 +14,7 @@ import { CustomValidatorsService } from 'src/app/shared/services/custom-validato
 @Component({
   selector: 'app-form-linea-canal',
   templateUrl: './linea-canal.component.html',
-  styleUrls: ['./linea-canal.component.css']
+  styleUrls: ['./linea-canal.component.scss']
 })
 export class LineaCanalComponent implements OnInit {
   @Input() lstLineaCanales: ObjetoObjetos[];
@@ -80,7 +80,7 @@ export class LineaCanalComponent implements OnInit {
     if (datoValido && (porcentajeTotalCanales == 100 || porcentajeTotalCanales == -1) && formCanalesValido){
       this.sendLinea.emit(objeto);
       this.selectedElement = objeto;
-    }    
+    }
   }
 
   sendEstado(value: boolean) {

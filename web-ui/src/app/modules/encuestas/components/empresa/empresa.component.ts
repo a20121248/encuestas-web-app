@@ -11,7 +11,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 @Component({
   selector: 'app-form-empresa',
   templateUrl: './empresa.component.html',
-  styleUrls: ['./empresa.component.css']
+  styleUrls: ['./empresa.component.scss']
 })
 
 export class EmpresaComponent implements OnInit {

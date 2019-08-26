@@ -19,7 +19,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 @Component({
   selector: 'app-enc-empresa',
   templateUrl: './enc-empresa.component.html',
-  styleUrls: ['./enc-empresa.component.css']
+  styleUrls: ['./enc-empresa.component.scss']
 })
 export class EncEmpresaComponent implements OnInit {
   lstEmpresas: Empresa[];
@@ -40,7 +40,6 @@ export class EncEmpresaComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-
 
   constructor(
     private activatedRoute: ActivatedRoute,

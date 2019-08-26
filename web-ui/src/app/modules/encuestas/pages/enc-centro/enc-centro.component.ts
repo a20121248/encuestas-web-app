@@ -22,7 +22,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 @Component({
   selector: 'app-enc-centro',
   templateUrl: './enc-centro.component.html',
-  styleUrls: ['./enc-centro.component.css']
+  styleUrls: ['./enc-centro.component.scss']
 })
 export class EncCentroComponent implements OnInit {
   lstCentros: Centro[];
@@ -107,7 +107,7 @@ export class EncCentroComponent implements OnInit {
     if(this.estadoCentros && this.estadoJustificacion){
       this.habilitarButton = true;
     } else {
-      this.habilitarButton = false; 
+      this.habilitarButton = false;
     }
   }
 

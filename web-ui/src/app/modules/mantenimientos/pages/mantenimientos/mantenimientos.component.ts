@@ -6,10 +6,10 @@ import { Proceso } from 'src/app/shared/models/Proceso';
 @Component({
   selector: 'app-mantenimientos',
   templateUrl: './mantenimientos.component.html',
-  styleUrls: ['./mantenimientos.component.css']
+  styleUrls: ['./mantenimientos.component.scss']
 })
 export class MantenimientosComponent implements OnInit {
-  titulo = 'Módulo de Mantenimiento';
+  titulo = 'MANTENIMIENTO';
   links = [['Mantenimiento de usuarios', 'usuarios'],
            ['Mantenimiento de posiciones', 'posiciones'],
            ['Mantenimiento de áreas', 'areas'],
@@ -29,11 +29,12 @@ export class MantenimientosComponent implements OnInit {
       this.procesoService.findAll().subscribe(procesos => {
         this.procesos = procesos;
         this.selectedProceso = procesos[procesos.length - 1];
+        console.log(this.selectedProceso);
       });
     }
 
   ngOnInit() {
-    this.titleService.setTitle('Encuestas | Mantenimiento');
+    this.titleService.setTitle('Mantenimiento');
   }
 
 }

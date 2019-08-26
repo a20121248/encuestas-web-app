@@ -2,6 +2,8 @@ package com.ms.encuestas.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import com.ms.encuestas.repositories.ProcesoRepository;
 
 @Service
 public class ProcesoService implements ProcesoServiceI {
+	private Logger logger = LoggerFactory.getLogger(ProcesoService.class);
+
 	@Autowired
 	private ProcesoRepository procesoRepository;
 	
@@ -20,7 +24,7 @@ public class ProcesoService implements ProcesoServiceI {
 	}
 	
 	@Override
-	public long count() {
+	public Long count() {
 		return procesoRepository.count();
 	}
 
@@ -33,11 +37,20 @@ public class ProcesoService implements ProcesoServiceI {
 	public Proceso findById(Long id) {
 		return procesoRepository.findById(id);
 	}
-
+	
 	@Override
-	public int save(Proceso proceso) {
-		// TODO Auto-generated method stub
-		return 0;
+	public Proceso findByCodigo(String codigo) {
+		return procesoRepository.findByCodigo(codigo);
+	}
+	
+	@Override
+	public int store(Proceso proceso) {
+		return procesoRepository.insert(proceso);
+	}
+	
+	@Override
+	public int update(Proceso proceso) {
+		return procesoRepository.update(proceso);
 	}
 
 	@Override

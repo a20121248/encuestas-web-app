@@ -10,7 +10,7 @@ import { CustomValidatorsService } from 'src/app/shared/services/custom-validato
 @Component({
   selector: 'app-form-producto-canal',
   templateUrl: './producto-canal.component.html',
-  styleUrls: ['./producto-canal.component.css']
+  styleUrls: ['./producto-canal.component.scss']
 })
 export class ProductoCanalComponent implements OnInit {
   @Input() lstProductoCanales: ObjetoObjetos[];

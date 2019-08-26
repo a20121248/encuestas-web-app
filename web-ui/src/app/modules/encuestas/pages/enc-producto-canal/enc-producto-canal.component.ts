@@ -16,7 +16,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 @Component({
   selector: 'app-enc-producto-canal',
   templateUrl: './enc-producto-canal.component.html',
-  styleUrls: ['./enc-producto-canal.component.css']
+  styleUrls: ['./enc-producto-canal.component.scss']
 })
 export class EncProductoCanalComponent implements OnInit {
   titulo = 'Herramienta de encuestas';

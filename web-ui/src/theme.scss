@@ -43,14 +43,27 @@ html, body {
   color: $color-azul;
 }
 
-
-
 .grupo {
   display:flex;align-items:center;
   color: $color-2;
 }
 
-app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-linea, app-enc-linea-canal, app-enc-producto-subcanal, app-enc-producto-canal, app-mantenimientos {
+app-seleccionar-usuario,
+app-enc-empresa,
+app-enc-centro,
+app-enc-eps,
+app-enc-linea,
+app-enc-linea-canal,
+app-enc-producto-subcanal,
+app-enc-producto-canal,
+app-mantenimientos,
+app-lineas,
+app-canales,
+app-subcanales,
+app-productos,
+app-centros,
+app-areas,
+app-reportes {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -60,9 +73,62 @@ app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-l
   left: 0;
   right: 0;
   background-color: $color-fondo;
+  .pacifico-page {
+    flex: 1 1 auto;
+  }
 }
 
 .pacifico-page {
+  .selected-row {
+    background: lightblue;
+  }
+
+  .cuadro {
+    .ng-select {
+      .ng-select-container {
+        min-height: 45.07px;
+      }
+    }
+    .ng-select.ng-select-single .ng-select-container .ng-clear-wrapper {
+      align-self: flex-end;
+      bottom: 5px;
+    }
+    .cargar {
+      font-size: 11px;
+      mat-progress-bar {
+        margin: 5px 0;
+      }
+      margin-bottom: 20px;
+      width: 100%;
+      padding: 0 1em;
+      .info {
+        margin-left: 1.5px;
+      }
+      .error {
+        color: red;
+      }
+    }
+    mat-card-content {
+      &> * {
+        width: 100%;
+      }
+      .mat-form-field-infix {
+        input {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .footer {
+    background: rgb(248, 246, 245);
+    border-top: 1px solid #B3B3B3;
+    font-size: 13px;
+    padding: .9em;
+    button {
+      margin-top: 8px;
+    }
+  }
   .mat-nav-list .mat-list-item.circular {
     line-height: 23px;
     span {
@@ -228,7 +294,10 @@ app-seleccionar-usuario, app-enc-empresa, app-enc-centro, app-enc-eps, app-enc-l
     flex-direction: column;
     widows: 100%;
     word-wrap: break-word;
-    padding: 1.25rem;
+    mat-card-content {
+      padding: .25rem;
+      margin-bottom: 0;
+    }
   }
 
   .mat-table {
@@ -370,3 +439,7 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
   }
 }
 
+.docs-footer {
+  background: mat-color($my-app-primary);
+  color: mat-color($my-app-primary, default-contrast);
+}
