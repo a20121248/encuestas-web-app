@@ -74,7 +74,7 @@ public class ProcesoController {
 		proceso.setUsuario(usuario);
 		this.procesoService.store(proceso);
 		return this.procesoService.findByCodigo(proceso.getCodigo());
-	}	
+	}
 	
 	@PutMapping("")
 	@ResponseStatus(HttpStatus.CREATED)

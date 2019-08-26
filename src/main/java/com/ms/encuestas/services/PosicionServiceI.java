@@ -1,5 +1,6 @@
 package com.ms.encuestas.services;
 
+import java.io.InputStream;
 import java.util.List;
 
 import com.ms.encuestas.models.Posicion;
@@ -14,4 +15,5 @@ public interface PosicionServiceI {
 	public Posicion save(Posicion posicion);
 	public void delete(Posicion posicion);
 	public void deleteById(Long id);
+	public void processExcel(Long procesoId, InputStream file);
 }

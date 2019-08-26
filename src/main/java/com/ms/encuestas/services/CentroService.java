@@ -59,15 +59,18 @@ public class CentroService implements CentroServiceI {
 		List<Tipo> centroTipos = tipoRepository.getCentroTypes(); 
 		
         try (XSSFWorkbook libro = new XSSFWorkbook(file)) {
-           XSSFSheet hoja = libro.getSheet("CENTROS");
+        	XSSFSheet hoja = libro.getSheet("CENTROS");
 
-           Iterator<Row> filas = hoja.iterator();
+        	Iterator<Row> filas = hoja.iterator();
            
            /*if (!menuControlador.navegador.validarFilaNormal(filas.next(), new ArrayList(Arrays.asList("CODIGO","NOMBRE","ATRIBUIBLE","TIPO GASTO","CLASE GASTO")))) {
                menuControlador.navegador.mensajeError(titulo,menuControlador.MENSAJE_UPLOAD_HEADER);
                return null;
            }*/
-           filas.next();
+	   		int numFilasOmitir = 7;
+	   		while (numFilasOmitir-- > 0) {
+	   			filas.next();
+	   		}
            
            DataFormatter dataFormatter = new DataFormatter();
            while (filas.hasNext()) {
