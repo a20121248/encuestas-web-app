@@ -11,37 +11,31 @@
     <table mat-table [dataSource]="procesos">
       <ng-container matColumnDef="codigo">
         <th mat-header-cell *matHeaderCellDef>CÓDIGO</th>
-        <td mat-cell *matCellDef="let proceso">{{proceso.id}}</td>
+        <td mat-cell *matCellDef="let proceso">{{proceso.codigo}}</td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
-
       <ng-container matColumnDef="nombre">
         <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
         <td mat-cell *matCellDef="let proceso">{{proceso.nombre}}</td>
       </ng-container>
-
       <ng-container matColumnDef="creador">
         <th mat-header-cell *matHeaderCellDef>CREADOR</th>
         <td mat-cell *matCellDef="let proceso">{{proceso.usuario.nombreCompleto}}</td>
       </ng-container>
-
       <ng-container matColumnDef="fechaCierre">
         <th mat-header-cell *matHeaderCellDef>FECHA DE CIERRE</th>
         <td mat-cell *matCellDef="let proceso">{{proceso.fechaCierre}}</td>
       </ng-container>
-
       <ng-container matColumnDef="fechaCreacion">
         <th mat-header-cell *matHeaderCellDef>FECHA DE CREACIÓN</th>
         <td mat-cell *matCellDef="let proceso">{{proceso.fechaCreacion}}</td>
       </ng-container>
-
       <ng-container matColumnDef="fechaActualizacion">
         <th mat-header-cell *matHeaderCellDef>FECHA DE ACTUALIZACIÓN</th>
         <td mat-cell *matCellDef="let proceso">{{proceso.fechaActualizacion}}</td>
       </ng-container>
-
       <tr mat-header-row *matHeaderRowDef="dcProcesos"></tr>
-      <tr mat-row *matRowDef="let row; columns: dcProcesos;" [class.selected-row]="row === selectedProceso" (click)="setSelected(row)"></tr>
+      <tr mat-row *matRowDef="let row; columns: dcProcesos; let i = index" [class.selected-row]="row === selectedProceso" (click)="setSelected(row, i)"></tr>
     </table>
   </div>
 </mat-card>

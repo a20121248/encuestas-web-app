@@ -2,3 +2,30 @@ mat-dialog-actions {
   padding: 15px 0 20px;
   place-content:flex-end;
 }
+
+.pacifico {
+  .mat-raised-button {
+    &.icono {
+      min-width: 36px;
+      .material-icons {
+        margin-right: 0;
+      }
+    }
+    min-width: 100px;
+    padding: 0;
+    .material-icons {
+      font-size: 18px;
+      margin-right: 8px;
+    }
+    &.sm {
+      min-width: 36px;
+    }
+  }
+  button + button {
+    margin-left: 15px;
+  }
+  .boton {
+    min-width: 36px;
+  }
+}
+

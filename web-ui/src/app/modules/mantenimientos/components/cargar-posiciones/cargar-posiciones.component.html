@@ -3,12 +3,6 @@
     {{ titulo }}
   </mat-card>
   <mat-card-content>
-    <ng-select [items]="procesos"
-                bindLabel="nombre"
-                placeholder="Seleccione un proceso"
-                [(ngModel)]="selectedProceso"
-                name="proceso">
-    </ng-select>
     <mat-form-field class="archivo">
       <mat-label>Seleccionar archivo</mat-label>
       <input matInput (click)="fileInput.click()" name="ruta" [(ngModel)]="ruta" readonly>

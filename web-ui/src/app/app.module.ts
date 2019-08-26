@@ -27,7 +27,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
-import { ProcesoDialogComponent } from './modules/mantenimientos/components/proceso/proceso.component';
 import { UsuarioDatosComponent } from './shared/components/usuario-datos/usuario-datos.component';
 import { JustificacionComponent } from './shared/components/justificacion/justificacion.component';
 import { EmpresaComponent } from './modules/encuestas/components/empresa/empresa.component';
@@ -188,7 +187,6 @@ export function initializeApp(appConfig: AppConfig) {
     CargarPerfilesComponent,
     CargarPosicionesComponent,
     CargarPosicionDatosComponent,
-    ProcesoDialogComponent,
     CargarCentrosComponent,
     CargarAreasComponent,
     FooterComponent,
@@ -239,7 +237,6 @@ export function initializeApp(appConfig: AppConfig) {
     MatDatepickerModule
   ],
   entryComponents: [
-    ProcesoDialogComponent,
     ModalCrearComponent,
     ModalEditarComponent,
     ModalEliminarComponent

@@ -1,14 +1,14 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { ProcesoService } from 'src/app/shared/services/proceso.service';
 import { Proceso } from 'src/app/shared/models/Proceso';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MatDialogConfig} from '@angular/material/dialog';
 import swal from 'sweetalert2';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { Usuario } from 'src/app/shared/models/usuario';
 import { filter } from 'rxjs/operators';
 import { ModalCrearComponent } from '../modal-crear/modal-crear.component';
 import { ModalEditarComponent } from '../modal-editar/modal-editar.component';
 import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.component';
+import { MatTable } from '@angular/material/table';
+
 
 @Component({
   selector: 'app-proceso',
@@ -18,17 +18,21 @@ import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.compone
 export class ProcesoComponent implements OnInit {
   titulo: string;
   procesos: Proceso[];
+  selectedIndex: number;
   selectedProceso: Proceso;
   dcProcesos = ['codigo', 'nombre', 'creador', 'fechaCierre', 'fechaCreacion', 'fechaActualizacion'];
   crearDialogRef: MatDialogRef<ModalCrearComponent>;
   editarDialogRef: MatDialogRef<ModalEditarComponent>;
   eliminarDialogRef: MatDialogRef<ModalEliminarComponent>;
 
+
+  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
+
   constructor(
     private procesoService: ProcesoService,
     public dialog: MatDialog
   ) {
-    this.titulo = 'CONFIGURACIÓN DE PROCESOS';
+    this.titulo = 'CONFIGURACIÓN DE ENCUESTAS';
   }
 
   ngOnInit() {
@@ -37,44 +41,52 @@ export class ProcesoComponent implements OnInit {
     });
   }
 
+
+
   crear(): void {
-    const param = {
-      hasBackdrop: true,
-      width: '500px',
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.width = '500px';
+    dialogConfig.data = {
+      titulo: `Crear encuesta`
     };
-    this.crearDialogRef = this.dialog.open(ModalCrearComponent, param);
-    this.crearDialogRef
-        .afterClosed()
-        .pipe(filter(name => name))
-        .subscribe(name => {
-          console.log(name);
-          // this.files.push({name, content: '' });
+    this.crearDialogRef = this.dialog.open(ModalCrearComponent, dialogConfig);
+    this.crearDialogRef.afterClosed()
+        .pipe(filter(proceso => proceso))
+        .subscribe(proceso => {
+          console.log('creando el proceso: ');
+          console.log(proceso);
+          this.procesoService.crear(proceso).subscribe((response) => {
+            this.procesos.push(response);
+            console.log(this.procesos);
+            this.table.renderRows();
+          }, err => console.log(err)
+          );
         });
   }
 
-  editar() {
+  editar(): void {
     if (this.selectedProceso == null) {
-      swal.fire('Editar proceso', 'Por favor, seleccione un proceso.', 'error');
+      swal.fire('Editar encuesta', 'Por favor, seleccione un proceso.', 'error');
       return;
     }
 
-    const data = {
-      titulo: 'titulo'
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.width = '500px';
+    dialogConfig.data = {
+      titulo: `Editar encuesta ${this.selectedProceso.codigo}`,
+      proceso: this.selectedProceso
     };
-    const param = {
-      hasBackdrop: true,
-      width: '500px',
-      data: {
-        titulo: 'titulo'
-      }
-    };
-    this.editarDialogRef = this.dialog.open(ModalCrearComponent, param);
-    this.editarDialogRef
-        .afterClosed()
-        .pipe(filter(name => name))
-        .subscribe(name => {
-          console.log(name);
-          // this.files.push({name, content: '' });
+    this.editarDialogRef = this.dialog.open(ModalEditarComponent, dialogConfig);
+    this.editarDialogRef.afterClosed()
+        .pipe(filter(proceso => proceso))
+        .subscribe(proceso => {
+          this.procesoService.editar(proceso).subscribe((response) => {
+            this.procesos[this.selectedIndex] = response;
+            this.table.renderRows();
+          }, err => console.log(err)
+          );
         });
   }
 
@@ -88,41 +100,8 @@ export class ProcesoComponent implements OnInit {
     }
   }
 
-  setSelected(proceso: Proceso) {
+  setSelected(proceso: Proceso, i: number) {
+    this.selectedIndex = i;
     this.selectedProceso = proceso;
-  }
-}
-
-@Component({
-  selector: 'app-proceso-dialog',
-  templateUrl: 'dialog.html',
-})
-export class ProcesoDialogComponent {
-  formGroup: FormGroup;
-  description: string;
-
-  constructor(
-    private fb: FormBuilder,
-    public dialogRef: MatDialogRef<ProcesoDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data
-  ) {
-    this.description = data.description;
-  }
-
-  ngOnInit() {
-    this.formGroup = this.fb.group({
-      codigo: [, []],
-      nombre: [, []],
-      creador: [, []],
-      fechaCierre: [, []]
-    });
-  }
-
-  close() {
-    this.dialogRef.close();
-  }
-
-  save() {
-    this.dialogRef.close(this.formGroup.value);
   }
 }

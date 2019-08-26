@@ -9,20 +9,22 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ModalCrearComponent implements OnInit {
   formGroup: FormGroup;
+  titulo: string;
 
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef<ModalCrearComponent>,
               @Inject(MAT_DIALOG_DATA) private data) { }
 
   ngOnInit() {
+    this.titulo = 'Crear encuesta';
     this.formGroup = this.formBuilder.group({
-      codigo: this.data ? this.data.titulo : '',
+      codigo: '',
       nombre: '',
       fechaCierre: ''
     });
   }
 
-  submit(form) {
-    this.dialogRef.close(`${form.value.filename}`);
+  submit() {
+    this.dialogRef.close(this.formGroup.value);
   }
 }

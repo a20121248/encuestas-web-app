@@ -15,12 +15,9 @@ export class CargarUsuariosComponent implements OnInit {
   titulo: string;
   cantUsuarios: number;
   ruta: string;
-  @Input() procesos: Proceso[];
-  @Input() selectedProceso: Proceso;
   formGroup: FormGroup;
   selectedFile: File;
   error: string;
-
   porcentaje: number;
   tamanhoCargado: number;
   tamanhoTotal: number;
