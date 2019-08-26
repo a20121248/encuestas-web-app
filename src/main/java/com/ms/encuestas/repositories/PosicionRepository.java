@@ -114,4 +114,30 @@ public class PosicionRepository {
 				new MapSqlParameterSource("codigo", codigo),
 				new PosicionMapper());
 	}
+	
+	public void storeDatosPosicion(Long procesoId, Posicion posicion) {
+		/*String sql = "SELECT A.codigo,\n" + 
+				 	 "       A.nombre,\n" + 
+				 	 "       A.fecha_creacion,\n" + 
+				 	 "       B.id area_id,\n" + 
+				 	 "       B.nombre area_nombre,\n" + 
+				 	 "       B.fecha_creacion area_fecha_creacion," +
+				 	 "       C.id division_id,\n" + 
+				 	 "       C.nombre division_nombre,\n" + 
+				 	 "       C.fecha_creacion division_fecha_creacion," +
+				 	 "       D.id centro_id,\n" +
+				 	 "       D.codigo centro_codigo,\n" +
+				 	 "       D.nombre centro_nombre,\n" +
+				 	 "       D.nivel centro_nivel,\n" +
+				 	 "       D.fecha_creacion centro_fecha_creacion" +
+				 	 "  FROM posiciones A\n" + 
+				 	 "  JOIN areas B ON A.area_id=B.id\n" +
+				 	 "  JOIN divisiones C ON B.division_id=C.id\n" +
+				 	 "  JOIN centros D ON A.centro_id=D.id\n" +
+				 	 " WHERE A.codigo=:codigo\n" +
+				 	 "   AND A.fecha_eliminacion IS NULL";
+		return plantilla.queryForObject(sql,
+				new MapSqlParameterSource("codigo", codigo),
+				new PosicionMapper());*/
+	}
 }

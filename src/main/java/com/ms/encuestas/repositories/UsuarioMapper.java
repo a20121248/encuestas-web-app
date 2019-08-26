@@ -23,13 +23,12 @@ public class UsuarioMapper implements RowMapper<Usuario> {
 			perfil = new Perfil();
 			perfil.setId(rs.getLong("perfil_id"));
 			perfil.setNombre(rs.getString("perfil_nombre"));
-			perfil.setDescripcion(rs.getString("perfil_descripcion"));
 			
 			Tipo perfilTipo = new Tipo();
 			perfilTipo.setId(rs.getLong("perfil_tipo_id"));
 			perfilTipo.setNombre(rs.getString("perfil_tipo_nombre"));
 			
-			perfil.setPerfilTipo(perfilTipo);
+			perfil.setTipo(perfilTipo);
 			
 		} catch (java.sql.SQLException e) {
 			perfil = null;

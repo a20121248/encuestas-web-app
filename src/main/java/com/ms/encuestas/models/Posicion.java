@@ -52,7 +52,7 @@ public class Posicion implements Serializable {
 	public void setPerfil(Perfil perfil) {
 		this.perfil = perfil;
 	}
-
+	
 	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}

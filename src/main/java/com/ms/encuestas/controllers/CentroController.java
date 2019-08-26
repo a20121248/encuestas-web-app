@@ -32,24 +32,24 @@ import com.ms.encuestas.services.CentroServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping("/api/centros")
+@RequestMapping("/api")
 public class CentroController {
 	private Logger logger = LoggerFactory.getLogger(CentroController.class);
 	
 	@Autowired
 	private CentroServiceI centroService;
 
-	@GetMapping("/cantidad")
+	@GetMapping("/centros/cantidad")
 	public Long count() {
 		return centroService.count();
 	}
 	
-	@GetMapping("")
+	@GetMapping("/centros")
 	public List<Centro> index() throws Exception {
 		return centroService.findAll();
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/centros/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id) {
 		Centro centro = null;
 		Map<String, Object> response = new HashMap<>();
@@ -66,7 +66,7 @@ public class CentroController {
 		return new ResponseEntity<Centro>(centro, HttpStatus.OK);
 	}
 
-	@PostMapping("")
+	@PostMapping("/centros")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Centro create(@RequestBody Centro centro) {
 		centro.setFechaCreacion(new Date());
@@ -74,7 +74,7 @@ public class CentroController {
 		return centro;
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/centros/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Centro update(@RequestBody Centro centro, @PathVariable Long id) {
 		Centro currentCentro = this.centroService.findById(id);
@@ -85,14 +85,14 @@ public class CentroController {
 		return currentCentro;
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/centros/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
 		Centro currentCentro = this.centroService.findById(id);
 		this.centroService.delete(currentCentro);
 	}
 	
-	@PostMapping("/cargar")
+	@PostMapping("/centros/cargar")
 	@ResponseStatus(HttpStatus.OK)
 	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
 		try {
