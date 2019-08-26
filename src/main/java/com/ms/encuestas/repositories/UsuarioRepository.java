@@ -41,9 +41,9 @@ public class UsuarioRepository {
 					 "  JOIN posiciones D ON A.posicion_codigo=D.codigo\n" +
 					 " WHERE proceso_id=:procesoId\n" + 
 					 "   AND responsable_posicion_codigo=:posicionCodigo";
-		//System.out.println(sql);
-		//System.out.println(procesoId);
-		//System.out.println(posicionCodigo);
+		// System.out.println(sql);
+		// System.out.println(procesoId);
+		// System.out.println(posicionCodigo);
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("procesoId", procesoId);
         paramMap.put("posicionCodigo", posicionCodigo);
@@ -79,7 +79,21 @@ public class UsuarioRepository {
 		return plantilla.query(sql, paramMap, new UsuarioMapper());
 	}
 
-	public Usuario findByCodigo(String codigo, Long procesoId) throws EmptyResultDataAccessException {
+	public Usuario findByCodigo(String usuarioCodigo) throws EmptyResultDataAccessException {
+		String sql = "SELECT A.codigo usuario_codigo,\n" +
+				     "       A.contrasenha usuario_contrasenha,\n" +
+				     "       A.nombre_completo usuario_nombre_completo,\n" +
+				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
+				     "       A.fecha_actualizacion usuario_fecha_actualizacion\n" +
+					 "  FROM usuarios A\n" +
+				     " WHERE A.codigo=:usuario_codigo\n" +
+					 "   AND A.fecha_eliminacion IS NULL";
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("usuario_codigo", usuarioCodigo);
+		return plantilla.queryForObject(sql, paramMap, new UsuarioMapper());
+	}
+	
+	public Usuario findByCodigoAndProceso(String usuarioCodigo, Long procesoId) throws EmptyResultDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
@@ -111,11 +125,11 @@ public class UsuarioRepository {
 					 "  LEFT JOIN areas D ON B.area_id=D.id\n" +
 					 "  LEFT JOIN centros E ON B.centro_id=E.id\n" +
 					 "  LEFT JOIN centro_tipos F ON E.centro_tipo_id=F.id\n" +
-				     " WHERE A.codigo=:codigo\n" +
-					 "   AND B.proceso_id=:proceso_id" +
+				     " WHERE A.codigo=:usuario_codigo\n" +
+					 "   AND B.proceso_id=:proceso_id\n" +
 					 "   AND A.fecha_eliminacion IS NULL";
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("codigo", codigo);
+        paramMap.put("usuario_codigo", usuarioCodigo);
         paramMap.put("proceso_id", procesoId);
 		return plantilla.queryForObject(sql, paramMap, new UsuarioMapper());
 	}
