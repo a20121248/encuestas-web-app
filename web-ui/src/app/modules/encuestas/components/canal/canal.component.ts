@@ -90,6 +90,19 @@ export class CanalComponent implements OnInit {
       form1Valid = data.valid;
       form1Dirty = data.dirty;
     } );
+
+    console.log(this.haGuardado);
+    console.log(this.groupForm.valid);
+    console.log(form1Valid);
+    console.log((this.haGuardado && this.groupForm.valid && form1Valid));
+
+
+    console.log(this.groupForm.valid);
+    console.log(!this.groupForm.dirty);
+    console.log(form1Valid);
+    console.log(!form1Dirty);
+    console.log((this.groupForm.valid && !this.groupForm.dirty && form1Valid && !form1Dirty));
+
     if((this.haGuardado && this.groupForm.valid && form1Valid) || (this.groupForm.valid && !this.groupForm.dirty && form1Valid && !form1Dirty)){
       this.router.navigate([this.url], { relativeTo: this.route });
     } else {

@@ -65,7 +65,7 @@ export class LineaCanalComponent implements OnInit {
       porcentajeTotalCanales = data;
     });
     this.sharedFormService.form2Actual.subscribe(data =>{
-      if(data == null){
+      if(data == null) {
         formCanalesValido = true;
       } else {
         formCanalesValido = data.valid;
