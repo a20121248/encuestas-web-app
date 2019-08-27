@@ -82,6 +82,7 @@ import { FooterComponent } from './shared/components/footer/footer.component';
 import { ModalCrearComponent } from './modules/mantenimientos/components/modal-crear/modal-crear.component';
 import { ModalEditarComponent } from './modules/mantenimientos/components/modal-editar/modal-editar.component';
 import { ModalEliminarComponent } from './modules/mantenimientos/components/modal-eliminar/modal-eliminar.component';
+import { Page404Component } from './shared/components/error-pages/page404/page404.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -124,7 +125,7 @@ const routes: Routes = [
       { path: 'usuarios', component: UsuariosComponent },
     ]
   },
-
+  { path: '**', component: Page404Component}
 ];
 
 /*const routes: Routes = [
@@ -192,7 +193,8 @@ export function initializeApp(appConfig: AppConfig) {
     FooterComponent,
     ModalCrearComponent,
     ModalEditarComponent,
-    ModalEliminarComponent
+    ModalEliminarComponent,
+    Page404Component
   ],
   imports: [
     BrowserAnimationsModule,

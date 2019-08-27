@@ -131,6 +131,9 @@ public class UsuarioRepository {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("usuario_codigo", usuarioCodigo);
         paramMap.put("proceso_id", procesoId);
+        System.out.println(sql);
+        System.out.println(usuarioCodigo);
+        System.out.println(procesoId);
 		return plantilla.queryForObject(sql, paramMap, new UsuarioMapper());
 	}
 	
