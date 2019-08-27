@@ -1,39 +1,45 @@
 <mat-card *ngIf="verificarLista()" class="encuesta mat-elevation-z2">
   <h4 class="card-header text-center py-3">ASIGNACIÓN POR PRODUCTO - CANAL</h4>
-  <div class="table-responsive mt-1"  style="overflow: auto; height: 75vh; padding-top: 0; padding-bottom: 0;">
+  <div class="table-responsive mt-1" style="overflow: auto; height: 75vh; padding-top: 0; padding-bottom: 0;">
     <table mat-table [dataSource]="lstProductoCanales">
       <ng-container matColumnDef="productos" sticky>
         <th mat-header-cell *matHeaderCellDef>PRODUCTOS</th>
         <td mat-cell *matCellDef="let element">{{element.objeto.nombre}}</td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
-      <ng-container *ngFor="let canal of lstCabeceraTableDynamico; let i = index" matColumnDef="{{canal}}" [formGroup]="groupForm">
+      <ng-container *ngFor="let canal of lstCabeceraTableDynamico; let i = index" matColumnDef="{{canal}}"
+        [formGroup]="groupForm">
         <th mat-header-cell *matHeaderCellDef>{{canal}}</th>
         <td mat-cell *matCellDef="let element">
           <mat-form-field>
-            <input matInput type='number' [(ngModel)]='element.lstObjetos[i].porcentaje' [formControlName]="element.objeto.codigo+element.lstObjetos[i].codigo">
+            <input matInput type='number' [(ngModel)]='element.lstObjetos[i].porcentaje'
+              [formControlName]="element.objeto.codigo+element.lstObjetos[i].codigo">
             <span matSuffix>%</span>
           </mat-form-field>
-          <mat-error *ngIf="validacionItemControl(element.objeto.codigo+element.lstObjetos[i].codigo).hasError('negativo')" class="invalid"> Valor negativo</mat-error>
-          <mat-error *ngIf="validacionItemControl(element.objeto.codigo+element.lstObjetos[i].codigo).hasError('invalidNumber')" class="invalid"> Número Invalido</mat-error>
+          <mat-error
+            *ngIf="validacionItemControl(element.objeto.codigo+element.lstObjetos[i].codigo).hasError('negativo')"
+            class="invalid"> Valor negativo</mat-error>
+          <mat-error
+            *ngIf="validacionItemControl(element.objeto.codigo+element.lstObjetos[i].codigo).hasError('invalidNumber')"
+            class="invalid"> Número Invalido</mat-error>
         </td>
         <td mat-footer-cell *matFooterCellDef>
-            <mat-form-field>
-                <input matInput type="number" class = 'footerSuma' value="{{obtenerSumaByColumn(i)}}" disabled>
-                <span matSuffix>%</span>
-              </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" class='footerSuma' value="{{obtenerSumaByColumn(i)}}" disabled>
+            <span matSuffix>%</span>
+          </mat-form-field>
       </ng-container>
       <ng-container matColumnDef="total" stickyEnd>
         <th mat-header-cell *matHeaderCellDef>TOTAL</th>
         <td mat-cell *matCellDef="let element">{{obtenerSumaByRow(element)}}<span matSuffix>%</span></td>
         <td mat-footer-cell *matFooterCellDef>
-            <mat-form-field>
-              <input matInput type="number" class = 'footerSuma' value="{{obtenerSumaTotal()}}" disabled>
-              <span matSuffix>%</span>
-            </mat-form-field>
-            <br>
-            <span *ngIf="porcTotal!=100 && groupForm.touched" class="invalid">No está a 100%</span>
-          </td>
+          <mat-form-field>
+            <input matInput type="number" class='footerSuma' value="{{obtenerSumaTotal()}}" disabled>
+            <span matSuffix>%</span>
+          </mat-form-field>
+          <br>
+          <span *ngIf="porcTotal!=100 && groupForm.touched" class="invalid">No está a 100%</span>
+        </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="lstCabeceraTableObtenida; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: lstCabeceraTableObtenida;"></tr>
