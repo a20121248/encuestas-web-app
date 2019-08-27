@@ -24,7 +24,8 @@ export class LineaCanalComponent implements OnInit {
   @Output() sendLinea = new EventEmitter();
   selectedElement: ObjetoObjetos | null;
 
-  dcLinea = ['codigo', 'nombre', 'porcentaje', 'estado'];
+  //dcLinea = ['codigo', 'nombre', 'porcentaje', 'estado'];
+  dcLinea = ['codigo', 'nombre', 'porcentaje'];
   groupForm: FormGroup;
   porcTotal: number;
   lineasCompletas: boolean[];
@@ -64,7 +65,7 @@ export class LineaCanalComponent implements OnInit {
       porcentajeTotalCanales = data;
     });
     this.sharedFormService.form2Actual.subscribe(data =>{
-      if(data == null){
+      if(data == null) {
         formCanalesValido = true;
       } else {
         formCanalesValido = data.valid;

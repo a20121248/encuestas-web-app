@@ -15,7 +15,7 @@
         </app-form-linea-canal>
       </div>
       <div class="col-md-6">
-        <app-form-canal *ngIf="lineaSeleccionada && porcentajePadre" [lineaSeleccionada]="lineaSeleccionada" 
+        <app-form-canal *ngIf="lineaSeleccionada && porcentajePadre" [lineaSeleccionada]="lineaSeleccionada" [haGuardado]="haGuardado"
         (estadoFormCanalToParent) = "estadoFormCanal($event)">
       </app-form-canal>
       </div>

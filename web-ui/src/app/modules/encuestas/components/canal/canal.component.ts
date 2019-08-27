@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, AbstractControl, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
@@ -8,9 +8,9 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 import { CustomValidatorsService } from 'src/app/shared/services/custom-validators.service';
 
 @Component({
-  selector: "app-form-canal",
-  templateUrl: "./canal.component.html",
-  styleUrls: ["./canal.component.scss"]
+  selector: 'app-form-canal',
+  templateUrl: './canal.component.html',
+  styleUrls: ['./canal.component.scss']
 })
 export class CanalComponent implements OnInit {
 
@@ -18,7 +18,8 @@ export class CanalComponent implements OnInit {
   @Input() haGuardado: boolean;
 
   @Output() estadoFormCanalToParent = new EventEmitter();
-  dcLinea = ["codigo", "nombre", "porcentaje", 'estado', "ir"];
+  //dcLinea = ['codigo', 'nombre', 'porcentaje', 'estado', 'ir'];
+  dcLinea = ['codigo', 'nombre', 'porcentaje', 'ir'];
   groupForm: FormGroup;
   porcTotal: number;
   url: string;
@@ -35,7 +36,7 @@ export class CanalComponent implements OnInit {
     this.onChanges();
   }
 
-  validacionItemControl(value:string):AbstractControl{
+  validacionItemControl(value: string): AbstractControl {
     return this.groupForm.get(String(value));
   }
 
@@ -89,6 +90,19 @@ export class CanalComponent implements OnInit {
       form1Valid = data.valid;
       form1Dirty = data.dirty;
     } );
+
+    console.log(this.haGuardado);
+    console.log(this.groupForm.valid);
+    console.log(form1Valid);
+    console.log((this.haGuardado && this.groupForm.valid && form1Valid));
+
+
+    console.log(this.groupForm.valid);
+    console.log(!this.groupForm.dirty);
+    console.log(form1Valid);
+    console.log(!form1Dirty);
+    console.log((this.groupForm.valid && !this.groupForm.dirty && form1Valid && !form1Dirty));
+
     if((this.haGuardado && this.groupForm.valid && form1Valid) || (this.groupForm.valid && !this.groupForm.dirty && form1Valid && !form1Dirty)){
       this.router.navigate([this.url], { relativeTo: this.route });
     } else {

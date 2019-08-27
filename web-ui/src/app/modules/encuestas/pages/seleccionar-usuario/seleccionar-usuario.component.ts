@@ -14,7 +14,8 @@ import { Title } from '@angular/platform-browser';
 })
 export class SeleccionarUsuarioComponent implements OnInit {
 
-  dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'estado','ir'];
+  //dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'estado', 'ir'];
+  dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'ir'];
   lstUsuario: Usuario[];
 
   titulo = 'Colaboradores';
