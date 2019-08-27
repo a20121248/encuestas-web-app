@@ -7,17 +7,20 @@
   </mat-card>
   <mat-card class="cuadro mat-elevation-z4 mt-4">
     <div class="row">
-      <div class="col-md-6">
-        <app-form-linea-canal *ngIf="lstLineaCanales"
-                              (sendLinea)="showCanalesByLinea($event)"
-                              (estadoFormLineaToParent) = "estadoFormLinea($event)"
-                              [lstLineaCanales]="lstLineaCanales">
+      <div class="col-md-4">
+        <app-form-linea-canal *ngIf="lstLineaCanales" (sendLinea)="showCanalesByLinea($event)"
+          (estadoFormLineaToParent)="estadoFormLinea($event)" [lstLineaCanales]="lstLineaCanales">
         </app-form-linea-canal>
       </div>
-      <div class="col-md-6">
-        <app-form-canal *ngIf="lineaSeleccionada && porcentajePadre" [lineaSeleccionada]="lineaSeleccionada" [haGuardado]="haGuardado"
-        (estadoFormCanalToParent) = "estadoFormCanal($event)">
-      </app-form-canal>
+      <div class="col-md-5">
+        <app-form-canal *ngIf="lineaSeleccionada && porcentajePadre" [lineaSeleccionada]="lineaSeleccionada"
+          [haGuardado]="haGuardado" (estadoFormCanalToParent)="estadoFormCanal($event)">
+        </app-form-canal>
+      </div>
+      <div class="col-md-3">
+        <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"
+          (estadoFormJustToParent)="estadoFormJustificacion($event)">
+        </app-form-justificacion>
       </div>
       <div class="col-md-12 text-right">
         <button mat-raised-button color="warn" (click)="goBack()"><i class="material-icons">reply</i>Atrás</button>
