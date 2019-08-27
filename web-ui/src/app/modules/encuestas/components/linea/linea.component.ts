@@ -22,7 +22,8 @@ export class LineaComponent implements OnInit {
 
   @Output() estadoFormLineaToParent = new EventEmitter();
 
-  dcLinea = ['codigo', 'nombre', 'porcentaje', 'estado', 'ir'];
+  //dcLinea = ['codigo', 'nombre', 'porcentaje', 'estado', 'ir'];
+  dcLinea = ['codigo', 'nombre', 'porcentaje', 'ir'];
   url: string;
   porcTotal: number;
   groupForm: FormGroup;

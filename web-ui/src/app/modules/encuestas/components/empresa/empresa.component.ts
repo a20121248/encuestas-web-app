@@ -20,7 +20,8 @@ export class EmpresaComponent implements OnInit {
   @Input() haGuardado:boolean;
 
   @Output() estadoFormEmpresaToParent = new EventEmitter();
-  dcEmpresa = ['nombre', 'porcentaje', 'estado','ir'];
+  //dcEmpresa = ['nombre', 'porcentaje', 'estado', 'ir'];
+  dcEmpresa = ['nombre', 'porcentaje', 'ir'];
   url: string;
   porcTotal: number;
   groupForm: FormGroup;

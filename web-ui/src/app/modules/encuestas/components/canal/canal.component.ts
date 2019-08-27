@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, AbstractControl, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
@@ -8,9 +8,9 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 import { CustomValidatorsService } from 'src/app/shared/services/custom-validators.service';
 
 @Component({
-  selector: "app-form-canal",
-  templateUrl: "./canal.component.html",
-  styleUrls: ["./canal.component.scss"]
+  selector: 'app-form-canal',
+  templateUrl: './canal.component.html',
+  styleUrls: ['./canal.component.scss']
 })
 export class CanalComponent implements OnInit {
 
@@ -18,7 +18,8 @@ export class CanalComponent implements OnInit {
   @Input() haGuardado: boolean;
 
   @Output() estadoFormCanalToParent = new EventEmitter();
-  dcLinea = ["codigo", "nombre", "porcentaje", 'estado', "ir"];
+  //dcLinea = ['codigo', 'nombre', 'porcentaje', 'estado', 'ir'];
+  dcLinea = ['codigo', 'nombre', 'porcentaje', 'ir'];
   groupForm: FormGroup;
   porcTotal: number;
   url: string;
@@ -35,7 +36,7 @@ export class CanalComponent implements OnInit {
     this.onChanges();
   }
 
-  validacionItemControl(value:string):AbstractControl{
+  validacionItemControl(value: string): AbstractControl {
     return this.groupForm.get(String(value));
   }
 
