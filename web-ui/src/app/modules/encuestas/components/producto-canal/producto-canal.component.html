@@ -28,7 +28,7 @@
         <td mat-cell *matCellDef="let element">{{obtenerSumaByRow(element)}}<span matSuffix>%</span></td>
         <td mat-footer-cell *matFooterCellDef>
             <mat-form-field>
-              <input matInput type="number" value="{{obtenerSumaTotal()}}" disabled>
+              <input matInput type="number" class = 'footerSuma' value="{{obtenerSumaTotal()}}" disabled>
               <span matSuffix>%</span>
             </mat-form-field>
             <br>
