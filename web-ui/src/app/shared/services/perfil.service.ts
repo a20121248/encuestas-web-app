@@ -22,7 +22,7 @@ export class PerfilService {
   }
 
   upload(formData: FormData): Observable<any> {
-    const url = `${this.urlServer.api}centros/cargar`;
+    const url = `${this.urlServer.api}perfiles/cargar`;
     return this.http.post<any>(url, formData, {
       reportProgress: true,
       observe: 'events'

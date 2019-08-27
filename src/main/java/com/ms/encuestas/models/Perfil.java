@@ -7,9 +7,9 @@ import java.util.List;
 public class Perfil implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
+	private String codigo;
 	private String nombre;
-	private String descripcion;
-	private Tipo perfilTipo;
+	private Tipo tipo;
 	private List<Centro> lstCentros;
 	private List<ObjetoObjetos> lstLineasCanales;
 	private Date fechaCreacion;
@@ -23,6 +23,14 @@ public class Perfil implements Serializable {
 		this.id = id;
 	}
 
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -30,21 +38,13 @@ public class Perfil implements Serializable {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	
-	public String getDescripcion() {
-		return descripcion;
+
+	public Tipo getTipo() {
+		return tipo;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-	
-	public Tipo getPerfilTipo() {
-		return perfilTipo;
-	}
-
-	public void setPerfilTipo(Tipo perfilTipo) {
-		this.perfilTipo = perfilTipo;
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
 	}
 	
 	public List<Centro> getLstCentros() {

@@ -6,7 +6,7 @@ export class Perfil {
   id: number;
   nombre: string;
   descripcion: string;
-  perfilTipo: Tipo;
+  tipo: Tipo;
   lstCentros: Centro[];
   lstLineasCanales: ObjetoObjetos[];
   fechaCreacion: Date;

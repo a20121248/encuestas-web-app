@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ms.encuestas.models.Division;
+import com.ms.encuestas.models.Posicion;
 import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.repositories.ProcesoRepository;
 
@@ -62,6 +63,5 @@ public class ProcesoService implements ProcesoServiceI {
 	@Override
 	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
-
 	}
 }
