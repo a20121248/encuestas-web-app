@@ -13,7 +13,8 @@ public class Usuario implements Serializable/*, UserDetails*/ {
 	private Date fechaActualizacion;
 	private List<Rol> lstRoles;
 	private Posicion posicion;
-
+	private boolean estado;
+	
 	public String getCodigo() {
 		return codigo;
 	}
@@ -70,6 +71,15 @@ public class Usuario implements Serializable/*, UserDetails*/ {
 		this.posicion = posicion;
 	}
 
+	public boolean isEstado() {
+		return estado;
+	}
+
+	public void setEstado(boolean estado) {
+		this.estado = estado;
+	} 
+
+	
 	/*@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return null;

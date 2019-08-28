@@ -58,7 +58,7 @@ export class AuthService {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: 'Basic ' + credenciales
     });
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.set('grant_type', 'password');
     params.set('username', usuario.codigo);
     params.set('password', usuario.contrasenha);
@@ -90,7 +90,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    let payload = this.obtenerDatosToken(this.token);
+    const payload = this.obtenerDatosToken(this.token);
     if (payload != null && payload.user_name && payload.user_name.length > 0) {
       return true;
     }

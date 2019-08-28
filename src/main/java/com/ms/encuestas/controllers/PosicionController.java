@@ -27,6 +27,7 @@ import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.repositories.PosicionRepository;
 import com.ms.encuestas.services.PosicionServiceI;
+import com.ms.encuestas.services.ProcesoServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
@@ -35,6 +36,8 @@ public class PosicionController {
 	private Logger logger = LoggerFactory.getLogger(PosicionController.class);	
 	@Autowired
 	private PosicionServiceI posicionService;
+	@Autowired
+	private ProcesoServiceI procesoService;
 	
 	@GetMapping("/posiciones/cantidad")
 	public Long count() {
@@ -48,48 +51,50 @@ public class PosicionController {
 	
 	@GetMapping("/posiciones/{codigo}")
 	public Posicion show(@PathVariable String codigo) {
-		return this.posicionService.findByCodigo(codigo);
+		return posicionService.findByCodigo(codigo);
 	}
 
 	@GetMapping("/posiciones-con-area-y-centro/{codigo}")
 	public Posicion showWithAreaAndCentro(@PathVariable String codigo) {
-		return this.posicionService.findByCodigoWithAreaAndCentro(codigo);
+		return posicionService.findByCodigoWithAreaAndCentro(codigo);
 	}
 	
 	@GetMapping("/posiciones-con-area/{codigo}")
 	public Posicion showWithArea(@PathVariable String codigo) {
-		return this.posicionService.findByCodigoWithArea(codigo);
+		return posicionService.findByCodigoWithArea(codigo);
 	}
 	
 	@GetMapping("/posiciones-con-centro/{codigo}")
 	public Posicion showWithCentro(@PathVariable String codigo) {
-		return this.posicionService.findByCodigoWithCentro(codigo);
+		return posicionService.findByCodigoWithCentro(codigo);
 	}
 	
 	@PutMapping("/posiciones")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Posicion update(@RequestBody Posicion posicion, @PathVariable String codigo) {
-		Posicion currentCentro = this.posicionService.findByCodigo(codigo);
+		Posicion currentCentro = posicionService.findByCodigo(codigo);
 		currentCentro.setNombre(posicion.getNombre());
 		//currentCentro.setApellido(centro.get());
 		//currentCentro.setEmail(centro.getEmail());
-		this.posicionService.save(currentCentro);
+		posicionService.save(currentCentro);
 		return currentCentro;
 	}
 
 	@DeleteMapping("/posiciones/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable String codigo) {
-		Posicion currentPosicion = this.posicionService.findByCodigo(codigo);
-		this.posicionService.delete(currentPosicion);
+		Posicion currentPosicion = posicionService.findByCodigo(codigo);
+		posicionService.delete(currentPosicion);
 	}
 
 	@PostMapping("/procesos/{procesoId}/cargar-datos-posiciones")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void cargarDatosPosiciones(@PathVariable Long procesoId, @RequestParam("file") MultipartFile file) {
 		try {
+			Proceso proceso = procesoService.findById(procesoId);
+			posicionService.deleteDatos(proceso);
 			logger.info(String.format("Leyendo el archivo ", file.getOriginalFilename()));
-			this.posicionService.processExcel(procesoId, file.getInputStream());
+			posicionService.processExcelDatos(proceso, file.getInputStream());
 		} catch (IOException e) {
 			logger.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
 		}

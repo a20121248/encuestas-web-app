@@ -7,9 +7,10 @@ import { Observable, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import swal from 'sweetalert2';
 
 @Injectable()
-export class TokenInterceptor implements HttpInterceptor {
+export class AuthInterceptor implements HttpInterceptor {
 
   constructor(public authService: AuthService,
               private router: Router) { }
@@ -17,19 +18,22 @@ export class TokenInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpEvent<any>> {
     if (this.authService.token != null) {
-      const authReq = req.clone({
-        headers: req.headers.set('Authorization', 'Bearer ' + this.authService.token)
-      });
-      return next.handle(authReq).pipe(
-        catchError((err: HttpErrorResponse) => {
-          if (err.status === 0 || err.status === 401) {
-            this.authService.logout();
-            this.router.navigate(['/login']);
-          }
-          return throwError(err);
-        })
-      );
+
     }
-    return next.handle(req);
+    return next.handle(req).pipe(
+      catchError( e => {
+        if (e.status == 401) {
+          if (this.authService.isAuthenticated()) {
+            this.authService.logout();
+          }
+          this.router.navigate(['/login']);
+        }
+        if (e.status == 403) {
+          swal.fire('Acceso denegado', `Hola ${this.authService.usuario.codigo} no tienes acceso a este recurso!`, 'warning');
+          this.router.navigate(['/colaboradores']);
+        }
+        return throwError(e);
+      })
+    );
   }
 }

@@ -10,6 +10,7 @@ public class Posicion implements Serializable {
 	private Centro centro;
 	private Area area;
 	private Perfil perfil;
+	private Usuario usuario;
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
 
@@ -29,6 +30,14 @@ public class Posicion implements Serializable {
 		this.nombre = nombre;
 	}
 
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
 	public Centro getCentro() {
 		return centro;
 	}

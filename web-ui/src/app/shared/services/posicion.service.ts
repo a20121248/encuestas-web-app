@@ -4,6 +4,7 @@ import { AppConfig } from './app.config';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Proceso } from '../models/Proceso';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class PosicionService {
   }
 
   upload(formData: FormData): Observable<any> {
-    const url = `${this.urlServer.api}centros/cargar`;
+    const url = `${this.urlServer.api}posiciones/cargar`;
     return this.http.post<any>(url, formData, {
       reportProgress: true,
       observe: 'events'
@@ -39,8 +40,9 @@ export class PosicionService {
     );
   }
 
-  uploadDatos(formData: FormData): Observable<any> {
-    const url = `${this.urlServer.api}centros/cargar`;
+  uploadDatos(proceso: Proceso, formData: FormData): Observable<any> {
+    const url = `${this.urlServer.api}procesos/${proceso.id}/cargar-datos-posiciones`;
+    console.log(this.uploadDatos);
     return this.http.post<any>(url, formData, {
       reportProgress: true,
       observe: 'events'

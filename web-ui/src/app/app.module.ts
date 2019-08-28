@@ -56,6 +56,7 @@ import { ProcesoComponent } from './modules/mantenimientos/components/proceso/pr
 import { MantenimientosComponent } from './modules/mantenimientos/pages/mantenimientos/mantenimientos.component';
 import { ReportesComponent } from './modules/reportes/pages/reportes/reportes.component';
 import { TokenInterceptor } from './shared/interceptors/token.interceptor';
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { ReporteControlComponent } from './modules/reportes/components/reporte-control/reporte-control.component';
 import { ReporteEmpresasComponent } from './modules/reportes/components/reporte-empresas/reporte-empresas.component';
 import { ReporteConsolidadoComponent } from './modules/reportes/components/reporte-consolidado/reporte-consolidado.component';
@@ -83,46 +84,51 @@ import { ModalCrearComponent } from './modules/mantenimientos/components/modal-c
 import { ModalEditarComponent } from './modules/mantenimientos/components/modal-editar/modal-editar.component';
 import { ModalEliminarComponent } from './modules/mantenimientos/components/modal-eliminar/modal-eliminar.component';
 import { Page404Component } from './shared/components/error-pages/page404/page404.component';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: 'colaboradores', pathMatch: 'full' },
-  { path: 'colaboradores', component: SeleccionarUsuarioComponent },
-  { path: 'colaboradores/:codigo/encuesta', component: EncEmpresaComponent },
+  { path: '', redirectTo: 'colaboradores', pathMatch: 'full', canActivate: [AuthGuard] },
+  { path: 'colaboradores', component: SeleccionarUsuarioComponent, canActivate: [AuthGuard] },
+  { path: 'colaboradores/:codigo/encuesta', component: EncEmpresaComponent, canActivate: [AuthGuard] },
   {
     path: 'colaboradores/:codigo/encuesta',
     children: [
-      { path: 'eps', component: EncEPSComponent },
-      { path: 'centro', component: EncCentroComponent },
-      { path: 'linea-canal', component: EncLineaCanalComponent}, // perfil provincia
+      { path: 'eps', component: EncEPSComponent, canActivate: [AuthGuard] },
+      { path: 'centro', component: EncCentroComponent, canActivate: [AuthGuard] },
+      { path: 'linea-canal', component: EncLineaCanalComponent, canActivate: [AuthGuard]}, // perfil provincia
       { path: 'linea-canal',
         children: [
-          { path: ':lineaId/:canalId/producto-subcanal', component: EncProductoSubcanalComponent } // perfil provincia
-        ]
+          { path: ':lineaId/:canalId/producto-subcanal',
+            component: EncProductoSubcanalComponent,
+            canActivate: [AuthGuard] } // perfil provincia
+        ],
       },
-      { path: 'lineas', component: EncLineaComponent },
+      { path: 'lineas', component: EncLineaComponent, canActivate: [AuthGuard] },
       { path: 'lineas', // perfil varias-lineas o canal
         children: [
-          { path: ':lineaId/producto-canal', component: EncProductoCanalComponent }, // perfil varias-lineas o una-linea
+          { path: ':lineaId/producto-canal',
+            component: EncProductoCanalComponent,
+            canActivate: [AuthGuard] } // perfil varias-lineas o una-linea
         ]
       }
     ]
   },
-  { path: 'resumen', component: ResumenComponent },
-  { path: 'reporting', component: ReportesComponent },
-  { path: 'mantenimiento', component: MantenimientosComponent },
+  { path: 'resumen', component: ResumenComponent, canActivate: [AuthGuard] },
+  { path: 'reporting', component: ReportesComponent, canActivate: [AuthGuard] },
+  { path: 'mantenimiento', component: MantenimientosComponent, canActivate: [AuthGuard] },
   { path: 'mantenimiento',
     children: [
-      { path: 'areas', component: AreasComponent },
-      { path: 'centros-de-costos', component: CentrosComponent },
-      { path: 'datos-posicion', component: PosicionDatosComponent },
-      { path: 'lineas', component: LineasComponent },
-      { path: 'canales', component: CanalesComponent },
-      { path: 'productos', component: ProductosComponent },
-      { path: 'subcanales', component: SubcanalesComponent },
-      { path: 'perfiles', component: PerfilesComponent },
-      { path: 'posiciones', component: PosicionesComponent },
-      { path: 'usuarios', component: UsuariosComponent },
+      { path: 'areas', component: AreasComponent, canActivate: [AuthGuard] },
+      { path: 'centros-de-costos', component: CentrosComponent, canActivate: [AuthGuard] },
+      { path: 'datos-posicion', component: PosicionDatosComponent, canActivate: [AuthGuard] },
+      { path: 'lineas', component: LineasComponent, canActivate: [AuthGuard] },
+      { path: 'canales', component: CanalesComponent, canActivate: [AuthGuard] },
+      { path: 'productos', component: ProductosComponent, canActivate: [AuthGuard] },
+      { path: 'subcanales', component: SubcanalesComponent, canActivate: [AuthGuard] },
+      { path: 'perfiles', component: PerfilesComponent, canActivate: [AuthGuard] },
+      { path: 'posiciones', component: PosicionesComponent, canActivate: [AuthGuard] },
+      { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
     ]
   },
   { path: '**', component: Page404Component}
@@ -229,6 +235,7 @@ export function initializeApp(appConfig: AppConfig) {
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     Title,
     AppConfig,
     {

@@ -52,7 +52,7 @@ export class CargarPosicionDatosComponent implements OnInit {
   subir(): void {
     const formData = new FormData();
     formData.append('file', this.selectedFile);
-    this.posicionService.uploadDatos(formData).subscribe(
+    this.posicionService.uploadDatos(this.selectedProceso, formData).subscribe(
       (res) => {
         this.porcentaje = res.porcentaje * 100;
         this.tamanhoCargado = res.porcentaje * this.tamanhoTotal;
