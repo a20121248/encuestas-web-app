@@ -6,6 +6,7 @@ import java.util.Date;
 public class Area implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
+	private String codigo;
 	private String nombre;
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
@@ -20,6 +21,14 @@ public class Area implements Serializable {
 		this.id = id;
 	}
 
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}

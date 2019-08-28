@@ -36,32 +36,22 @@ public class UsuarioController {
 	
 	private final Logger log = LoggerFactory.getLogger(UsuarioController.class);
 	
-	@PostMapping("usuarios/upload")
-	public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("procesoId") Long procesoId) {
-		Map<String, Object> response = new HashMap<>();
-		if (!archivo.isEmpty()) {
-			String nombreArchivo = archivo.getOriginalFilename();
-			Path rutaArchivo = Paths.get("storage").resolve(nombreArchivo).toAbsolutePath();
-			log.info(rutaArchivo.toString());
-			try {
-				Files.copy(archivo.getInputStream(), rutaArchivo);
-			} catch (IOException e) {
-				response.put("mensaje", "Error al subir imagen del cliente.");
-				return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-			}			
-		}
-		
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
-	}
-
 	@GetMapping("/usuarios/cantidad")
 	public Long count() throws Exception {
 		return usuarioService.count();
 	}
 
 	@GetMapping("/usuarios")
-	public List<Usuario> index() throws Exception {
-		return usuarioService.findAll();
+	public List<Usuario> findAll() throws Exception {
+		List<Usuario> usuarios = usuarioService.findAll();
+		for (Usuario usuario : usuarios) {			
+			boolean estado = true;
+			
+			
+			
+			usuario.setEstado(estado);
+		}
+		return usuarios; 
 	}
 	
 	@GetMapping("/procesos/{procesoId}/usuarios-dependientes/{posicionCodigo}")

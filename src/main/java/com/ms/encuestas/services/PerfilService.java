@@ -80,8 +80,6 @@ public class PerfilService implements PerfilServiceI {
 		List<Objeto> lineas = objetoRepository.findAllLineas();
 		List<Objeto> canales = objetoRepository.findAllCanales();
 		
-		System.out.println(String.format("Existen %d líneas", lineas.size()));
-		System.out.println(String.format("Existen %d canales", canales.size()));
         try (XSSFWorkbook libro = new XSSFWorkbook(file)) {
            XSSFSheet hoja = libro.getSheet("PERFILES");
            Iterator<Row> filas = hoja.iterator();

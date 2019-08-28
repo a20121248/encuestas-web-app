@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import com.ms.encuestas.models.Posicion;
+import com.ms.encuestas.models.Proceso;
 
 public interface PosicionServiceI {
 	public Long count();
@@ -15,5 +16,6 @@ public interface PosicionServiceI {
 	public Posicion save(Posicion posicion);
 	public void delete(Posicion posicion);
 	public void deleteById(Long id);
-	public void processExcel(Long procesoId, InputStream file);
+	public void processExcelDatos(Proceso proceso, InputStream file);
+	public int deleteDatos(Proceso proceso);
 }
