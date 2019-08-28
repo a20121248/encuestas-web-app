@@ -10,6 +10,7 @@ public class Empresa implements Serializable {
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
 	private double porcentaje;
+	private boolean estado;
 	
 	public Long getId() {
 		return id;
@@ -49,5 +50,13 @@ public class Empresa implements Serializable {
 
 	public void setPorcentaje(double porcentaje) {
 		this.porcentaje = porcentaje;
+	}
+
+	public boolean isEstado() {
+		return estado;
+	}
+
+	public void setEstado(boolean estado) {
+		this.estado = estado;
 	}
 }

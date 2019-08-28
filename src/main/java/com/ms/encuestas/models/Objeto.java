@@ -12,6 +12,7 @@ public class Objeto implements Serializable {
 	private double porcentaje;
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
+	private boolean estado;
 
 	public Long getId() {
 		return id;
@@ -53,6 +54,14 @@ public class Objeto implements Serializable {
 		this.porcentaje = porcentaje;
 	}
 	
+	public boolean isEstado() {
+		return estado;
+	}
+
+	public void setEstado(boolean estado) {
+		this.estado = estado;
+	}
+
 	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}

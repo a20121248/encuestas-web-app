@@ -57,24 +57,24 @@ public class UsuarioRepository {
 	
 	public List<Usuario> findAll() throws EmptyResultDataAccessException {
 		String sql = "SELECT B.codigo usuario_codigo,\n" +
-				 "       B.contrasenha usuario_contrasenha,\n" + 
-				 "       B.nombre_completo usuario_nombre_completo,\n" + 
-				 "       B.fecha_creacion usuario_fecha_creacion,\n" + 
-				 "       B.fecha_actualizacion usuario_fecha_actualizacion,\n" + 
-				 "       A.area_id,\n" + 
-				 "       C.nombre area_nombre,\n" +
-				 "       C.division area_division,\n" +
-				 "       C.fecha_creacion area_fecha_creacion,\n" + 
-				 "       C.fecha_actualizacion area_fecha_actualizacion,\n" +
-				 "       D.codigo posicion_codigo,\n" + 
-				 "       D.nombre posicion_nombre,\n" + 
-				 "       D.fecha_creacion posicion_fecha_creacion,\n" + 
-				 "       D.fecha_actualizacion posicion_fecha_actualizacion\n" +
-				 "  FROM usuarios B \n" + 
-				 "  LEFT JOIN posicion_datos A ON A.usuario_codigo=B.codigo AND A.proceso_id=0\n" + 
-				 "  LEFT JOIN areas C ON A.area_id=C.id\n" +
-				 "  LEFT JOIN posiciones D ON A.posicion_codigo=D.codigo\n" +
-				 " WHERE B.fecha_eliminacion IS NULL";
+				 	 "       B.contrasenha usuario_contrasenha,\n" + 
+				 	 "       B.nombre_completo usuario_nombre_completo,\n" + 
+				 	 "       B.fecha_creacion usuario_fecha_creacion,\n" + 
+				 	 "       B.fecha_actualizacion usuario_fecha_actualizacion,\n" + 
+				 	 "       A.area_id,\n" + 
+				 	 "       C.nombre area_nombre,\n" +
+				 	 "       C.division area_division,\n" +
+				 	 "       C.fecha_creacion area_fecha_creacion,\n" + 
+				 	 "       C.fecha_actualizacion area_fecha_actualizacion,\n" +
+				 	 "       D.codigo posicion_codigo,\n" + 
+				 	 "       D.nombre posicion_nombre,\n" + 
+				 	 "       D.fecha_creacion posicion_fecha_creacion,\n" + 
+				 	 "       D.fecha_actualizacion posicion_fecha_actualizacion\n" +
+				 	 "  FROM usuarios B \n" + 
+				 	 "  LEFT JOIN posicion_datos A ON A.usuario_codigo=B.codigo AND A.proceso_id=0\n" + 
+				 	 "  LEFT JOIN areas C ON A.area_id=C.id\n" +
+				 	 "  LEFT JOIN posiciones D ON A.posicion_codigo=D.codigo\n" +
+				 	 " WHERE B.fecha_eliminacion IS NULL";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		return plantilla.query(sql, paramMap, new UsuarioMapper());
 	}

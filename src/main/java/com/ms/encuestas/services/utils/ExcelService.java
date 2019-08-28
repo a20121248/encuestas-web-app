@@ -9,18 +9,26 @@ import java.util.Map.Entry;
 import org.apache.poi.ooxml.POIXMLProperties.CoreProperties;
 import org.apache.poi.ooxml.POIXMLProperties.ExtendedProperties;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ExcelService implements ExcelServiceI {
 	private Logger logger = LoggerFactory.getLogger(ExcelService.class);
-
+	private DataFormatter dataFormatter;
+	
+	@Autowired
+	public ExcelService() {
+		dataFormatter = new DataFormatter();
+	}
+	
 	@Override
 	@Transactional(readOnly = true)
 	public int crearArchivo(SXSSFWorkbook wb, String rutaArchivo) {		
