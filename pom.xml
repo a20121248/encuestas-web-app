@@ -15,11 +15,9 @@
 	<packaging>war</packaging>
 	<name>encuestas-web-app</name>
 	<description>Herramienta de encuestas</description>
-
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -91,6 +89,14 @@
 	      	<artifactId>javax.servlet-api</artifactId>
 	      	<scope>provided</scope>
 	    </dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-oxm</artifactId>
+	    </dependency>
+		<dependency>
+		    <groupId>org.springframework.ws</groupId>
+		    <artifactId>spring-ws-core</artifactId>
+	    </dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -118,5 +124,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
