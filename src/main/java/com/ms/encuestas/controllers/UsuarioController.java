@@ -25,9 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ms.encuestas.models.Usuario;
-import com.ms.encuestas.models.segcen.ISegCenServicios;
-import com.ms.encuestas.models.segcen.SegCenServicio;
 import com.ms.encuestas.services.UsuarioServiceI;
+import com.ms.encuestas.services.segcen.ISegCenServicios;
+import com.ms.encuestas.services.segcen.SegCenServicio;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
@@ -68,7 +68,7 @@ public class UsuarioController {
 	
 	@GetMapping("/procesos/{procesoId}/usuarios-dependientes/{posicionCodigo}")
 	public List<Usuario> findUsuariosDependientes(@PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
-		ISegCenServicios segCenServicios = new SegCenServicio().getBasicHttpBindingISegCenServicios();
+		/*ISegCenServicios segCenServicios = new SegCenServicio().getBasicHttpBindingISegCenServicios();
 		
 		String strPIdUsuario = "ALamaS";
 		String msj;
@@ -121,17 +121,13 @@ public class UsuarioController {
     	log.info(String.format("Llamada a función: ValidarUsuarioApp('%s','%s','%s',%d,%d,%d,%s,%s)", strPUsuario,strPContrasenia,strPCodigoAplicacion,intPMayor,intPMinor,intPVersion,strPIP,strPHostName));
     	msj = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
     	log.info(String.format("Respuesta: '%s'.", msj));
-    	
-		
-    	
-    	
-		
+    	*/
 		return usuarioService.findUsuariosDependientesByCodigo(procesoId, posicionCodigo);
 	}
 
 	@GetMapping("/procesos/{procesoId}/usuarios/{codigo}")
 	public Usuario show(@PathVariable Long procesoId, @PathVariable String codigo) {
-		return this.usuarioService.findByCodigo(codigo, procesoId);
+		return this.usuarioService.findByCodigoAndProceso(codigo, procesoId);
 		/*Usuario usuario = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -161,7 +157,7 @@ public class UsuarioController {
 		Map<String, Object> response = new HashMap<>();
 
 		try {
-			usuario = this.usuarioService.findByCodigo(codigo, procesoId);
+			usuario = this.usuarioService.findByCodigoAndProceso(codigo, procesoId);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
 			response.put("error", e.getMessage() + ": " + e.getMostSpecificCause().getMessage());

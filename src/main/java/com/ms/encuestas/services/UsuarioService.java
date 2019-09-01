@@ -71,7 +71,13 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Usuario findByCodigo(String codigo, Long procesoId) {
+	public Usuario findByCodigo(String codigo) {
+		return usuarioRepository.findByCodigo(codigo);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Usuario findByCodigoAndProceso(String codigo, Long procesoId) {
 		return usuarioRepository.findByCodigoAndProceso(codigo, procesoId);
 	}
 	

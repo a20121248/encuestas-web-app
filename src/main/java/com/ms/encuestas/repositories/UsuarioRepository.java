@@ -41,9 +41,6 @@ public class UsuarioRepository {
 					 "  JOIN posiciones D ON A.posicion_codigo=D.codigo\n" +
 					 " WHERE proceso_id=:procesoId\n" + 
 					 "   AND responsable_posicion_codigo=:posicionCodigo";
-		// System.out.println(sql);
-		// System.out.println(procesoId);
-		// System.out.println(posicionCodigo);
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("procesoId", procesoId);
         paramMap.put("posicionCodigo", posicionCodigo);
@@ -88,9 +85,7 @@ public class UsuarioRepository {
 					 "  FROM usuarios A\n" +
 				     " WHERE A.codigo=:usuario_codigo\n" +
 					 "   AND A.fecha_eliminacion IS NULL";
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("usuario_codigo", usuarioCodigo);
-		return plantilla.queryForObject(sql, paramMap, new UsuarioMapper());
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_codigo", usuarioCodigo), new UsuarioMapper());
 	}
 	
 	public Usuario findByCodigoAndProceso(String usuarioCodigo, Long procesoId) throws EmptyResultDataAccessException {
@@ -131,9 +126,6 @@ public class UsuarioRepository {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("usuario_codigo", usuarioCodigo);
         paramMap.put("proceso_id", procesoId);
-        System.out.println(sql);
-        System.out.println(usuarioCodigo);
-        System.out.println(procesoId);
 		return plantilla.queryForObject(sql, paramMap, new UsuarioMapper());
 	}
 	
