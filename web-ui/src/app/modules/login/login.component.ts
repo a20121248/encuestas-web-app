@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
-
   constructor(
     public authService: AuthService,
     private router: Router,
@@ -50,16 +49,20 @@ export class LoginComponent implements OnInit {
   get dominio() { return this.loginForm.get('dominio'); }
 
   login(): void {
-    if (this.codigo.value == "" || this.contrasenha.value == "") {
+    if (this.codigo.value == '' || this.contrasenha.value == '') {
       swal.fire('Error en iniciar sesión', 'Matrícula o contraseña vacías.', 'error');
       return;
     }
-    if (this.dominio.value == "") {
+    if (this.dominio.value == '') {
       swal.fire('Error en iniciar sesión', 'Seleccione un dominio.', 'error');
       return;
     }
     this.usuario.codigo = this.codigo.value;
     this.usuario.contrasenha = this.contrasenha.value;
+    if (this.usuario.codigo != 'admin.encuestas' && this.dominio.value == 'Generales') {
+      this.usuario.codigo = 'epps\\' + this.usuario.codigo;
+    }
+
     this.authService.login(this.usuario).subscribe(
       response => {
         //console.log(response);
@@ -69,13 +72,19 @@ export class LoginComponent implements OnInit {
         this.authService.guardarUsuario(response.access_token);
         this.authService.guardarToken(response.access_token);
         let usuario = this.authService.usuario;
-        let proceso = this.authService.proceso;
         this.router.navigate(['/colaboradores']);
-        swal.fire(`${proceso.nombre}`, `Hola ${usuario.nombre}, has iniciado sesión con éxito!`, 'success');
+        swal.fire(`Encuestas PPTO`, `Hola ${usuario.nombre}, has iniciado sesión con éxito!`, 'success');
       }, err => {
+        console.log(err);
         if (err.status == 400) {
-          swal.fire('Error en iniciar sesión', 'Usuario o clave incorrecta.', 'error');
-        }
+          swal.fire('Error en iniciar sesión',
+                    err.error.error_description,
+                    'error');
+        } else if (err.status == 401) {
+          swal.fire('Error en iniciar sesión',
+                    'No se pudo conectar al servicio de directorio activo. Contactar con Helpdesk.',
+                    'error');
+        };
       }
     );
   }
