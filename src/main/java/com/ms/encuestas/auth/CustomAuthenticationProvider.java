@@ -1,10 +1,12 @@
 package com.ms.encuestas.auth;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -28,6 +30,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
 	@Autowired
 	private UsuarioServiceI usuarioService;
+	@Value("${app.usarAD}")
+	private boolean usarAD;
 	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -36,16 +40,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		logger.info(String.format("probando la autenticacion con usuario: %s", authentication.getName()));
-		logger.info(String.format("probando la autenticacion con contrasenia: %s", authentication.getCredentials().toString()));
+		logger.info(String.format("Probando la autenticacion con usuario: %s", authentication.getName()));
+		logger.info(String.format("Probando la autenticacion con contrasenia: %s", authentication.getCredentials().toString()));
 		
     	String strPUsuario = authentication.getName();
     	String strPContrasenia = authentication.getCredentials().toString();
     	
 		boolean error = false;
-    	if (strPUsuario.equals("admin.encuestas")) {
+		System.out.println("env");
+    	if (strPUsuario.equals("admin.encuestas") || usarAD) {
     		Usuario usuario = usuarioService.findByCodigo(strPUsuario);
-    		logger.info(String.format("probando la autenticacion con usuario: %s", authentication.getName()));
     		if (usuario == null) {
     			error = true;
     		} else if (!passwordEncoder().matches(strPContrasenia,usuario.getContrasenha())) {
@@ -59,29 +63,34 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         	String strPIP = "";
         	String strPHostName = "";
         	try {
-        		System.out.println("aa");
         		SegCenServicio segCenServicio = new SegCenServicio();
-        		System.out.println("bb");
             	ISegCenServicios segCenServicios = segCenServicio.getBasicHttpBindingISegCenServicios();
-            	System.out.println("cc");
             	String response = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
             	logger.info(String.format("Respuesta del SegCen: %s", response));
             	if (!response.equals("")) {
             		error = true;
             	}
         	} catch(javax.xml.ws.WebServiceException e) {
-        		logger.error("No se pudo conectar al servicio de SegCen.");
-        		throw new AuthenticationServiceException("SEGCEN");
+        		logger.error("No se pudo conectar al servicio de directorio activo.");
+        		throw new AuthenticationServiceException("No se pudo conectar al servicio de directorio activo.");
         	}        	
     	}
     	
     	if (error) {
-    		logger.error("El usuario no existe o está bloqueado o la contraseña es incorrecta.");
-            throw new BadCredentialsException("El usuario no existe o está bloqueado o la contraseña es incorrecta. Por favor contactar con Helpdesk.");
+    		String msj = String.format("El usuario '%s' no existe, está bloqueado o la contraseña es incorrecta.", strPUsuario);
+    		logger.error(msj);
+            throw new BadCredentialsException(msj + " Por favor contactar con Helpdesk.");
     	}
     	
-		logger.info(String.format("El usuario '%s' se autenticó correctamente.", strPUsuario));
-		return new UsernamePasswordAuthenticationToken(strPUsuario, strPContrasenia, new ArrayList<GrantedAuthority>());
+		List<GrantedAuthority> authorities = usuarioService.getRolesByCodigo(strPUsuario);
+		if (authorities != null && !authorities.isEmpty()) {
+			logger.info(String.format("El usuario '%s' se autenticó correctamente.", strPUsuario));
+			return new UsernamePasswordAuthenticationToken(strPUsuario, strPContrasenia, authorities);			
+		} else {
+			String msj = String.format("No se pudieron cargar los roles del usuario '%s'.", strPUsuario);
+			logger.info(msj);
+    		throw new AuthenticationServiceException(msj + " Por favor contactar con Helpdesk.");
+		}
 	}
 
 	@Override

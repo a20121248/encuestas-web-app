@@ -2,6 +2,8 @@ package com.ms.encuestas.services;
 
 import java.util.List;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import com.ms.encuestas.models.Usuario;
 
 public interface UsuarioServiceI {
@@ -16,4 +18,5 @@ public interface UsuarioServiceI {
 	public void delete(Usuario usuario);
 	public void deleteById(String codigo);
 	public List<Usuario> findUsuariosDependientesByCodigo(Long procesoId, String usuarioCodigo);
+	List<GrantedAuthority> getRolesByCodigo(String codigo);
 }

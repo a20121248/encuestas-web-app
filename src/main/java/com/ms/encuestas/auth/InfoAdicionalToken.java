@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -24,14 +25,17 @@ public class InfoAdicionalToken implements TokenEnhancer {
 	@Autowired
 	private UsuarioServiceI usuarioService;
 	@Autowired
-	private ProcesoServiceI procesoService;	
+	private ProcesoServiceI procesoService;
+	@Value("${app.usarAD}")
+	private boolean usarAD;
 	
 	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
 		//Proceso proceso = procesoService.getCurrentProceso();
 		//Usuario usuario = usuarioService.findByCodigoAndProceso(authentication.getName(), proceso.getId());
 		Map<String, Object> additionalInformation = new HashMap<>();
-		if (authentication.getName().equals("admin.encuestas")) {
+		if (authentication.getName().equals("admin.encuestas") || usarAD) {
+			Usuario usuario = usuarioService.findByCodigo(authentication.getName());
 			additionalInformation.put("nombre", "Administrador");
 		} else {
         	ISegCenServicios segCenServicios = new SegCenServicio().getBasicHttpBindingISegCenServicios();

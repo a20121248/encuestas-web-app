@@ -85,6 +85,7 @@ import { ModalEditarComponent } from './modules/mantenimientos/components/modal-
 import { ModalEliminarComponent } from './modules/mantenimientos/components/modal-eliminar/modal-eliminar.component';
 import { Page404Component } from './shared/components/error-pages/page404/page404.component';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { RolGuard } from './shared/guards/rol.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -115,20 +116,20 @@ const routes: Routes = [
     ]
   },
   { path: 'resumen', component: ResumenComponent, canActivate: [AuthGuard] },
-  { path: 'reporting', component: ReportesComponent, canActivate: [AuthGuard] },
-  { path: 'mantenimiento', component: MantenimientosComponent, canActivate: [AuthGuard] },
+  { path: 'reporting', component: ReportesComponent, canActivate: [AuthGuard, RolGuard] },
+  { path: 'mantenimiento', component: MantenimientosComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
   { path: 'mantenimiento',
     children: [
-      { path: 'areas', component: AreasComponent, canActivate: [AuthGuard] },
-      { path: 'centros-de-costos', component: CentrosComponent, canActivate: [AuthGuard] },
-      { path: 'datos-posicion', component: PosicionDatosComponent, canActivate: [AuthGuard] },
-      { path: 'lineas', component: LineasComponent, canActivate: [AuthGuard] },
-      { path: 'canales', component: CanalesComponent, canActivate: [AuthGuard] },
-      { path: 'productos', component: ProductosComponent, canActivate: [AuthGuard] },
-      { path: 'subcanales', component: SubcanalesComponent, canActivate: [AuthGuard] },
-      { path: 'perfiles', component: PerfilesComponent, canActivate: [AuthGuard] },
-      { path: 'posiciones', component: PosicionesComponent, canActivate: [AuthGuard] },
-      { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
+      { path: 'areas', component: AreasComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
+      { path: 'centros-de-costos', component: CentrosComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
+      { path: 'datos-posicion', component: PosicionDatosComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
+      { path: 'lineas', component: LineasComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
+      { path: 'canales', component: CanalesComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
+      { path: 'productos', component: ProductosComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
+      { path: 'subcanales', component: SubcanalesComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
+      { path: 'perfiles', component: PerfilesComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
+      { path: 'posiciones', component: PosicionesComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
+      { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
     ]
   },
   { path: '**', component: Page404Component}

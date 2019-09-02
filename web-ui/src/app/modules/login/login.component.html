@@ -35,11 +35,11 @@
                 </mat-option>
               </mat-select>
               <mat-error *ngIf="dominio.hasError('required') && dominio.touched">Por favor, seleccione un dominio</mat-error>
-            </mat-form-field>      
+            </mat-form-field>
           </div>
         </mat-card-content>
         <mat-card-actions align="center">
-          <button [disabled]="!loginForm.valid" (click)='login()' mat-raised-button color="accent"><b>LOGIN</b></button>
+          <button (click)='login()' mat-raised-button color="accent"><b>LOGIN</b></button>
         </mat-card-actions>
       </mat-card>
     </form>

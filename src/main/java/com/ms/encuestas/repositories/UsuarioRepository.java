@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.ms.encuestas.models.Rol;
 import com.ms.encuestas.models.Usuario;
 
 @Repository
@@ -201,5 +202,15 @@ public class UsuarioRepository {
 
 	public void delete(Usuario usuario) {
 		return;
+	}
+
+	public List<Rol> findRolesByCodigo(String codigo) {
+		String sql = "SELECT B.*\n" +
+					 "  FROM rol_usuario A\n" +
+					 "  JOIN roles B\n" +
+					 "    ON A.rol_id=B.id\n" + 
+					 " WHERE A.usuario_codigo=:codigo\n" + 
+					 "   AND B.fecha_eliminacion IS NULL";
+		return plantilla.query(sql, new MapSqlParameterSource("codigo", codigo), new RolMapper());
 	}
 }

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ms.encuestas.models.Rol;
 import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.repositories.PosicionRepository;
 import com.ms.encuestas.repositories.RolRepository;
@@ -72,7 +74,12 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	@Override
 	@Transactional(readOnly = true)
 	public Usuario findByCodigo(String codigo) {
-		return usuarioRepository.findByCodigo(codigo);
+		try {
+			return usuarioRepository.findByCodigo(codigo);
+		} catch(EmptyResultDataAccessException e) {
+			logger.info(String.format("No se encontró al usuario '%s' en la base de datos.", codigo));
+			return null;
+		}
 	}
 	
 	@Override
@@ -116,5 +123,17 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	public void deleteById(String codigo) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<GrantedAuthority> getRolesByCodigo(String codigo) {
+		List<Rol> roles = usuarioRepository.findRolesByCodigo(codigo);
+		if (roles != null && !roles.isEmpty()) {
+			return roles.stream()
+						.map(rol -> new SimpleGrantedAuthority(rol.getNombre()))
+						.peek(authority -> logger.info("Rol: " + authority.getAuthority()))
+						.collect(Collectors.toList());
+		}
+		return null;
 	}
 }
