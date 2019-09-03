@@ -107,7 +107,7 @@ public class PosicionController {
 	
 	@PostMapping("/procesos/{procesoId}/descargar-datos-posiciones")
 	@Transactional(readOnly = true)
-	public ResponseEntity<?> downloadPerfiles(@PathVariable Long procesoId) {
+	public ResponseEntity<?> downloadDatos(@PathVariable Long procesoId) {
 		Resource resource = posicionService.downloadExcelDatos();
         String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         

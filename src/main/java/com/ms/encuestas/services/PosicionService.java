@@ -263,7 +263,7 @@ public class PosicionService implements PosicionServiceI {
         if (data == null || data.size() == 0) {
         	data = posicionRepository.findAllDatosListEmpty();
         	excelService.crearCabecera(sh, 0, data);
-            excelService.crearArchivo(wb, result);        	
+            excelService.crearArchivo(wb, result);
     		return fileService.loadFileAsResource(result);
         }
         
@@ -274,13 +274,22 @@ public class PosicionService implements PosicionServiceI {
         for (Map<String, Object> fila: data) {
     		Row row = sh.createRow(rowNum++);
     		int colNum = 0;
-        	row.createCell(colNum).setCellValue((String) fila.get("CODIGO"));sh.setColumnWidth(colNum++, 3000);
-        	row.createCell(colNum).setCellValue((String) fila.get("NOMBRE"));sh.setColumnWidth(colNum++, 12000);
-        	row.createCell(colNum).setCellValue((String) fila.get("TIPO"));sh.setColumnWidth(colNum++, 5000);
-        	row.createCell(colNum).setCellValue(((BigDecimal) fila.get("NIVEL")).intValue());sh.setColumnWidth(colNum++, 3000);
-        	row.createCell(colNum).setCellValue((String) fila.get("GRUPO"));sh.setColumnWidth(colNum++, 4000);
-        	row.createCell(colNum).setCellValue((Date) fila.get("FECHA_CREACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
-        	row.createCell(colNum).setCellValue((Date) fila.get("FECHA_ACTUALIZACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
+    		row.createCell(colNum).setCellValue((String) fila.get("POSICION_CODIGO"));sh.setColumnWidth(colNum++, 3000);
+    		row.createCell(colNum).setCellValue((String) fila.get("POSICION_NOMBRE"));sh.setColumnWidth(colNum++, 6000);
+    		row.createCell(colNum).setCellValue((String) fila.get("MATRICULA"));sh.setColumnWidth(colNum++, 3000);
+    		row.createCell(colNum).setCellValue((String) fila.get("NOMBRE_COMPLETO"));sh.setColumnWidth(colNum++, 6000);
+    		row.createCell(colNum).setCellValue((String) fila.get("AREA_CODIGO"));sh.setColumnWidth(colNum++, 3000);
+    		row.createCell(colNum).setCellValue((String) fila.get("AREA_NOMBRE"));sh.setColumnWidth(colNum++, 6000);
+    		row.createCell(colNum).setCellValue((String) fila.get("CENTRO_CODIGO"));sh.setColumnWidth(colNum++, 3000);
+    		row.createCell(colNum).setCellValue((String) fila.get("CENTRO_NOMBRE"));sh.setColumnWidth(colNum++, 6000);
+    		row.createCell(colNum).setCellValue((String) fila.get("PERFIL_CODIGO"));sh.setColumnWidth(colNum++, 3000);
+    		row.createCell(colNum).setCellValue((String) fila.get("PERFIL_NOMBRE"));sh.setColumnWidth(colNum++, 6000);
+    		row.createCell(colNum).setCellValue((String) fila.get("RESPONSABLE_MATRICULA"));sh.setColumnWidth(colNum++, 3000);
+    		row.createCell(colNum).setCellValue((String) fila.get("RESPONSABLE_NOMBRE_COMPLETO"));sh.setColumnWidth(colNum++, 6000);
+    		row.createCell(colNum).setCellValue((String) fila.get("RESPONSABLE_POSICION_CODIGO"));sh.setColumnWidth(colNum++, 3000);
+    		row.createCell(colNum).setCellValue((String) fila.get("RESPONSABLE_POSICION_NOMBRE"));sh.setColumnWidth(colNum++, 6000);
+    		row.createCell(colNum).setCellValue((Date) fila.get("FECHA_CREACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
+    		row.createCell(colNum).setCellValue((Date) fila.get("FECHA_ACTUALIZACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
         }
         excelService.crearArchivo(wb, result);        	
 		return fileService.loadFileAsResource(result);
