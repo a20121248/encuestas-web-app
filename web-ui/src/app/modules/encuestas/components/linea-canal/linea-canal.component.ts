@@ -61,10 +61,10 @@ export class LineaCanalComponent implements OnInit {
     let porcentajeTotalCanales: number;
     let formCanalesValido: boolean;
     let datoValido: boolean;
-    this.sharedFormService.form2PorcentajeActual.subscribe(data => {
+    this.sharedFormService.form3PorcentajeActual.subscribe(data => {
       porcentajeTotalCanales = data;
     });
-    this.sharedFormService.form2Actual.subscribe(data =>{
+    this.sharedFormService.form3Actual.subscribe(data =>{
       if(data == null) {
         formCanalesValido = true;
       } else {
@@ -76,7 +76,7 @@ export class LineaCanalComponent implements OnInit {
     if (objeto.objeto.porcentaje == 0) {
       objeto.lstObjetos.map(t => {
         t.porcentaje = 0;
-      })
+      });
     }
     if (datoValido && (porcentajeTotalCanales == 100 || porcentajeTotalCanales == -1) && formCanalesValido){
       this.sendLinea.emit(objeto);
@@ -89,14 +89,17 @@ export class LineaCanalComponent implements OnInit {
   }
 
   onChanges():void{
+    let completo: boolean;
     this.groupForm.valueChanges
     .subscribe(data =>{
       if(this.groupForm.valid && this.porcTotal==100){
-        let completo = this.validatePorcentajesCompleto()
+        completo = this.validatePorcentajesCompleto();
         this.sendEstado(completo);
       } else {
+        completo = false;
         this.sendEstado(false);
       }
+      this.sharedFormService.actualizarEstadoCompletoForm1(completo);
       this.sharedFormService.actualizarEstadoForm1(this.groupForm);
     });
   }
@@ -114,6 +117,7 @@ export class LineaCanalComponent implements OnInit {
         }
       }
     }
+    // Valida si los canales de la linea con porcentaje>0 es igual a 100
     if(this.lineasCompletas.filter((item) => item == false).length > 0){
       return false;
     } else {

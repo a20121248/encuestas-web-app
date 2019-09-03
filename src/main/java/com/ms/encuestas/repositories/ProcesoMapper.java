@@ -12,27 +12,22 @@ import com.ms.encuestas.models.Tipo;
 import com.ms.encuestas.models.Usuario;
 
 public class ProcesoMapper implements RowMapper<Proceso> {
-	private Logger logger = LoggerFactory.getLogger(ProcesoMapper.class);
 	@Override
 	public Proceso mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Proceso proceso = new Proceso();
+		proceso.setId(rs.getLong("id"));
+		proceso.setCodigo(rs.getString("codigo"));
+		proceso.setNombre(rs.getString("nombre"));
+		proceso.setFechaInicio(rs.getDate("fecha_inicio"));
+		proceso.setFechaCierre(rs.getDate("fecha_cierre"));
+		proceso.setFechaCreacion(rs.getDate("fecha_creacion"));
+		proceso.setFechaActualizacion(rs.getDate("fecha_actualizacion"));
 		
-		Usuario usuario;
-		try {
-			usuario = new Usuario();
-			usuario.setCodigo(rs.getString("usuario_codigo"));
-			usuario.setNombreCompleto(rs.getString("usuario_nombre_completo"));
-			proceso.setUsuario(usuario);
-		} catch (java.sql.SQLException e) {
-			usuario = null;
-		}
+		Usuario usuario = new Usuario();
+		usuario.setCodigo(rs.getString("usuario_codigo"));
+		usuario.setNombreCompleto(rs.getString("usuario_nombre_completo"));
+		proceso.setUsuario(usuario);
 		
-		proceso.setId(rs.getLong("proceso_id"));
-		proceso.setCodigo(rs.getString("proceso_codigo"));
-		proceso.setNombre(rs.getString("proceso_nombre"));
-		proceso.setFechaCierre(rs.getDate("proceso_fecha_cierre"));
-		proceso.setFechaCreacion(rs.getDate("proceso_fecha_creacion"));
-		proceso.setFechaActualizacion(rs.getDate("proceso_fecha_actualizacion"));
 		return proceso;
 	}
 }

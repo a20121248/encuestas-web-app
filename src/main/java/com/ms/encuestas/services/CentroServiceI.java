@@ -3,6 +3,8 @@ package com.ms.encuestas.services;
 import java.io.InputStream;
 import java.util.List;
 
+import org.springframework.core.io.Resource;
+
 import com.ms.encuestas.models.Centro;
 
 public interface CentroServiceI {
@@ -13,4 +15,5 @@ public interface CentroServiceI {
 	public void delete(Centro centro);
 	public void deleteById(Long id);
 	public void processExcel(InputStream file);
+	public Resource downloadExcel();
 }

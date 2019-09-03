@@ -47,9 +47,16 @@ export class ProductoSubcanalComponent implements OnInit {
     }
   }
 
-  obtenerSuma(element: ObjetoObjetos): number {
+  obtenerSumaByRow(element: ObjetoObjetos): number {
     if (element != null) {
       return Math.trunc(100000 * element.lstObjetos.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0)) / 100000;
+    }
+    return 0;
+  }
+
+  obtenerSumaByColumn(column: number):number{
+    if(this.lstProductoSubcanales!= null){
+      return Math.trunc(100000 * this.lstProductoSubcanales.map(t => t.lstObjetos[column].porcentaje).reduce((acc, value) => acc + value, 0)) / 100000;
     }
     return 0;
   }

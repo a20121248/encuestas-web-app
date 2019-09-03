@@ -63,8 +63,8 @@ export class CanalComponent implements OnInit {
       } else {
         this.sendEstado(false);
       }
-      this.sharedFormService.actualizarEstadoForm2(this.groupForm);
-      this.sharedFormService.actualizarPorcentajeForm2(this.porcTotal);
+      this.sharedFormService.actualizarEstadoForm3(this.groupForm);
+      this.sharedFormService.actualizarPorcentajeForm3(this.porcTotal);
     });
   }
 
@@ -84,6 +84,9 @@ export class CanalComponent implements OnInit {
   revisarEdicionFormulario(lineaID: number, canalID: number){
     let form1Valid:boolean;
     let form1Dirty:boolean;
+    let form2Valid:boolean;
+    let form2Dirty:boolean;
+
     this.url = lineaID+"/"+canalID+"/producto-subcanal";
     console.log(this.url);
     this.sharedFormService.form1Actual.subscribe( data => {
@@ -91,22 +94,16 @@ export class CanalComponent implements OnInit {
       form1Dirty = data.dirty;
     } );
 
-    console.log(this.haGuardado);
-    console.log(this.groupForm.valid);
-    console.log(form1Valid);
-    console.log((this.haGuardado && this.groupForm.valid && form1Valid));
-
-
-    console.log(this.groupForm.valid);
-    console.log(!this.groupForm.dirty);
-    console.log(form1Valid);
-    console.log(!form1Dirty);
-    console.log((this.groupForm.valid && !this.groupForm.dirty && form1Valid && !form1Dirty));
-
-    if((this.haGuardado && this.groupForm.valid && form1Valid) || (this.groupForm.valid && !this.groupForm.dirty && form1Valid && !form1Dirty)){
+    this.sharedFormService.form2Actual.subscribe( data => {
+      form2Valid = data.valid;
+      form2Dirty = data.dirty;
+    } );
+    // Valida si se haGuardado y las formas son validas, or si no se ha cambiado alguna forma y si son validas
+    if((this.haGuardado && this.groupForm.valid && form1Valid && form2Valid) || (this.groupForm.valid && !this.groupForm.dirty && form1Valid && !form1Dirty && form2Valid && !form2Dirty)){
       this.router.navigate([this.url], { relativeTo: this.route });
     } else {
-      if((this.groupForm.valid && this.groupForm.dirty)|| (form1Valid && form1Dirty)){
+      // Valida si alguna de las formas ha sido cambiada
+      if((this.groupForm.valid && this.groupForm.dirty) || (form1Valid && form1Dirty)  || (form2Valid && form2Dirty)){
         swal.fire({
           title: 'Cambios detectados',
           text: "Primero guarde antes de continuar.",

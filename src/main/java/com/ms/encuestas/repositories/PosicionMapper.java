@@ -25,6 +25,7 @@ public class PosicionMapper implements RowMapper<Posicion> {
 			area.setFechaCreacion(rs.getDate("area_fecha_creacion"));
 			area.setFechaActualizacion(rs.getDate("area_fecha_actualizacion"));
 			area.setDivision(rs.getString("area_division"));
+			posicion.setArea(area);
 		} catch (java.sql.SQLException e) {
 			area = null;
 		}
@@ -36,7 +37,8 @@ public class PosicionMapper implements RowMapper<Posicion> {
 			centro.setCodigo(rs.getString("centro_codigo"));
 			centro.setNombre(rs.getString("centro_nombre"));
 			centro.setNivel(rs.getInt("centro_nivel"));
-			centro.setFechaCreacion(rs.getDate("centro_fecha_creacion"));			
+			centro.setFechaCreacion(rs.getDate("centro_fecha_creacion"));
+			posicion.setCentro(centro);
 		} catch (java.sql.SQLException e) {
 			centro = null;
 		}
@@ -44,8 +46,10 @@ public class PosicionMapper implements RowMapper<Posicion> {
 		posicion.setCodigo(rs.getString("codigo"));
 		posicion.setNombre(rs.getString("nombre"));
 		posicion.setFechaCreacion(rs.getDate("fecha_creacion"));
-		posicion.setArea(area);
-		posicion.setCentro(centro);
+		posicion.setFechaActualizacion(rs.getDate("fecha_actualizacion"));
+		
+		if (posicion.getCodigo() == null)
+			return null;
 		return posicion;
 	}
 }

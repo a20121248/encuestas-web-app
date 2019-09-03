@@ -30,6 +30,38 @@ public class PerfilRepository {
 		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
 	}
 	
+	public List<Map<String,Object>> findAllListEmpty() throws EmptyResultDataAccessException {
+		String sql = "SELECT NULL codigo,\n" + 
+				 	 "       NULL nombre,\n" + 
+				 	 "       NULL tipo,\n" + 
+				 	 "       NULL dimension1_codigo,\n" + 
+				 	 "       NULL dimension1_nombre,\n" + 
+				 	 "       NULL dimension2_codigo,\n" + 
+				 	 "       NULL dimension2_nombre\n" + 
+				 	 "  FROM DUAL";
+	return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
+	}
+	
+	public List<Map<String,Object>> findAllList() throws EmptyResultDataAccessException {
+		String sql = "SELECT A.codigo,\n" + 
+					 "       A.nombre,\n" + 
+					 "       B.nombre tipo,\n" + 
+					 "       NVL(C1.codigo,D1.codigo) dimension1_codigo,\n" + 
+					 "       NVL(C1.nombre,D1.nombre) dimension1_nombre,\n" + 
+					 "       D2.codigo dimension2_codigo,\n" + 
+					 "       D2.nombre dimension2_nombre\n" + 
+					 "  FROM perfiles A\n" +
+					 "  JOIN perfil_tipos B ON A.perfil_tipo_id=B.id\n" + 
+					 "  LEFT JOIN perfil_centro C ON A.id=C.perfil_id\n" + 
+					 "  LEFT JOIN perfil_linea_canal D ON A.id=D.perfil_id\n" + 
+					 "  LEFT JOIN centros C1 ON C.centro_id=C1.id\n" + 
+					 "  LEFT JOIN objetos D1 ON D.linea_id=D1.id\n" + 
+					 "  LEFT JOIN objetos D2 ON D.canal_id=D2.id\n" + 
+					 " WHERE A.fecha_eliminacion IS NULL\n" + 
+					 " ORDER BY A.fecha_creacion, A.codigo,C1.codigo,D1.codigo,D2.codigo";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
+	}
+	
 	public List<Perfil> findAll() throws EmptyResultDataAccessException {
 		return null;
 	}
