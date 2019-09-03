@@ -38,6 +38,7 @@ export class AuthService {
 
   setProceso(proceso: Proceso): void {
     this._proceso = proceso;
+    localStorage.setItem('proceso', JSON.stringify(this._proceso));
   }
 
   public get token(): string {
@@ -108,6 +109,6 @@ export class AuthService {
     //localStorage.clear();
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
-    //localStorage.removeItem('proceso');
+    localStorage.removeItem('proceso');
   }
 }
