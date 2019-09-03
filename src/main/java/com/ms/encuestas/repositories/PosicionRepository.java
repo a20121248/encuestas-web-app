@@ -115,9 +115,7 @@ public class PosicionRepository {
 				 	 "  JOIN centros D ON A.centro_id=D.id\n" +
 				 	 " WHERE A.codigo=:codigo\n" +
 				 	 "   AND A.fecha_eliminacion IS NULL";
-		return plantilla.queryForObject(sql,
-				new MapSqlParameterSource("codigo", codigo),
-				new PosicionMapper());
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("codigo", codigo), new PosicionMapper());
 	}
 	
 	public int deleteDatosProceso(Long procesoId) {
@@ -140,5 +138,19 @@ public class PosicionRepository {
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);
 		return plantilla.update(sql, paramMap);
+	}
+
+	public Posicion findByProcesoIdAndUsuarioCodigo(Long procesoId, String usuarioCodigo) throws EmptyResultDataAccessException {
+		String sql = "SELECT B.*\n" +
+					 "  FROM posicion_datos A\n" + 
+					 "  LEFT JOIN posiciones B\n" + 
+					 "    ON A.posicion_codigo=B.codigo\n" + 
+					 " WHERE A.proceso_id=:proceso_id\n" +
+					 "   AND A.usuario_codigo=:usuario_codigo\n" +
+					 "   AND B.fecha_eliminacion IS NULL";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("proceso_id", procesoId);
+		paramMap.put("usuario_codigo", usuarioCodigo);
+		return plantilla.queryForObject(sql, paramMap, new PosicionMapper());
 	}
 }

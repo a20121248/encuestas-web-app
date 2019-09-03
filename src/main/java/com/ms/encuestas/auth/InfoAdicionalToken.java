@@ -26,21 +26,22 @@ public class InfoAdicionalToken implements TokenEnhancer {
 	private UsuarioServiceI usuarioService;
 	@Autowired
 	private ProcesoServiceI procesoService;
-	@Value("${app.usarAD}")
-	private boolean usarAD;
 	
 	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-		//Proceso proceso = procesoService.getCurrentProceso();
-		//Usuario usuario = usuarioService.findByCodigoAndProceso(authentication.getName(), proceso.getId());
+		String usuarioRed = authentication.getName();
 		Map<String, Object> additionalInformation = new HashMap<>();
-		if (authentication.getName().equals("admin.encuestas") || usarAD) {
-			Usuario usuario = usuarioService.findByCodigo(authentication.getName());
+		if (authentication.getName().equals("admin.encuestas")) {
 			additionalInformation.put("nombre", "Administrador");
 		} else {
-        	ISegCenServicios segCenServicios = new SegCenServicio().getBasicHttpBindingISegCenServicios();
-        	String response = segCenServicios.obtenerNombreUsuario(authentication.getName());
-			additionalInformation.put("nombre", response);
+			Usuario usuario;
+    		if (usuarioRed.length()>5 && usuarioRed.substring(0, 5).equals("epps\\")) {
+    			usuario = usuarioService.findByUsuarioGenerales(usuarioRed);
+    		} else {
+    			usuario = usuarioService.findByUsuarioVida(usuarioRed);
+    		}
+    		additionalInformation.put("codigo", usuario.getCodigo());
+    		additionalInformation.put("nombre", usuario.getNombreCompleto());
 		}
 		
 		/*Map<String, Object> procesoResponse = new HashMap<>();

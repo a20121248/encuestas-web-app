@@ -77,6 +77,30 @@ public class UsuarioRepository {
 		return plantilla.query(sql, paramMap, new UsuarioMapper());
 	}
 
+	public Usuario findByUsuarioGenerales(String usuarioRed) throws EmptyResultDataAccessException {
+		String sql = "SELECT A.codigo usuario_codigo,\n" +
+				     "       A.contrasenha usuario_contrasenha,\n" +
+				     "       A.nombre_completo usuario_nombre_completo,\n" +
+				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
+				     "       A.fecha_actualizacion usuario_fecha_actualizacion\n" +
+					 "  FROM usuarios A\n" +
+				     " WHERE A.usuario_generales=:usuario_red\n" +
+					 "   AND A.fecha_eliminacion IS NULL";
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_red", usuarioRed), new UsuarioMapper());
+	}
+	
+	public Usuario findByUsuarioVida(String usuarioRed) throws EmptyResultDataAccessException {
+		String sql = "SELECT A.codigo usuario_codigo,\n" +
+				     "       A.contrasenha usuario_contrasenha,\n" +
+				     "       A.nombre_completo usuario_nombre_completo,\n" +
+				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
+				     "       A.fecha_actualizacion usuario_fecha_actualizacion\n" +
+					 "  FROM usuarios A\n" +
+				     " WHERE A.usuario_vida=:usuario_red\n" +
+					 "   AND A.fecha_eliminacion IS NULL";
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_red", usuarioRed), new UsuarioMapper());
+	}
+	
 	public Usuario findByCodigo(String usuarioCodigo) throws EmptyResultDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +

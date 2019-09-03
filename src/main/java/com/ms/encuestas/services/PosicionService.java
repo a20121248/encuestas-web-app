@@ -1,18 +1,30 @@
 package com.ms.encuestas.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.ms.encuestas.models.Area;
@@ -32,6 +44,8 @@ import com.ms.encuestas.repositories.PosicionRepository;
 import com.ms.encuestas.repositories.ProcesoRepository;
 import com.ms.encuestas.repositories.TipoRepository;
 import com.ms.encuestas.repositories.UsuarioRepository;
+import com.ms.encuestas.services.utils.ExcelServiceI;
+import com.ms.encuestas.services.utils.FileServiceI;
 import com.ms.encuestas.services.utils.LoggerServiceI;
 
 @Service
@@ -39,6 +53,10 @@ public class PosicionService implements PosicionServiceI {
 	private Logger logger = LoggerFactory.getLogger(PosicionService.class);
 	@Autowired
 	private LoggerServiceI log;
+	@Autowired
+	private FileServiceI fileService;
+	@Autowired
+	private ExcelServiceI excelService;
 	@Autowired
 	private PosicionRepository posicionRepository;
 	@Autowired
@@ -51,7 +69,6 @@ public class PosicionService implements PosicionServiceI {
 	private PerfilRepository perfilRepository;
 	@Autowired
 	private ProcesoRepository procesoRepository;
-	
 
 	public Long count() {
 		return posicionRepository.count();
@@ -218,5 +235,54 @@ public class PosicionService implements PosicionServiceI {
        } catch (IOException e) {
            logger.error(e.getMessage());
        }
+	}
+
+	@Override
+	public Posicion findByProcesoIdAndUsuarioCodigo(Long procesoId, String usuarioCodigo) {
+		try {
+			return posicionRepository.findByProcesoIdAndUsuarioCodigo(procesoId, usuarioCodigo);
+		} catch(EmptyResultDataAccessException e) {
+			logger.info(String.format("No se encontró una posición asociada al usuario '%s' para el proceso con ID=%d.", usuarioCodigo, procesoId));
+			return null;
+		}
+	}
+
+	@Override
+	public Resource downloadExcelDatos() {
+		Path currentRelativePath = Paths.get("");
+		String currentPath = currentRelativePath.toAbsolutePath().toString();
+		
+		List<String> alphabets = Arrays.asList(currentPath, "storage", "app", "reportes", "Datos de las posiciones.xlsx");
+		String result = String.join(File.separator, alphabets);
+		
+        SXSSFWorkbook wb = excelService.crearLibro();
+        SXSSFSheet sh = wb.createSheet("DATOS_POSICIONES");
+
+        List<Map<String,Object>> data = posicionRepository.findAllDatosList();
+        
+        if (data == null || data.size() == 0) {
+        	data = posicionRepository.findAllDatosListEmpty();
+        	excelService.crearCabecera(sh, 0, data);
+            excelService.crearArchivo(wb, result);        	
+    		return fileService.loadFileAsResource(result);
+        }
+        
+        int rowNum = 0;
+        excelService.crearCabecera(sh, rowNum++, data);
+		CellStyle dateStyle = wb.createCellStyle();
+	    dateStyle.setDataFormat((short)14);
+        for (Map<String, Object> fila: data) {
+    		Row row = sh.createRow(rowNum++);
+    		int colNum = 0;
+        	row.createCell(colNum).setCellValue((String) fila.get("CODIGO"));sh.setColumnWidth(colNum++, 3000);
+        	row.createCell(colNum).setCellValue((String) fila.get("NOMBRE"));sh.setColumnWidth(colNum++, 12000);
+        	row.createCell(colNum).setCellValue((String) fila.get("TIPO"));sh.setColumnWidth(colNum++, 5000);
+        	row.createCell(colNum).setCellValue(((BigDecimal) fila.get("NIVEL")).intValue());sh.setColumnWidth(colNum++, 3000);
+        	row.createCell(colNum).setCellValue((String) fila.get("GRUPO"));sh.setColumnWidth(colNum++, 4000);
+        	row.createCell(colNum).setCellValue((Date) fila.get("FECHA_CREACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
+        	row.createCell(colNum).setCellValue((Date) fila.get("FECHA_ACTUALIZACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
+        }
+        excelService.crearArchivo(wb, result);        	
+		return fileService.loadFileAsResource(result);
 	}
 }

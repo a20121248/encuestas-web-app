@@ -47,9 +47,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     	String strPContrasenia = authentication.getCredentials().toString();
     	
 		boolean error = false;
-		System.out.println("env");
-    	if (strPUsuario.equals("admin.encuestas") || usarAD) {
-    		Usuario usuario = usuarioService.findByCodigo(strPUsuario);
+		Usuario usuario = null;
+    	if (strPUsuario.equals("admin.encuestas") || !usarAD) {
+    		if (strPUsuario.length()>5 && strPUsuario.substring(0, 5).equals("epps\\")) {    		
+    			usuario = usuarioService.findByUsuarioGenerales(strPUsuario);
+    		} else {
+    			usuario = usuarioService.findByUsuarioVida(strPUsuario);
+    		}
     		if (usuario == null) {
     			error = true;
     		} else if (!passwordEncoder().matches(strPContrasenia,usuario.getContrasenha())) {
@@ -70,6 +74,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             	if (!response.equals("")) {
             		error = true;
             	}
+            	
+        		if (strPUsuario.length()>5 && strPUsuario.substring(0, 5).equals("epps\\")) {
+        			usuario = usuarioService.findByUsuarioGenerales(strPUsuario);
+        		} else {
+        			usuario = usuarioService.findByUsuarioVida(strPUsuario);
+        		}
+        		
+        		if (usuario == null) {
+        			error = true;
+        		}
         	} catch(javax.xml.ws.WebServiceException e) {
         		logger.error("No se pudo conectar al servicio de directorio activo.");
         		throw new AuthenticationServiceException("No se pudo conectar al servicio de directorio activo.");
@@ -82,7 +96,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException(msj + " Por favor contactar con Helpdesk.");
     	}
     	
-		List<GrantedAuthority> authorities = usuarioService.getRolesByCodigo(strPUsuario);
+		List<GrantedAuthority> authorities = usuarioService.getRolesByCodigo(usuario.getCodigo());
 		if (authorities != null && !authorities.isEmpty()) {
 			logger.info(String.format("El usuario '%s' se autenticó correctamente.", strPUsuario));
 			return new UsernamePasswordAuthenticationToken(strPUsuario, strPContrasenia, authorities);			

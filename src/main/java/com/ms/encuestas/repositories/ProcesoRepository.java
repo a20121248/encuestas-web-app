@@ -23,21 +23,15 @@ public class ProcesoRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 
-	public Proceso getCurrentProceso() {
-		String sql = "SELECT A.id proceso_id,\n" +
-					 "       A.codigo proceso_codigo,\n" +
-			         "       A.nombre proceso_nombre,\n" + 
-			         "       A.fecha_cierre proceso_fecha_cierre,\n" + 
-			         "       A.fecha_creacion proceso_fecha_creacion,\n" + 
-			         "       A.fecha_actualizacion proceso_fecha_actualizacion,\n" + 
-			         "       B.codigo usuario_codigo,\n" +
-			         "       B.nombre_completo usuario_nombre_completo,\n" + 
-			         "       B.fecha_creacion usuario_fecha_creacion,\n" + 
-			         "       B.fecha_actualizacion usuario_fecha_actualizacion\n" + 
+	public Proceso getCurrentProceso() throws EmptyResultDataAccessException {
+		String sql = "SELECT A.*,\n" +
+					 "       A.usuario_codigo,\n" +
+					 "       B.nombre_completo usuario_nombre_completo\n" +
 			         "  FROM procesos A\n" + 
-			         "  JOIN usuarios B ON A.usuario_codigo=B.codigo\n" + 
-			         " WHERE A.fecha_eliminacion IS NULL\n" + 
-			         "   AND A.fecha_cierre IS NULL";
+			         "  LEFT JOIN usuarios B\n" +
+			         "    ON A.usuario_codigo=B.codigo\n" + 
+			         " WHERE A.fecha_eliminacion IS NULL" +
+			         "   AND A.activo=1";
         return plantilla.queryForObject(sql, (MapSqlParameterSource) null, new ProcesoMapper());
 	}
 	
@@ -47,14 +41,9 @@ public class ProcesoRepository {
 	}
 	
 	public List<Proceso> findAll() throws EmptyResultDataAccessException {
-		String sql = "SELECT A.id proceso_id,\n" +
-					 "       A.codigo proceso_codigo,\n" +
-					 "       A.nombre proceso_nombre,\n" +
+		String sql = "SELECT A.*,\n" +
 					 "       B.codigo usuario_codigo,\n" +
-					 "       B.nombre_completo usuario_nombre_completo,\n" +
-					 "       A.fecha_cierre proceso_fecha_cierre,\n" +
-					 "       A.fecha_creacion proceso_fecha_creacion,\n" +
-					 "       A.fecha_actualizacion proceso_fecha_actualizacion\n" + 
+					 "       B.nombre_completo usuario_nombre_completo\n" + 
 					 "  FROM procesos A\n" +
 					 "  LEFT JOIN usuarios B\n" +
 					 "    ON A.usuario_codigo=B.codigo\n" +

@@ -9,6 +9,8 @@ import com.ms.encuestas.models.Usuario;
 public interface UsuarioServiceI {
 	public Long count();
 	public List<Usuario> findAll();
+	public Usuario findByUsuarioGenerales(String usuario);
+	public Usuario findByUsuarioVida(String usuario);
 	public Usuario findByCodigo(String codigo);
 	public Usuario findByCodigoAndProceso(String codigo, Long procesoId);
 	public Usuario findByPosicionCodigo(String posicionCodigo, Long procesoId);

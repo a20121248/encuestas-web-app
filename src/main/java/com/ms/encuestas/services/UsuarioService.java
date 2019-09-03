@@ -129,11 +129,28 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	public List<GrantedAuthority> getRolesByCodigo(String codigo) {
 		List<Rol> roles = usuarioRepository.findRolesByCodigo(codigo);
 		if (roles != null && !roles.isEmpty()) {
-			return roles.stream()
-						.map(rol -> new SimpleGrantedAuthority(rol.getNombre()))
-						.peek(authority -> logger.info("Rol: " + authority.getAuthority()))
-						.collect(Collectors.toList());
+			return roles.stream().map(rol -> new SimpleGrantedAuthority(rol.getNombre())).collect(Collectors.toList());
 		}
 		return null;
+	}
+
+	@Override
+	public Usuario findByUsuarioGenerales(String usuarioRed) {
+		try {
+			return usuarioRepository.findByUsuarioGenerales(usuarioRed);
+		} catch(EmptyResultDataAccessException e) {
+			logger.info(String.format("No se encontró al usuario '%s' en la base de datos de Generales.", usuarioRed));
+			return null;
+		}
+	}
+
+	@Override
+	public Usuario findByUsuarioVida(String usuarioRed) {
+		try {
+			return usuarioRepository.findByUsuarioVida(usuarioRed);
+		} catch(EmptyResultDataAccessException e) {
+			logger.info(String.format("No se encontró al usuario '%s' en la base de datos de Vida.", usuarioRed));
+			return null;
+		}
 	}
 }
