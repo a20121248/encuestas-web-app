@@ -18,8 +18,8 @@ import { Proceso } from 'src/app/shared/models/Proceso';
 })
 export class SeleccionarUsuarioComponent implements OnInit {
 
-  //dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'estado', 'ir'];
-  dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'ir'];
+  dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'estado', 'ir'];
+  //dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'ir'];
   lstUsuario: Usuario[];
   procesoActual: Proceso;
   posicion: Posicion;
