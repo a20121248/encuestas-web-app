@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.ms.encuestas.models.Rol;
 import com.ms.encuestas.models.Usuario;
 
 @Repository
@@ -41,9 +42,6 @@ public class UsuarioRepository {
 					 "  JOIN posiciones D ON A.posicion_codigo=D.codigo\n" +
 					 " WHERE proceso_id=:procesoId\n" + 
 					 "   AND responsable_posicion_codigo=:posicionCodigo";
-		// System.out.println(sql);
-		// System.out.println(procesoId);
-		// System.out.println(posicionCodigo);
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("procesoId", procesoId);
         paramMap.put("posicionCodigo", posicionCodigo);
@@ -79,6 +77,30 @@ public class UsuarioRepository {
 		return plantilla.query(sql, paramMap, new UsuarioMapper());
 	}
 
+	public Usuario findByUsuarioGenerales(String usuarioRed) throws EmptyResultDataAccessException {
+		String sql = "SELECT A.codigo usuario_codigo,\n" +
+				     "       A.contrasenha usuario_contrasenha,\n" +
+				     "       A.nombre_completo usuario_nombre_completo,\n" +
+				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
+				     "       A.fecha_actualizacion usuario_fecha_actualizacion\n" +
+					 "  FROM usuarios A\n" +
+				     " WHERE A.usuario_generales=:usuario_red\n" +
+					 "   AND A.fecha_eliminacion IS NULL";
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_red", usuarioRed), new UsuarioMapper());
+	}
+	
+	public Usuario findByUsuarioVida(String usuarioRed) throws EmptyResultDataAccessException {
+		String sql = "SELECT A.codigo usuario_codigo,\n" +
+				     "       A.contrasenha usuario_contrasenha,\n" +
+				     "       A.nombre_completo usuario_nombre_completo,\n" +
+				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
+				     "       A.fecha_actualizacion usuario_fecha_actualizacion\n" +
+					 "  FROM usuarios A\n" +
+				     " WHERE A.usuario_vida=:usuario_red\n" +
+					 "   AND A.fecha_eliminacion IS NULL";
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_red", usuarioRed), new UsuarioMapper());
+	}
+	
 	public Usuario findByCodigo(String usuarioCodigo) throws EmptyResultDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
@@ -88,9 +110,7 @@ public class UsuarioRepository {
 					 "  FROM usuarios A\n" +
 				     " WHERE A.codigo=:usuario_codigo\n" +
 					 "   AND A.fecha_eliminacion IS NULL";
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("usuario_codigo", usuarioCodigo);
-		return plantilla.queryForObject(sql, paramMap, new UsuarioMapper());
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_codigo", usuarioCodigo), new UsuarioMapper());
 	}
 	
 	public Usuario findByCodigoAndProceso(String usuarioCodigo, Long procesoId) throws EmptyResultDataAccessException {
@@ -131,9 +151,6 @@ public class UsuarioRepository {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("usuario_codigo", usuarioCodigo);
         paramMap.put("proceso_id", procesoId);
-        System.out.println(sql);
-        System.out.println(usuarioCodigo);
-        System.out.println(procesoId);
 		return plantilla.queryForObject(sql, paramMap, new UsuarioMapper());
 	}
 	
@@ -209,5 +226,15 @@ public class UsuarioRepository {
 
 	public void delete(Usuario usuario) {
 		return;
+	}
+
+	public List<Rol> findRolesByCodigo(String codigo) {
+		String sql = "SELECT B.*\n" +
+					 "  FROM rol_usuario A\n" +
+					 "  JOIN roles B\n" +
+					 "    ON A.rol_id=B.id\n" + 
+					 " WHERE A.usuario_codigo=:codigo\n" + 
+					 "   AND B.fecha_eliminacion IS NULL";
+		return plantilla.query(sql, new MapSqlParameterSource("codigo", codigo), new RolMapper());
 	}
 }

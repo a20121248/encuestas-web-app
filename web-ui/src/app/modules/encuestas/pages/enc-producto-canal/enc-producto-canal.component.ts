@@ -47,7 +47,7 @@ export class EncProductoCanalComponent implements OnInit {
     this.lineaId = this.activatedRoute.snapshot.paramMap.get('lineaId');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
       this.usuarioSeleccionado = usuario;
-      this.productoCanalService.obtenerEncuesta(this.usuarioSeleccionado, this.lineaId).subscribe(encuesta => {
+      this.productoCanalService.obtenerEncuesta(this.posicionCodigo, this.lineaId).subscribe(encuesta => {
         this.encuesta = encuesta;
       });
     });
@@ -69,7 +69,7 @@ export class EncProductoCanalComponent implements OnInit {
       this.habilitarButton = false;
     }
   }
-  
+
   goBack() {
     let form1dirty: boolean;
     this.sharedFormService.form1Actual.subscribe(data => {
@@ -94,7 +94,7 @@ export class EncProductoCanalComponent implements OnInit {
 
   guardarEncuesta() {
     this.haGuardado = true;
-    this.productoCanalService.guardarEncuesta(this.encuesta, this.posicionCodigo).subscribe(
+    this.productoCanalService.guardarEncuesta(this.encuesta, this.posicionCodigo, this.lineaId).subscribe(
       response => console.log(response), err => console.log(err)
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');

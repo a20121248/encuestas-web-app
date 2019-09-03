@@ -17,6 +17,11 @@ export class ProcesoService {
     return this.http.get<Proceso>(url);
   }
 
+  getCurrentProceso(): Observable<Proceso> {
+    const url = `${this.urlServer.api}procesos/actual`;
+    return this.http.get<Proceso>(url);
+  }
+
   findAll(): Observable<Proceso[]> {
     const url = `${this.urlServer.api}procesos`;
     return this.http.get<Proceso[]>(url);

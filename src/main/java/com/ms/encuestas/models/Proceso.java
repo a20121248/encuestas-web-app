@@ -9,6 +9,8 @@ public class Proceso implements Serializable {
 	private String codigo;
 	private String nombre;
 	private Usuario usuario;
+	private boolean activo;
+	private Date fechaInicio;
 	private Date fechaCierre;
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
@@ -44,7 +46,23 @@ public class Proceso implements Serializable {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+	
+	public boolean isActivo() {
+		return activo;
+	}
 
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+
+	public Date getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+	
 	public Date getFechaCierre() {
 		return fechaCierre;
 	}

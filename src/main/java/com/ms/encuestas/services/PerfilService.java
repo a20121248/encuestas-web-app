@@ -1,23 +1,36 @@
 package com.ms.encuestas.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.ms.encuestas.models.Area;
 import com.ms.encuestas.models.Centro;
+import com.ms.encuestas.models.Filtro;
 import com.ms.encuestas.models.LineaCanal;
 import com.ms.encuestas.models.Objeto;
 import com.ms.encuestas.models.ObjetoObjetos;
@@ -27,11 +40,16 @@ import com.ms.encuestas.repositories.CentroRepository;
 import com.ms.encuestas.repositories.ObjetoRepository;
 import com.ms.encuestas.repositories.PerfilRepository;
 import com.ms.encuestas.repositories.TipoRepository;
+import com.ms.encuestas.services.utils.ExcelServiceI;
+import com.ms.encuestas.services.utils.FileServiceI;
 
 @Service
 public class PerfilService implements PerfilServiceI {
 	private Logger logger = LoggerFactory.getLogger(PerfilService.class);
-	
+	@Autowired
+	private FileServiceI fileService;
+	@Autowired
+	private ExcelServiceI excelService;	
 	@Autowired
 	private PerfilRepository perfilRepository;
 	@Autowired
@@ -196,4 +214,42 @@ public class PerfilService implements PerfilServiceI {
 		return lstLineasCanales;
 	}
 	
+	@Override
+	public Resource downloadExcel() {		
+		Path currentRelativePath = Paths.get("");
+		String currentPath = currentRelativePath.toAbsolutePath().toString();
+		
+		List<String> alphabets = Arrays.asList(currentPath, "storage", "app", "reportes", "Perfiles.xlsx");
+		String result = String.join(File.separator, alphabets);
+		
+        SXSSFWorkbook wb = excelService.crearLibro();
+        SXSSFSheet sh = wb.createSheet("PERFILES");
+
+        List<Map<String,Object>> data = perfilRepository.findAllList();
+        
+        if (data == null || data.size() == 0) {
+        	data = perfilRepository.findAllListEmpty();
+        	excelService.crearCabecera(sh, 0, data);
+            excelService.crearArchivo(wb, result);        	
+    		return fileService.loadFileAsResource(result);
+        }
+        
+        int rowNum = 0;
+        excelService.crearCabecera(sh, rowNum++, data);
+		CellStyle dateStyle = wb.createCellStyle();
+	    dateStyle.setDataFormat((short)14);
+        for (Map<String, Object> fila: data) {
+    		Row row = sh.createRow(rowNum++);
+    		int colNum = 0;
+        	row.createCell(colNum).setCellValue((String) fila.get("CODIGO"));sh.setColumnWidth(colNum++, 3000);
+        	row.createCell(colNum).setCellValue((String) fila.get("NOMBRE"));sh.setColumnWidth(colNum++, 8000);
+        	row.createCell(colNum).setCellValue((String) fila.get("TIPO"));sh.setColumnWidth(colNum++, 3000);
+        	row.createCell(colNum).setCellValue((String) fila.get("DIMENSION1_CODIGO"));sh.setColumnWidth(colNum++, 3000);
+        	row.createCell(colNum).setCellValue((String) fila.get("DIMENSION1_NOMBRE"));sh.setColumnWidth(colNum++, 8000);
+        	row.createCell(colNum).setCellValue((String) fila.get("DIMENSION2_CODIGO"));sh.setColumnWidth(colNum++, 3000);
+        	row.createCell(colNum).setCellValue((String) fila.get("DIMENSION2_NOMBRE"));sh.setColumnWidth(colNum++, 8000);
+        }
+        excelService.crearArchivo(wb, result);        	
+		return fileService.loadFileAsResource(result);
+	}
 }

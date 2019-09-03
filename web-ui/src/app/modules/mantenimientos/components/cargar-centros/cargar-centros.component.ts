@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Proceso } from 'src/app/shared/models/Proceso';
 import { CentroService } from 'src/app/shared/services/centro.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import * as fileSaver from 'file-saver';
 
 @Component({
   selector: 'app-cargar-centros',
@@ -59,5 +60,11 @@ export class CargarCentrosComponent implements OnInit {
   }
 
   descargar(): void {
+    const filename = 'Centros de costos.xlsx';
+    this.centroService.download().subscribe(response => {
+      fileSaver.saveAs(new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+    }, err => {
+      console.log(err);
+    });
   }
 }

@@ -61,8 +61,8 @@ export class UsuarioService {
     );
   }
 
-  getUsuariosDependientes(): Observable<Usuario[]> {
-    const url = `procesos/${this.authService.proceso.id}/usuarios-dependientes/${this.authService.usuario.posicion.codigo}`;
+  getUsuariosDependientes(procesoId: number, posicionCodigo: string): Observable<Usuario[]> {
+    const url = `procesos/${procesoId}/usuarios-dependientes/${posicionCodigo}`;
     return this.http.get<Usuario[]>(`${this.urlServer.api}${url}`);
   }
 }

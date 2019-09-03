@@ -26,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.services.UsuarioServiceI;
+import com.ms.encuestas.services.segcen.ISegCenServicios;
+import com.ms.encuestas.services.segcen.SegCenServicio;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
@@ -36,32 +38,96 @@ public class UsuarioController {
 	
 	private final Logger log = LoggerFactory.getLogger(UsuarioController.class);
 	
+	@PostMapping("usuarios/upload")
+	public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("procesoId") Long procesoId) {
+		Map<String, Object> response = new HashMap<>();
+		if (!archivo.isEmpty()) {
+			String nombreArchivo = archivo.getOriginalFilename();
+			Path rutaArchivo = Paths.get("storage").resolve(nombreArchivo).toAbsolutePath();
+			log.info(rutaArchivo.toString());
+			try {
+				Files.copy(archivo.getInputStream(), rutaArchivo);
+			} catch (IOException e) {
+				response.put("mensaje", "Error al subir imagen del cliente.");
+				return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}			
+		}
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	}
+
 	@GetMapping("/usuarios/cantidad")
 	public Long count() throws Exception {
 		return usuarioService.count();
 	}
 
 	@GetMapping("/usuarios")
-	public List<Usuario> findAll() throws Exception {
-		List<Usuario> usuarios = usuarioService.findAll();
-		for (Usuario usuario : usuarios) {			
-			boolean estado = true;
-			
-			
-			
-			usuario.setEstado(estado);
-		}
-		return usuarios; 
+	public List<Usuario> index() throws Exception {
+		return usuarioService.findAll();
 	}
 	
 	@GetMapping("/procesos/{procesoId}/usuarios-dependientes/{posicionCodigo}")
 	public List<Usuario> findUsuariosDependientes(@PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
+		/*ISegCenServicios segCenServicios = new SegCenServicio().getBasicHttpBindingISegCenServicios();
+		
+		String strPIdUsuario = "ALamaS";
+		String msj;
+		
+    	log.info(String.format("Llamada a función: obtenerNombreUsuario('%s')", strPIdUsuario));
+    	log.info(String.format("Respuesta: '%s'.", segCenServicios.obtenerNombreUsuario(strPIdUsuario)));
+    	
+    	
+    	String strPUsuario;
+    	String strPContrasenia;
+    	String strPCodigoAplicacion;
+    	int intPMayor;
+    	int intPMinor;
+    	int intPVersion;
+    	String strPIP;
+    	String strPHostName;
+    	log.info("=========USUARIO GENERALES=========");
+    	strPUsuario = "epps\\psilvest";
+    	strPContrasenia = "Pacifico2019.";
+    	strPCodigoAplicacion = "ENCPTO";
+    	intPMayor = 1;
+    	intPMinor = 0;
+    	intPVersion = 0;
+    	strPIP = "";
+    	strPHostName = "";
+    	log.info(String.format("Llamada a función: ValidarUsuarioApp('%s','%s','%s',%d,%d,%d,%s,%s)", strPUsuario,strPContrasenia,strPCodigoAplicacion,intPMayor,intPMinor,intPVersion,strPIP,strPHostName));
+    	msj = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
+    	log.info(String.format("Respuesta: '%s'.", msj));   
+    	log.info("=========USUARIO VIDA=========");
+    	strPUsuario = "ALamaS";
+    	strPContrasenia = "Pacifico2019.";
+    	strPCodigoAplicacion = "ENCPTO";
+    	intPMayor = 1;
+    	intPMinor = 0;
+    	intPVersion = 0;
+    	strPIP = "";
+    	strPHostName = "";
+    	log.info(String.format("Llamada a función: ValidarUsuarioApp('%s','%s','%s',%d,%d,%d,%s,%s)", strPUsuario,strPContrasenia,strPCodigoAplicacion,intPMayor,intPMinor,intPVersion,strPIP,strPHostName));
+    	msj = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
+    	log.info(String.format("Respuesta: '%s'.", msj));
+    	log.info("=========USUARIO VIDA INCORRECTO=========");
+    	strPUsuario = "ALamaS";
+    	strPContrasenia = "secret";
+    	strPCodigoAplicacion = "ENCPTO";
+    	intPMayor = 1;
+    	intPMinor = 0;
+    	intPVersion = 0;
+    	strPIP = "";
+    	strPHostName = "";
+    	log.info(String.format("Llamada a función: ValidarUsuarioApp('%s','%s','%s',%d,%d,%d,%s,%s)", strPUsuario,strPContrasenia,strPCodigoAplicacion,intPMayor,intPMinor,intPVersion,strPIP,strPHostName));
+    	msj = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
+    	log.info(String.format("Respuesta: '%s'.", msj));
+    	*/
 		return usuarioService.findUsuariosDependientesByCodigo(procesoId, posicionCodigo);
 	}
 
 	@GetMapping("/procesos/{procesoId}/usuarios/{codigo}")
 	public Usuario show(@PathVariable Long procesoId, @PathVariable String codigo) {
-		return this.usuarioService.findByCodigo(codigo, procesoId);
+		return this.usuarioService.findByCodigoAndProceso(codigo, procesoId);
 		/*Usuario usuario = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -91,7 +157,7 @@ public class UsuarioController {
 		Map<String, Object> response = new HashMap<>();
 
 		try {
-			usuario = this.usuarioService.findByCodigo(codigo, procesoId);
+			usuario = this.usuarioService.findByCodigoAndProceso(codigo, procesoId);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
 			response.put("error", e.getMessage() + ": " + e.getMostSpecificCause().getMessage());

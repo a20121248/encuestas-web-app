@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PerfilService } from 'src/app/shared/services/perfil.service';
 
 @Component({
   selector: 'app-perfiles',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PerfilesComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public perfilService: PerfilService
+  ) { }
 
   ngOnInit() {
   }
-
 }

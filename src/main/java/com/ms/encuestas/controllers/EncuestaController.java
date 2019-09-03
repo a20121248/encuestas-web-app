@@ -107,11 +107,11 @@ public class EncuestaController {
 		return encuestaService.getProductoSubcanales(procesoId, posicionCodigo, encuestaTipoId, lineaId, canalId);
 	}
 	
-	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-subcanal")
+	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-subcanal/{lineaId}/{canalId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createLineaCanal(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaObjetoObjetos encuesta) {
+	public void createLineaCanal(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @PathVariable Long canalId, @RequestBody EncuestaObjetoObjetos encuesta) {
 		Long encuestaTipoId = new Long(5); // 5: Producto y Subcanal
-		this.encuestaService.saveProductoSubcanales(encuesta, procesoId, posicionCodigo, encuestaTipoId);
+		this.encuestaService.saveProductoSubcanales(encuesta, procesoId, posicionCodigo, lineaId, canalId, encuestaTipoId);
 	}
 	
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal/{lineaId}")
@@ -121,10 +121,10 @@ public class EncuestaController {
 		return encuestaService.getProductoCanales(procesoId, posicionCodigo, encuestaTipoId, lineaId);
 	}
 	
-	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal")
+	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal/{lineaId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createProductoCanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaObjetoObjetos encuesta) {
+	public void createProductoCanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @RequestBody EncuestaObjetoObjetos encuesta) {
 		Long encuestaTipoId = new Long(6); // 6: Producto y Canal
-		this.encuestaService.saveProductoCanales(encuesta, procesoId, posicionCodigo, encuestaTipoId);
+		this.encuestaService.saveProductoCanales(encuesta, procesoId, posicionCodigo, encuestaTipoId, lineaId);
 	}
 }

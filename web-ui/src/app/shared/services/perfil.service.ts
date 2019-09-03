@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { AppConfig } from './app.config';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { HttpClient, HttpEventType } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +37,13 @@ export class PerfilService {
       }
     })
     );
+  }
+
+  download(): Observable<any> {
+    const url = `${this.urlServer.api}perfiles/descargar`;
+    return this.http.post(url, null, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
   }
 }

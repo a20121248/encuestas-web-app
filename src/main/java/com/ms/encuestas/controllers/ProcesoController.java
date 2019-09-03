@@ -25,30 +25,45 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ms.encuestas.models.EncuestaEmpresa;
+import com.ms.encuestas.models.Posicion;
 import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.models.Usuario;
+import com.ms.encuestas.services.PosicionServiceI;
 import com.ms.encuestas.services.ProcesoServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping("/api/procesos")
+@RequestMapping("/api")
 public class ProcesoController {
     private static final Logger logger = LoggerFactory.getLogger(ProcesoController.class);
 
 	@Autowired
 	private ProcesoServiceI procesoService;
+	@Autowired
+	private PosicionServiceI posicionService;
+
+	@GetMapping("/procesos/{procesoId}/usuarios/{usuarioCodigo}/posicion")
+	public Posicion findByProcesoIdAndUsuarioCodigo(Authentication authentication, @PathVariable Long procesoId, @PathVariable String usuarioCodigo) {
+		// User user = (User) authentication.getPrincipal();
+		return posicionService.findByProcesoIdAndUsuarioCodigo(procesoId, usuarioCodigo);
+	}
 	
-	@GetMapping("/cantidad")
+	@GetMapping("/procesos/actual")
+	public Proceso getCurrentProceso() {
+		return procesoService.getCurrentProceso();
+	}
+	
+	@GetMapping("/procesos/cantidad")
 	public Long count() {
 		return procesoService.count();
 	}
 	
-	@GetMapping("")
+	@GetMapping("/procesos")
 	public List<Proceso> index() {
 		return procesoService.findAll();
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/procesos/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id) {
 		Proceso proceso = null;
 		Map<String, Object> response = new HashMap<>();
@@ -65,7 +80,7 @@ public class ProcesoController {
 		return new ResponseEntity<Proceso>(proceso, HttpStatus.OK);
 	}
 
-	@PostMapping("")
+	@PostMapping("/procesos")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Proceso create(Authentication authentication, @RequestBody Proceso proceso) {
 		User user = (User) authentication.getPrincipal();
@@ -76,7 +91,7 @@ public class ProcesoController {
 		return this.procesoService.findByCodigo(proceso.getCodigo());
 	}
 	
-	@PutMapping("")
+	@PutMapping("/procesos")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Proceso update(Authentication authentication, @RequestBody Proceso proceso) {
 		User user = (User) authentication.getPrincipal();
@@ -92,7 +107,7 @@ public class ProcesoController {
 		return currentProceso;
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/procesos/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(Authentication authentication, @PathVariable Long id) {
 		Proceso proceso = this.procesoService.findById(id);

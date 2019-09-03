@@ -20,7 +20,7 @@ export class ProcesoComponent implements OnInit {
   procesos: Proceso[];
   selectedIndex: number;
   selectedProceso: Proceso;
-  dcProcesos = ['codigo', 'nombre', 'creador', 'fechaCierre', 'fechaCreacion', 'fechaActualizacion'];
+  dcProcesos = ['codigo', 'nombre', 'creador', 'activo', 'fechaInicio', 'fechaCierre', 'fechaCreacion', 'fechaActualizacion'];
   crearDialogRef: MatDialogRef<ModalCrearComponent>;
   editarDialogRef: MatDialogRef<ModalEditarComponent>;
   eliminarDialogRef: MatDialogRef<ModalEliminarComponent>;

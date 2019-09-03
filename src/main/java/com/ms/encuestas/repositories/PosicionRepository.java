@@ -115,9 +115,7 @@ public class PosicionRepository {
 				 	 "  JOIN centros D ON A.centro_id=D.id\n" +
 				 	 " WHERE A.codigo=:codigo\n" +
 				 	 "   AND A.fecha_eliminacion IS NULL";
-		return plantilla.queryForObject(sql,
-				new MapSqlParameterSource("codigo", codigo),
-				new PosicionMapper());
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("codigo", codigo), new PosicionMapper());
 	}
 	
 	public int deleteDatosProceso(Long procesoId) {
@@ -140,5 +138,71 @@ public class PosicionRepository {
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);
 		return plantilla.update(sql, paramMap);
+	}
+
+	public Posicion findByProcesoIdAndUsuarioCodigo(Long procesoId, String usuarioCodigo) throws EmptyResultDataAccessException {
+		String sql = "SELECT B.*\n" +
+					 "  FROM posicion_datos A\n" + 
+					 "  LEFT JOIN posiciones B\n" + 
+					 "    ON A.posicion_codigo=B.codigo\n" + 
+					 " WHERE A.proceso_id=:proceso_id\n" +
+					 "   AND A.usuario_codigo=:usuario_codigo\n" +
+					 "   AND B.fecha_eliminacion IS NULL";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("proceso_id", procesoId);
+		paramMap.put("usuario_codigo", usuarioCodigo);
+		return plantilla.queryForObject(sql, paramMap, new PosicionMapper());
+	}
+
+	public List<Map<String, Object>> findAllDatosListEmpty() throws EmptyResultDataAccessException {
+		String sql = "SELECT NULL posicion_codigo,\n" + 
+					 "       NULL posicion_nombre,\n" + 
+					 "       NULL matricula,\n" + 
+					 "       NULL nombre_completo,\n" + 
+					 "       NULL area_codigo,\n" + 
+					 "       NULL area_nombre,\n" + 
+					 "       NULL centro_codigo,\n" + 
+					 "       NULL centro_nombre,\n" + 
+					 "       NULL perfil_codigo,\n" + 
+					 "       NULL perfil_nombre,\n" + 
+					 "       NULL responsable_matricula,\n" + 
+					 "       NULL responsable_nombre_completo,\n" + 
+					 "       NULL responsable_posicion_codigo,\n" + 
+					 "       NULL responsable_posicion_nombre,\n" + 
+					 "       NULL fecha_creacion,\n" + 
+					 "       NULL fecha_actualizacion" + 
+					 "  FROM DUAL";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
+	}
+	
+	public List<Map<String, Object>> findAllDatosList() throws EmptyResultDataAccessException {
+		String sql = "SELECT B.codigo posicion_codigo,\n" + 
+					 "       B.nombre posicion_nombre,\n" + 
+					 "       C.codigo matricula,\n" + 
+					 "       C.nombre_completo,\n" + 
+					 "       D.codigo area_codigo,\n" + 
+					 "       D.nombre area_nombre,\n" + 
+					 "       E.codigo centro_codigo,\n" + 
+					 "       E.nombre centro_nombre,\n" + 
+					 "       F.codigo perfil_codigo,\n" + 
+					 "       F.nombre perfil_nombre,\n" + 
+					 "       I.codigo responsable_matricula,\n" + 
+					 "       I.nombre_completo responsable_nombre_completo,\n" + 
+					 "       G.codigo responsable_posicion_codigo,\n" + 
+					 "       G.nombre responsable_posicion_nombre,\n" + 
+					 "       A.fecha_creacion,\n" + 
+					 "       A.fecha_actualizacion\n" + 
+					 "  FROM posicion_datos A\n" + 
+					 "  JOIN posiciones B ON A.posicion_codigo=B.codigo\n" + 
+					 "  LEFT JOIN usuarios C ON A.usuario_codigo=C.codigo\n" + 
+					 "  LEFT JOIN areas D ON A.area_id=D.id\n" + 
+					 "  LEFT JOIN centros E ON A.centro_id=E.id\n" + 
+					 "  LEFT JOIN perfiles F ON A.perfil_id=F.id\n" + 
+					 "  LEFT JOIN posiciones G ON A.responsable_posicion_codigo=G.codigo\n" + 
+					 "  LEFT JOIN posicion_datos H ON H.posicion_codigo=G.codigo AND A.proceso_id=H.proceso_id\n" + 
+					 "  LEFT JOIN usuarios I ON H.usuario_codigo=I.codigo\n" + 
+					 " WHERE A.proceso_id=1\n" + 
+					 " ORDER BY A.fecha_creacion";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
 	}
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Proceso } from 'src/app/shared/models/Proceso';
 import { PerfilService } from 'src/app/shared/services/perfil.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import * as fileSaver from 'file-saver';
 
 @Component({
   selector: 'app-cargar-perfiles',
@@ -59,5 +60,11 @@ export class CargarPerfilesComponent implements OnInit {
   }
 
   descargar(): void {
+    const filename = 'Perfiles.xlsx';
+    this.perfilService.download().subscribe(response => {
+      fileSaver.saveAs(new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+    }, err => {
+      console.log(err);
+    });
   }
 }

@@ -3,6 +3,9 @@ package com.ms.encuestas.services;
 import java.io.InputStream;
 import java.util.List;
 
+import org.springframework.core.io.Resource;
+
+import com.ms.encuestas.models.Filtro;
 import com.ms.encuestas.models.Perfil;
 
 public interface PerfilServiceI {
@@ -13,4 +16,5 @@ public interface PerfilServiceI {
 	public void delete(Perfil perfil);
 	public void deleteById(Long id);
 	public void processExcel(InputStream file);
+	public Resource downloadExcel();
 }

@@ -15,11 +15,9 @@
 	<packaging>war</packaging>
 	<name>encuestas-web-app</name>
 	<description>Herramienta de encuestas</description>
-
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -118,5 +116,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

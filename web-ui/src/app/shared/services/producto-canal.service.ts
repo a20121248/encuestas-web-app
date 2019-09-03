@@ -36,25 +36,15 @@ export class ProductoCanalService {
     console.log(error);
   }
 
-  obtenerEncuesta(usuario: Usuario, lineaId: string): Observable<Encuesta> {
-    // const str1 = 'procesos/' + this.authService.proceso.id;
-    // const str2 = 'colaboradores/' + usuario.posicion.codigo;
-    // const str3 = 'encuesta/linea/producto-subcanal';
-    // const url = this.urlServer.api + str1 + '/' + str2 + '/' + str3;
-    // return this.http.get<Encuesta>(url, { headers: this.agregarAuthorizationHeader() });
-    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+  obtenerEncuesta(posicionCodigo: string, lineaId: string): Observable<Encuesta> {
+    const url1 = `${this.urlServer.api}procesos/${this.authService.proceso.id}/colaboradores/${posicionCodigo}/`;
     const url2 = `${url1}encuesta/producto-canal/${lineaId}`;
-    console.log(`${this.urlServer.api}${url2}`);
-    return this.http.get<Encuesta>(`${this.urlServer.api}${url2}`);
+    return this.http.get<Encuesta>(url2);
   }
 
-  guardarEncuesta(encuesta: Encuesta, posicionCodigo: string): Observable<any> {
-    const str1 = 'procesos/' + this.authService.proceso.id + '/';
-    const str2 = 'colaboradores/' + posicionCodigo + '/';
-    const str3 = 'encuesta/producto-canal';
-    const url = this.urlServer.api + str1 + str2 + str3;
-    console.log(url);
-    console.log(encuesta);
-    return this.http.post<any>(url, encuesta);
+  guardarEncuesta(encuesta: Encuesta, posicionCodigo: string, lineaId: string): Observable<any> {
+    const url1 = `${this.urlServer.api}procesos/${this.authService.proceso.id}/colaboradores/${posicionCodigo}/`;
+    const url2 = `${url1}encuesta/producto-canal/${lineaId}`;
+    return this.http.post<any>(url2, encuesta);
   }
 }

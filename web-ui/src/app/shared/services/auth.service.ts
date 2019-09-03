@@ -38,6 +38,7 @@ export class AuthService {
 
   setProceso(proceso: Proceso): void {
     this._proceso = proceso;
+    localStorage.setItem('proceso', JSON.stringify(this._proceso));
   }
 
   public get token(): string {
@@ -68,13 +69,11 @@ export class AuthService {
   guardarUsuario(accessToken: string): void {
     const payload = this.obtenerDatosToken(accessToken);
     this._usuario = new Usuario();
-    this._usuario.codigo = payload.user_name;
+    this._usuario.codigo = payload.codigo;
     this._usuario.nombre = payload.nombre;
-    this._proceso = payload.proceso;
-    this._usuario.posicion = payload.posicion;
+    this._usuario.roles = payload.authorities;
 
     localStorage.setItem('usuario', JSON.stringify(this._usuario));
-    localStorage.setItem('proceso', JSON.stringify(this._proceso));
   }
 
   guardarToken(accessToken: string): void {
@@ -92,6 +91,13 @@ export class AuthService {
   isAuthenticated(): boolean {
     const payload = this.obtenerDatosToken(this.token);
     if (payload != null && payload.user_name && payload.user_name.length > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  hasRole(rol: string): boolean {
+    if (this.usuario.roles.includes(rol)) {
       return true;
     }
     return false;

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -27,6 +28,34 @@ public class CentroRepository {
 		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
 	}
 
+	public List<Map<String,Object>> findAllListEmpty() throws EmptyResultDataAccessException {
+		String sql = "SELECT NULL codigo,\n" + 
+				 	 "       NULL nombre,\n" + 
+				 	 "       NULL tipo,\n" + 
+				 	 "       NULL nivel,\n" + 
+				 	 "       NULL grupo,\n" + 
+				 	 "       NULL fecha_creacion,\n" + 
+				 	 "       NULL fecha_actualizacion\n" + 
+				 	 "  FROM DUAL";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
+	}
+	
+	public List<Map<String,Object>> findAllList() throws EmptyResultDataAccessException {
+		String sql = "SELECT A.codigo,\n" + 
+					 "       A.nombre,\n" + 
+					 "       B.nombre tipo,\n" + 
+					 "       A.nivel,\n" + 
+					 "       A.grupo,\n" + 
+					 "       A.fecha_creacion,\n" + 
+					 "       A.fecha_actualizacion\n" + 
+					 "  FROM centros A\n" + 
+					 "  JOIN centro_tipos B ON A.centro_tipo_id=B.id\n" + 
+					 " WHERE A.fecha_eliminacion IS NULL\n" + 
+					 "   AND A.empresa_id=1\n" + 
+					 " ORDER BY A.codigo";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
+	}
+	
 	public List<Centro> findAll() {
 		String sql = "SELECT A.id centro_id,\n" + 
 					 "       A.codigo centro_codigo,\n" + 
