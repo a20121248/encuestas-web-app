@@ -48,9 +48,16 @@ export class ProductoCanalComponent implements OnInit {
     }
   }
 
-  obtenerSuma(element: any): number {
+  obtenerSumaByRow(element: any): number {
     if (element != null) {
       return Math.trunc(100000 * element.lstObjetos.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0)) / 100000;
+    }
+    return 0;
+  }
+
+  obtenerSumaByColumn(column: number):number{
+    if(this.lstProductoCanales!= null){
+      return this.lstProductoCanales.map(t => t.lstObjetos[column].porcentaje).reduce((acc, value) => acc + value, 0);
     }
     return 0;
   }
