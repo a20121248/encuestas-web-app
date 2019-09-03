@@ -34,23 +34,15 @@ export class ProductoSubcanalService {
     console.log(error);
   }
 
-  obtenerEncuesta(usuario: Usuario, lineaId: string, canalId: string): Observable<Encuesta> {
-    // const str1 = 'procesos/' + this.authService.proceso.id;
-    // const str2 = 'colaboradores/' + usuario.posicion.codigo;
-    // const str3 = 'encuesta/linea/producto-subcanal';
-    // const url = this.urlServer.api + str1 + '/' + str2 + '/' + str3;
-    // return this.http.get<Encuesta>(url, { headers: this.agregarAuthorizationHeader() });
-    //return of(MATRIZ);
-    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+  obtenerEncuesta(posicionCodigo: string, lineaId: string, canalId: string): Observable<Encuesta> {
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${posicionCodigo}/`;
     const url2 = `${url1}encuesta/producto-subcanal/${lineaId}/${canalId}`;
-    console.log(`${this.urlServer.api}${url2}`);
     return this.http.get<Encuesta>(`${this.urlServer.api}${url2}`);
   }
 
-  guardarEncuesta(encuesta: Encuesta, usuario: Usuario): Observable<any> {
-    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
-    const url2 = `${url1}encuesta/producto-subcanal`;
-    console.log(`${this.urlServer.api}${url2}`);
+  guardarEncuesta(encuesta: Encuesta, posicionCodigo: string, lineaId: string, canalId: string): Observable<any> {
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${posicionCodigo}/`;
+    const url2 = `${url1}encuesta/producto-subcanal/${lineaId}/${canalId}`;
     return this.http.post<any>(`${this.urlServer.api}${url2}`, encuesta);
   }
 }
