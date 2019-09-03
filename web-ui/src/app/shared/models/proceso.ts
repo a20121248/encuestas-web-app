@@ -5,6 +5,8 @@ export class Proceso {
   codigo: string;
   nombre: string;
   usuario: Usuario;
+  activo: boolean;
+  fechaInicio: Date;
   fechaCierre: Date;
   fechaCreacion: Date;
   fechaActualizacion: Date;
