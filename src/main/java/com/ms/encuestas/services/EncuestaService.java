@@ -142,7 +142,7 @@ public class EncuestaService implements EncuestaServiceI {
 	}
 
 	@Override
-	public void saveProductoCanales(EncuestaObjetoObjetos encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+	public void saveProductoCanales(EncuestaObjetoObjetos encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId, Long lineaId) {
 		if (encuesta.getJustificacion() == null) {
 			encuesta.setJustificacion(getJustificacionDefault());
 			encuesta.setObservaciones(getObservacionesDefault());
@@ -151,7 +151,7 @@ public class EncuestaService implements EncuestaServiceI {
 			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);
     	else
     		encuestaRepository.updateEncuestaCabecera(encuesta.getJustificacion(), encuesta.getObservaciones(), procesoId, posicionCodigo, encuestaTipoId);
-		encuestaRepository.insertLstProductoCanales(encuesta.getLstItems(), procesoId, posicionCodigo);
+		encuestaRepository.insertLstProductoCanales(encuesta.getLstItems(), procesoId, posicionCodigo, lineaId);
 	}
 
 	@Override
@@ -165,7 +165,7 @@ public class EncuestaService implements EncuestaServiceI {
 	}
 
 	@Override
-	public void saveProductoSubcanales(EncuestaObjetoObjetos encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId) {
+	public void saveProductoSubcanales(EncuestaObjetoObjetos encuesta, Long procesoId, String posicionCodigo, Long encuestaTipoId, Long lineaId, Long canalId) {
 		if (encuesta.getJustificacion() == null) {
 			encuesta.setJustificacion(getJustificacionDefault());
 			encuesta.setObservaciones(getObservacionesDefault());
@@ -174,6 +174,6 @@ public class EncuestaService implements EncuestaServiceI {
 			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);
     	else
     		encuestaRepository.updateEncuestaCabecera(encuesta.getJustificacion(), encuesta.getObservaciones(), procesoId, posicionCodigo, encuestaTipoId);
-		encuestaRepository.insertLstProductoSubcanales(encuesta.getLstItems(), procesoId, posicionCodigo);
+		encuestaRepository.insertLstProductoSubcanales(encuesta.getLstItems(), procesoId, posicionCodigo, lineaId, canalId);
 	}
 }
