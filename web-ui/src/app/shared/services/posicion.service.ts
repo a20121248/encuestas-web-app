@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpEventType } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { AppConfig } from './app.config';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Proceso } from '../models/Proceso';
+import { Posicion } from '../models/posicion';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,11 @@ export class PosicionService {
   count(): Observable<number> {
     const url = `posiciones/cantidad`;
     return this.http.get<number>(`${this.urlServer.api}${url}`);
+  }
+
+  findByProcesoIdAndUsuarioCodigo(procesoId: number, usuarioCodigo: string): Observable<Posicion> {
+    const url = `${this.urlServer.api}procesos/${procesoId}/usuarios/${usuarioCodigo}/posicion`;
+    return this.http.get<Posicion>(url);
   }
 
   upload(formData: FormData): Observable<any> {
@@ -40,8 +46,8 @@ export class PosicionService {
     );
   }
 
-  uploadDatos(proceso: Proceso, formData: FormData): Observable<any> {
-    const url = `${this.urlServer.api}procesos/${proceso.id}/cargar-datos-posiciones`;
+  uploadDatos(procesoId: number, formData: FormData): Observable<any> {
+    const url = `${this.urlServer.api}procesos/${procesoId}/cargar-datos-posiciones`;
     console.log(this.uploadDatos);
     return this.http.post<any>(url, formData, {
       reportProgress: true,
@@ -57,5 +63,14 @@ export class PosicionService {
       }
     })
     );
+  }
+
+  downloadDatos(procesoId: number): Observable<any> {
+    const url = `${this.urlServer.api}procesos/${procesoId}/descargar-datos-posiciones`;
+    console.log(this.uploadDatos);
+    return this.http.post(url, null, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
   }
 }

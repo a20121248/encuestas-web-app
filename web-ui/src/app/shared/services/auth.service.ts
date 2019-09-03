@@ -68,7 +68,7 @@ export class AuthService {
   guardarUsuario(accessToken: string): void {
     const payload = this.obtenerDatosToken(accessToken);
     this._usuario = new Usuario();
-    this._usuario.codigo = payload.user_name;
+    this._usuario.codigo = payload.codigo;
     this._usuario.nombre = payload.nombre;
     this._usuario.roles = payload.authorities;
 
@@ -108,6 +108,6 @@ export class AuthService {
     //localStorage.clear();
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
-    localStorage.removeItem('proceso');
+    //localStorage.removeItem('proceso');
   }
 }

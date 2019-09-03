@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Proceso } from 'src/app/shared/models/Proceso';
 import { PosicionService } from 'src/app/shared/services/posicion.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import * as fileSaver from 'file-saver';
 
 @Component({
   selector: 'app-cargar-posicion-datos',
@@ -52,7 +53,7 @@ export class CargarPosicionDatosComponent implements OnInit {
   subir(): void {
     const formData = new FormData();
     formData.append('file', this.selectedFile);
-    this.posicionService.uploadDatos(this.selectedProceso, formData).subscribe(
+    this.posicionService.uploadDatos(this.selectedProceso.id, formData).subscribe(
       (res) => {
         this.porcentaje = res.porcentaje * 100;
         this.tamanhoCargado = res.porcentaje * this.tamanhoTotal;
@@ -62,5 +63,11 @@ export class CargarPosicionDatosComponent implements OnInit {
   }
 
   descargar(): void {
+    const filename = 'Datos de las posiciones.xlsx';
+    this.posicionService.downloadDatos(this.selectedProceso.id).subscribe(response => {
+      fileSaver.saveAs(new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+    }, err => {
+      console.log(err);
+    });
   }
 }

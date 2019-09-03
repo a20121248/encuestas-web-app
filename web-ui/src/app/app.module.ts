@@ -116,7 +116,7 @@ const routes: Routes = [
     ]
   },
   { path: 'resumen', component: ResumenComponent, canActivate: [AuthGuard] },
-  { path: 'reporting', component: ReportesComponent, canActivate: [AuthGuard, RolGuard] },
+  { path: 'reporting', component: ReportesComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
   { path: 'mantenimiento', component: MantenimientosComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
   { path: 'mantenimiento',
     children: [
