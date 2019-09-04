@@ -95,7 +95,14 @@ public class UsuarioMapper implements RowMapper<Usuario> {
 		} catch (java.sql.SQLException e) {
 			usuario = null;
 		}
-
+		try {
+			if(rs.getBoolean("estado") == true)
+				usuario.setEstado(false);
+			else usuario.setEstado(true);
+		} catch (java.sql.SQLException e) {
+			usuario.setEstado(false);
+		}
+		
 		return usuario;
 	}
 }
