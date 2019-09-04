@@ -15,8 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class EncuestasWebAppApplication extends SpringBootServletInitializer implements CommandLineRunner {
 	private static final LoggerWrapper LOGGER = LoggerWrapper.getLogger(EncuestasWebAppApplication.class);	
 	
-	//@Autowired
-	//private BCryptPasswordEncoder passwordEnconder;
+	@Autowired
+	private BCryptPasswordEncoder passwordEnconder;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(EncuestasWebAppApplication.class, args);

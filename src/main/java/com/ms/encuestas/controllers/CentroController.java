@@ -6,11 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,24 +36,24 @@ import com.ms.encuestas.services.CentroServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping("/api/centros")
+@RequestMapping("/api")
 public class CentroController {
 	private Logger logger = LoggerFactory.getLogger(CentroController.class);
 	
 	@Autowired
 	private CentroServiceI centroService;
 
-	@GetMapping("/cantidad")
+	@GetMapping("/centros/cantidad")
 	public Long count() {
 		return centroService.count();
 	}
 	
-	@GetMapping("")
+	@GetMapping("/centros")
 	public List<Centro> index() throws Exception {
 		return centroService.findAll();
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/centros/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id) {
 		Centro centro = null;
 		Map<String, Object> response = new HashMap<>();
@@ -66,7 +70,7 @@ public class CentroController {
 		return new ResponseEntity<Centro>(centro, HttpStatus.OK);
 	}
 
-	@PostMapping("")
+	@PostMapping("/centros")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Centro create(@RequestBody Centro centro) {
 		centro.setFechaCreacion(new Date());
@@ -74,7 +78,7 @@ public class CentroController {
 		return centro;
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/centros/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Centro update(@RequestBody Centro centro, @PathVariable Long id) {
 		Centro currentCentro = this.centroService.findById(id);
@@ -85,14 +89,14 @@ public class CentroController {
 		return currentCentro;
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/centros/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
 		Centro currentCentro = this.centroService.findById(id);
 		this.centroService.delete(currentCentro);
 	}
 	
-	@PostMapping("/cargar")
+	@PostMapping("/centros/cargar")
 	@ResponseStatus(HttpStatus.OK)
 	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
 		try {
@@ -102,5 +106,18 @@ public class CentroController {
 			logger.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
 		}
 		
+	}
+	
+	
+	@PostMapping("/centros/descargar")
+	@Transactional(readOnly = true)
+	public ResponseEntity<?> downloadCentros() {
+		Resource resource = centroService.downloadExcel();
+        String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
 	}
 }

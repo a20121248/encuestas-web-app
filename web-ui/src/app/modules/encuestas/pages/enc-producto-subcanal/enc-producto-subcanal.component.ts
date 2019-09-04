@@ -33,7 +33,7 @@ export class EncProductoSubcanalComponent implements OnInit {
 
   @ViewChild(ProductoSubcanalComponent, { static: false })
   productoSubcanalComponent: ProductoSubcanalComponent;
-  
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private productoSubcanalService: ProductoSubcanalService,
@@ -48,7 +48,7 @@ export class EncProductoSubcanalComponent implements OnInit {
     this.canalId = this.activatedRoute.snapshot.paramMap.get('canalId');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
       this.usuarioSeleccionado = usuario;
-      this.productoSubcanalService.obtenerEncuesta(this.usuarioSeleccionado, this.lineaId, this.canalId).subscribe(encuesta => {
+      this.productoSubcanalService.obtenerEncuesta(this.posicionCodigo, this.lineaId, this.canalId).subscribe(encuesta => {
         this.encuesta = encuesta;
         this.lstItems = encuesta.lstItems as ObjetoObjetos[];
       });
@@ -74,7 +74,7 @@ export class EncProductoSubcanalComponent implements OnInit {
 
   guardarEncuesta() {
     this.haGuardado = true;
-    this.productoSubcanalService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
+    this.productoSubcanalService.guardarEncuesta(this.encuesta, this.posicionCodigo, this.lineaId, this.canalId).subscribe(
       response => console.log(response), err => console.log(err)
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
@@ -100,6 +100,6 @@ export class EncProductoSubcanalComponent implements OnInit {
           this.location.back();
         }
       }
-    }  
+    }
   }
 }

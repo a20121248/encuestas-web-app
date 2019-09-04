@@ -27,6 +27,22 @@ public class ObjetoRepository {
 		return plantilla.queryForObject(sql, new MapSqlParameterSource("objeto_tipo_id", objetoTipoId), Long.class);
 	}
 	
+	public List<Objeto> findAllLineas() throws EmptyResultDataAccessException {
+		return findAll(new Long(1));
+	}
+	
+	public List<Objeto> findAllCanales() throws EmptyResultDataAccessException {
+		return findAll(new Long(2));
+	}
+	
+	public List<Objeto> findAllProductos() throws EmptyResultDataAccessException {
+		return findAll(new Long(3));
+	}
+	
+	public List<Objeto> findAllSubcanales() throws EmptyResultDataAccessException {
+		return findAll(new Long(4));
+	}
+	
 	public List<Objeto> findAll(Long objetoTipoId) throws EmptyResultDataAccessException {
 		String sql = "SELECT A.id,\n" +
 					 "       A.codigo,\n" +

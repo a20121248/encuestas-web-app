@@ -54,13 +54,15 @@ export class UsuarioService {
   }
 
   getUsuarioByPosicionCodigo(codigo: string): Observable<Usuario> {
+    console.log('url');
+    console.log(`${this.urlServer.api}procesos/${this.authService.proceso.id}/usuarios/posicion/${codigo}`);
     return this.http.get<Usuario>(
       `${this.urlServer.api}procesos/${this.authService.proceso.id}/usuarios/posicion/${codigo}`
     );
   }
 
-  getUsuariosDependientes(): Observable<Usuario[]> {
-    const url = `procesos/${this.authService.proceso.id}/usuarios-dependientes/${this.authService.usuario.posicion.codigo}`;
+  getUsuariosDependientes(procesoId: number, posicionCodigo: string): Observable<Usuario[]> {
+    const url = `procesos/${procesoId}/usuarios-dependientes/${posicionCodigo}`;
     return this.http.get<Usuario[]>(`${this.urlServer.api}${url}`);
   }
 }

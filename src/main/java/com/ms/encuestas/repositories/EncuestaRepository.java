@@ -249,11 +249,10 @@ public class EncuestaRepository {
 			  "    ON B.objeto_tipo_id=1\n" + // lineas 
 			  "   AND B.id=A.linea_id\n" +
 			  "  LEFT JOIN encuesta_linea C\n" +
-			  "    ON C.proceso_id=A.proceso_id\n" +
+			  "    ON C.proceso_id=:proceso_id\n" +
 			  "   AND C.posicion_codigo=:posicion_codigo\n" +
 			  "   AND C.linea_id=A.linea_id\n" + 
-			  " WHERE A.proceso_id=:proceso_id\n" +
-			  "   AND A.perfil_id=:perfil_id\n" +
+			  " WHERE A.perfil_id=:perfil_id\n" +
 		      " ORDER BY B.nombre";
 		
 		encuesta.setLstItems(plantilla.query(sql, paramMap, new ObjetoMapper()));		
@@ -318,25 +317,17 @@ public class EncuestaRepository {
 			  "    ON C.objeto_tipo_id=2\n" + // canales
 			  "   AND C.id=A.canal_id\n" +
 			  "  LEFT JOIN encuesta_linea_canal D\n" + 
-			  "    ON D.proceso_id=A.proceso_id\n" +
+			  "    ON D.proceso_id=:proceso_id\n" +
 			  "   AND D.posicion_codigo=:posicion_codigo\n" +
 			  "   AND D.linea_id=A.linea_id\n" + 
 			  "   AND D.canal_id=A.canal_id\n" + 
-			  " WHERE A.proceso_id=:proceso_id\n" +
-			  "   AND A.perfil_id=:perfil_id\n" + 
+			  " WHERE A.perfil_id=:perfil_id\n" + 
 			  " ORDER BY A.linea_id,A.canal_id";
 		
-		//System.out.println("proceso_id:" + procesoId);
-		//System.out.println("posicion_codigo:"+ posicionCodigo);
-		//System.out.println("encuesta_tipo_id:"+ encuestaTipoId);
-		//System.out.println("perfil_id:"+ perfilId);
-		//System.out.println(sql);
-		
-		paramMap.put("proceso_id", procesoId);
 		paramMap.put("posicion_codigo", posicionCodigo);
 		paramMap.put("encuesta_tipo_id", encuestaTipoId);
 		paramMap.put("perfil_id", perfilId);
-		
+			
 	   	encuesta.setLstItems(plantilla.query(sql, paramMap, new EncuestaLineaCanalesExtractor()));		
 		return encuesta;
 	}
@@ -421,26 +412,31 @@ public class EncuestaRepository {
 		return encuesta;
 	}
 	
-	public void insertLstProductoSubcanales(List<ObjetoObjetos> lstItems, Long procesoId, String posicionCodigo) {
-		System.out.println("AQUI en el REPOSITORY");
+	public void insertLstProductoSubcanales(List<ObjetoObjetos> lstItems, Long procesoId, String posicionCodigo, Long lineaId, Long canalId) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("proceso_id", procesoId);
 		paramMap.put("posicion_codigo", posicionCodigo);
+		paramMap.put("linea_id", lineaId);
+		paramMap.put("canal_id", canalId);
 		
 		String sql = "DELETE FROM encuesta_producto_subcanal\n" + 
 					 " WHERE proceso_id=:proceso_id\n" + 
-					 "   AND posicion_codigo=:posicion_codigo";
+					 "   AND posicion_codigo=:posicion_codigo\n" +
+					 "   AND linea_id=:linea_id\n" +
+					 "   AND canal_id=:canal_id";
 		
 		plantilla.update(sql,paramMap);
 		
 		for (ObjetoObjetos producto: lstItems) {
 			for (Objeto subcanal: producto.getLstObjetos()) {
-				sql = "INSERT INTO encuesta_producto_subcanal(proceso_id,posicion_codigo,producto_id,subcanal_id,porcentaje)\n"+
-		              "VALUES(:proceso_id,:posicion_codigo,:producto_id,:subcanal_id,:porcentaje)";
+				sql = "INSERT INTO encuesta_producto_subcanal(proceso_id,posicion_codigo,linea_id,producto_id,canal_id,subcanal_id,porcentaje)\n"+
+		              "VALUES(:proceso_id,:posicion_codigo,:linea_id,:producto_id,:canal_id,:subcanal_id,:porcentaje)";
 				paramMap = new HashMap<String, Object>();
 				paramMap.put("proceso_id", procesoId);
 				paramMap.put("posicion_codigo", posicionCodigo);
+				paramMap.put("linea_id", lineaId);
 				paramMap.put("producto_id", producto.getObjeto().getId());
+				paramMap.put("canal_id", canalId);
 				paramMap.put("subcanal_id", subcanal.getId());
 				paramMap.put("porcentaje", subcanal.getPorcentaje()/100);
 				plantilla.update(sql,paramMap);
@@ -490,23 +486,26 @@ public class EncuestaRepository {
 		return encuesta;
 	}
 	
-	public void insertLstProductoCanales(List<ObjetoObjetos> lstItems, Long procesoId, String posicionCodigo) {
+	public void insertLstProductoCanales(List<ObjetoObjetos> lstItems, Long procesoId, String posicionCodigo, Long lineaId) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("proceso_id", procesoId);
 		paramMap.put("posicion_codigo", posicionCodigo);
+		paramMap.put("linea_id", lineaId);
 		
-		String sql = "DELETE FROM encuesta_producto_canal\n" + 
+		String sql = "DELETE FROM encuesta_producto_canal\n" +
 					 " WHERE proceso_id=:proceso_id\n" + 
-					 "   AND posicion_codigo=:posicion_codigo";
+					 "   AND posicion_codigo=:posicion_codigo\n" +
+					 "   AND linea_id=:linea_id";
 		plantilla.update(sql,paramMap);
 		
 		for (ObjetoObjetos producto: lstItems) {
 			for (Objeto canal: producto.getLstObjetos()) {
-				sql = "INSERT INTO encuesta_producto_canal(proceso_id,posicion_codigo,producto_id,canal_id,porcentaje)\n"+
-		              "VALUES(:proceso_id,:posicion_codigo,:producto_id,:canal_id,:porcentaje)";
+				sql = "INSERT INTO encuesta_producto_canal(proceso_id,posicion_codigo,linea_id,producto_id,canal_id,porcentaje)\n"+
+		              "VALUES(:proceso_id,:posicion_codigo,:linea_id,:producto_id,:canal_id,:porcentaje)";
 				paramMap = new HashMap<String, Object>();
 				paramMap.put("proceso_id", procesoId);
 				paramMap.put("posicion_codigo", posicionCodigo);
+				paramMap.put("linea_id", lineaId);
 				paramMap.put("producto_id", producto.getObjeto().getId());
 				paramMap.put("canal_id", canal.getId());
 				paramMap.put("porcentaje", canal.getPorcentaje()/100);

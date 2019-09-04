@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { throwError, of, Observable } from 'rxjs';
-import { HttpClient, HttpEventType } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { AppConfig } from 'src/app/shared/services/app.config';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Router } from '@angular/router';
@@ -77,5 +77,14 @@ export class CentroService {
   guardarEncuesta(encuesta: Encuesta, usuario: Usuario): Observable<any> {
     const url = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/encuesta/centro`;
     return this.http.post<any>(this.urlServer.api + url, encuesta);
+  }
+
+
+  download(): Observable<any> {
+    const url = `${this.urlServer.api}centros/descargar`;
+    return this.http.post(url, null, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
   }
 }

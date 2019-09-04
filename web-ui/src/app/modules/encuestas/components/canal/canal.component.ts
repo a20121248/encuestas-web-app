@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, AbstractControl, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
@@ -8,9 +8,9 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 import { CustomValidatorsService } from 'src/app/shared/services/custom-validators.service';
 
 @Component({
-  selector: "app-form-canal",
-  templateUrl: "./canal.component.html",
-  styleUrls: ["./canal.component.scss"]
+  selector: 'app-form-canal',
+  templateUrl: './canal.component.html',
+  styleUrls: ['./canal.component.scss']
 })
 export class CanalComponent implements OnInit {
 
@@ -18,7 +18,8 @@ export class CanalComponent implements OnInit {
   @Input() haGuardado: boolean;
 
   @Output() estadoFormCanalToParent = new EventEmitter();
-  dcLinea = ["codigo", "nombre", "porcentaje", 'estado', "ir"];
+  //dcLinea = ['codigo', 'nombre', 'porcentaje', 'estado', 'ir'];
+  dcLinea = ['codigo', 'nombre', 'porcentaje', 'ir'];
   groupForm: FormGroup;
   porcTotal: number;
   url: string;
@@ -35,7 +36,7 @@ export class CanalComponent implements OnInit {
     this.onChanges();
   }
 
-  validacionItemControl(value:string):AbstractControl{
+  validacionItemControl(value: string): AbstractControl {
     return this.groupForm.get(String(value));
   }
 
@@ -62,8 +63,8 @@ export class CanalComponent implements OnInit {
       } else {
         this.sendEstado(false);
       }
-      this.sharedFormService.actualizarEstadoForm2(this.groupForm);
-      this.sharedFormService.actualizarPorcentajeForm2(this.porcTotal);
+      this.sharedFormService.actualizarEstadoForm3(this.groupForm);
+      this.sharedFormService.actualizarPorcentajeForm3(this.porcTotal);
     });
   }
 
@@ -83,16 +84,26 @@ export class CanalComponent implements OnInit {
   revisarEdicionFormulario(lineaID: number, canalID: number){
     let form1Valid:boolean;
     let form1Dirty:boolean;
+    let form2Valid:boolean;
+    let form2Dirty:boolean;
+
     this.url = lineaID+"/"+canalID+"/producto-subcanal";
     console.log(this.url);
     this.sharedFormService.form1Actual.subscribe( data => {
       form1Valid = data.valid;
       form1Dirty = data.dirty;
     } );
-    if((this.haGuardado && this.groupForm.valid && form1Valid) || (this.groupForm.valid && !this.groupForm.dirty && form1Valid && !form1Dirty)){
+
+    this.sharedFormService.form2Actual.subscribe( data => {
+      form2Valid = data.valid;
+      form2Dirty = data.dirty;
+    } );
+    // Valida si se haGuardado y las formas son validas, or si no se ha cambiado alguna forma y si son validas
+    if((this.haGuardado && this.groupForm.valid && form1Valid && form2Valid) || (this.groupForm.valid && !this.groupForm.dirty && form1Valid && !form1Dirty && form2Valid && !form2Dirty)){
       this.router.navigate([this.url], { relativeTo: this.route });
     } else {
-      if((this.groupForm.valid && this.groupForm.dirty)|| (form1Valid && form1Dirty)){
+      // Valida si alguna de las formas ha sido cambiada
+      if((this.groupForm.valid && this.groupForm.dirty) || (form1Valid && form1Dirty)  || (form2Valid && form2Dirty)){
         swal.fire({
           title: 'Cambios detectados',
           text: "Primero guarde antes de continuar.",

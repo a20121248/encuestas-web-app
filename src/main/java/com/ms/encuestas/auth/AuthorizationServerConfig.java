@@ -51,11 +51,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		TokenEnhancerChain tokenEnhacEnhancerChain = new TokenEnhancerChain();
 		tokenEnhacEnhancerChain.setTokenEnhancers(Arrays.asList(infoAdicionalToken, accessTokenConverter()));
 		
-		endpoints
-			.authenticationManager(authenticationManager)
-			.tokenStore(tokenStore())
-			.accessTokenConverter(accessTokenConverter())
-			.tokenEnhancer(tokenEnhacEnhancerChain);		
+		endpoints.authenticationManager(authenticationManager)
+				 .tokenStore(tokenStore())
+				 .accessTokenConverter(accessTokenConverter())
+				 .tokenEnhancer(tokenEnhacEnhancerChain);		
 	}
 
 	@Bean

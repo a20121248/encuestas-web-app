@@ -37,7 +37,9 @@ export class EncLineaCanalComponent implements OnInit {
   lineaSeleccionada: ObjetoObjetos;
   porcentajePadre: boolean;
   estadoLineas: boolean;
+  estadoLineasCompleto: boolean = false;
   estadoCanales:boolean;
+  estadoJustificacion: boolean;
   haGuardado: boolean;
   private estadoButton = new BehaviorSubject<boolean>(false);
   estadoButtonActual =  this.estadoButton.asObservable();
@@ -67,6 +69,8 @@ export class EncLineaCanalComponent implements OnInit {
       this.lineaCanalService.obtenerEncuesta(this.usuarioSeleccionado).subscribe(encuesta => {
         this.encuesta = encuesta;
         this.lstLineaCanales = (encuesta.lstItems as ObjetoObjetos[]);
+        this.observaciones = encuesta.observaciones;
+        this.justificacion = encuesta.justificacion;
       });
     });
   }
@@ -75,8 +79,16 @@ export class EncLineaCanalComponent implements OnInit {
     this.titleService.setTitle('Encuestas | Línea - Canal');
   }
 
+  estadoFormJustificacion(value: boolean) {
+    this.estadoJustificacion = value;
+    this.setButtonGuardar();
+  }
+
   estadoFormLinea(value:boolean){
     this.estadoLineas = value;
+    this.sharedFormService.form1EstadoCompletoActual.subscribe( data => {
+      this.estadoLineasCompleto = data;
+    });
     this.setButtonGuardar();
   }
 
@@ -86,7 +98,7 @@ export class EncLineaCanalComponent implements OnInit {
   }
 
   setButtonGuardar(){
-    if(this.estadoLineas && this.estadoCanales){
+    if((this.estadoLineas && this.estadoCanales && this.estadoJustificacion) || (this.estadoLineas && this.estadoLineasCompleto && this.estadoJustificacion)){
       this.habilitarButton = true;
     } else {
       this.habilitarButton = false;
@@ -97,6 +109,8 @@ export class EncLineaCanalComponent implements OnInit {
     this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.lineaCanalComponent.lstLineaCanales;
+    this.encuesta.justificacion = this.justificacionComponent.justificacion;
+    this.encuesta.observaciones = this.justificacionComponent.observaciones;
     this.lineaCanalService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
       response => console.log(response), err => console.log(err)
     );
@@ -119,23 +133,27 @@ export class EncLineaCanalComponent implements OnInit {
   goBack() {
     let form1dirty:boolean;
     let form2dirty:boolean;
+    let form3dirty:boolean;
     this.sharedFormService.form1Actual.subscribe(data => {
       form1dirty = data.dirty;
     });
     this.sharedFormService.form2Actual.subscribe(data => {
       form2dirty = data.dirty;
     });
+    this.sharedFormService.form3Actual.subscribe(data => {
+      form3dirty = data.dirty;
+    });
     if(this.haGuardado){
       this.location.back();
     } else {
-      if( form1dirty || form2dirty ){
+      if( form1dirty || form2dirty || form3dirty){
         swal.fire({
           title: 'Cambios detectados',
           text: "Primero guarde antes de continuar.",
           type: "warning"
         });
       } else {
-        if( !form1dirty && !form2dirty ){
+        if( !form1dirty && !form2dirty && !form3dirty){
           this.location.back();
         }
       }

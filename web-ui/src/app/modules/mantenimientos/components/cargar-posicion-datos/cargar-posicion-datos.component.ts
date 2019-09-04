@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Proceso } from 'src/app/shared/models/Proceso';
 import { PosicionService } from 'src/app/shared/services/posicion.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import * as fileSaver from 'file-saver';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cargar-posicion-datos',
@@ -52,7 +54,7 @@ export class CargarPosicionDatosComponent implements OnInit {
   subir(): void {
     const formData = new FormData();
     formData.append('file', this.selectedFile);
-    this.posicionService.uploadDatos(formData).subscribe(
+    this.posicionService.uploadDatos(this.selectedProceso.id, formData).subscribe(
       (res) => {
         this.porcentaje = res.porcentaje * 100;
         this.tamanhoCargado = res.porcentaje * this.tamanhoTotal;
@@ -62,5 +64,37 @@ export class CargarPosicionDatosComponent implements OnInit {
   }
 
   descargar(): void {
+    const filename = 'Datos de las posiciones.xlsx';
+    this.posicionService.downloadDatos(this.selectedProceso.id).subscribe(response => {
+      fileSaver.saveAs(new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+    }, err => {
+      console.log(err);
+    });
+  }
+
+  eliminar(): void {
+    swal.fire({
+      title: `Eliminar parametría de la encuesta '${this.selectedProceso.codigo}'`,
+      text: 'Esta acción es irreversible.',
+      type: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar'
+    }).then((result) => {
+      if (result.value) {
+        this.posicionService.deleteDatos(this.selectedProceso).subscribe(response => {
+          console.log(response);
+        }, err => {
+          console.log(err);
+        });
+        swal.fire(
+          `Eliminar parametría del proceso ${this.selectedProceso.nombre}`,
+          'La parametría ha sido eliminada.',
+          'success'
+        );
+      }
+    });
   }
 }

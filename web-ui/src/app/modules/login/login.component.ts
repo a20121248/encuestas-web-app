@@ -15,14 +15,10 @@ export class LoginComponent implements OnInit {
   titulo = 'Iniciar sesión';
   usuario: Usuario;
   hide = true;
-  selectFormControl = new FormControl('', Validators.required);
 
-  selectedDominio: string;
-  dominioControl = new FormControl('', [Validators.required]);
   dominios: string[] = ['Generales', 'Vida'];
 
   loginForm: FormGroup;
-
 
   constructor(
     public authService: AuthService,
@@ -33,51 +29,66 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.titleService.setTitle('Encuestas | Login');
-    this.loginForm = this.fb.group({
-      codigo: new FormControl('', Validators.required),
-      contrasenha: new FormControl('', Validators.required),
-      dominio: new FormControl('', Validators.required)
-    });
     if (this.authService.isAuthenticated()) {
-      swal.fire('Login', `Hola ${this.authService.usuario.nombre}, ya iniciaste sesión anteriormente.`, 'info');
+      swal.fire('Login', `Hola ${this.authService.usuario.nombre},<br>ya iniciaste sesión anteriormente.`, 'info');
       this.router.navigate(['/colaboradores']);
     }
+    this.titleService.setTitle('Encuestas | Login');
+    this.loginForm = this.fb.group({
+      codigo: [null, Validators.required],
+      contrasenha: [null, Validators.required],
+      dominio: [null, Validators.required]
+    });
   }
 
   get codigo() { return this.loginForm.get('codigo'); }
   get contrasenha() { return this.loginForm.get('contrasenha'); }
   get dominio() { return this.loginForm.get('dominio'); }
 
-  login(): void {
-    if (this.codigo.value == "" || this.contrasenha.value == "") {
-      swal.fire('Error en iniciar sesión', 'Matrícula o contraseña vacías.', 'error');
-      return;
-    }
-    if (this.dominio.value == "") {
-      swal.fire('Error en iniciar sesión', 'Seleccione un dominio.', 'error');
-      return;
-    }
-    this.usuario.codigo = this.codigo.value;
-    this.usuario.contrasenha = this.contrasenha.value;
-    this.authService.login(this.usuario).subscribe(
-      response => {
-        //console.log(response);
-        //let payload = JSON.parse(atob(response.access_token.split('.')[1]));
-        //console.log(payload);
-
-        this.authService.guardarUsuario(response.access_token);
-        this.authService.guardarToken(response.access_token);
-        let usuario = this.authService.usuario;
-        let proceso = this.authService.proceso;
-        this.router.navigate(['/colaboradores']);
-        swal.fire(`${proceso.nombre}`, `Hola ${usuario.nombre}, has iniciado sesión con éxito!`, 'success');
-      }, err => {
-        if (err.status == 400) {
-          swal.fire('Error en iniciar sesión', 'Usuario o clave incorrecta.', 'error');
-        }
-      }
-    );
+  isFieldValid(field: string) {
+    return !this.loginForm.get(field).valid && this.loginForm.get(field).touched;
   }
 
+  login(): void {
+    if (this.loginForm.valid) {
+      this.usuario.codigo = this.codigo.value;
+      this.usuario.contrasenha = this.contrasenha.value;
+      if (this.usuario.codigo != 'admin.encuestas' && this.dominio.value == 'Generales') {
+        this.usuario.codigo = 'epps\\' + this.usuario.codigo;
+      }
+
+      this.authService.login(this.usuario).subscribe(
+        response => {
+          //console.log(response);
+          //let payload = JSON.parse(atob(response.access_token.split('.')[1]));
+          //console.log(payload);
+
+          this.authService.guardarUsuario(response.access_token);
+          this.authService.guardarToken(response.access_token);
+          let usuario = this.authService.usuario;
+          this.router.navigate(['/colaboradores']);
+          swal.fire(`Encuestas PPTO`, `Hola ${usuario.nombre},<br>has iniciado sesión con éxito.`, 'success');
+        }, err => {
+          console.log(err);
+          if (err.status == 400) {
+            swal.fire('Error en iniciar sesión',
+                      err.error.error_description,
+                      'error');
+          } else if (err.status == 401) {
+            swal.fire('Error en iniciar sesión',
+                      err.error.error_description,
+                      'error');
+          } else {
+            swal.fire('Error en iniciar sesión',
+                      'No hay respuesta del servidor. Contactar con Helpdesk.',
+                      'error');
+          }
+        }
+      );
+    } else {
+      this.loginForm.get('codigo').markAsTouched({ onlySelf: true });
+      this.loginForm.get('contrasenha').markAsTouched({ onlySelf: true });
+      this.loginForm.get('dominio').markAsTouched({ onlySelf: true });
+    }
+  }
 }

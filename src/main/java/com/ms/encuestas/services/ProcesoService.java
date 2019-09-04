@@ -5,9 +5,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.ms.encuestas.models.Division;
+import com.ms.encuestas.models.Posicion;
 import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.repositories.ProcesoRepository;
 
@@ -20,7 +22,12 @@ public class ProcesoService implements ProcesoServiceI {
 	
 	@Override
 	public Proceso getCurrentProceso() {
-		return procesoRepository.getCurrentProceso();
+		try {
+			return procesoRepository.getCurrentProceso();
+		} catch(EmptyResultDataAccessException e) {
+			logger.info("No se encontró un proceso activo en la base de datos.");
+			return null;
+		}
 	}
 	
 	@Override
@@ -62,6 +69,5 @@ public class ProcesoService implements ProcesoServiceI {
 	@Override
 	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
-
 	}
 }

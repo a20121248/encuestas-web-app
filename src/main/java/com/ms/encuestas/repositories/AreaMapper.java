@@ -11,11 +11,12 @@ public class AreaMapper implements RowMapper<Area> {
 	@Override
 	public Area mapRow(ResultSet rs, int rowNum) throws SQLException {		
 		Area area = new Area();
-		area.setId(rs.getLong("area_id"));
-		area.setNombre(rs.getString("area_nombre"));
-		area.setDivision(rs.getString("area_division"));
-		area.setFechaCreacion(rs.getDate("area_fecha_creacion"));
-		area.setFechaActualizacion(rs.getDate("area_fecha_actualizacion"));
+		area.setId(rs.getLong("id"));
+		area.setCodigo(rs.getString("codigo"));
+		area.setNombre(rs.getString("nombre"));
+		area.setDivision(rs.getString("division"));
+		area.setFechaCreacion(rs.getDate("fecha_creacion"));
+		area.setFechaActualizacion(rs.getDate("fecha_actualizacion"));
 		area.setAgrupador("TODAS");
 		return area;
 	}

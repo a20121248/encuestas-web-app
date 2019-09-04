@@ -20,7 +20,8 @@ export class EmpresaComponent implements OnInit {
   @Input() haGuardado:boolean;
 
   @Output() estadoFormEmpresaToParent = new EventEmitter();
-  dcEmpresa = ['nombre', 'porcentaje', 'estado','ir'];
+  //dcEmpresa = ['nombre', 'porcentaje', 'estado', 'ir'];
+  dcEmpresa = ['nombre', 'porcentaje', 'ir'];
   url: string;
   porcTotal: number;
   groupForm: FormGroup;
@@ -59,7 +60,7 @@ export class EmpresaComponent implements OnInit {
   }
 
   setRuta(codigo:string){
-    let perfilTipoId = this.usuario.posicion.perfil.perfilTipo.id;
+    let perfilTipoId = this.usuario.posicion.perfil.tipo.id;
     if (codigo == '1') {
       if (perfilTipoId == 1) { // Perfil STAFF: Pagina de centros de costos
         this.url = 'centro';

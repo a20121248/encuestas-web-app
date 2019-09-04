@@ -24,7 +24,10 @@
       <mat-progress-bar color="accent" mode="determinate" value="{{ porcentaje }}"></mat-progress-bar>
       <div class="info"> {{ tamanhoCargado.toFixed(2) }} KB de {{ tamanhoTotal.toFixed(2) }} KB</div>
     </div>
-    <button (click)="subir()" mat-raised-button color="accent"><i class="material-icons">cloud_upload</i>Subir</button>
+    <div>
+      <button (click)="subir()" mat-raised-button color="accent"><i class="material-icons">cloud_upload</i>Subir</button>
+      <button (click)="eliminar()" mat-raised-button style="margin-left:25px;"><i class="material-icons">delete</i>Eliminar</button>
+    </div>
   </mat-card-actions>
   <mat-card-footer class="footer">
     <div fxFlex fxLayoutAlign="center center" fxLayout="column">

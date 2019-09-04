@@ -10,15 +10,14 @@ import swal from 'sweetalert2';
 })
 export class NavegacionComponent implements OnInit {
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit() {
   }
 
   logout(): void {
-    let nombre = this.authService.usuario.nombre;
     this.authService.logout();
-    swal.fire('Login', `Hola ${nombre}, ha cerrado sesión con éxito.`, 'success');
+    swal.fire('Login', `Has cerrado sesión con éxito.`, 'success');
     this.router.navigate(['/login']);
   }
 }

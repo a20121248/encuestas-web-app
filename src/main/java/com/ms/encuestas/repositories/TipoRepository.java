@@ -31,8 +31,6 @@ public class TipoRepository {
 	
 	public List<Tipo> getTableTypes(String tableName) {
 		String sql = "SELECT * FROM " + tableName + " WHERE fecha_eliminacion IS NULL";
-		System.out.println(sql);
-		System.out.println(tableName);
 		return plantilla.query(sql, new MapSqlParameterSource("table_name", tableName), new TipoMapper());
 	}
 }

@@ -6,6 +6,10 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import swal from 'sweetalert2';
 import { Title } from '@angular/platform-browser';
+import { Posicion } from 'src/app/shared/models/posicion';
+import { PosicionService } from 'src/app/shared/services/posicion.service';
+import { ProcesoService } from 'src/app/shared/services/proceso.service';
+import { Proceso } from 'src/app/shared/models/Proceso';
 
 @Component({
   selector: 'app-seleccionar-usuario',
@@ -14,21 +18,40 @@ import { Title } from '@angular/platform-browser';
 })
 export class SeleccionarUsuarioComponent implements OnInit {
 
-  dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'estado','ir'];
+  dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'perfil', 'estado', 'ir'];
   lstUsuario: Usuario[];
+  procesoActual: Proceso;
+  posicion: Posicion;
+  titulo: string;
 
-  titulo = 'Colaboradores';
   constructor(
+    public authService: AuthService,
     private usuarioService: UsuarioService,
+    private posicionService: PosicionService,
+    private procesoService: ProcesoService,
     private router: Router,
     private titleService: Title
-  ) {}
+  ) {
+    this.titulo = 'Colaboradores';
+    this.procesoService.getCurrentProceso().subscribe(pro => {
+      this.procesoActual = pro;
+      this.authService.setProceso(pro);
+      this.posicionService.findByProcesoIdAndUsuarioCodigo(this.procesoActual.id, this.authService.usuario.codigo).subscribe(pos => {
+        this.authService.usuario.posicion = pos;
+        this.usuarioService.getUsuariosDependientes(this.procesoActual.id, this.authService.usuario.posicion.codigo).subscribe(usuarios => {
+          this.lstUsuario = usuarios as Usuario[];
+          console.log(this.lstUsuario);
+        });
+      });
+    });
+  }
 
   ngOnInit() {
     this.titleService.setTitle('Encuestas | Colaboradores');
-    this.usuarioService.getUsuariosDependientes().subscribe(usuarios => {
-      console.log(usuarios.map(t => t.estado = true));
-      this.lstUsuario = usuarios as Usuario[];
-    });
+    if (this.procesoActual != null && this.authService.usuario.posicion != null) {
+
+    } else {
+      console.log('error');
+    }
   }
 }
