@@ -52,40 +52,38 @@ public class ProcesoRepository {
 		return plantilla.query(sql, new ProcesoMapper());
 	}
 	
-	public Proceso findById(Long procesoId) throws EmptyResultDataAccessException {
-		String sql = "SELECT A.id proceso_id,\n" +
-					 "       A.codigo proceso_codigo,\n" +
-					 "       A.nombre proceso_nombre,\n" +
+	public Proceso findById(Long id) throws EmptyResultDataAccessException {
+		String sql = "SELECT A.id,\n" +
+					 "       A.codigo,\n" +
+					 "       A.nombre,\n" +
 					 "       B.codigo usuario_codigo,\n" +
 					 "       B.nombre_completo usuario_nombre_completo,\n" +
-					 "       A.fecha_cierre proceso_fecha_cierre,\n" + 
-					 "       A.fecha_creacion proceso_fecha_creacion,\n" + 
-					 "       A.fecha_actualizacion proceso_fecha_actualizacion\n" + 
+					 "       A.fecha_inicio,\n" +
+					 "       A.fecha_cierre,\n" + 
+					 "       A.fecha_creacion,\n" + 
+					 "       A.fecha_actualizacion\n" + 
 					 "  FROM procesos A\n" +
 					 "  LEFT JOIN usuarios B\n" +
 					 "    ON A.usuario_codigo=B.codigo\n" +
-					 " WHERE A.id=:proceso_id";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("proceso_id", procesoId);
-		return plantilla.queryForObject(sql, paramMap, new ProcesoMapper());
+					 " WHERE A.id=:id";
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("id", id), new ProcesoMapper());
 	}
 	
-	public Proceso findByCodigo(String procesoCodigo) throws EmptyResultDataAccessException {
-		String sql = "SELECT A.id proceso_id,\n" +
-				 	 "       A.codigo proceso_codigo,\n" +
-				 	 "       A.nombre proceso_nombre,\n" +
+	public Proceso findByCodigo(String codigo) throws EmptyResultDataAccessException {
+		String sql = "SELECT A.id,\n" +
+				 	 "       A.codigo,\n" +
+				 	 "       A.nombre,\n" +
 				 	 "       B.codigo usuario_codigo,\n" +
 				 	 "       B.nombre_completo usuario_nombre_completo,\n" +
-				 	 "       A.fecha_cierre proceso_fecha_cierre,\n" +
-				 	 "       A.fecha_creacion proceso_fecha_creacion,\n" +
-				 	 "       A.fecha_actualizacion proceso_fecha_actualizacion\n" + 
+				 	 "       A.fecha_inicio,\n" +
+				 	 "       A.fecha_cierre,\n" +
+				 	 "       A.fecha_creacion,\n" +
+				 	 "       A.fecha_actualizacion\n" + 
 					 "  FROM procesos A\n" +
 					 "  LEFT JOIN usuarios B\n" +
 					 "    ON A.usuario_codigo=B.codigo\n" +
-					 " WHERE A.codigo=:proceso_codigo";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("proceso_codigo", procesoCodigo);
-		return plantilla.queryForObject(sql, paramMap, new ProcesoMapper());
+					 " WHERE A.codigo=:codigo";
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("codigo", codigo), new ProcesoMapper());
 	}
 	
 	public int insert(Proceso proceso) {
@@ -105,6 +103,8 @@ public class ProcesoRepository {
 		String sql = "UPDATE procesos\n" +
 					 "   SET codigo=:codigo,\n" +
 					 "       nombre=:nombre,\n" +
+					 "       activo=:activo,\n" +
+					 "       fecha_inicio=:fecha_inicio,\n" +
 					 "       fecha_cierre=:fecha_cierre,\n" +
 					 "		 fecha_actualizacion=:fecha_actualizacion\n" +
 				     " WHERE id=:id";		
@@ -112,6 +112,8 @@ public class ProcesoRepository {
 		paramMap.put("id", proceso.getId());
 		paramMap.put("codigo", proceso.getCodigo());
 		paramMap.put("nombre", proceso.getNombre());
+		paramMap.put("activo", proceso.isActivo());
+		paramMap.put("fecha_cierre", proceso.getFechaInicio());
 		paramMap.put("fecha_cierre", proceso.getFechaCierre());
 		paramMap.put("fecha_actualizacion", new Date());        
 		return plantilla.update(sql, paramMap);

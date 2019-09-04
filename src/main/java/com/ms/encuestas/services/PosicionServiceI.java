@@ -21,5 +21,5 @@ public interface PosicionServiceI {
 	public void deleteById(Long id);
 	public void processExcelDatos(Proceso proceso, InputStream file);
 	public Resource downloadExcelDatos();
-	public int deleteDatos(Proceso proceso);
+	public void deleteDatos(Proceso proceso);
 }

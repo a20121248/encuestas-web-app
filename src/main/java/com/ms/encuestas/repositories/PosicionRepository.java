@@ -41,7 +41,7 @@ public class PosicionRepository {
 		return plantilla.queryForObject(sql, paramMap, Integer.class)==1;
 	}
 	
-	public List<Posicion> findAll() {
+	public List<Posicion> findAll() throws EmptyResultDataAccessException {
 		String sql = "SELECT *\n" +
 				     "  FROM posiciones\n" +
 				     " WHERE fecha_eliminacion IS NULL";
@@ -118,9 +118,9 @@ public class PosicionRepository {
 		return plantilla.queryForObject(sql, new MapSqlParameterSource("codigo", codigo), new PosicionMapper());
 	}
 	
-	public int deleteDatosProceso(Long procesoId) {
+	public void deleteDatosProceso(Long procesoId) {
 		String sql = "DELETE FROM posicion_datos WHERE proceso_id=:proceso_id";
-		return plantilla.update(sql, new MapSqlParameterSource("proceso_id", procesoId));		
+		plantilla.update(sql, new MapSqlParameterSource("proceso_id", procesoId));
 	}
 	
 	public int insertDatos(Proceso proceso, DatosPosicion datos) throws EmptyResultDataAccessException {

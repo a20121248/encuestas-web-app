@@ -27,11 +27,12 @@ public class AreaRepository {
 	
 
 	public Area findById(Long areaId) throws EmptyResultDataAccessException {
-		String queryStr = "SELECT id area_id,\n" +
-						  "       nombre area_nombre,\n" +
-						  "       division area_division,\n" +
-						  "       fecha_creacion area_fecha_creacion,\n" +
-						  "       fecha_actualizacion area_fecha_actualizacion\n" +
+		String queryStr = "SELECT id,\n" +
+						  "       codigo,\n" +
+						  "       nombre,\n" +
+						  "       division,\n" +
+						  "       fecha_creacion,\n" +
+						  "       fecha_actualizacion\n" +
 						  "  FROM areas\n" +
 						  " WHERE id=:area_id";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -40,14 +41,15 @@ public class AreaRepository {
 	}
 	
 	public List<Area> findAll() throws EmptyResultDataAccessException {
-		String sql = "SELECT id area_id,\n" +
-					 "       nombre area_nombre,\n" +
-					 "       division area_division,\n" +
-					 "       fecha_creacion area_fecha_creacion,\n" +
-					 "       fecha_creacion area_fecha_actualizacion\n" +
+		String sql = "SELECT id,\n" +
+					 "       codigo,\n" +
+					 "       nombre,\n" +
+					 "       division,\n" +
+					 "       fecha_creacion,\n" +
+					 "       fecha_actualizacion\n" +
 					 "  FROM areas\n" +
 					 " WHERE fecha_eliminacion IS NULL\n" +
-					 " ORDER BY nombre";
+					 " ORDER BY codigo";
 		return plantilla.query(sql, new AreaMapper());
 	}
 	

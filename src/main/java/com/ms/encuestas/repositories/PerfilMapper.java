@@ -7,18 +7,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.ms.encuestas.models.Proceso;
+import com.ms.encuestas.models.Perfil;
+import com.ms.encuestas.models.Tipo;
 
-public class PerfilMapper implements RowMapper<Proceso> {
+public class PerfilMapper implements RowMapper<Perfil> {
 	private Logger logger = LoggerFactory.getLogger(PerfilMapper.class);
 	@Override
-	public Proceso mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Proceso proceso = new Proceso();
-		proceso.setId(rs.getLong("proceso_id"));
-		proceso.setNombre(rs.getString("proceso_nombre"));
-		proceso.setFechaCierre(rs.getDate("proceso_fecha_cierre"));
-		proceso.setFechaCreacion(rs.getDate("proceso_fecha_creacion"));
-		proceso.setFechaActualizacion(rs.getDate("proceso_fecha_actualizacion"));
-		return proceso;
+	public Perfil mapRow(ResultSet rs, int rowNum) throws SQLException {
+		Perfil perfil = new Perfil();
+		perfil.setId(rs.getLong("id"));
+		perfil.setCodigo(rs.getString("codigo"));
+		perfil.setNombre(rs.getString("nombre"));
+		
+		try {
+			Tipo tipo = new Tipo();
+			tipo.setId(rs.getLong("tipo_id"));
+			tipo.setCodigo(rs.getString("tipo_nombre"));
+			tipo.setFechaCreacion(rs.getDate("tipo_fecha_creacion"));
+			tipo.setFechaActualizacion(rs.getDate("tipo_fecha_actualizacion"));			
+			perfil.setTipo(tipo);
+			
+		} catch (java.sql.SQLException e) {
+		}
+
+		return perfil;
 	}
 }
