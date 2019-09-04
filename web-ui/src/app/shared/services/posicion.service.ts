@@ -67,10 +67,14 @@ export class PosicionService {
 
   downloadDatos(procesoId: number): Observable<any> {
     const url = `${this.urlServer.api}procesos/${procesoId}/descargar-datos-posiciones`;
-    console.log(this.uploadDatos);
     return this.http.post(url, null, {
       responseType: 'blob',
       headers: new HttpHeaders().append('Content-Type', 'application/json')
     });
+  }
+
+  deleteDatos(proceso: Proceso): Observable<any> {
+    const url = `${this.urlServer.api}posiciones/eliminar-datos`;
+    return this.http.post<any>(url, proceso);
   }
 }
