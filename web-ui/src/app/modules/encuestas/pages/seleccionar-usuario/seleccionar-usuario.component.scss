@@ -6,7 +6,7 @@
 }
 
 .mat-column-nombre {
-  width: 35%;
+  width: 25%;
 }
 
 .mat-column-posicion {
@@ -15,6 +15,11 @@
 
 .mat-column-area {
   width: 25%;
+}
+
+.mat-column-perfil {
+  width: 7%;
+  text-align: center;
 }
 
 .mat-column-estado {
@@ -30,7 +35,7 @@
 .terminado{
   color: green;
   font-size: 75%;
-  display: flex; 
+  display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -39,7 +44,7 @@
 .pendiente{
   color: red;
   font-size: 80%;
-  display: flex; 
+  display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;

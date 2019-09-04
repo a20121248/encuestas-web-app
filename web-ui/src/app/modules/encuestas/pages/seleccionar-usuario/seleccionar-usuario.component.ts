@@ -18,8 +18,7 @@ import { Proceso } from 'src/app/shared/models/Proceso';
 })
 export class SeleccionarUsuarioComponent implements OnInit {
 
-  dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'estado', 'ir'];
-  //dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'ir'];
+  dcUsuario = ['codigo', 'nombre', 'posicion', 'area', 'perfil', 'estado', 'ir'];
   lstUsuario: Usuario[];
   procesoActual: Proceso;
   posicion: Posicion;
@@ -41,6 +40,7 @@ export class SeleccionarUsuarioComponent implements OnInit {
         this.authService.usuario.posicion = pos;
         this.usuarioService.getUsuariosDependientes(this.procesoActual.id, this.authService.usuario.posicion.codigo).subscribe(usuarios => {
           this.lstUsuario = usuarios as Usuario[];
+          console.log(this.lstUsuario);
         });
       });
     });
