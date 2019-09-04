@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ms.encuestas.models.Empresa;
 import com.ms.encuestas.models.Posicion;
 import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.models.Usuario;
@@ -115,5 +116,11 @@ public class PosicionController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+	}
+	
+	@PostMapping("posiciones/eliminar-datos")
+	@ResponseStatus(HttpStatus.OK)
+	public void create(@RequestBody Proceso proceso) {
+		posicionService.deleteDatos(proceso);
 	}
 }

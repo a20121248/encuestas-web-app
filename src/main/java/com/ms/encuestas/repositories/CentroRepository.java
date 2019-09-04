@@ -56,7 +56,7 @@ public class CentroRepository {
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
 	}
 	
-	public List<Centro> findAll() {
+	public List<Centro> findAll() throws EmptyResultDataAccessException {
 		String sql = "SELECT A.id centro_id,\n" + 
 					 "       A.codigo centro_codigo,\n" + 
 					 "       A.nombre centro_nombre,\n" + 

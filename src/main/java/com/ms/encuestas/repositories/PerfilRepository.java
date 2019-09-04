@@ -30,6 +30,11 @@ public class PerfilRepository {
 		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
 	}
 	
+	public List<String> findAllCodigos() throws EmptyResultDataAccessException {
+		String sql = "SELECT codigo FROM perfiles";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null, String.class);
+	}
+	
 	public List<Map<String,Object>> findAllListEmpty() throws EmptyResultDataAccessException {
 		String sql = "SELECT NULL codigo,\n" + 
 				 	 "       NULL nombre,\n" + 
@@ -37,9 +42,11 @@ public class PerfilRepository {
 				 	 "       NULL dimension1_codigo,\n" + 
 				 	 "       NULL dimension1_nombre,\n" + 
 				 	 "       NULL dimension2_codigo,\n" + 
-				 	 "       NULL dimension2_nombre\n" + 
+				 	 "       NULL dimension2_nombre,\n" +
+				 	 "       NULL fecha_creacion,\n" +
+				 	 "       NULL fecha_actualizacion\n" +
 				 	 "  FROM DUAL";
-	return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
 	}
 	
 	public List<Map<String,Object>> findAllList() throws EmptyResultDataAccessException {
@@ -49,7 +56,9 @@ public class PerfilRepository {
 					 "       NVL(C1.codigo,D1.codigo) dimension1_codigo,\n" + 
 					 "       NVL(C1.nombre,D1.nombre) dimension1_nombre,\n" + 
 					 "       D2.codigo dimension2_codigo,\n" + 
-					 "       D2.nombre dimension2_nombre\n" + 
+					 "       D2.nombre dimension2_nombre,\n" +
+					 "       A.fecha_creacion,\n" +
+					 "       A.fecha_actualizacion\n" +
 					 "  FROM perfiles A\n" +
 					 "  JOIN perfil_tipos B ON A.perfil_tipo_id=B.id\n" + 
 					 "  LEFT JOIN perfil_centro C ON A.id=C.perfil_id\n" + 
@@ -58,16 +67,44 @@ public class PerfilRepository {
 					 "  LEFT JOIN objetos D1 ON D.linea_id=D1.id\n" + 
 					 "  LEFT JOIN objetos D2 ON D.canal_id=D2.id\n" + 
 					 " WHERE A.fecha_eliminacion IS NULL\n" + 
-					 " ORDER BY A.fecha_creacion, A.codigo,C1.codigo,D1.codigo,D2.codigo";
+					 " ORDER BY A.codigo,C1.codigo,D1.codigo,D2.codigo";
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
 	}
 	
 	public List<Perfil> findAll() throws EmptyResultDataAccessException {
-		return null;
+		String sql = "SELECT A.*,\n" +
+				 	 "       B.id tipo_id,\n" +
+				 	 "       B.nombre tipo_nombre,\n" +
+				 	 "       B.fecha_creacion tipo_fecha_creacion,\n" +
+				 	 "       B.fecha_actualizacion tipo_fecha_actualizacion\n" +
+				 	 "  FROM perfiles A\n" +
+				 	 "  JOIN perfil_tipos B ON A.perfil_tipo_id=B.id\n" + 
+				 	 " WHERE A.fecha_eliminacion IS NULL";
+		return plantilla.query(sql, (MapSqlParameterSource) null, new PerfilMapper());
 	}
 	
-	public Perfil findById(Long procesoId) throws EmptyResultDataAccessException {
-		return null;
+	public Perfil findById(Long id) throws EmptyResultDataAccessException {
+		String sql = "SELECT A.*,\n" +
+					 "       B.id tipo_id,\n" +
+				 	 "       B.nombre tipo_nombre,\n" +
+				 	 "       B.fecha_creacion tipo_fecha_creacion,\n" +
+				 	 "       B.fecha_actualizacion tipo_fecha_actualizacion\n" +
+				 	 "  FROM perfiles A\n" +
+				 	 "  JOIN perfil_tipos B ON A.perfil_tipo_id=B.id\n" + 
+				 	 " WHERE A.id=:id";
+	   return plantilla.queryForObject(sql, new MapSqlParameterSource("id", id), new PerfilMapper());
+	}
+	
+	public Perfil findByCodigo(String codigo) throws EmptyResultDataAccessException {
+		String sql = "SELECT A.*,\n" +
+					 "       B.id tipo_id,\n" +
+				 	 "       B.nombre tipo_nombre,\n" +
+				 	 "       B.fecha_creacion tipo_fecha_creacion,\n" +
+				 	 "       B.fecha_actualizacion tipo_fecha_actualizacion\n" +
+				 	 "  FROM perfiles A\n" +
+				 	 "  JOIN perfil_tipos B ON A.perfil_tipo_id=B.id\n" + 
+				 	 " WHERE A.codigo=:codigo";
+        return plantilla.queryForObject(sql, new MapSqlParameterSource("codigo", codigo), new PerfilMapper());
 	}
 	
 	public Long insert(Perfil perfil) throws EmptyResultDataAccessException {
@@ -92,9 +129,9 @@ public class PerfilRepository {
 					 "       nombre=:nombre,\n" +
 					 "       perfil_tipo_id=:perfil_tipo_id,\n" +
 					 "		 fecha_actualizacion=:fecha_actualizacion\n" +
-				     " WHERE perfil_id=:perfil_id";
+				     " WHERE id=:id";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("perfil_id", perfil.getId());
+		paramMap.put("id", perfil.getId());
 		paramMap.put("codigo", perfil.getCodigo());
 		paramMap.put("nombre", perfil.getNombre());
 		paramMap.put("perfil_tipo_id", perfil.getTipo().getId());
@@ -118,6 +155,16 @@ public class PerfilRepository {
 		}
 		return 1;
 	}
+
+	public void deleteDetalleCentros(Long perfilId) {
+		String sql = "DELETE FROM perfil_centro WHERE perfil_id=:perfil_id";
+		plantilla.update(sql, new MapSqlParameterSource("perfil_id", perfilId));
+	}
+	
+	public void deleteDetalleLineasCanales(Long perfilId) {
+		String sql = "DELETE FROM perfil_linea_canal WHERE perfil_id=:perfil_id";
+		plantilla.update(sql, new MapSqlParameterSource("perfil_id", perfilId));
+	}
 	
 	public int insertLstLineasCanales(Long perfilId, List<LineaCanal> lstLineasCanales) throws EmptyResultDataAccessException {
 		String sql = "INSERT INTO perfil_linea_canal(perfil_id,linea_id,canal_id,fecha_creacion,fecha_actualizacion)\n" +
@@ -136,6 +183,12 @@ public class PerfilRepository {
 	}
 	
 	public int delete(Perfil perfil) throws EmptyResultDataAccessException {
-		return 0;
+		String sql = "UPDATE perfiles\n" +
+				 	 "   SET fecha_eliminacion=:fecha_eliminacion" +
+				 	 " WHERE id=:id";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", perfil.getId());
+		paramMap.put("fecha_eliminacion", new Date());
+		return plantilla.update(sql,paramMap);
 	}
 }

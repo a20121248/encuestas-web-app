@@ -110,7 +110,7 @@ public class CentroService implements CentroServiceI {
                if (accion.equals("CREAR")) {
             	   centroRepository.insert(centro);
             	   logger.info(String.format("Se creó el centro de costos %s.", codigo));
-               } else if (accion.equals("ACTUALIZAR")) {
+               } else if (accion.equals("EDITAR")) {
             	   centroRepository.update(centro);
             	   logger.info(String.format("Se actualizó el centro de costos %s.", codigo));
                } else if (accion.equals("ELIMINAR")) {

@@ -11,6 +11,7 @@ import com.ms.encuestas.models.Perfil;
 public interface PerfilServiceI {
 	public Long count();
 	public List<Perfil> findAll();
+	public Perfil findByCodigo(String codigo);
 	public Perfil findById(Long id);
 	public int save(Perfil perfil);
 	public void delete(Perfil perfil);
