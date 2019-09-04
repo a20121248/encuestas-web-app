@@ -249,11 +249,10 @@ public class EncuestaRepository {
 			  "    ON B.objeto_tipo_id=1\n" + // lineas 
 			  "   AND B.id=A.linea_id\n" +
 			  "  LEFT JOIN encuesta_linea C\n" +
-			  "    ON C.proceso_id=A.proceso_id\n" +
+			  "    ON C.proceso_id=:proceso_id\n" +
 			  "   AND C.posicion_codigo=:posicion_codigo\n" +
 			  "   AND C.linea_id=A.linea_id\n" + 
-			  " WHERE A.proceso_id=:proceso_id\n" +
-			  "   AND A.perfil_id=:perfil_id\n" +
+			  " WHERE A.perfil_id=:perfil_id\n" +
 		      " ORDER BY B.nombre";
 		
 		encuesta.setLstItems(plantilla.query(sql, paramMap, new ObjetoMapper()));		
@@ -318,25 +317,17 @@ public class EncuestaRepository {
 			  "    ON C.objeto_tipo_id=2\n" + // canales
 			  "   AND C.id=A.canal_id\n" +
 			  "  LEFT JOIN encuesta_linea_canal D\n" + 
-			  "    ON D.proceso_id=A.proceso_id\n" +
+			  "    ON D.proceso_id=:proceso_id\n" +
 			  "   AND D.posicion_codigo=:posicion_codigo\n" +
 			  "   AND D.linea_id=A.linea_id\n" + 
 			  "   AND D.canal_id=A.canal_id\n" + 
-			  " WHERE A.proceso_id=:proceso_id\n" +
-			  "   AND A.perfil_id=:perfil_id\n" + 
+			  " WHERE A.perfil_id=:perfil_id\n" + 
 			  " ORDER BY A.linea_id,A.canal_id";
 		
-		//System.out.println("proceso_id:" + procesoId);
-		//System.out.println("posicion_codigo:"+ posicionCodigo);
-		//System.out.println("encuesta_tipo_id:"+ encuestaTipoId);
-		//System.out.println("perfil_id:"+ perfilId);
-		//System.out.println(sql);
-		
-		paramMap.put("proceso_id", procesoId);
 		paramMap.put("posicion_codigo", posicionCodigo);
 		paramMap.put("encuesta_tipo_id", encuestaTipoId);
 		paramMap.put("perfil_id", perfilId);
-		
+			
 	   	encuesta.setLstItems(plantilla.query(sql, paramMap, new EncuestaLineaCanalesExtractor()));		
 		return encuesta;
 	}

@@ -68,60 +68,6 @@ public class UsuarioController {
 	
 	@GetMapping("/procesos/{procesoId}/usuarios-dependientes/{posicionCodigo}")
 	public List<Usuario> findUsuariosDependientes(@PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
-		/*ISegCenServicios segCenServicios = new SegCenServicio().getBasicHttpBindingISegCenServicios();
-		
-		String strPIdUsuario = "ALamaS";
-		String msj;
-		
-    	log.info(String.format("Llamada a función: obtenerNombreUsuario('%s')", strPIdUsuario));
-    	log.info(String.format("Respuesta: '%s'.", segCenServicios.obtenerNombreUsuario(strPIdUsuario)));
-    	
-    	
-    	String strPUsuario;
-    	String strPContrasenia;
-    	String strPCodigoAplicacion;
-    	int intPMayor;
-    	int intPMinor;
-    	int intPVersion;
-    	String strPIP;
-    	String strPHostName;
-    	log.info("=========USUARIO GENERALES=========");
-    	strPUsuario = "epps\\psilvest";
-    	strPContrasenia = "Pacifico2019.";
-    	strPCodigoAplicacion = "ENCPTO";
-    	intPMayor = 1;
-    	intPMinor = 0;
-    	intPVersion = 0;
-    	strPIP = "";
-    	strPHostName = "";
-    	log.info(String.format("Llamada a función: ValidarUsuarioApp('%s','%s','%s',%d,%d,%d,%s,%s)", strPUsuario,strPContrasenia,strPCodigoAplicacion,intPMayor,intPMinor,intPVersion,strPIP,strPHostName));
-    	msj = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
-    	log.info(String.format("Respuesta: '%s'.", msj));   
-    	log.info("=========USUARIO VIDA=========");
-    	strPUsuario = "ALamaS";
-    	strPContrasenia = "Pacifico2019.";
-    	strPCodigoAplicacion = "ENCPTO";
-    	intPMayor = 1;
-    	intPMinor = 0;
-    	intPVersion = 0;
-    	strPIP = "";
-    	strPHostName = "";
-    	log.info(String.format("Llamada a función: ValidarUsuarioApp('%s','%s','%s',%d,%d,%d,%s,%s)", strPUsuario,strPContrasenia,strPCodigoAplicacion,intPMayor,intPMinor,intPVersion,strPIP,strPHostName));
-    	msj = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
-    	log.info(String.format("Respuesta: '%s'.", msj));
-    	log.info("=========USUARIO VIDA INCORRECTO=========");
-    	strPUsuario = "ALamaS";
-    	strPContrasenia = "secret";
-    	strPCodigoAplicacion = "ENCPTO";
-    	intPMayor = 1;
-    	intPMinor = 0;
-    	intPVersion = 0;
-    	strPIP = "";
-    	strPHostName = "";
-    	log.info(String.format("Llamada a función: ValidarUsuarioApp('%s','%s','%s',%d,%d,%d,%s,%s)", strPUsuario,strPContrasenia,strPCodigoAplicacion,intPMayor,intPMinor,intPVersion,strPIP,strPHostName));
-    	msj = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
-    	log.info(String.format("Respuesta: '%s'.", msj));
-    	*/
 		return usuarioService.findUsuariosDependientesByCodigo(procesoId, posicionCodigo);
 	}
 
