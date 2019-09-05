@@ -1,40 +1,55 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FileUploadService } from 'src/app/shared/services/file-upload.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ProcesoService } from 'src/app/shared/services/proceso.service';
-import { Proceso } from 'src/app/shared/models/Proceso';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import * as fileSaver from 'file-saver';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cargar-usuarios',
   templateUrl: './cargar-usuarios.component.html',
   styleUrls: ['./cargar-usuarios.component.scss']
 })
-export class CargarUsuariosComponent implements OnInit {
+export class CargarUsuariosComponent implements OnInit, OnDestroy {
   titulo: string;
   cantUsuarios: number;
   ruta: string;
   formGroup: FormGroup;
   selectedFile: File;
   error: string;
+  subscribeSubir: Subscription;
+  subscribeCantidad: Subscription;
   porcentaje: number;
   tamanhoCargado: number;
   tamanhoTotal: number;
 
   constructor(private formBuilder: FormBuilder, private usuarioService: UsuarioService) {
-    this.titulo = 'CARGAR USUARIOS';
+    this.titulo = 'CARGAR COLABORADORES';
     this.porcentaje = 0;
     this.tamanhoCargado = 0;
     this.tamanhoTotal = 0;
-    this.usuarioService.count().subscribe(cantUsuarios => {
-      this.cantUsuarios = cantUsuarios;
-    });
+    this.cantUsuarios = 0;
   }
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
       archivo: ['']
+    });
+    this.obtenerCantidad();
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscribeSubir != null) {
+      this.subscribeSubir.unsubscribe();
+    }
+    if (this.subscribeCantidad != null) {
+      this.subscribeCantidad.unsubscribe();
+    }
+  }
+
+  obtenerCantidad(): void {
+    this.subscribeCantidad = this.usuarioService.count().subscribe(cantUsuarios => {
+      this.cantUsuarios = cantUsuarios;
     });
   }
 
@@ -50,17 +65,36 @@ export class CargarUsuariosComponent implements OnInit {
   }
 
   subir(): void {
+    if (this.selectedFile == null) {
+      swal.fire('Cargar colaboradores', 'Por favor, seleccione un archivo.', 'error');
+      return;
+    }
+    this.porcentaje = 0;
     const formData = new FormData();
     formData.append('file', this.selectedFile);
-    this.usuarioService.upload(formData).subscribe(
+    this.subscribeSubir = this.usuarioService.upload(formData).subscribe(
       (res) => {
-        this.porcentaje = res.porcentaje * 100;
-        this.tamanhoCargado = res.porcentaje * this.tamanhoTotal;
-      },
-      (err) => this.error = err
+        if (res != null && res.porcentaje != null) {
+          this.porcentaje = res.porcentaje * 100;
+          this.tamanhoCargado = res.porcentaje * this.tamanhoTotal;
+        }
+      }, (err) => {
+        this.error = err;
+      }, () => {
+        this.obtenerCantidad();
+        swal.fire(`Cargar usuarios`, 'Terminó la carga.', 'success');
+      }
     );
   }
 
   descargar(): void {
+    const filename = 'Colaboradores.xlsx';
+    this.usuarioService.download().subscribe(
+      res => {
+        fileSaver.saveAs(new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 }

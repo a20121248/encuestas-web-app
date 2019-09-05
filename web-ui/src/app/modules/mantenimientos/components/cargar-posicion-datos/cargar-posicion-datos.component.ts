@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Proceso } from 'src/app/shared/models/Proceso';
 import { PosicionService } from 'src/app/shared/services/posicion.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import * as fileSaver from 'file-saver';
 import swal from 'sweetalert2';
 
@@ -10,7 +11,7 @@ import swal from 'sweetalert2';
   templateUrl: './cargar-posicion-datos.component.html',
   styleUrls: ['./cargar-posicion-datos.component.scss']
 })
-export class CargarPosicionDatosComponent implements OnInit {
+export class CargarPosicionDatosComponent implements OnInit, OnDestroy {
   titulo: string;
   cantPosiciones: number;
   ruta: string;
@@ -19,7 +20,8 @@ export class CargarPosicionDatosComponent implements OnInit {
   formGroup: FormGroup;
   selectedFile: File;
   error: string;
-
+  subscribeSubir: Subscription;
+  subscribeCantidad: Subscription;
   porcentaje: number;
   tamanhoCargado: number;
   tamanhoTotal: number;
@@ -29,14 +31,28 @@ export class CargarPosicionDatosComponent implements OnInit {
     this.porcentaje = 0;
     this.tamanhoCargado = 0;
     this.tamanhoTotal = 0;
-    this.posicionService.count().subscribe(cantPosiciones => {
-      this.cantPosiciones = cantPosiciones;
-    });
+    this.cantPosiciones = 0;
   }
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
       archivo: ['']
+    });
+    this.obtenerCantidad();
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscribeSubir != null) {
+      this.subscribeSubir.unsubscribe();
+    }
+    if (this.subscribeCantidad != null) {
+      this.subscribeCantidad.unsubscribe();
+    }
+  }
+
+  obtenerCantidad(): void {
+    this.subscribeCantidad = this.posicionService.countDatos(this.selectedProceso.id).subscribe(cantPosiciones => {
+      this.cantPosiciones = cantPosiciones;
     });
   }
 
@@ -52,24 +68,37 @@ export class CargarPosicionDatosComponent implements OnInit {
   }
 
   subir(): void {
+    if (this.selectedProceso == null || this.selectedFile == null) {
+      swal.fire('Cargar datos de las posiciones', 'Por favor, seleccione una encuesta y un archivo.', 'error');
+      return;
+    }
+    this.porcentaje = 0;
     const formData = new FormData();
     formData.append('file', this.selectedFile);
-    this.posicionService.uploadDatos(this.selectedProceso.id, formData).subscribe(
+    this.subscribeSubir = this.posicionService.uploadDatos(this.selectedProceso.id, formData).subscribe(
       (res) => {
-        this.porcentaje = res.porcentaje * 100;
-        this.tamanhoCargado = res.porcentaje * this.tamanhoTotal;
-      },
-      (err) => this.error = err
+        if (res != null && res.porcentaje != null) {
+          this.porcentaje = res.porcentaje * 100;
+          this.tamanhoCargado = res.porcentaje * this.tamanhoTotal;
+        }
+      }, (err) => {
+        this.error = err;
+      }, () => {
+        this.obtenerCantidad();
+        swal.fire(`Cargar datos de las posiciones`, 'Terminó la carga.', 'success');
+      }
     );
   }
 
   descargar(): void {
     const filename = 'Datos de las posiciones.xlsx';
-    this.posicionService.downloadDatos(this.selectedProceso.id).subscribe(response => {
-      fileSaver.saveAs(new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
-    }, err => {
-      console.log(err);
-    });
+    this.posicionService.downloadDatos(this.selectedProceso.id).subscribe(
+      res => {
+        fileSaver.saveAs(new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
   eliminar(): void {
@@ -84,16 +113,15 @@ export class CargarPosicionDatosComponent implements OnInit {
       confirmButtonText: 'Sí, eliminar'
     }).then((result) => {
       if (result.value) {
-        this.posicionService.deleteDatos(this.selectedProceso).subscribe(response => {
-          console.log(response);
+        this.subscribeSubir.unsubscribe();
+        this.posicionService.deleteDatos(this.selectedProceso).subscribe(res => {
+          console.log(res);
         }, err => {
           console.log(err);
+        }, () => {
+          this.obtenerCantidad();
+          swal.fire(`Eliminar parametría del proceso ${this.selectedProceso.nombre}`, 'La parametría ha sido eliminada.', 'success');
         });
-        swal.fire(
-          `Eliminar parametría del proceso ${this.selectedProceso.nombre}`,
-          'La parametría ha sido eliminada.',
-          'success'
-        );
       }
     });
   }

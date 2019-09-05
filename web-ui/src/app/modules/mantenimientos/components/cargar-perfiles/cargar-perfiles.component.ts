@@ -1,21 +1,24 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Proceso } from 'src/app/shared/models/Proceso';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PerfilService } from 'src/app/shared/services/perfil.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import * as fileSaver from 'file-saver';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cargar-perfiles',
   templateUrl: './cargar-perfiles.component.html',
   styleUrls: ['./cargar-perfiles.component.scss']
 })
-export class CargarPerfilesComponent implements OnInit {
+export class CargarPerfilesComponent implements OnInit, OnDestroy {
   titulo: string;
   cantPerfiles: number;
   ruta: string;
   formGroup: FormGroup;
   selectedFile: File;
   error: string;
+  subscribeSubir: Subscription;
+  subscribeCantidad: Subscription;
   porcentaje: number;
   tamanhoCargado: number;
   tamanhoTotal: number;
@@ -25,14 +28,28 @@ export class CargarPerfilesComponent implements OnInit {
     this.porcentaje = 0;
     this.tamanhoCargado = 0;
     this.tamanhoTotal = 0;
-    this.perfilService.count().subscribe(cantPerfiles => {
-      this.cantPerfiles = cantPerfiles;
-    });
+    this.cantPerfiles = 0;
   }
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
       archivo: ['']
+    });
+    this.obtenerCantidad();
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscribeSubir != null) {
+      this.subscribeSubir.unsubscribe();
+    }
+    if (this.subscribeCantidad != null) {
+      this.subscribeCantidad.unsubscribe();
+    }
+  }
+
+  obtenerCantidad(): void {
+    this.subscribeCantidad = this.perfilService.count().subscribe(cantPerfiles => {
+      this.cantPerfiles = cantPerfiles;
     });
   }
 
@@ -48,23 +65,36 @@ export class CargarPerfilesComponent implements OnInit {
   }
 
   subir(): void {
+    if (this.selectedFile == null) {
+      swal.fire('Cargar perfiles', 'Por favor, seleccione un perfil.', 'error');
+      return;
+    }
+    this.porcentaje = 0;
     const formData = new FormData();
     formData.append('file', this.selectedFile);
-    this.perfilService.upload(formData).subscribe(
+    this.subscribeSubir = this.perfilService.upload(formData).subscribe(
       (res) => {
-        this.porcentaje = res.porcentaje * 100;
-        this.tamanhoCargado = res.porcentaje * this.tamanhoTotal;
-      },
-      (err) => this.error = err
+        if (res != null && res.porcentaje != null) {
+          this.porcentaje = res.porcentaje * 100;
+          this.tamanhoCargado = res.porcentaje * this.tamanhoTotal;
+        }
+      }, (err) => {
+        this.error = err;
+      }, () => {
+        this.obtenerCantidad();
+        swal.fire(`Cargar perfiles`, 'Terminó la carga.', 'success');
+      }
     );
   }
 
   descargar(): void {
     const filename = 'Perfiles.xlsx';
-    this.perfilService.download().subscribe(response => {
-      fileSaver.saveAs(new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
-    }, err => {
-      console.log(err);
-    });
+    this.perfilService.download().subscribe(
+      res => {
+        fileSaver.saveAs(new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 }
