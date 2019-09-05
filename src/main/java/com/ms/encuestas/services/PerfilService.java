@@ -3,7 +3,6 @@ package com.ms.encuestas.services;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.hibernate.validator.constraints.br.CNPJ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +27,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.ms.encuestas.models.Area;
 import com.ms.encuestas.models.Centro;
-import com.ms.encuestas.models.Filtro;
 import com.ms.encuestas.models.LineaCanal;
 import com.ms.encuestas.models.Objeto;
-import com.ms.encuestas.models.ObjetoObjetos;
 import com.ms.encuestas.models.Perfil;
 import com.ms.encuestas.models.Tipo;
-import com.ms.encuestas.repositories.CentroRepository;
-import com.ms.encuestas.repositories.ObjetoRepository;
 import com.ms.encuestas.repositories.PerfilRepository;
 import com.ms.encuestas.repositories.TipoRepository;
 import com.ms.encuestas.services.utils.ExcelServiceI;
@@ -56,9 +49,9 @@ public class PerfilService implements PerfilServiceI {
 	@Autowired
 	private TipoRepository tipoRepository;
 	@Autowired
-	private CentroRepository centroRepository;
+	private CentroServiceI centroService;
 	@Autowired
-	private ObjetoRepository objetoRepository;
+	private ObjetoServiceI objetoService;
 	
 	@Override
 	public Long count() {
@@ -67,7 +60,12 @@ public class PerfilService implements PerfilServiceI {
 
 	@Override
 	public List<Perfil> findAll() {
-		return perfilRepository.findAll();
+		try {
+			return perfilRepository.findAll();
+		} catch(EmptyResultDataAccessException e) {
+			logger.info("No existe ningún perfil registrado en la base de datos.");
+			return new ArrayList<Perfil>();
+		}
 	}
 	
 	@Override
@@ -98,32 +96,40 @@ public class PerfilService implements PerfilServiceI {
 
 	@Override
 	public void delete(Perfil perfil) {
-		// TODO Auto-generated method stub
-
+		perfilRepository.delete(perfil);
 	}
 
 	@Override
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
+		perfilRepository.deleteById(id);
+	}
+	
+	@Override
+	public List<String> findAllCodigos() {
+		List<String> codigos = perfilRepository.findAllCodigos();
+		if (codigos == null) {
+			logger.info("No existe ningún perfil registrado en la base de datos.");
+			codigos = new ArrayList<String>();
+		}
+		return codigos; 
 	}
 	
 	@Override
 	public void processExcel(InputStream file) {
 		logger.info("======================INICIANDO CARGA DE PERFILES====================================");
 		List<Tipo> perfilTipos = tipoRepository.getPerfilTypes();
-		List<Centro> centros = centroRepository.findAll();
-		List<Objeto> lineas = objetoRepository.findAllLineas();
-		List<Objeto> canales = objetoRepository.findAllCanales();
-		List<String> perfilCodigos;
-		try {
-			perfilCodigos = perfilRepository.findAllCodigos();			
-		} catch(EmptyResultDataAccessException e) {
-			logger.info("Carga inicial: No existe ningún perfil registrado en la base de datos");
-			perfilCodigos = new ArrayList<String>();
-		}
+		List<Centro> centros = centroService.findAll();
+		List<Objeto> lineas = objetoService.findAllLineas();
+		List<Objeto> canales = objetoService.findAllCanales();
+		List<String> perfilCodigos = findAllCodigos();
 		
         try (XSSFWorkbook libro = new XSSFWorkbook(file)) {
            XSSFSheet hoja = libro.getSheet("PERFILES");
+			if (hoja == null) {
+				logger.error("No se pudo procesar el Excel porque la hoja PERFILES no existe.");
+				return;
+			}
+			
            Iterator<Row> filas = hoja.iterator();
            
            /*if (!menuControlador.navegador.validarFilaNormal(filas.next(), new ArrayList(Arrays.asList("CODIGO","NOMBRE","ATRIBUIBLE","TIPO GASTO","CLASE GASTO")))) {
@@ -131,10 +137,10 @@ public class PerfilService implements PerfilServiceI {
                return null;
            }*/
 	   		int numFilasOmitir = 6;
-	   		while (numFilasOmitir-- > 0) filas.next();
+	   		for (int i = 0; i < numFilasOmitir; ++i) filas.next();
            
            DataFormatter dataFormatter = new DataFormatter();
-           while (filas.hasNext()) {
+           for (int numFila = numFilasOmitir+1; filas.hasNext(); ++numFila) {
         	   Iterator<Cell> celdas = filas.next().cellIterator();
         	   
                String codigo = dataFormatter.formatCellValue(celdas.next());
@@ -144,9 +150,9 @@ public class PerfilService implements PerfilServiceI {
                String accion = dataFormatter.formatCellValue(celdas.next());
                
         	   if (tipo == null) {
-        		   String msj = String.format("No se encontró el tipo de perfil. No se puede procesar el perfil {0}", codigo);
+        		   String msj = String.format("FILA %d: No se puede procesar el perfil con código '%s' porque el tipo '%s' no existe.", numFila, codigo, tipoNombre);
         		   logger.info(msj);
-        		   return;
+        		   continue;
         	   }
         	   
         	   XSSFSheet hojaDetalle;
@@ -159,53 +165,51 @@ public class PerfilService implements PerfilServiceI {
 
                if (accion.equals("CREAR")) {
             	   if (perfilCodigos.contains(codigo)) {
-            		   logger.info(String.format("No se puede crear el perfil '%s' porque el código '%s' ya fue usado.", nombre, codigo));
-            		   continue;
+            		   logger.error(String.format("No se puede crear el perfil '%s' porque el código '%s' ya fue usado.", nombre, codigo));
             	   } else {
             		   hojaDetalle = libro.getSheet(codigo);
                 	   if (hojaDetalle == null) {
-                		   logger.info(String.format("No se encontró una hoja con nombre '%s'. No se puede crear el perfil.",codigo));
-                		   continue;
+                		   logger.error(String.format("No se encontró una hoja con nombre '%s'. No se puede crear el perfil.",codigo));
+                	   } else {                		   
+                		   perfilId = perfilRepository.insert(perfil);
+                		   if (tipoNombre.equals("STAFF")) {
+                			   List<Centro> lstCentros = processExcelLstCentros(codigo, perfilId, hojaDetalle.iterator(), centros);
+                			   perfilRepository.insertLstCentros(perfilId, lstCentros);
+                		   } else {
+                			   List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfilId, hojaDetalle.iterator(), lineas, canales);
+                			   perfilRepository.insertLstLineasCanales(perfilId, lstLineasCanales);
+                		   }
+                		   logger.info(String.format("Se creó el perfil '%s'.", codigo));
                 	   }
-            		   perfilId = perfilRepository.insert(perfil);
-                	   if (tipoNombre.equals("STAFF")) {
-                		   List<Centro> lstCentros = processExcelLstCentros(codigo, perfilId, hojaDetalle.iterator(), centros);
-                		   perfilRepository.insertLstCentros(perfilId, lstCentros);
-                	   } else {
-                		   List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfilId, hojaDetalle.iterator(), lineas, canales);
-                		   perfilRepository.insertLstLineasCanales(perfilId, lstLineasCanales);
-                	   }
-                	   logger.info(String.format("Se creó el perfil %s.", codigo));
             	   }
                } else if (accion.equals("EDITAR")) {
         		   hojaDetalle = libro.getSheet(codigo);
             	   if (hojaDetalle == null) {
-            		   logger.info(String.format("No se encontró una hoja con nombre '%s'. No se puede actualizar el perfil.",codigo));
-            		   continue;
+            		   logger.error(String.format("No se encontró una hoja con nombre '%s'. No se puede actualizar el perfil.",codigo));
+            	   } else {            		   
+            		   Perfil perfilBuscado = perfilRepository.findByCodigo(codigo);
+            		   if (perfilBuscado != null) {
+            			   perfil.setId(perfilBuscado.getId());
+            			   perfilId = perfilRepository.update(perfil);
+            			   int cantRegistros = -1;
+            			   if (tipoNombre.equals("STAFF")) {
+            				   List<Centro> lstCentros = processExcelLstCentros(codigo, perfilId, hojaDetalle.iterator(), centros);
+            				   perfilRepository.deleteDetalleCentros(perfilId);
+            				   perfilRepository.deleteDetalleLineasCanales(perfilId);
+            				   perfilRepository.insertLstCentros(perfilId, lstCentros);
+            				   cantRegistros = lstCentros.size();
+            			   } else {
+            				   List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfilId, hojaDetalle.iterator(), lineas, canales);
+            				   perfilRepository.deleteDetalleCentros(perfilId);
+            				   perfilRepository.deleteDetalleLineasCanales(perfilId);
+            				   perfilRepository.insertLstLineasCanales(perfilId, lstLineasCanales);
+            				   cantRegistros = lstLineasCanales.size();
+            			   }
+            			   logger.info(String.format("Se actualizó el perfil con código '%s' al tipo %s con %d registros.", codigo, tipoNombre, cantRegistros));
+            		   } else {
+            			   logger.error(String.format("No se pudo actualizar el perfil '%s' porque no se encontró en la base de datos.", codigo));
+            		   }            	   
             	   }
-            	   Perfil perfilBuscado = perfilRepository.findByCodigo(codigo);
-            	   if (perfilBuscado != null) {
-            		   perfil.setId(perfilBuscado.getId());
-            		   perfilId = perfilRepository.update(perfil);
-            		   int cantRegistros = -1;
-                	   if (tipoNombre.equals("STAFF")) {
-                		   List<Centro> lstCentros = processExcelLstCentros(codigo, perfilId, hojaDetalle.iterator(), centros);
-                		   perfilRepository.deleteDetalleCentros(perfilId);
-                		   perfilRepository.deleteDetalleLineasCanales(perfilId);
-                		   perfilRepository.insertLstCentros(perfilId, lstCentros);
-                		   cantRegistros = lstCentros.size();
-                	   } else {
-                		   List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfilId, hojaDetalle.iterator(), lineas, canales);
-                		   perfilRepository.deleteDetalleCentros(perfilId);
-                		   perfilRepository.deleteDetalleLineasCanales(perfilId);
-                		   perfilRepository.insertLstLineasCanales(perfilId, lstLineasCanales);
-                		   cantRegistros = lstLineasCanales.size();
-                	   }
-                	   logger.info(String.format("Se actualizó el perfil con código '%s' al tipo %s con %d registros.", codigo, tipoNombre, cantRegistros));
-            	   } else {
-            		   logger.error(String.format("No se pudo actualizar el perfil '%s' porque no se encontró en la base de datos.", codigo));
-            		   continue;
-            	   }            	   
                } else if (accion.equals("ELIMINAR")) {
             	   Perfil perfilBuscado = perfilRepository.findByCodigo(codigo);
             	   if (perfilBuscado != null) {
@@ -214,10 +218,8 @@ public class PerfilService implements PerfilServiceI {
             	   } else {
             		   logger.error(String.format("No se pudo eliminar el perfil '%s' porque no se encontró en la base de datos.", codigo));
             	   }
-            	   continue;
                } else {
             	   logger.error(String.format("No se realizó ninguna acción en el perfil %s porque la acción '%s' no existe.", codigo, accion));
-            	   continue;
                }           	
            }
            libro.close();
@@ -243,10 +245,10 @@ public class PerfilService implements PerfilServiceI {
             if (centro == null) {
             	logger.error(String.format("HOJA %s, FILA %d: El centro de costos con código '%s' no existe.", hojaNombre, numFila, codigo));
             	continue;
-            }/* else if (!nombre.equals(centro.getNombre())) {
+            } else if (!nombre.equals(centro.getNombre())) {
    				logger.error(String.format("HOJA %s, FILA %d: El centro de costos con nombre '%s' no coincide con el registrado con código '%s'.", hojaNombre, numFila, nombre, codigo));
    				continue;
-   			}*/
+   			}
             lstCentros.add(centro);
         }
 		return lstCentros;

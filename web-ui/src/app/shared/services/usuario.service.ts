@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpEventType, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppConfig } from 'src/app/shared/services/app.config';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -32,7 +32,7 @@ export class UsuarioService {
   }
 
   upload(formData: FormData): Observable<any> {
-    const url = `${this.urlServer.api}centros/cargar`;
+    const url = `${this.urlServer.api}usuarios/cargar`;
     return this.http.post<any>(url, formData, {
       reportProgress: true,
       observe: 'events'
@@ -47,6 +47,14 @@ export class UsuarioService {
       }
     })
     );
+  }
+
+  download(): Observable<any> {
+    const url = `${this.urlServer.api}usuarios/descargar`;
+    return this.http.post(url, null, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
   }
 
   getUsuario(codigo: string): Observable<Usuario> {

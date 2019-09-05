@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
@@ -60,22 +61,41 @@ public class PosicionService implements PosicionServiceI {
 	@Autowired
 	private PosicionRepository posicionRepository;
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private UsuarioServiceI usuarioService;
 	@Autowired
-	private AreaRepository areaRepository;
+	private AreaServiceI areaService;
 	@Autowired
-	private CentroRepository centroRepository;
+	private CentroServiceI centroService;
 	@Autowired
-	private PerfilRepository perfilRepository;
-	@Autowired
-	private ProcesoRepository procesoRepository;
+	private PerfilServiceI perfilService;
 
+	@Override
 	public Long count() {
 		return posicionRepository.count();
 	}
+	
+	@Override
+	public Long countDatos(Long procesoId) {
+		return posicionRepository.countDatos(procesoId);
+	}
+	
+	@Override
+	public List<String> findAllCodigos() {
+		List<String> codigos = posicionRepository.findAllCodigos();
+		if (codigos == null) {
+			logger.info("No existe ninguna posición registrada en la base de datos.");
+			codigos = new ArrayList<String>();
+		}
+		return codigos; 
+	}
 
 	public List<Posicion> findAll() {
-		return posicionRepository.findAll();
+		try {
+			return posicionRepository.findAll();
+		} catch(EmptyResultDataAccessException e) {
+			logger.error("No se encontraron posiciones en la base de datos.");
+			return new ArrayList<Posicion>();
+		}
 	}
 
 	public Posicion findByCodigo(String codigo) {
@@ -99,12 +119,11 @@ public class PosicionService implements PosicionServiceI {
 	}
 
 	public void delete(Posicion posicion) {
-		return;
+		posicionRepository.delete(posicion);
 	}
 
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
-
+		posicionRepository.deleteById(id);
 	}
 	
 	@Override
@@ -115,45 +134,12 @@ public class PosicionService implements PosicionServiceI {
 	
 	@Override
 	public void processExcelDatos(Proceso proceso, InputStream file) {
-		List<Posicion> posiciones;
-		try {
-			posiciones = posicionRepository.findAll();
-		} catch(EmptyResultDataAccessException e) {
-			logger.error("No se encontraron posiciones en la base de datos.");
-			return;
-		}
-
-		List<Usuario> usuarios;
-		try {
-			usuarios = usuarioRepository.findAll();
-		} catch(EmptyResultDataAccessException e) {
-			logger.error("No se encontraron colaboradores en la base de datos.");
-			return;
-		}
-		
-		List<Area> areas;
-		try {
-			areas = areaRepository.findAll();
-		} catch(EmptyResultDataAccessException e) {
-			logger.error("No se encontraron áreas en la base de datos.");
-			return;
-		}
-		
-		List<Centro> centros;
-		try {
-			centros = centroRepository.findAll();
-		} catch(EmptyResultDataAccessException e) {
-			logger.error("No se encontraron centros de costos en la base de datos.");
-			return;
-		}	
-		
-		List<Perfil> perfiles;
-		try {
-			perfiles = perfilRepository.findAll();
-		} catch(EmptyResultDataAccessException e) {
-			logger.error("No se encontraron perfiles en la base de datos.");
-			return;
-		}
+		logger.info("======================INICIANDO CARGA DE DATOS DE LAS POSICIONES====================================");
+		List<Posicion> posiciones = findAll();
+		List<Usuario> usuarios = usuarioService.findAll();
+		List<Area> areas = areaService.findAll();		
+		List<Centro> centros = centroService.findAll();
+		List<Perfil> perfiles = perfilService.findAll();
 		
         try (XSSFWorkbook libro = new XSSFWorkbook(file)) {
         	XSSFSheet hoja = libro.getSheet("DATOS_POSICIONES");
@@ -214,10 +200,10 @@ public class PosicionService implements PosicionServiceI {
 	   			if (centroCodigo == null) {
 	   				logger.error(String.format("FILA %d: El centro de costos con código '%s' no existe o fue eliminado.", numFila, centroCodigo));
 	   				continue;
-	   			}/* else if (!centroNombre.equals(centro.getNombre())) {
+	   			} else if (!centroNombre.equals(centro.getNombre())) {
 	   				logger.error(String.format("FILA %d: El centro de costos con nombre '%s' no coincide con el registrado con código '%s'.", numFila, centroNombre, centroCodigo));
 	   				continue;
-	   			}*/
+	   			}
                
 	   			String perfilCodigo = dataFormatter.formatCellValue(celdas.next());
 	   			String perfilNombre = dataFormatter.formatCellValue(celdas.next());
@@ -272,6 +258,7 @@ public class PosicionService implements PosicionServiceI {
         } catch (IOException e) {
         	logger.error(e.getMessage());
         }
+        logger.info("======================FIN DE CARGA DE DATOS DE LAS POSICIONES====================================");
 	}
 
 	@Override
@@ -325,6 +312,109 @@ public class PosicionService implements PosicionServiceI {
     		row.createCell(colNum).setCellValue((String) fila.get("RESPONSABLE_NOMBRE_COMPLETO"));sh.setColumnWidth(colNum++, 6000);
     		row.createCell(colNum).setCellValue((String) fila.get("RESPONSABLE_POSICION_CODIGO"));sh.setColumnWidth(colNum++, 3000);
     		row.createCell(colNum).setCellValue((String) fila.get("RESPONSABLE_POSICION_NOMBRE"));sh.setColumnWidth(colNum++, 6000);
+    		row.createCell(colNum).setCellValue((Date) fila.get("FECHA_CREACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
+    		row.createCell(colNum).setCellValue((Date) fila.get("FECHA_ACTUALIZACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
+        }
+        excelService.crearArchivo(wb, result);        	
+		return fileService.loadFileAsResource(result);
+	}
+	
+	@Override
+	public void processExcel(InputStream file) {
+		logger.info("======================INICIANDO CARGA DE POSICIONES====================================");
+		List<String> posicionCodigos = findAllCodigos();
+		
+        try (XSSFWorkbook libro = new XSSFWorkbook(file)) {
+        	XSSFSheet hoja = libro.getSheet("POSICIONES");
+        	if (hoja == null) {
+				logger.error("No se pudo procesar el Excel porque la hoja POSICIONES no existe.");
+				return;
+			}
+           
+        	Iterator<Row> filas = hoja.iterator();
+           
+        	/*if (!menuControlador.navegador.validarFilaNormal(filas.next(), new ArrayList(Arrays.asList("CODIGO","NOMBRE","ATRIBUIBLE","TIPO GASTO","CLASE GASTO")))) {
+               menuControlador.navegador.mensajeError(titulo,menuControlador.MENSAJE_UPLOAD_HEADER);
+               return null;
+           	}*/
+	   		int numFilasOmitir = 6;
+	   		for (int i = 0; i < numFilasOmitir; ++i) filas.next();
+           
+	   		DataFormatter dataFormatter = new DataFormatter();
+	   		for (int numFila = numFilasOmitir+1; filas.hasNext(); ++numFila) {
+	   			Iterator<Cell> celdas = filas.next().cellIterator();
+        	   
+	   			String codigo = dataFormatter.formatCellValue(celdas.next());
+	   			String nombre = dataFormatter.formatCellValue(celdas.next());
+	   			String accion = dataFormatter.formatCellValue(celdas.next());
+               
+	   			Posicion posicion = new Posicion();
+	   			posicion.setCodigo(codigo);
+        	   	posicion.setNombre(nombre);
+
+	   			if (accion.equals("CREAR")) {
+	   				if (!posicionCodigos.contains(codigo)) {
+	   					posicionRepository.insert(posicion);
+	   					logger.info(String.format("FILA %d: Se creó la posición '%s'.", numFila, codigo));
+	   				} else {
+	   					logger.info(String.format("FILA %d: No se pudo crear la posición '%s' porque el código '%s' ya fue usado.", numFila, nombre, codigo));
+	   				}
+	   			} else if (accion.equals("EDITAR")) {
+	   				Posicion posicionBuscado = posicionRepository.findByCodigo(codigo);
+	   				if (posicionBuscado != null) {
+	   					posicionRepository.update(posicion);
+	   					logger.info(String.format("FILA %d: Se editó la posición con código '%s'.", numFila, codigo));
+	   				} else {
+	   					logger.error(String.format("FILA %d: No se pudo editar la posición con código '%s' porque no se encontró en la base de datos.", numFila, codigo));
+	   				}
+	   			} else if (accion.equals("ELIMINAR")) {
+	   				Posicion posicionBuscado = posicionRepository.findByCodigo(codigo);
+	   				if (posicionBuscado != null) {
+	   					posicionRepository.delete(posicionBuscado);
+	   					logger.info(String.format("FILA %d: Se eliminó la posición con código '%s'.", numFila, codigo));
+	   				} else {
+	   					logger.error(String.format("FILA %d: No se pudo eliminar la posición con código '%s' porque no se encontró en la base de datos.", numFila, codigo));
+	   				}
+	   			} else {
+	   				logger.error(String.format("FILA %d: No se realizó ninguna acción en la posición con código '%s' porque la acción '%s' no existe.", numFila, codigo, accion));
+	   			}           	
+           }
+           libro.close();
+       } catch (IOException e) {
+           logger.error(e.getMessage());
+       }
+       logger.info("======================FIN DE CARGA DE POSICIONES====================================");
+	}
+	
+	@Override
+	public Resource downloadExcel() {
+		Path currentRelativePath = Paths.get("");
+		String currentPath = currentRelativePath.toAbsolutePath().toString();
+		
+		List<String> alphabets = Arrays.asList(currentPath, "storage", "app", "reportes", "Posiciones.xlsx");
+		String result = String.join(File.separator, alphabets);
+		
+        SXSSFWorkbook wb = excelService.crearLibro();
+        SXSSFSheet sh = wb.createSheet("POSICIONES");
+
+        List<Map<String,Object>> data = posicionRepository.findAllList();
+        
+        if (data == null || data.size() == 0) {
+        	data = posicionRepository.findAllListEmpty();
+        	excelService.crearCabecera(sh, 0, data);
+            excelService.crearArchivo(wb, result);
+    		return fileService.loadFileAsResource(result);
+        }
+        
+        int rowNum = 0;
+        excelService.crearCabecera(sh, rowNum++, data);
+		CellStyle dateStyle = wb.createCellStyle();
+	    dateStyle.setDataFormat((short)14);
+        for (Map<String, Object> fila: data) {
+    		Row row = sh.createRow(rowNum++);
+    		int colNum = 0;
+    		row.createCell(colNum).setCellValue((String) fila.get("CODIGO"));sh.setColumnWidth(colNum++, 3000);
+    		row.createCell(colNum).setCellValue((String) fila.get("NOMBRE"));sh.setColumnWidth(colNum++, 8000);
     		row.createCell(colNum).setCellValue((Date) fila.get("FECHA_CREACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
     		row.createCell(colNum).setCellValue((Date) fila.get("FECHA_ACTUALIZACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
         }

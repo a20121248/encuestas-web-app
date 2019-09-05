@@ -29,6 +29,26 @@ public class ObjetoService implements ObjetoServiceI {
 	public List<Objeto> findAll(Long objetoTipoId) {
 		return objetoRepository.findAll(objetoTipoId);
 	}
+	
+	@Override
+	public List<Objeto> findAllLineas() {
+		return objetoRepository.findAll(new Long(1));
+	}
+	
+	@Override
+	public List<Objeto> findAllCanales() {
+		return objetoRepository.findAll(new Long(2));
+	}
+	
+	@Override
+	public List<Objeto> findAllProductos() {
+		return objetoRepository.findAll(new Long(3));
+	}
+	
+	@Override
+	public List<Objeto> findAllSubcanales() {
+		return objetoRepository.findAll(new Long(4));
+	}
 
 	@Override
 	public Objeto findById(Long id) {

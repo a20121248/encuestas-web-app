@@ -7,8 +7,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +25,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ms.encuestas.models.Empresa;
 import com.ms.encuestas.models.Posicion;
 import com.ms.encuestas.models.Proceso;
-import com.ms.encuestas.models.Usuario;
-import com.ms.encuestas.repositories.PosicionRepository;
 import com.ms.encuestas.services.PosicionServiceI;
 import com.ms.encuestas.services.ProcesoServiceI;
 
@@ -48,6 +43,11 @@ public class PosicionController {
 	@GetMapping("/posiciones/cantidad")
 	public Long count() {
 		return posicionService.count();
+	}
+	
+	@GetMapping("/procesos/{procesoId}/cantidad-datos-posiciones")
+	public Long countDatos(@PathVariable Long procesoId) {
+		return posicionService.countDatos(procesoId);
 	}
 	
 	@GetMapping("/posiciones")
@@ -92,13 +92,35 @@ public class PosicionController {
 		Posicion currentPosicion = posicionService.findByCodigo(codigo);
 		posicionService.delete(currentPosicion);
 	}
+	
+	@PostMapping("/posiciones/cargar")
+	@ResponseStatus(HttpStatus.OK)
+	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
+		try {
+			logger.info(String.format("Leyendo el archivo ", file.getOriginalFilename()));
+			this.posicionService.processExcel(file.getInputStream());
+		} catch (IOException e) {
+			logger.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
+		}
+	}
+	
+	@PostMapping("/posiciones/descargar")
+	@Transactional(readOnly = true)
+	public ResponseEntity<?> downloadExcel() {
+		Resource resource = posicionService.downloadExcel();
+        String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+	}
 
 	@PostMapping("/procesos/{procesoId}/cargar-datos-posiciones")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void cargarDatosPosiciones(@PathVariable Long procesoId, @RequestParam("file") MultipartFile file) {
 		try {
 			Proceso proceso = procesoService.findById(procesoId);
-			posicionService.deleteDatos(proceso);
 			logger.info(String.format("Leyendo el archivo ", file.getOriginalFilename()));
 			posicionService.processExcelDatos(proceso, file.getInputStream());
 		} catch (IOException e) {

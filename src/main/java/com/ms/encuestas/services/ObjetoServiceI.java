@@ -7,6 +7,10 @@ import com.ms.encuestas.models.Objeto;
 public interface ObjetoServiceI {
 	public Long count(Long objetoTipoId);
 	public List<Objeto> findAll(Long objetoTipoId);
+	public List<Objeto> findAllLineas();
+	public List<Objeto> findAllCanales();
+	public List<Objeto> findAllProductos();
+	public List<Objeto> findAllSubcanales();
 	public Objeto findById(Long id);
 	public int save(Objeto objeto);
 	public void delete(Objeto objeto);

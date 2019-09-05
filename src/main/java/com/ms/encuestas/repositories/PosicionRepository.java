@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -14,20 +12,27 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.ms.encuestas.models.DatosPosicion;
-import com.ms.encuestas.models.EncuestaEmpresa;
-import com.ms.encuestas.models.Perfil;
 import com.ms.encuestas.models.Posicion;
 import com.ms.encuestas.models.Proceso;
 
 @Repository
 public class PosicionRepository {
-	private Logger logger = LoggerFactory.getLogger(PosicionRepository.class);
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 	
 	public Long count() {
 		String sql = "SELECT COUNT(1) FROM posiciones WHERE fecha_eliminacion IS NULL";
 		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
+	}
+	
+	public Long countDatos(Long procesoId) {
+		String sql = "SELECT COUNT(1) FROM posicion_datos WHERE proceso_id=:proceso_id";
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("proceso_id", procesoId), Long.class);
+	}
+	
+	public List<String> findAllCodigos() throws EmptyResultDataAccessException {
+		String sql = "SELECT codigo FROM posiciones";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null, String.class);
 	}
 	
 	public boolean exists(Long procesoId, String posicionCodigo) {
@@ -203,6 +208,64 @@ public class PosicionRepository {
 					 "  LEFT JOIN usuarios I ON H.usuario_codigo=I.codigo\n" + 
 					 " WHERE A.proceso_id=1\n" + 
 					 " ORDER BY A.fecha_creacion";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
+	}
+	
+	public Posicion insert(Posicion posicion) throws EmptyResultDataAccessException {
+		String sql = "INSERT INTO posiciones(codigo,nombre,fecha_creacion,fecha_actualizacion)\n" +
+                     "VALUES(:codigo,:nombre,:fecha_creacion,:fecha_actualizacion)";		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("codigo", posicion.getCodigo());
+		paramMap.put("nombre", posicion.getNombre());
+		Date fecha = new Date();
+		paramMap.put("fecha_creacion", fecha);
+		paramMap.put("fecha_actualizacion", fecha);
+		plantilla.update(sql,paramMap);
+		
+		return posicion;
+	}
+	
+	public Posicion update(Posicion posicion) throws EmptyResultDataAccessException {
+		String sql = "UPDATE posiciones\n" +
+					 "   SET nombre=:nombre,\n" +
+					 "		 fecha_actualizacion=:fecha_actualizacion\n" +
+                     " WHERE codigo=:codigo";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("codigo", posicion.getCodigo());
+		paramMap.put("nombre", posicion.getNombre());
+		paramMap.put("fecha_actualizacion", new Date());
+		plantilla.update(sql,paramMap);
+		
+		return posicion;
+	}
+	
+	public void delete(Posicion posicion) {
+		String sql = "DELETE FROM posiciones WHERE codigo=:codigo";
+		plantilla.update(sql, new MapSqlParameterSource("codigo", posicion.getCodigo()));
+	}
+	
+	public void deleteById(Long id) {
+		String sql = "DELETE FROM posiciones WHERE id=:id";
+		plantilla.update(sql, new MapSqlParameterSource("id", id));
+	}
+	
+	public List<Map<String,Object>> findAllListEmpty() throws EmptyResultDataAccessException {
+		String sql = "SELECT NULL codigo,\n" +
+				 	 "       NULL nombre,\n" + 
+				 	 "       NULL fecha_creacion,\n" +
+				 	 "       NULL fecha_actualizacion\n" +
+				 	 "  FROM DUAL";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
+	}
+	
+	public List<Map<String,Object>> findAllList() throws EmptyResultDataAccessException {
+		String sql = "SELECT codigo,\n" + 
+					 "       nombre,\n" +  
+					 "       fecha_creacion,\n" +
+					 "       fecha_actualizacion\n" +
+					 "  FROM posiciones\n" + 
+					 " WHERE fecha_eliminacion IS NULL\n" + 
+					 " ORDER BY fecha_creacion";
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
 	}
 }

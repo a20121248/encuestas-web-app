@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.springframework.core.io.Resource;
 
-import com.ms.encuestas.models.Filtro;
 import com.ms.encuestas.models.Perfil;
 
 public interface PerfilServiceI {
 	public Long count();
+	public List<String> findAllCodigos();
 	public List<Perfil> findAll();
 	public Perfil findByCodigo(String codigo);
 	public Perfil findById(Long id);

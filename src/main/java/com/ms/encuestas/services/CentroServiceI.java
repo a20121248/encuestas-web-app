@@ -8,7 +8,8 @@ import org.springframework.core.io.Resource;
 import com.ms.encuestas.models.Centro;
 
 public interface CentroServiceI {
-	public Long count();
+	public Long count(Long empresaId);
+	public List<String> findAllCodigos();
 	public List<Centro> findAll();
 	public Centro findById(Long id);
 	public Centro save(Centro centro);

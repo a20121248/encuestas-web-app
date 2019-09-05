@@ -7,6 +7,8 @@ import java.util.List;
 public class Usuario implements Serializable/*, UserDetails*/ {
 	private static final long serialVersionUID = 1L;
 	private String codigo;
+	private String usuarioVida;
+	private String usuarioGenerales;
 	private String contrasenha;
 	private String nombreCompleto;
 	private Date fechaCreacion;
@@ -21,6 +23,22 @@ public class Usuario implements Serializable/*, UserDetails*/ {
 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
+	}
+	
+	public String getUsuarioVida() {
+		return usuarioVida;
+	}
+
+	public void setUsuarioVida(String usuarioVida) {
+		this.usuarioVida = usuarioVida;
+	}
+
+	public String getUsuarioGenerales() {
+		return usuarioGenerales;
+	}
+
+	public void setUsuarioGenerales(String usuarioGenerales) {
+		this.usuarioGenerales = usuarioGenerales;
 	}
 
 	public String getContrasenha() {

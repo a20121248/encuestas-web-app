@@ -27,28 +27,8 @@ public class ObjetoRepository {
 		return plantilla.queryForObject(sql, new MapSqlParameterSource("objeto_tipo_id", objetoTipoId), Long.class);
 	}
 	
-	public List<Objeto> findAllLineas() throws EmptyResultDataAccessException {
-		return findAll(new Long(1));
-	}
-	
-	public List<Objeto> findAllCanales() throws EmptyResultDataAccessException {
-		return findAll(new Long(2));
-	}
-	
-	public List<Objeto> findAllProductos() throws EmptyResultDataAccessException {
-		return findAll(new Long(3));
-	}
-	
-	public List<Objeto> findAllSubcanales() throws EmptyResultDataAccessException {
-		return findAll(new Long(4));
-	}
-	
 	public List<Objeto> findAll(Long objetoTipoId) throws EmptyResultDataAccessException {
-		String sql = "SELECT A.id,\n" +
-					 "       A.codigo,\n" +
-					 "       A.nombre,\n" +
-					 "       A.fecha_creacion,\n" +
-					 "       A.fecha_actualizacion,\n" +
+		String sql = "SELECT A.*,\n" +
 					 "       B.id padre_id,\n" + 
 					 "		 B.codigo padre_codigo,\n" + 
 					 "		 B.nombre padre_nombre,\n" + 
@@ -63,18 +43,18 @@ public class ObjetoRepository {
 		return plantilla.query(sql, new MapSqlParameterSource("objeto_tipo_id", objetoTipoId), new ObjetoMapper());
 	}
 	
-	public Proceso findById(Long procesoId) throws EmptyResultDataAccessException {
-		String sql = "SELECT id proceso_id,\n" + 
-					 "       nombre proceso_nombre,\n" + 
-					 "       fecha_cierre proceso_fecha_cierre,\n" + 
-					 "       fecha_creacion proceso_fecha_creacion,\n" + 
-					 "       fecha_actualizacion proceso_fecha_actualizacion\n" + 
-					 "  FROM procesos\n" + 
-					 " WHERE id=:proceso_id\n" + 
-					 " ORDER BY ID";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("proceso_id", procesoId);
-		return plantilla.queryForObject(sql, paramMap, new ProcesoMapper());
+	public Objeto findById(Long id) throws EmptyResultDataAccessException {
+		String sql = "SELECT A.*,\n" +
+					 "       B.id padre_id,\n" + 
+					 "		 B.codigo padre_codigo,\n" + 
+					 "		 B.nombre padre_nombre,\n" + 
+					 "		 B.fecha_creacion padre_fecha_creacion,\n" + 
+					 "		 B.fecha_actualizacion padre_fecha_actualizacion\n" + 
+					 "  FROM objetos A\n" +
+				     "  LEFT JOIN objetos B\n" +
+					 "    ON A.padre_objeto_id=B.id\n" + 
+					 " WHERE A.id=:id";
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("id", id), new ObjetoMapper());
 	}
 
 }
