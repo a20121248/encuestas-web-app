@@ -100,6 +100,9 @@ public class ReporteService implements ReporteServiceI {
         	row.createCell(colNum).setCellValue((String) fila.get("PERFIL"));
         	sh.setColumnWidth(colNum++, 4000);
         	row.createCell(colNum++).setCellValue((String) fila.get("PERFIL_TIPO"));
+        	row.createCell(colNum++).setCellValue((String) fila.get("RESPONSABLE_MATRICULA"));
+    		row.createCell(colNum).setCellValue((String) fila.get("RESPONSABLE"));
+    		sh.setColumnWidth(colNum++, 8000);
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_1"));
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_2"));
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_3"));
