@@ -372,7 +372,7 @@ public class ReporteRepository {
 				"                     NVL(B.codigo,'VACANTE') USUARIO_CODIGO,\r\n" + 
 				"                     NVL(B.nombre_completo,'VACANTE') USUARIO_NOMBRE_COMPLETO,\r\n" + 
 				"                     D.codigo POSICION_CODIGO,\r\n" + 
-				"                     D.nombre POSICION_NOMBRE,\r\n" + 
+				"                     D.nombre POSICION_NOMBRE,\r\n" +
 				"                     E.nombre AREA_NOMBRE,\r\n" + 
 				"                     F.codigo CENTRO_CODIGO,\r\n" + 
 				"                     F.nombre CENTRO_NOMBRE,\r\n" + 
@@ -540,77 +540,6 @@ public class ReporteRepository {
 	
 	public List<Map<String,Object>> reporteConsolidado(Long procesoId, List<Area> areas, List<Centro> centros, List<Tipo> estados) {
 		calcularEstado(procesoId, areas, centros, estados);
-		
-//		String sql = "DELETE FROM REP_CONS_01";
-//		plantilla.update(sql, (MapSqlParameterSource) null);
-//		
-//		sql = "INSERT INTO REP_CONS_01(proceso_id,posicion_codigo,dimension1_codigo,dimension1,dimension2_codigo,dimension2,porcentaje)\n" +
-//			  "SELECT A.PROCESO_ID,\n" + 
-//			  "       A.POSICION_CODIGO,\n" +
-//			  "       C.codigo DIMENSION1_CODIGO,\n" +
-//			  "       C.nombre DIMENSION1,\n" +
-//			  "       'N/A' DIMENSION2_CODIGO,\n" +
-//			  "       'N/A' DIMENSION2,\n" + 
-//			  "       NVL(B.porcentaje,0) PORCENTAJE\n" + 
-//			  "  FROM REP_ESTADO_F A\n" + 
-//			  "  LEFT JOIN encuesta_centro B\n" + 
-//			  "    ON B.proceso_id=A.proceso_id\n" + 
-//			  "   AND B.posicion_codigo=A.posicion_codigo\n" + 
-//			  "  LEFT JOIN centros C\n" + 
-//			  "    ON C.id=B.centro_id\n" +
-//			  "   AND C.empresa_id=1\n" + 
-//			  " WHERE A.perfil_tipo_id=1";
-//		plantilla.update(sql, (MapSqlParameterSource) null);
-//		
-//		sql = "INSERT INTO REP_CONS_01(proceso_id,posicion_codigo,dimension1_codigo,dimension1,dimension2_codigo,dimension2,porcentaje)\n" +
-//			  "SELECT A.PROCESO_ID,\n" + 
-//			  "       A.POSICION_CODIGO,\n" +
-//			  "       NVL(P.codigo,'N/A') DIMENSION1_CODIGO,\n" + 
-//			  "       NVL(P.nombre,'N/A') DIMENSION1,\n" + 
-//			  "       NVL(C.codigo,'N/A') DIMENSION2_CODIGO,\n" + 
-//			  "       NVL(C.nombre,'N/A') DIMENSION2,\n" + 
-//			  "       NVL(E1.porcentaje,0)*NVL(E2.porcentaje,0) PORCENTAJE\n" + 
-//			  "  FROM REP_estado_F A\n" + 
-//			  "  LEFT JOIN ENCUESTA_LINEA E1\n" + 
-//			  "    ON E1.proceso_id=A.proceso_id\n" + 
-//			  "   AND E1.posicion_codigo=A.posicion_codigo\n" +
-//			  "  LEFT JOIN ENCUESTA_PRODUCTO_CANAL E2\n" + 
-//			  "    ON E2.proceso_id=A.proceso_id\n" + 
-//			  "   AND E2.posicion_codigo=A.posicion_codigo\n" + 
-//			  "  JOIN objetos P\n" + 
-//			  "    ON P.id=E2.producto_id\n" + 
-//			  "   AND P.objeto_tipo_id=3 -- PRODUCTO\n" + 
-//			  "   AND P.padre_objeto_id=E1.linea_id -- PRODUCTO DE ESA LINEA\n" + 
-//			  "  LEFT JOIN objetos C\n" + 
-//			  "    ON C.id=E2.canal_id\n" + 
-//			  "   AND C.objeto_tipo_id=2 -- CANAL\n" + 
-//			  " WHERE A.perfil_tipo_id=2";
-//		plantilla.update(sql, (MapSqlParameterSource) null);
-//			
-//		sql = "INSERT INTO REP_CONS_01(proceso_id,posicion_codigo,dimension1_codigo,dimension1,dimension2_codigo,dimension2,porcentaje)\n" +
-//				  "SELECT A.PROCESO_ID,\n" + 
-//				  "       A.POSICION_CODIGO,\n" +
-//				  "       NVL(P.codigo,'N/A') DIMENSION1_CODIGO,\n" + 
-//				  "       NVL(P.nombre,'N/A') DIMENSION1,\n" + 
-//				  "       NVL(S.codigo,'N/A') DIMENSION2_CODIGO,\n" + 
-//				  "       NVL(S.nombre,'N/A') DIMENSION2,\n" + 
-//				  "       NVL(E1.linea_porcentaje,0)*NVL(E1.canal_porcentaje,0)*NVL(E2.porcentaje,0) PORCENTAJE\n" + 
-//				  "  FROM REP_estado_F A\n" + 
-//				  "  LEFT JOIN ENCUESTA_LINEA_CANAL E1\n" + 
-//				  "    ON E1.proceso_id=A.proceso_id\n" + 
-//				  "   AND E1.posicion_codigo=A.posicion_codigo\n" +
-//				  "  LEFT JOIN ENCUESTA_PRODUCTO_SUBCANAL E2\n" + 
-//				  "    ON E2.proceso_id=A.proceso_id\n" + 
-//				  "   AND E2.posicion_codigo=A.posicion_codigo\n" + 
-//				  "  JOIN objetos P\n" + 
-//				  "    ON P.id=E2.producto_id\n" + 
-//				  "   AND P.objeto_tipo_id=3 -- PRODUCTO\n" + 
-//				  "   AND P.padre_objeto_id=E1.linea_id -- PRODUCTO DE ESA LINEA\n" + 
-//				  "  LEFT JOIN objetos S\n" + 
-//				  "    ON S.id=E2.subcanal_id\n" + 
-//				  "   AND S.objeto_tipo_id=4 -- SUBCANAL\n" + 
-//				  " WHERE A.perfil_tipo_id IN (3,4)";
-//		plantilla.update(sql, (MapSqlParameterSource) null);
 		
 		String sql = "SELECT  SYSDATE FECHA_DESCARGA,\r\n" + 
 				"       USR_BASE.PROCESO_NOMBRE PROCESO,\r\n" + 
