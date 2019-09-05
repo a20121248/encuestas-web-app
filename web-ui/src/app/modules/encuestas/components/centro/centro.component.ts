@@ -126,7 +126,7 @@ export class CentroComponent implements OnInit {
 
   getTotalPorcentaje() {
     if (this.lstCentros != null) {
-      this.porcTotal = this.lstCentros.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+      this.porcTotal = Math.trunc(this.lstCentros.map(t => 100*t.porcentaje).reduce((acc, value) => acc + value, 0))/100;
       return this.porcTotal;
     }
     else {
@@ -136,7 +136,7 @@ export class CentroComponent implements OnInit {
   }
 
   getTotalPorcentajeByGrupo( grupo:string ){
-    return this.lstCentros.filter((item) => item.grupo == grupo).map(t => t.porcentaje).reduce((acc,value) => acc + value, 0);
+    return Math.trunc(this.lstCentros.filter((item) => item.grupo == grupo).map(t => 100*t.porcentaje).reduce((acc,value) => acc + value, 0))/100;
   }
 
   sendEstado(value: boolean) {

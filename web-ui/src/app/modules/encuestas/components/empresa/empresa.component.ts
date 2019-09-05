@@ -39,7 +39,7 @@ export class EmpresaComponent implements OnInit {
 
   getTotalPorcentaje() {
     if (this.lstEmpresas != null) {
-      this.porcTotal = this.lstEmpresas.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+      this.porcTotal = Math.trunc(this.lstEmpresas.map(t => 100*t.porcentaje).reduce((acc, value) => acc + value, 0))/100;
       return this.porcTotal;
     }
     else {

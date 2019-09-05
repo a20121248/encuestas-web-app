@@ -50,14 +50,14 @@ export class ProductoCanalComponent implements OnInit {
 
   obtenerSumaByRow(element: any): number {
     if (element != null) {
-      return Math.trunc(100000 * element.lstObjetos.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0)) / 100000;
+      return Math.round(element.lstObjetos.map(t => 100*t.porcentaje).reduce((acc, value) => acc + value, 0)) / 100;
     }
     return 0;
   }
 
   obtenerSumaByColumn(column: number):number{
     if(this.lstProductoCanales!= null){
-      return this.lstProductoCanales.map(t => t.lstObjetos[column].porcentaje).reduce((acc, value) => acc + value, 0);
+      return Math.round(this.lstProductoCanales.map(t => 100*t.lstObjetos[column].porcentaje).reduce((acc, value) => acc + value, 0))/100;
     }
     return 0;
   }
@@ -66,9 +66,10 @@ export class ProductoCanalComponent implements OnInit {
     this.sumaTotal = 0;
     if (this.lstProductoCanales != null) {
       this.lstProductoCanales.forEach(element => {
-        this.sumaTotal += element.lstObjetos.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+        this.sumaTotal += Math.round(element.lstObjetos.map(t => 100*t.porcentaje).reduce((acc, value) => acc + value, 0))/100;
+        this.sumaTotal = Math.round(100*this.sumaTotal) / 100;
       });
-      this.porcTotal = Math.trunc(100000 * this.sumaTotal) / 100000;
+      this.porcTotal =this.sumaTotal;
       return this.porcTotal;
     } else {
       this.porcTotal = 0;
