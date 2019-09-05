@@ -423,6 +423,7 @@ public class ReporteRepository {
         			 "       NULL EMPRESA_PORCENTAJE,\n" +
         			 "       NULL LINEA_EPS,\n" +
         			 "       NULL LINEA_EPS_PORCENTAJE\n" +
+        			 "       NULL PONDERADO\n" +
         			 "  FROM DUAL";
         return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
 	}
@@ -491,57 +492,48 @@ public class ReporteRepository {
 	public List<Map<String,Object>> reporteEmpresas(Long procesoId, List<Area> areas, List<Centro> centros, List<Tipo> estados) {
 		calcularEstado(procesoId, areas, centros, estados);
 		
-		String sql = "SELECT SYSDATE FECHA_DESCARGA,\n" + 
-					 "       A.PROCESO_NOMBRE PROCESO,\n" + 
-					 "       A.USUARIO_CODIGO MATRICULA,\n" + 
-					 "       A.USUARIO_NOMBRE_COMPLETO COLABORADOR,\n" + 
-					 "       A.POSICION_CODIGO NRO_POSICION,\n" + 
-					 "       A.POSICION_NOMBRE POSICION,\n" + 
-					 "       A.AREA_NOMBRE AREA,\n" + 
-					 "       A.CENTRO_CODIGO CECO_CODIGO,\n" + 
-					 "       A.CENTRO_NOMBRE CECO_NOMBRE,\n" + 
-					 "       A.PERFIL_NOMBRE PERFIL,\n" + 
-					 "       A.PERFIL_TIPO_NOMBRE PERFIL_TIPO,\n" +
-					 "       CASE WHEN ETAPA_1=0 THEN 'NO INICIADA'\n" + 
-					 "            WHEN ETAPA_1=1 THEN 'INICIADA'\n" + 
-					 "            WHEN ETAPA_1=2 THEN 'COMPLETADA'\n" + 
-					 "       END ETAPA_1,\n" + 
-					 "       CASE WHEN ETAPA_2=0 THEN 'NO INICIADA'\n" + 
-					 "            WHEN ETAPA_2=1 THEN 'INICIADA'\n" + 
-					 "            WHEN ETAPA_2=2 THEN 'COMPLETADA'\n" + 
-					 "       END ETAPA_2,\n" + 
-					 "       CASE WHEN ETAPA_3=0 THEN 'NO INICIADA'\n" + 
-					 "            WHEN ETAPA_3=1 THEN 'INICIADA'\n" + 
-					 "            WHEN ETAPA_3=2 THEN 'COMPLETADA'\n" + 
-					 "       END ETAPA_3,\n" + 
-					 "       CASE WHEN ETAPA_4=0 THEN 'NO INICIADA'\n" + 
-					 "            WHEN ETAPA_4=1 THEN 'INICIADA'\n" + 
-					 "            WHEN ETAPA_4=2 THEN 'COMPLETADA'\n" + 
-					 "       END ETAPA_4,\n" + 
-					 "       CASE WHEN ETAPA_TOTAL=0 THEN 'NO INICIADA'\n" + 
-					 "            WHEN ETAPA_TOTAL=1 THEN 'INICIADA'\n" + 
-					 "            WHEN ETAPA_TOTAL=2 THEN 'COMPLETADA'\n" + 
-					 "       END ESTADO_GLOBAL,\n" +
-					 "       A.ULT_FECHA_ACTUALIZACION ULTIMA_MODIFICACION,\n" +
-					 "       B.nombre EMPRESA,\n" + 
-					 "       NVL(D.porcentaje,0) EMPRESA_PORCENTAJE,\n" + 
-					 "       NVL(C.nombre,'NO APLICA') LINEA_EPS,\n" + 
-					 "       NVL(E.porcentaje,0) LINEA_EPS_PORCENTAJE\n" +
-					 "  FROM REP_ESTADO_F A\n" +
-					 "  LEFT JOIN empresas B\n" + 
-					 "    ON 1=1\n" + 
-					 "  LEFT JOIN centros C\n" + 
-					 "    ON C.empresa_id=2\n" + 
-					 "   AND C.empresa_id=B.id\n" + 
-					 "  LEFT JOIN encuesta_centro D\n" + 
-					 "    ON D.centro_id=C.id\n" + 
-					 "   AND D.proceso_id=A.proceso_id\n" + 
-					 "   AND D.posicion_codigo=A.posicion_codigo\n" +
-					 "  LEFT JOIN encuesta_centro E\n" + 
-					 "    ON E.centro_id=C.id\n" + 
-					 "   AND E.proceso_id=A.proceso_id\n" + 
-					 "   AND E.posicion_codigo=A.posicion_codigo\n" +
-              		 " WHERE A.perfil_tipo_id=1";
+		String sql = "SELECT SYSDATE FECHA_DESCARGA,\r\n" + 
+					"       A.PROCESO_NOMBRE PROCESO,\r\n" + 
+					"       A.USUARIO_CODIGO MATRICULA,\r\n" + 
+					"       A.USUARIO_NOMBRE_COMPLETO COLABORADOR,\r\n" + 
+					"       A.POSICION_CODIGO NRO_POSICION,\r\n" + 
+					"       A.POSICION_NOMBRE POSICION,\r\n" + 
+					"       A.AREA_NOMBRE AREA,\r\n" + 
+					"       A.CENTRO_CODIGO CECO_CODIGO,\r\n" + 
+					"       A.CENTRO_NOMBRE CECO_NOMBRE,\r\n" + 
+					"       A.PERFIL_NOMBRE PERFIL,\r\n" + 
+					"       A.PERFIL_TIPO_NOMBRE PERFIL_TIPO,\r\n" + 
+					"       CASE WHEN ETAPA_1=0 THEN 'NO INICIADA'\r\n" + 
+					"            WHEN ETAPA_1=1 THEN 'COMPLETADA'\r\n" + 
+					"       END ETAPA_1,\r\n" + 
+					"       CASE WHEN ETAPA_2=0 THEN 'NO INICIADA'\r\n" + 
+					"            WHEN ETAPA_2=1 THEN 'COMPLETADA'\r\n" + 
+					"       END ETAPA_2,\r\n" + 
+					"       CASE WHEN ETAPA_3=0 THEN 'NO INICIADA'\r\n" + 
+					"            WHEN ETAPA_3=1 THEN 'COMPLETADA'\r\n" + 
+					"       END ETAPA_3,\r\n" + 
+					"       CASE WHEN ETAPA_4=0 THEN 'NO INICIADA'\r\n" + 
+					"            WHEN ETAPA_4=1 THEN 'INICIADA'\r\n" + 
+					"            WHEN ETAPA_4=2 THEN 'COMPLETADA'\r\n" + 
+					"       END ETAPA_4,\r\n" + 
+					"       CASE WHEN ETAPA_TOTAL=0 THEN 'NO INICIADA'\r\n" + 
+					"            WHEN ETAPA_TOTAL=1 THEN 'INICIADA'\r\n" + 
+					"            WHEN ETAPA_TOTAL=2 THEN 'COMPLETADA'\r\n" + 
+					"       END ESTADO_GLOBAL,\r\n" + 
+					"       A.ULT_FECHA_ACTUALIZACION ULTIMA_MODIFICACION,\r\n" + 
+					"       COALESCE(C.nombre,'-') EMPRESA,\r\n" + 
+					"       COALESCE(B.porcentaje,0) EMPRESA_PORCENTAJE,\r\n" + 
+					"       COALESCE(D.nombre,'N/A') LINEA_EPS,\r\n" + 
+					"       COALESCE(E.porcentaje,0) LINEA_EPS_PORCENTAJE,\r\n" + 
+					"       CASE WHEN B.PORCENTAJE IS NULL THEN 0\r\n" + 
+					"            WHEN(B.PORCENTAJE IS NOT NULL AND E.PORCENTAJE IS NULL) THEN B.PORCENTAJE\r\n" + 
+					"            WHEN(B.PORCENTAJE IS NOT NULL AND E.PORCENTAJE IS NOT NULL) THEN B.PORCENTAJE*E.PORCENTAJE\r\n" + 
+					"        END PONDERADO\r\n" + 
+					"FROM REP_ESTADO_F A\r\n" + 
+					"LEFT JOIN encuesta_empresa B ON B.posicion_codigo = a.posicion_codigo AND b.proceso_id = a.proceso_id\r\n" + 
+					"LEFT JOIN empresas C on C.id = B.empresa_id\r\n" + 
+					"LEFT JOIN centros D on B.empresa_id = 2 and  D.empresa_id = C.id\r\n" + 
+					"LEFT JOIN encuesta_centro E on E.proceso_id = a.proceso_id and E.posicion_codigo = a.posicion_codigo and E.centro_id = D.id";
         sql += filtroEstados(estados, "A");
         return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
 	}
@@ -549,118 +541,170 @@ public class ReporteRepository {
 	public List<Map<String,Object>> reporteConsolidado(Long procesoId, List<Area> areas, List<Centro> centros, List<Tipo> estados) {
 		calcularEstado(procesoId, areas, centros, estados);
 		
-		String sql = "DELETE FROM REP_CONS_01";
-		plantilla.update(sql, (MapSqlParameterSource) null);
+//		String sql = "DELETE FROM REP_CONS_01";
+//		plantilla.update(sql, (MapSqlParameterSource) null);
+//		
+//		sql = "INSERT INTO REP_CONS_01(proceso_id,posicion_codigo,dimension1_codigo,dimension1,dimension2_codigo,dimension2,porcentaje)\n" +
+//			  "SELECT A.PROCESO_ID,\n" + 
+//			  "       A.POSICION_CODIGO,\n" +
+//			  "       C.codigo DIMENSION1_CODIGO,\n" +
+//			  "       C.nombre DIMENSION1,\n" +
+//			  "       'N/A' DIMENSION2_CODIGO,\n" +
+//			  "       'N/A' DIMENSION2,\n" + 
+//			  "       NVL(B.porcentaje,0) PORCENTAJE\n" + 
+//			  "  FROM REP_ESTADO_F A\n" + 
+//			  "  LEFT JOIN encuesta_centro B\n" + 
+//			  "    ON B.proceso_id=A.proceso_id\n" + 
+//			  "   AND B.posicion_codigo=A.posicion_codigo\n" + 
+//			  "  LEFT JOIN centros C\n" + 
+//			  "    ON C.id=B.centro_id\n" +
+//			  "   AND C.empresa_id=1\n" + 
+//			  " WHERE A.perfil_tipo_id=1";
+//		plantilla.update(sql, (MapSqlParameterSource) null);
+//		
+//		sql = "INSERT INTO REP_CONS_01(proceso_id,posicion_codigo,dimension1_codigo,dimension1,dimension2_codigo,dimension2,porcentaje)\n" +
+//			  "SELECT A.PROCESO_ID,\n" + 
+//			  "       A.POSICION_CODIGO,\n" +
+//			  "       NVL(P.codigo,'N/A') DIMENSION1_CODIGO,\n" + 
+//			  "       NVL(P.nombre,'N/A') DIMENSION1,\n" + 
+//			  "       NVL(C.codigo,'N/A') DIMENSION2_CODIGO,\n" + 
+//			  "       NVL(C.nombre,'N/A') DIMENSION2,\n" + 
+//			  "       NVL(E1.porcentaje,0)*NVL(E2.porcentaje,0) PORCENTAJE\n" + 
+//			  "  FROM REP_estado_F A\n" + 
+//			  "  LEFT JOIN ENCUESTA_LINEA E1\n" + 
+//			  "    ON E1.proceso_id=A.proceso_id\n" + 
+//			  "   AND E1.posicion_codigo=A.posicion_codigo\n" +
+//			  "  LEFT JOIN ENCUESTA_PRODUCTO_CANAL E2\n" + 
+//			  "    ON E2.proceso_id=A.proceso_id\n" + 
+//			  "   AND E2.posicion_codigo=A.posicion_codigo\n" + 
+//			  "  JOIN objetos P\n" + 
+//			  "    ON P.id=E2.producto_id\n" + 
+//			  "   AND P.objeto_tipo_id=3 -- PRODUCTO\n" + 
+//			  "   AND P.padre_objeto_id=E1.linea_id -- PRODUCTO DE ESA LINEA\n" + 
+//			  "  LEFT JOIN objetos C\n" + 
+//			  "    ON C.id=E2.canal_id\n" + 
+//			  "   AND C.objeto_tipo_id=2 -- CANAL\n" + 
+//			  " WHERE A.perfil_tipo_id=2";
+//		plantilla.update(sql, (MapSqlParameterSource) null);
+//			
+//		sql = "INSERT INTO REP_CONS_01(proceso_id,posicion_codigo,dimension1_codigo,dimension1,dimension2_codigo,dimension2,porcentaje)\n" +
+//				  "SELECT A.PROCESO_ID,\n" + 
+//				  "       A.POSICION_CODIGO,\n" +
+//				  "       NVL(P.codigo,'N/A') DIMENSION1_CODIGO,\n" + 
+//				  "       NVL(P.nombre,'N/A') DIMENSION1,\n" + 
+//				  "       NVL(S.codigo,'N/A') DIMENSION2_CODIGO,\n" + 
+//				  "       NVL(S.nombre,'N/A') DIMENSION2,\n" + 
+//				  "       NVL(E1.linea_porcentaje,0)*NVL(E1.canal_porcentaje,0)*NVL(E2.porcentaje,0) PORCENTAJE\n" + 
+//				  "  FROM REP_estado_F A\n" + 
+//				  "  LEFT JOIN ENCUESTA_LINEA_CANAL E1\n" + 
+//				  "    ON E1.proceso_id=A.proceso_id\n" + 
+//				  "   AND E1.posicion_codigo=A.posicion_codigo\n" +
+//				  "  LEFT JOIN ENCUESTA_PRODUCTO_SUBCANAL E2\n" + 
+//				  "    ON E2.proceso_id=A.proceso_id\n" + 
+//				  "   AND E2.posicion_codigo=A.posicion_codigo\n" + 
+//				  "  JOIN objetos P\n" + 
+//				  "    ON P.id=E2.producto_id\n" + 
+//				  "   AND P.objeto_tipo_id=3 -- PRODUCTO\n" + 
+//				  "   AND P.padre_objeto_id=E1.linea_id -- PRODUCTO DE ESA LINEA\n" + 
+//				  "  LEFT JOIN objetos S\n" + 
+//				  "    ON S.id=E2.subcanal_id\n" + 
+//				  "   AND S.objeto_tipo_id=4 -- SUBCANAL\n" + 
+//				  " WHERE A.perfil_tipo_id IN (3,4)";
+//		plantilla.update(sql, (MapSqlParameterSource) null);
 		
-		sql = "INSERT INTO REP_CONS_01(proceso_id,posicion_codigo,dimension1_codigo,dimension1,dimension2_codigo,dimension2,porcentaje)\n" +
-			  "SELECT A.PROCESO_ID,\n" + 
-			  "       A.POSICION_CODIGO,\n" +
-			  "       C.codigo DIMENSION1_CODIGO,\n" +
-			  "       C.nombre DIMENSION1,\n" +
-			  "       'N/A' DIMENSION2_CODIGO,\n" +
-			  "       'N/A' DIMENSION2,\n" + 
-			  "       NVL(B.porcentaje,0) PORCENTAJE\n" + 
-			  "  FROM REP_ESTADO_F A\n" + 
-			  "  LEFT JOIN encuesta_centro B\n" + 
-			  "    ON B.proceso_id=A.proceso_id\n" + 
-			  "   AND B.posicion_codigo=A.posicion_codigo\n" + 
-			  "  LEFT JOIN centros C\n" + 
-			  "    ON C.id=B.centro_id\n" +
-			  "   AND C.empresa_id=1\n" + 
-			  " WHERE A.perfil_tipo_id=1";
-		plantilla.update(sql, (MapSqlParameterSource) null);
-		
-		sql = "INSERT INTO REP_CONS_01(proceso_id,posicion_codigo,dimension1_codigo,dimension1,dimension2_codigo,dimension2,porcentaje)\n" +
-			  "SELECT A.PROCESO_ID,\n" + 
-			  "       A.POSICION_CODIGO,\n" +
-			  "       NVL(P.codigo,'N/A') DIMENSION1_CODIGO,\n" + 
-			  "       NVL(P.nombre,'N/A') DIMENSION1,\n" + 
-			  "       NVL(C.codigo,'N/A') DIMENSION2_CODIGO,\n" + 
-			  "       NVL(C.nombre,'N/A') DIMENSION2,\n" + 
-			  "       NVL(E1.porcentaje,0)*NVL(E2.porcentaje,0) PORCENTAJE\n" + 
-			  "  FROM REP_estado_F A\n" + 
-			  "  LEFT JOIN ENCUESTA_LINEA E1\n" + 
-			  "    ON E1.proceso_id=A.proceso_id\n" + 
-			  "   AND E1.posicion_codigo=A.posicion_codigo\n" +
-			  "  LEFT JOIN ENCUESTA_PRODUCTO_CANAL E2\n" + 
-			  "    ON E2.proceso_id=A.proceso_id\n" + 
-			  "   AND E2.posicion_codigo=A.posicion_codigo\n" + 
-			  "  JOIN objetos P\n" + 
-			  "    ON P.id=E2.producto_id\n" + 
-			  "   AND P.objeto_tipo_id=3 -- PRODUCTO\n" + 
-			  "   AND P.padre_objeto_id=E1.linea_id -- PRODUCTO DE ESA LINEA\n" + 
-			  "  LEFT JOIN objetos C\n" + 
-			  "    ON C.id=E2.canal_id\n" + 
-			  "   AND C.objeto_tipo_id=2 -- CANAL\n" + 
-			  " WHERE A.perfil_tipo_id=2";
-		plantilla.update(sql, (MapSqlParameterSource) null);
-			
-		sql = "INSERT INTO REP_CONS_01(proceso_id,posicion_codigo,dimension1_codigo,dimension1,dimension2_codigo,dimension2,porcentaje)\n" +
-				  "SELECT A.PROCESO_ID,\n" + 
-				  "       A.POSICION_CODIGO,\n" +
-				  "       NVL(P.codigo,'N/A') DIMENSION1_CODIGO,\n" + 
-				  "       NVL(P.nombre,'N/A') DIMENSION1,\n" + 
-				  "       NVL(S.codigo,'N/A') DIMENSION2_CODIGO,\n" + 
-				  "       NVL(S.nombre,'N/A') DIMENSION2,\n" + 
-				  "       NVL(E1.linea_porcentaje,0)*NVL(E1.canal_porcentaje,0)*NVL(E2.porcentaje,0) PORCENTAJE\n" + 
-				  "  FROM REP_estado_F A\n" + 
-				  "  LEFT JOIN ENCUESTA_LINEA_CANAL E1\n" + 
-				  "    ON E1.proceso_id=A.proceso_id\n" + 
-				  "   AND E1.posicion_codigo=A.posicion_codigo\n" +
-				  "  LEFT JOIN ENCUESTA_PRODUCTO_SUBCANAL E2\n" + 
-				  "    ON E2.proceso_id=A.proceso_id\n" + 
-				  "   AND E2.posicion_codigo=A.posicion_codigo\n" + 
-				  "  JOIN objetos P\n" + 
-				  "    ON P.id=E2.producto_id\n" + 
-				  "   AND P.objeto_tipo_id=3 -- PRODUCTO\n" + 
-				  "   AND P.padre_objeto_id=E1.linea_id -- PRODUCTO DE ESA LINEA\n" + 
-				  "  LEFT JOIN objetos S\n" + 
-				  "    ON S.id=E2.subcanal_id\n" + 
-				  "   AND S.objeto_tipo_id=4 -- SUBCANAL\n" + 
-				  " WHERE A.perfil_tipo_id IN (3,4)";
-		plantilla.update(sql, (MapSqlParameterSource) null);
-		
-		sql = "SELECT SYSDATE FECHA_DESCARGA,\n" + 
-			  "       A.PROCESO_NOMBRE PROCESO,\n" + 
-			  "       A.USUARIO_CODIGO MATRICULA,\n" + 
-			  "       A.USUARIO_NOMBRE_COMPLETO COLABORADOR,\n" + 
-			  "       A.POSICION_CODIGO NRO_POSICION,\n" + 
-			  "       A.POSICION_NOMBRE POSICION,\n" + 
-			  "       A.AREA_NOMBRE AREA,\n" + 
-			  "       A.CENTRO_CODIGO CECO_CODIGO,\n" + 
-			  "       A.CENTRO_NOMBRE CECO_NOMBRE,\n" + 
-			  "       A.PERFIL_NOMBRE PERFIL,\n" + 
-			  "       A.PERFIL_TIPO_NOMBRE PERFIL_TIPO,\n" +
-			  "       CASE WHEN ETAPA_1=0 THEN 'NO INICIADA'\n" + 
-			  "            WHEN ETAPA_1=1 THEN 'INICIADA'\n" + 
-			  "            WHEN ETAPA_1=2 THEN 'COMPLETADA'\n" + 
-			  "       END ETAPA_1,\n" + 
-			  "       CASE WHEN ETAPA_2=0 THEN 'NO INICIADA'\n" + 
-			  "            WHEN ETAPA_2=1 THEN 'INICIADA'\n" + 
-			  "            WHEN ETAPA_2=2 THEN 'COMPLETADA'\n" + 
-			  "       END ETAPA_2,\n" + 
-			  "       CASE WHEN ETAPA_3=0 THEN 'NO INICIADA'\n" + 
-			  "            WHEN ETAPA_3=1 THEN 'INICIADA'\n" + 
-			  "            WHEN ETAPA_3=2 THEN 'COMPLETADA'\n" + 
-			  "       END ETAPA_3,\n" + 
-			  "       CASE WHEN ETAPA_4=0 THEN 'NO INICIADA'\n" + 
-			  "            WHEN ETAPA_4=1 THEN 'INICIADA'\n" + 
-			  "            WHEN ETAPA_4=2 THEN 'COMPLETADA'\n" + 
-			  "       END ETAPA_4,\n" + 
-			  "       CASE WHEN ETAPA_TOTAL=0 THEN 'NO INICIADA'\n" + 
-			  "            WHEN ETAPA_TOTAL=1 THEN 'INICIADA'\n" + 
-			  "            WHEN ETAPA_TOTAL=2 THEN 'COMPLETADA'\n" + 
-			  "       END ESTADO_GLOBAL,\n" +
-			  "       A.ULT_FECHA_ACTUALIZACION ULTIMA_MODIFICACION,\n" + 
-			  "       NVL(B.DIMENSION1_CODIGO,'N/A') DIMENSION1_CODIGO,\n" + 
-			  "       NVL(B.DIMENSION1,'N/A') DIMENSION1,\n" +
-			  "       NVL(B.DIMENSION2_CODIGO,'N/A') DIMENSION2_CODIGO,\n" +
-			  "       NVL(B.DIMENSION2,'N/A') DIMENSION2,\n" +
-			  "       NVL(B.PORCENTAJE,0) PORCENTAJE\n" +
-			  "  FROM REP_ESTADO_F A\n" +
-			  "  LEFT JOIN REP_CONS_01 B\n" + 
-			  "    ON B.proceso_id=A.proceso_id\n" +
-			  "   AND B.posicion_codigo=A.posicion_codigo";
+		String sql = "SELECT  SYSDATE FECHA_DESCARGA,\r\n" + 
+				"       USR_BASE.PROCESO_NOMBRE PROCESO,\r\n" + 
+				"       USR_BASE.USUARIO_CODIGO MATRICULA,\r\n" + 
+				"       USR_BASE.USUARIO_NOMBRE_COMPLETO COLABORADOR,\r\n" + 
+				"       USR_BASE.POSICION_CODIGO NRO_POSICION,\r\n" + 
+				"       USR_BASE.POSICION_NOMBRE POSICION,\r\n" + 
+				"       USR_BASE.AREA_NOMBRE AREA,\r\n" + 
+				"       USR_BASE.CENTRO_CODIGO CECO_CODIGO,\r\n" + 
+				"       USR_BASE.CENTRO_NOMBRE CECO_NOMBRE,\r\n" + 
+				"       USR_BASE.PERFIL_NOMBRE PERFIL,\r\n" + 
+				"       USR_BASE.PERFIL_TIPO_NOMBRE PERFIL_TIPO,\r\n" + 
+				"       CASE WHEN ETAPA_1=0 THEN 'NO INICIADA'\r\n" + 
+				"            WHEN ETAPA_1=1 THEN 'COMPLETADA'\r\n" + 
+				"       END ETAPA_1,\r\n" + 
+				"       CASE WHEN ETAPA_2=0 THEN 'NO INICIADA'\r\n" + 
+				"            WHEN ETAPA_2=1 THEN 'COMPLETADA'\r\n" + 
+				"       END ETAPA_2,\r\n" + 
+				"       CASE WHEN ETAPA_3=0 THEN 'NO INICIADA'\r\n" + 
+				"            WHEN ETAPA_3=1 THEN 'COMPLETADA'\r\n" + 
+				"       END ETAPA_3,\r\n" + 
+				"       CASE WHEN ETAPA_4=0 THEN 'NO INICIADA'\r\n" + 
+				"            WHEN ETAPA_4=1 THEN 'INICIADA'\r\n" + 
+				"            WHEN ETAPA_4=2 THEN 'COMPLETADA'\r\n" + 
+				"       END ETAPA_4,\r\n" + 
+				"       CASE WHEN ETAPA_TOTAL=0 THEN 'NO INICIADA'\r\n" + 
+				"            WHEN ETAPA_TOTAL=1 THEN 'INICIADA'\r\n" + 
+				"            WHEN ETAPA_TOTAL=2 THEN 'COMPLETADA'\r\n" + 
+				"       END ESTADO_GLOBAL,\r\n" + 
+				"       ULT_FECHA_ACTUALIZACION ULTIMA_MODIFICACION,\r\n" + 
+				"        CONS.DIMENSION1_CODIGO,\r\n" + 
+				"        CONS.DIMENSION1,\r\n" + 
+				"        CONS.DIMENSION2_CODIGO,\r\n" + 
+				"        CONS.DIMENSION2,\r\n" + 
+				"        CONS.PORCENTAJE\r\n" + 
+				"FROM REP_estado_F USR_BASE\r\n" + 
+				"LEFT JOIN \r\n" + 
+				"  (SELECT A.PROCESO_ID,\r\n" + 
+				"         A.POSICION_CODIGO,\r\n" + 
+				"         NVL(D.codigo,'N/A') DIMENSION1_CODIGO,\r\n" + 
+				"         NVL(D.nombre,'N/A') DIMENSION1,\r\n" + 
+				"         'N/A' DIMENSION2_CODIGO,\r\n" + 
+				"         'N/A' DIMENSION2,\r\n" + 
+				"         NVL(E.porcentaje,0) PORCENTAJE\r\n" + 
+				"    FROM REP_ESTADO_F A\r\n" + 
+				"    JOIN posicion_datos B on B.usuario_codigo = a.usuario_codigo and b.proceso_id = a.proceso_id\r\n" + 
+				"    LEFT JOIN perfil_centro C ON C.perfil_id = b.perfil_id\r\n" + 
+				"    LEFT JOIN centros D ON D.id = C.centro_id\r\n" + 
+				"    LEFT JOIN encuesta_centro E ON B.proceso_id=A.proceso_id AND E.posicion_codigo=A.posicion_codigo and E.centro_id = D.id\r\n" + 
+				"   WHERE A.perfil_tipo_id=1\r\n" + 
+				"  union\r\n" + 
+				"  SELECT A.PROCESO_ID,\r\n" + 
+				"         A.POSICION_CODIGO,\r\n" + 
+				"         NVL(D.codigo,'N/A') DIMENSION1_CODIGO,\r\n" + 
+				"         NVL(D.nombre,'N/A') DIMENSION1,\r\n" + 
+				"         NVL(E.codigo,'N/A') DIMENSION2_CODIGO,\r\n" + 
+				"         NVL(E.nombre,'N/A') DIMENSION2,\r\n" + 
+				"         NVL(E1.porcentaje,0)*NVL(E2.porcentaje,0) PORCENTAJE\r\n" + 
+				"    FROM REP_estado_F A\r\n" + 
+				"    JOIN posicion_datos B on B.usuario_codigo = a.usuario_codigo and b.proceso_id = a.proceso_id\r\n" + 
+				"    LEFT JOIN ENCUESTA_LINEA E1 ON E1.proceso_id=A.proceso_id AND E1.posicion_codigo=A.posicion_codigo\r\n" + 
+				"    LEFT JOIN perfil_linea_canal C ON C.perfil_id = B.perfil_id and C.linea_id = E1.linea_id\r\n" + 
+				"    LEFT JOIN objetos D on D.objeto_tipo_id = 3 and D.padre_objeto_id = C.linea_id AND E1.PORCENTAJE >0\r\n" + 
+				"    LEFT JOIN ENCUESTA_PRODUCTO_CANAL E2 ON E2.proceso_id=A.proceso_id AND E2.posicion_codigo=A.posicion_codigo AND  E2.canal_id = C.canal_id and E2.producto_id = D.id\r\n" + 
+				"    LEFT JOIN OBJETOS E ON E.objeto_tipo_id = 2 and E.ID = C.canal_id AND E2.PORCENTAJE >0\r\n" + 
+				"   WHERE A.perfil_tipo_id=2 AND (E.codigo IS NOT NULL OR (D.codigo IS NULL AND E.codigo IS NULL))\r\n" + 
+				"   union\r\n" + 
+				"   SELECT F.PROCESO_ID,\r\n" + 
+				"          F.POSICION_CODIGO,\r\n" + 
+				"          NVL(usr.DIMENSION1_CODIGO,'N/A') DIMENSION1_CODIGO,\r\n" + 
+				"          NVL(usr.DIMENSION1,'N/A') DIMENSION1,\r\n" + 
+				"          NVL(usr.DIMENSION2_CODIGO,'N/A') DIMENSION2_CODIGO,\r\n" + 
+				"          NVL(usr.DIMENSION2,'N/A') DIMENSION2,\r\n" + 
+				"          NVL(usr.PORCENTAJE,0)PORCENTAJE\r\n" + 
+				"   FROM (\r\n" + 
+				"   SELECT A.PROCESO_ID,\r\n" + 
+				"         A.POSICION_CODIGO,\r\n" + 
+				"         E1.LINEA_ID,\r\n" + 
+				"         E1.CANAL_ID,\r\n" + 
+				"         NVL(D.codigo,'N/A') DIMENSION1_CODIGO,\r\n" + 
+				"         NVL(D.nombre,'N/A') DIMENSION1,\r\n" + 
+				"         NVL(E.codigo,'N/A') DIMENSION2_CODIGO,\r\n" + 
+				"         NVL(E.nombre,'N/A') DIMENSION2,\r\n" + 
+				"         NVL(E1.linea_porcentaje,0)*NVL(E1.canal_porcentaje,0)*NVL(E2.porcentaje,0) PORCENTAJE\r\n" + 
+				"    FROM REP_estado_F A\r\n" + 
+				"    JOIN posicion_datos B on B.usuario_codigo = a.usuario_codigo and b.proceso_id = a.proceso_id\r\n" + 
+				"    LEFT JOIN ENCUESTA_LINEA_CANAL E1 ON E1.proceso_id=A.proceso_id AND E1.posicion_codigo=A.posicion_codigo\r\n" + 
+				"    LEFT JOIN perfil_linea_canal C ON C.perfil_id = B.perfil_id and C.linea_id = E1.linea_id and C.canal_id = E1.canal_id\r\n" + 
+				"    LEFT JOIN objetos D on D.objeto_tipo_id = 3 and D.padre_objeto_id = C.linea_id AND E1.LINEA_PORCENTAJE >0\r\n" + 
+				"    LEFT JOIN objetos E on E.objeto_tipo_id = 4 and E.padre_objeto_id = C.canal_id AND E1.CANAL_PORCENTAJE >0\r\n" + 
+				"    LEFT JOIN ENCUESTA_PRODUCTO_SUBCANAL E2 ON E2.proceso_id=A.proceso_id AND E2.posicion_codigo=A.posicion_codigo and E2.producto_id = D.id and E2.subcanal_id = E.id and E1.LINEA_PORCENTAJE >0 and E1.CANAL_PORCENTAJE >0\r\n" + 
+				"   WHERE A.perfil_tipo_id=3 and ((e1.linea_id is null and e1.canal_id is null)or(e2.porcentaje>0)))usr\r\n" + 
+				"    right join REP_estado_F F on  F.POSICION_CODIGO = usr.POSICION_CODIGO \r\n" + 
+				"    where F.perfil_tipo_id=3) CONS ON USR_BASE.proceso_id=CONS.proceso_id AND USR_BASE.posicion_codigo=CONS.posicion_codigo";
         sql += filtroEstados(estados, "A");
         return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
 	}

@@ -171,11 +171,13 @@ public class ReporteService implements ReporteServiceI {
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_3"));
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_4"));
         	row.createCell(colNum++).setCellValue((String) fila.get("ESTADO_GLOBAL"));        	
-        	row.createCell(colNum).setCellValue((Date) fila.get("ULTIMA_MODIFICACION")); sh.setColumnWidth(colNum++, 3000);        	
+        	row.createCell(colNum).setCellValue((Date) fila.get("ULTIMA_MODIFICACION")); sh.setColumnWidth(colNum, 3000);  
+        	row.getCell(colNum++).setCellStyle(dateStyle);
         	row.createCell(colNum).setCellValue((String) fila.get("EMPRESA")); sh.setColumnWidth(colNum++, 4000);
         	row.createCell(colNum++).setCellValue(((BigDecimal) fila.get("EMPRESA_PORCENTAJE")).doubleValue());        	
         	row.createCell(colNum).setCellValue((String) fila.get("LINEA_EPS")); sh.setColumnWidth(colNum++, 4000);
         	row.createCell(colNum++).setCellValue(((BigDecimal) fila.get("LINEA_EPS_PORCENTAJE")).doubleValue());
+        	row.createCell(colNum++).setCellValue(((BigDecimal) fila.get("PONDERADO")).doubleValue());
         }
         excelService.crearArchivo(wb, result);        	
 		return fileService.loadFileAsResource(result);
@@ -236,7 +238,8 @@ public class ReporteService implements ReporteServiceI {
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_3"));
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_4"));
         	row.createCell(colNum++).setCellValue((String) fila.get("ESTADO_GLOBAL"));        	
-        	row.createCell(colNum).setCellValue((Date) fila.get("ULTIMA_MODIFICACION")); sh.setColumnWidth(colNum++, 3000);        	
+        	row.createCell(colNum).setCellValue((Date) fila.get("ULTIMA_MODIFICACION")); sh.setColumnWidth(colNum, 3000);
+        	row.getCell(colNum++).setCellStyle(dateStyle);
         	row.createCell(colNum++).setCellValue((String) fila.get("DIMENSION1_CODIGO"));
         	row.createCell(colNum++).setCellValue((String) fila.get("DIMENSION1"));
         	row.createCell(colNum++).setCellValue((String) fila.get("DIMENSION2_CODIGO"));
