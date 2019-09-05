@@ -11,32 +11,34 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.services.UsuarioServiceI;
-import com.ms.encuestas.services.segcen.ISegCenServicios;
-import com.ms.encuestas.services.segcen.SegCenServicio;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
 public class UsuarioController {
-	@Autowired
-	private UsuarioServiceI usuarioService;
-	
 	private final Logger log = LoggerFactory.getLogger(UsuarioController.class);
+	@Autowired
+	private UsuarioServiceI usuarioService;	
 	
 	@PostMapping("usuarios/upload")
 	public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("procesoId") Long procesoId) {
@@ -151,5 +153,28 @@ public class UsuarioController {
 		response.put("centroNombre",usuario.getPosicion().getCentro().getNombre());
 		response.put("centroNivel",usuario.getPosicion().getCentro().getNivel());
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping("/usuarios/cargar")
+	@ResponseStatus(HttpStatus.OK)
+	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
+		try {
+			log.info(String.format("Leyendo el archivo ", file.getOriginalFilename()));
+			this.usuarioService.processExcel(file.getInputStream());
+		} catch (IOException e) {
+			log.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
+		}
+	}
+	
+	@PostMapping("/usuarios/descargar")
+	@Transactional(readOnly = true)
+	public ResponseEntity<?> downloadPerfiles() {
+		Resource resource = usuarioService.downloadExcel();
+        String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
 	}
 }

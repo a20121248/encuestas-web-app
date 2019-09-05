@@ -45,7 +45,8 @@ public class CentroController {
 
 	@GetMapping("/centros/cantidad")
 	public Long count() {
-		return centroService.count();
+		Long empresaId = new Long(1);
+		return centroService.count(empresaId);
 	}
 	
 	@GetMapping("/centros")

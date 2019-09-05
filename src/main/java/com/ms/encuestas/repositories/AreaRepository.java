@@ -1,5 +1,6 @@
 package com.ms.encuestas.repositories;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.ms.encuestas.models.Area;
+import com.ms.encuestas.models.Usuario;
 
 @Repository
 public class AreaRepository {
@@ -25,18 +27,26 @@ public class AreaRepository {
 		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
 	}
 	
+	public List<String> findAllCodigos() throws EmptyResultDataAccessException {
+		String sql = "SELECT codigo FROM areas";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null, String.class);
+	}
 
-	public Area findById(Long areaId) throws EmptyResultDataAccessException {
-		String queryStr = "SELECT id,\n" +
-						  "       codigo,\n" +
-						  "       nombre,\n" +
-						  "       division,\n" +
-						  "       fecha_creacion,\n" +
-						  "       fecha_actualizacion\n" +
+	public Area findById(Long id) throws EmptyResultDataAccessException {
+		String queryStr = "SELECT *\n" +
 						  "  FROM areas\n" +
-						  " WHERE id=:area_id";
+						  " WHERE id=:id";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("area_id", areaId);
+		paramMap.put("id", id);
+        return plantilla.queryForObject(queryStr, paramMap, new AreaMapper());
+	}
+	
+	public Area findByCodigo(String codigo) throws EmptyResultDataAccessException {
+		String queryStr = "SELECT *\n" +
+						  "  FROM areas\n" +
+						  " WHERE codigo=:codigo";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("codigo", codigo);
         return plantilla.queryForObject(queryStr, paramMap, new AreaMapper());
 	}
 	
@@ -86,5 +96,67 @@ public class AreaRepository {
 		paramMap.put("area_id", id);
 		
 		return plantilla.queryForObject(sql, paramMap, new AreaMapper());
+	}
+	
+	public Area insert(Area area) throws EmptyResultDataAccessException {
+		String sql = "INSERT INTO areas(codigo,nombre,division,fecha_creacion,fecha_actualizacion)\n" +
+                     "VALUES(:codigo,:nombre,:division,:fecha_creacion,:fecha_actualizacion)";		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("codigo", area.getCodigo());
+		paramMap.put("nombre", area.getNombre());
+		paramMap.put("division", area.getDivision());
+		Date fecha = new Date();
+		paramMap.put("fecha_creacion", fecha);
+		paramMap.put("fecha_actualizacion", fecha);
+		plantilla.update(sql,paramMap);
+		
+		sql = "SELECT areas_seq.currval FROM DUAL";
+		area.setId(plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class));
+		return area;
+	}
+	
+	public Area update(Area area) throws EmptyResultDataAccessException {
+		String sql = "UPDATE areas\n" +
+					 "   SET codigo=:codigo,\n" +
+					 "       nombre=:nombre,\n" +
+					 "		 division=:division,\n" +
+					 "		 fecha_actualizacion=:fecha_actualizacion\n" +
+                     " WHERE id=:id";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", area.getId());
+		paramMap.put("codigo", area.getCodigo());
+		paramMap.put("nombre", area.getNombre());
+		paramMap.put("division", area.getDivision());
+		paramMap.put("fecha_actualizacion", new Date());
+		plantilla.update(sql,paramMap);
+		
+		return area;
+	}
+	
+	public void delete(Area area) {
+		String sql = "DELETE FROM areas WHERE id=:id";
+		plantilla.update(sql, new MapSqlParameterSource("id", area.getCodigo()));
+	}
+	
+	public List<Map<String,Object>> findAllListEmpty() throws EmptyResultDataAccessException {
+		String sql = "SELECT NULL codigo,\n" + 
+				 	 "       NULL nombre,\n" + 
+				 	 "       NULL division,\n" + 
+				 	 "       NULL fecha_creacion,\n" +
+				 	 "       NULL fecha_actualizacion\n" +
+				 	 "  FROM DUAL";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
+	}
+	
+	public List<Map<String,Object>> findAllList() throws EmptyResultDataAccessException {
+		String sql = "SELECT codigo,\n" + 
+					 "       nombre,\n" + 
+					 "       division,\n" +  
+					 "       fecha_creacion,\n" +
+					 "       fecha_actualizacion\n" +
+					 "  FROM areas\n" + 
+					 " WHERE fecha_eliminacion IS NULL\n" + 
+					 " ORDER BY fecha_creacion";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
 	}
 }

@@ -1,5 +1,6 @@
 package com.ms.encuestas.repositories;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,14 +13,19 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.ms.encuestas.models.Perfil;
 import com.ms.encuestas.models.Rol;
 import com.ms.encuestas.models.Usuario;
 
 @Repository
 public class UsuarioRepository {
-	private Logger logger = LoggerFactory.getLogger(UsuarioRepository.class);
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
+	
+	public List<String> findAllCodigos() throws EmptyResultDataAccessException {
+		String sql = "SELECT codigo FROM usuarios";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null, String.class);
+	}
 
 	  public List<Usuario> findUsuariosDependientesByCodigo(Long procesoId, String posicionCodigo) {
           String sql = "SELECT usr.usuario_codigo,\n" + 
@@ -433,10 +439,46 @@ public class UsuarioRepository {
 		return null;
 	}
 
-	public void delete(Usuario usuario) {
-		return;
+	public Usuario insert(Usuario usuario) throws EmptyResultDataAccessException {
+		String sql = "INSERT INTO usuarios(codigo,contrasenha,usuario_vida,usuario_generales,nombre_completo,fecha_creacion,fecha_actualizacion)\n" +
+                     "VALUES(:codigo,:contrasenha,:usuario_vida,:usuario_generales,:nombre_completo,:fecha_creacion,:fecha_actualizacion)";		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("codigo", usuario.getCodigo());
+		paramMap.put("contrasenha", "$2a$10$TrHYVE2HDH7XIi9CaGKbde2EI2aZAlRRTfQpyXOsT3u8l7GXN2qnq");
+		paramMap.put("usuario_vida", usuario.getUsuarioVida());
+		paramMap.put("usuario_generales", usuario.getUsuarioGenerales());
+		paramMap.put("nombre_completo", usuario.getNombreCompleto());
+		Date fecha = new Date();
+		paramMap.put("fecha_creacion", fecha);
+		paramMap.put("fecha_actualizacion", fecha);
+		plantilla.update(sql,paramMap);
+		
+		return usuario;
 	}
-
+	
+	public Usuario update(Usuario usuario) throws EmptyResultDataAccessException {
+		String sql = "UPDATE usuarios\n" +
+					 "   SET usuario_vida=:usuario_vida,\n" +
+					 "       usuario_generales=:usuario_generales,\n" +
+					 "		 nombre_completo=:nombre_completo,\n" +
+					 "		 fecha_actualizacion=:fecha_actualizacion\n" +
+                     " WHERE codigo=:codigo";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("codigo", usuario.getCodigo());
+		paramMap.put("usuario_vida", usuario.getUsuarioVida());
+		paramMap.put("usuario_generales", usuario.getUsuarioGenerales());
+		paramMap.put("nombre_completo", usuario.getNombreCompleto());
+		paramMap.put("fecha_actualizacion", new Date());
+		plantilla.update(sql,paramMap);
+		
+		return usuario;
+	}
+	
+	public void delete(Usuario usuario) {
+		String sql = "DELETE FROM usuarios WHERE codigo=:codigo";
+		plantilla.update(sql, new MapSqlParameterSource("codigo", usuario.getCodigo()));
+	}
+	
 	public List<Rol> findRolesByCodigo(String codigo) {
 		String sql = "SELECT B.*\n" +
 					 "  FROM rol_usuario A\n" +
@@ -445,5 +487,29 @@ public class UsuarioRepository {
 					 " WHERE A.usuario_codigo=:codigo\n" + 
 					 "   AND B.fecha_eliminacion IS NULL";
 		return plantilla.query(sql, new MapSqlParameterSource("codigo", codigo), new RolMapper());
+	}
+	
+	public List<Map<String,Object>> findAllListEmpty() throws EmptyResultDataAccessException {
+		String sql = "SELECT NULL matricula,\n" + 
+				 	 "       NULL usuario_vida,\n" + 
+				 	 "       NULL usuario_generales,\n" + 
+				 	 "       NULL nombre_completo,\n" + 
+				 	 "       NULL fecha_creacion,\n" +
+				 	 "       NULL fecha_actualizacion\n" +
+				 	 "  FROM DUAL";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
+	}
+	
+	public List<Map<String,Object>> findAllList() throws EmptyResultDataAccessException {
+		String sql = "SELECT codigo matricula,\n" + 
+					 "       usuario_vida,\n" + 
+					 "       usuario_generales,\n" + 
+					 "       nombre_completo,\n" + 
+					 "       fecha_creacion,\n" +
+					 "       fecha_actualizacion\n" +
+					 "  FROM usuarios\n" + 
+					 " WHERE fecha_eliminacion IS NULL\n" + 
+					 " ORDER BY fecha_creacion";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
 	}
 }

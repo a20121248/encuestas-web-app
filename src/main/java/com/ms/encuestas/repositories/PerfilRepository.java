@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -15,13 +13,10 @@ import org.springframework.stereotype.Repository;
 
 import com.ms.encuestas.models.Centro;
 import com.ms.encuestas.models.LineaCanal;
-import com.ms.encuestas.models.Objeto;
-import com.ms.encuestas.models.ObjetoObjetos;
 import com.ms.encuestas.models.Perfil;
 
 @Repository
 public class PerfilRepository {
-	private Logger logger = LoggerFactory.getLogger(PerfilRepository.class);
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 
@@ -182,13 +177,23 @@ public class PerfilRepository {
 		return 1;
 	}
 	
-	public int delete(Perfil perfil) throws EmptyResultDataAccessException {
+	public void delete(Perfil perfil) throws EmptyResultDataAccessException {
 		String sql = "UPDATE perfiles\n" +
 				 	 "   SET fecha_eliminacion=:fecha_eliminacion" +
 				 	 " WHERE id=:id";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", perfil.getId());
 		paramMap.put("fecha_eliminacion", new Date());
-		return plantilla.update(sql,paramMap);
+		plantilla.update(sql,paramMap);
+	}
+	
+	public void deleteById(Long id) throws EmptyResultDataAccessException {
+		String sql = "UPDATE perfiles\n" +
+				 	 "   SET fecha_eliminacion=:fecha_eliminacion" +
+				 	 " WHERE id=:id";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", id);
+		paramMap.put("fecha_eliminacion", new Date());
+		plantilla.update(sql,paramMap);
 	}
 }
