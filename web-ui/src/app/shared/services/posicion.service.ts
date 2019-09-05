@@ -23,6 +23,11 @@ export class PosicionService {
     return this.http.get<number>(`${this.urlServer.api}${url}`);
   }
 
+  countDatos(procesoId: number): Observable<number> {
+    const url = `${this.urlServer.api}procesos/${procesoId}/cantidad-datos-posiciones`;
+    return this.http.get<number>(url);
+  }
+
   findByProcesoIdAndUsuarioCodigo(procesoId: number, usuarioCodigo: string): Observable<Posicion> {
     const url = `${this.urlServer.api}procesos/${procesoId}/usuarios/${usuarioCodigo}/posicion`;
     return this.http.get<Posicion>(url);
@@ -46,9 +51,16 @@ export class PosicionService {
     );
   }
 
+  download(): Observable<any> {
+    const url = `${this.urlServer.api}posiciones/descargar`;
+    return this.http.post(url, null, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
+  }
+
   uploadDatos(procesoId: number, formData: FormData): Observable<any> {
     const url = `${this.urlServer.api}procesos/${procesoId}/cargar-datos-posiciones`;
-    console.log(this.uploadDatos);
     return this.http.post<any>(url, formData, {
       reportProgress: true,
       observe: 'events'

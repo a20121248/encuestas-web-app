@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Area } from '../models/area';
 import { AppConfig } from './app.config';
-import { HttpClient, HttpEventType } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -34,6 +34,14 @@ export class AreaService {
       }
     })
     );
+  }
+
+  download(): Observable<any> {
+    const url = `${this.urlServer.api}areas/descargar`;
+    return this.http.post(url, null, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
   }
 
   findById(areaId: number): Observable<Area> {
