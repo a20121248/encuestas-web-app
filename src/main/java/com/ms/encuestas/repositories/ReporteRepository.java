@@ -705,7 +705,7 @@ public class ReporteRepository {
 				"   WHERE A.perfil_tipo_id=3 and ((e1.linea_id is null and e1.canal_id is null)or(e2.porcentaje>0)))usr\r\n" + 
 				"    right join REP_estado_F F on  F.POSICION_CODIGO = usr.POSICION_CODIGO \r\n" + 
 				"    where F.perfil_tipo_id=3) CONS ON USR_BASE.proceso_id=CONS.proceso_id AND USR_BASE.posicion_codigo=CONS.posicion_codigo";
-        sql += filtroEstados(estados, "A");
+        sql += filtroEstados(estados, "USR_BASE");
         return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
 	}
 }
