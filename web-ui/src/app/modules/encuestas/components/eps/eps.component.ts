@@ -33,7 +33,7 @@ export class EpsComponent implements OnInit {
 
   getTotalPorcentaje(){
     if (this.lstEps != null) {
-      this. porcTotal = Math.trunc(this.lstEps.map(t => 100*t.porcentaje).reduce((acc, value) => acc + value, 0))/100;
+      this. porcTotal = Math.round(this.lstEps.map(t => 100*t.porcentaje).reduce((acc, value) => acc + value, 0))/100;
       return this.porcTotal;
     } else {
       this.porcTotal = 0;

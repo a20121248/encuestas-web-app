@@ -71,7 +71,7 @@ export class LineaComponent implements OnInit {
 
   getTotalPorcentaje() {
     if (this.lstLineas != null) {
-      this.porcTotal = Math.trunc(this.lstLineas.map(t => 100*t.porcentaje).reduce((acc, value) => acc + value, 0))/100;
+      this.porcTotal = Math.round(this.lstLineas.map(t => 100*t.porcentaje).reduce((acc, value) => acc + value, 0))/100;
       return this.porcTotal;
     }
     else {

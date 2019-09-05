@@ -48,7 +48,7 @@ export class LineaCanalComponent implements OnInit {
 
   getTotalPorcentaje() {
     if (this.lstLineaCanales != null) {
-      this.porcTotal = Math.trunc(this.lstLineaCanales.map(t => 100*t.objeto.porcentaje).reduce((acc, value) => acc + value, 0))/100;
+      this.porcTotal = Math.round(this.lstLineaCanales.map(t => 100*t.objeto.porcentaje).reduce((acc, value) => acc + value, 0))/100;
       return this.porcTotal;
     }
     else {
