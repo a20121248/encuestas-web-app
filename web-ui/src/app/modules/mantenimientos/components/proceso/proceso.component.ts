@@ -9,7 +9,6 @@ import { ModalEditarComponent } from '../modal-editar/modal-editar.component';
 import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.component';
 import { MatTable } from '@angular/material/table';
 
-
 @Component({
   selector: 'app-proceso',
   templateUrl: './proceso.component.html',
@@ -20,11 +19,11 @@ export class ProcesoComponent implements OnInit {
   procesos: Proceso[];
   selectedIndex: number;
   selectedProceso: Proceso;
+  estados: string[];
   dcProcesos = ['codigo', 'nombre', 'creador', 'activo', 'fechaInicio', 'fechaCierre', 'fechaCreacion', 'fechaActualizacion'];
   crearDialogRef: MatDialogRef<ModalCrearComponent>;
   editarDialogRef: MatDialogRef<ModalEditarComponent>;
   eliminarDialogRef: MatDialogRef<ModalEliminarComponent>;
-
 
   @ViewChild(MatTable, { static: false }) table: MatTable<any>;
 
@@ -33,6 +32,7 @@ export class ProcesoComponent implements OnInit {
     public dialog: MatDialog
   ) {
     this.titulo = 'CONFIGURACIÓN DE ENCUESTAS';
+    this.estados = ['Abierta', 'Cerrada'];
   }
 
   ngOnInit() {
@@ -41,14 +41,13 @@ export class ProcesoComponent implements OnInit {
     });
   }
 
-
-
   crear(): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.hasBackdrop = true;
-    dialogConfig.width = '500px';
+    dialogConfig.width = '400px';
     dialogConfig.data = {
-      titulo: `Crear encuesta`
+      titulo: `Crear encuesta`,
+      estados: this.estados
     };
     this.crearDialogRef = this.dialog.open(ModalCrearComponent, dialogConfig);
     this.crearDialogRef.afterClosed()
@@ -73,9 +72,10 @@ export class ProcesoComponent implements OnInit {
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.hasBackdrop = true;
-    dialogConfig.width = '500px';
+    dialogConfig.width = '400px';
     dialogConfig.data = {
       titulo: `Editar encuesta ${this.selectedProceso.codigo}`,
+      estados: this.estados,
       proceso: this.selectedProceso
     };
     this.editarDialogRef = this.dialog.open(ModalEditarComponent, dialogConfig);
@@ -92,10 +92,10 @@ export class ProcesoComponent implements OnInit {
 
   eliminar() {
     if (this.selectedProceso == null) {
-      swal.fire('Eliminar proceso', 'Por favor, seleccione un proceso.', 'error');
+      swal.fire('Eliminar encuesta', 'Por favor, seleccione una encuesta.', 'error');
       return;
     } else {
-      swal.fire('Eliminar proceso', `¿Está seguro de eliminar el proceso ${this.selectedProceso.nombre}?` , 'question');
+      swal.fire('Eliminar encuesta', `¿Está seguro de eliminar la encuesta ${this.selectedProceso.nombre}?` , 'question');
       return;
     }
   }

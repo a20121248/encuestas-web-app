@@ -9,6 +9,15 @@
       <mat-label>Nombre</mat-label>
       <input matInput formControlName="nombre">
     </mat-form-field>
+    <ng-select [items]="estados"
+               placeholder="Seleccionar estado"
+               [(ngModel)]="selectedEstado"></ng-select>
+    <mat-form-field>
+      <mat-label>Fecha de inicio</mat-label>
+      <input matInput [matDatepicker]="fechaInicio" formControlName="fechaInicio" readonly>
+      <mat-datepicker-toggle matSuffix [for]="fechaInicio"></mat-datepicker-toggle>
+      <mat-datepicker #fechaInicio></mat-datepicker>
+    </mat-form-field>
     <mat-form-field>
       <mat-label>Fecha de cierre</mat-label>
       <input matInput [matDatepicker]="picker" formControlName="fechaCierre" readonly>
