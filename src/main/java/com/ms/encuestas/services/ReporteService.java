@@ -244,7 +244,7 @@ public class ReporteService implements ReporteServiceI {
         	row.createCell(colNum++).setCellValue((String) fila.get("DIMENSION1"));
         	row.createCell(colNum++).setCellValue((String) fila.get("DIMENSION2_CODIGO"));
         	row.createCell(colNum++).setCellValue((String) fila.get("DIMENSION2"));
-        	row.createCell(colNum++).setCellValue(((BigDecimal) fila.get("PORCENTAJE")).doubleValue());
+        	row.createCell(colNum++).setCellValue(((BigDecimal) fila.get("PONDERADO")).doubleValue());
         }
         excelService.crearArchivo(wb, result);        	
 		return fileService.loadFileAsResource(result);

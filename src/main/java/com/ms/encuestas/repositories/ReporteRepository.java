@@ -601,7 +601,7 @@ public class ReporteRepository {
 				"        CONS.DIMENSION1,\r\n" + 
 				"        CONS.DIMENSION2_CODIGO,\r\n" + 
 				"        CONS.DIMENSION2,\r\n" + 
-				"        CONS.PORCENTAJE\r\n" + 
+				"        CONS.PORCENTAJE PONDERADO\r\n" + 
 				"FROM REP_estado_F USR_BASE\r\n" + 
 				"LEFT JOIN \r\n" + 
 				"  (SELECT A.PROCESO_ID,\r\n" + 
