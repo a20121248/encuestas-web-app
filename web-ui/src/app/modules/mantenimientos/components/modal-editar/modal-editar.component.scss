@@ -3,29 +3,14 @@ mat-dialog-actions {
   place-content:flex-end;
 }
 
-.pacifico {
-  .mat-raised-button {
-    &.icono {
-      min-width: 36px;
-      .material-icons {
-        margin-right: 0;
-      }
-    }
-    min-width: 100px;
-    padding: 0;
-    .material-icons {
-      font-size: 18px;
-      margin-right: 8px;
-    }
-    &.sm {
-      min-width: 36px;
-    }
+mat-dialog-content {
+  div {
+    margin: 5px 0;
   }
-  button + button {
-    margin-left: 15px;
-  }
-  .boton {
-    min-width: 36px;
+  mat-radio-group {
+    margin: 5.5px 0 8.5px;
+    mat-radio-button + mat-radio-button {
+      margin-left: 40px;
+    }
   }
 }
-

@@ -44,7 +44,7 @@ export class ModalEditarComponent implements OnInit {
       id: this.proceso.id,
       codigo: this.proceso.codigo,
       nombre: this.proceso.nombre,
-      usuario: this.proceso.usuario,
+      creador: this.data.creador.nombre,
       fechaInicio: this.proceso.fechaInicio,
       fechaCierre: this.proceso.fechaCierre,
       fechaCreacion: this.proceso.fechaCreacion,
