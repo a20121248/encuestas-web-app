@@ -48,8 +48,8 @@ export class LineaComponent implements OnInit {
       } else {
         this.sendEstado(false);
       }
-      this.sharedFormService.actualizarEstadoForm1(this.groupForm);
     });
+    this.sharedFormService.actualizarEstadoForm1(this.groupForm);
   }
 
   sendEstado(value: boolean) {
@@ -91,16 +91,24 @@ export class LineaComponent implements OnInit {
 
   revisarEdicionFormulario(lineaId: number){
     this.setRuta(lineaId);
-    let form2Valid:boolean;
-    let form2Dirty:boolean;
-    this.sharedFormService.form2Actual.subscribe( data => {
-      form2Valid = data.valid;
-      form2Dirty = data.dirty;
-    } );
-    if((this.haGuardado && this.groupForm.valid && form2Valid) || (this.groupForm.valid && !this.groupForm.dirty && form2Valid && !form2Dirty)){
+    let form1dirty: boolean;
+    let form1pristine: boolean;
+    let form2valid:boolean
+    let form2dirty: boolean;
+    let form2pristine: boolean;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1dirty = data.dirty;
+      form1pristine = data.pristine;
+    });
+    this.sharedFormService.form2Actual.subscribe(data => {
+      form2dirty = data.dirty;
+      form2pristine = data.pristine;
+      form2valid = data.valid;
+    });
+    if((this.haGuardado && form1pristine && form2pristine) || (this.groupForm.valid && !form1dirty && form2valid && !form2dirty)){
       this.router.navigate([this.url], { relativeTo: this.route });
     } else {
-      if((this.groupForm.valid && this.groupForm.dirty)|| (form2Valid && form2Dirty)){
+      if((form1dirty)|| (form2dirty)){
         swal.fire({
           title: 'Cambios detectados',
           text: "Primero guarde antes de continuar.",
