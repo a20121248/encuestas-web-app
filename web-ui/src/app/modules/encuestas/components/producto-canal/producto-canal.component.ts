@@ -93,8 +93,8 @@ export class ProductoCanalComponent implements OnInit {
       } else {
         this.sendEstado(false);
       }
-      this.sharedFormService.actualizarEstadoForm1(this.groupForm);
     });
+    this.sharedFormService.actualizarEstadoForm1(this.groupForm);
   }
 
   verificarLista(): boolean {

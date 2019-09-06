@@ -12,6 +12,7 @@ import { ProductoCanalService } from 'src/app/shared/services/producto-canal.ser
 import { ProductoCanalComponent } from 'src/app/modules/encuestas/components/producto-canal/producto-canal.component';
 import { Encuesta } from 'src/app/shared/models/encuesta';
 import { SharedFormService } from 'src/app/shared/services/shared-form.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-enc-producto-canal',
@@ -72,10 +73,12 @@ export class EncProductoCanalComponent implements OnInit {
 
   goBack() {
     let form1dirty: boolean;
+    let form1pristine: boolean;
     this.sharedFormService.form1Actual.subscribe(data => {
       form1dirty = data.dirty;
+      form1pristine = data.pristine;
     });
-    if (this.haGuardado) {
+    if (this.haGuardado  && form1pristine) {
       this.location.back();
     } else {
       if (form1dirty) {
@@ -93,11 +96,17 @@ export class EncProductoCanalComponent implements OnInit {
   }
 
   guardarEncuesta() {
+    let form1: FormGroup;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1 = data;
+      form1.markAsPristine({onlySelf:true});
+    });
     this.haGuardado = true;
     this.productoCanalService.guardarEncuesta(this.encuesta, this.posicionCodigo, this.lineaId).subscribe(
       response => console.log(response), err => console.log(err)
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
+    this.sharedFormService.actualizarEstadoForm1(form1);
   }
 }
 
