@@ -199,7 +199,7 @@ public class ReporteService implements ReporteServiceI {
 		Path currentRelativePath = Paths.get("");
 		String currentPath = currentRelativePath.toAbsolutePath().toString();
 		
-		List<String> alphabets = Arrays.asList(currentPath, "storage", "app", "reportes", "Reporte de empresa.xlsx");
+		List<String> alphabets = Arrays.asList(currentPath, "storage", "app", "reportes", "Reporte consolidado.xlsx");
 		String result = String.join(File.separator, alphabets);
 		
         SXSSFWorkbook wb = excelService.crearLibro();
@@ -208,7 +208,7 @@ public class ReporteService implements ReporteServiceI {
         List<Map<String,Object>> data = reporteRepository.reporteConsolidado(procesoId, areas, centros, estados);
         
         if (data == null || data.size() == 0) {
-        	data = reporteRepository.reporteEmpresasVacio();
+        	data = reporteRepository.reporteConsolidadoVacio();
         	excelService.crearCabecera(sh, 0, data);
             excelService.crearArchivo(wb, result);        	
     		return fileService.loadFileAsResource(result);

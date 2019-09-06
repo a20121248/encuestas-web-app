@@ -422,7 +422,34 @@ public class ReporteRepository {
         			 "       NULL EMPRESA,\n" +
         			 "       NULL EMPRESA_PORCENTAJE,\n" +
         			 "       NULL LINEA_EPS,\n" +
-        			 "       NULL LINEA_EPS_PORCENTAJE\n" +
+        			 "       NULL LINEA_EPS_PORCENTAJE,\n" +
+        			 "       NULL PONDERADO\n" +
+        			 "  FROM DUAL";
+        return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
+	}
+	
+	public List<Map<String,Object>> reporteConsolidadoVacio() {        
+        String sql = "SELECT NULL FECHA_DESCARGA,\n" + 
+        			 "       NULL PROCESO,\n" +
+        			 "       NULL MATRICULA,\n" +
+        			 "       NULL COLABORADOR,\n" +
+        			 "       NULL NRO_POSICION,\n" + 
+        			 "       NULL POSICION,\n" + 
+        			 "       NULL AREA,\n" +
+        			 "       NULL CECO_CODIGO,\n" + 
+        			 "       NULL CECO_NOMBRE,\n" + 
+        			 "       NULL PERFIL,\n" +
+        			 "       NULL PERFIL_TIPO,\n" +
+        			 "       NULL ETAPA_1,\n" +
+        			 "       NULL ETAPA_2,\n" +
+        			 "       NULL ETAPA_3,\n" +
+        			 "       NULL ETAPA_4,\n" +
+        			 "       NULL ESTADO_GLOBAL,\n" +
+        			 "       NULL ULTIMA_MODIFICACION\n," +        			 
+        			 "       NULL DIMENSION1_CODIGO,\n" +
+        			 "       NULL DIMENSION1,\n" +
+        			 "       NULL DIMENSION2_CODIGO,\n" +
+        			 "       NULL DIMENSION2,\n" +
         			 "       NULL PONDERADO\n" +
         			 "  FROM DUAL";
         return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
