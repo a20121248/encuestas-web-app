@@ -69,31 +69,6 @@ export class EncCentroComponent implements OnInit {
     this.titleService.setTitle('Encuestas | Centros de costos');
   }
 
-  // onChanges() {
-  //   let validForm1: boolean;
-  //   let validForm2: boolean;
-  //   let completeForm1: number;
-  //   this.sharedFormService.form1Actual
-  //     .subscribe(data => {
-  //       if(data == null) validForm1 = false;
-  //       else validForm1 = data.valid;
-  //     });
-  //   this.sharedFormService.form2Actual
-  //     .subscribe(data => {
-  //       if(data == null) validForm2 = false;
-  //       else validForm2 = data.valid;
-  //     });
-  //   this.sharedFormService.form1PorcentajeActual
-  //   .subscribe( data => {
-  //     completeForm1 = data;
-  //   });
-  //   console.log(validForm1 && validForm2 && completeForm1 == 100);
-  //   if(validForm1 && validForm2 && completeForm1 == 100){
-  //     if(this.btnGuardar != null) this.setButtonGuardar(true);
-  //   } else {
-  //     if(this.btnGuardar != null) this.setButtonGuardar(false);
-  //   }
-  // }
   estadoFormJustificacion(value: boolean) {
     this.estadoJustificacion = value;
     this.setButtonGuardar();
