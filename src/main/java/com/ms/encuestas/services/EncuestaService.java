@@ -132,13 +132,13 @@ public class EncuestaService implements EncuestaServiceI {
 	}
 
 	@Override
-	public EncuestaObjetoObjetos getProductoCanales(Long procesoId, String posicionCodigo, Long encuestaTipoId, Long lineaId) {
+	public EncuestaObjetoObjetos getProductoCanales(Long procesoId, String posicionCodigo, Long encuestaTipoId, Long perfilId, Long lineaId) {
 		if (!posicionRepository.exists(procesoId, posicionCodigo))
 			return null;
     	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId)) {
 			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);    		
     	}
-    	return encuestaRepository.getEncuestaProductoCanales(procesoId, posicionCodigo, encuestaTipoId, lineaId);
+    	return encuestaRepository.getEncuestaProductoCanales(procesoId, posicionCodigo, encuestaTipoId, perfilId, lineaId);
 	}
 
 	@Override
