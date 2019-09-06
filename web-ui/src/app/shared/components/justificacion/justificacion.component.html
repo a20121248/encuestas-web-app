@@ -11,7 +11,7 @@
   </mat-form-field>
 
   <mat-form-field *ngIf="justificacion && justificacion.id==5" class="mt-2">
-    <input matInput placeholder="Detalle de la justificación" [(ngModel)]="justificacion.detalle" required formControlName="detalleJust">
+    <input matInput maxlength="250" placeholder="Detalle de la justificación" [(ngModel)]="justificacion.detalle" required formControlName="detalleJust">
     <mat-error *ngIf="detalleJustControl.invalid && detalleJustControl.touched" >
       Escribir el detalle de la justificación.
     </mat-error>
