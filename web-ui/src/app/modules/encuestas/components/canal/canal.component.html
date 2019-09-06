@@ -20,7 +20,7 @@
                 <th mat-header-cell *matHeaderCellDef> PORCENTAJE </th>
                 <td mat-cell class="input-porcentaje" *matCellDef="let item">
                     <mat-form-field style="width: 40px;">
-                        <input type="number" matInput [(ngModel)]="item.porcentaje" [formControlName]="item.codigo">
+                        <input type="number" matInput max="100" min="0" [(ngModel)]="item.porcentaje" [formControlName]="item.codigo">
                         <span matSuffix>%</span>
                     </mat-form-field>
                     <mat-error *ngIf="validacionItemControl(item.codigo).hasError('negativo')" class="invalid">Valor
