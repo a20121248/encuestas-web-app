@@ -8,6 +8,7 @@ import { ModalCrearComponent } from '../modal-crear/modal-crear.component';
 import { ModalEditarComponent } from '../modal-editar/modal-editar.component';
 import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.component';
 import { MatTable } from '@angular/material/table';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-proceso',
@@ -28,6 +29,7 @@ export class ProcesoComponent implements OnInit {
   @ViewChild(MatTable, { static: false }) table: MatTable<any>;
 
   constructor(
+    public authService: AuthService,
     private procesoService: ProcesoService,
     public dialog: MatDialog
   ) {
@@ -44,10 +46,11 @@ export class ProcesoComponent implements OnInit {
   crear(): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.hasBackdrop = true;
-    dialogConfig.width = '400px';
+    dialogConfig.width = '450px';
     dialogConfig.data = {
       titulo: `Crear encuesta`,
-      estados: this.estados
+      estados: this.estados,
+      creador: this.authService.usuario
     };
     this.crearDialogRef = this.dialog.open(ModalCrearComponent, dialogConfig);
     this.crearDialogRef.afterClosed()
@@ -72,11 +75,12 @@ export class ProcesoComponent implements OnInit {
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.hasBackdrop = true;
-    dialogConfig.width = '400px';
+    dialogConfig.width = '450px';
     dialogConfig.data = {
       titulo: `Editar encuesta ${this.selectedProceso.codigo}`,
       estados: this.estados,
-      proceso: this.selectedProceso
+      proceso: this.selectedProceso,
+      creador: this.authService.usuario
     };
     this.editarDialogRef = this.dialog.open(ModalEditarComponent, dialogConfig);
     this.editarDialogRef.afterClosed()

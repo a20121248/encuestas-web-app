@@ -43,6 +43,7 @@ export class ModalCrearComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       codigo: '',
       nombre: '',
+      creador: this.data.creador.nombre,
       fechaInicio: '',
       fechaCierre: ''
     });
