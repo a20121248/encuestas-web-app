@@ -36,9 +36,9 @@ export class ProductoCanalService {
     console.log(error);
   }
 
-  obtenerEncuesta(posicionCodigo: string, lineaId: string): Observable<Encuesta> {
+  obtenerEncuesta(posicionCodigo: string, perfilId: number, lineaId: string): Observable<Encuesta> {
     const url1 = `${this.urlServer.api}procesos/${this.authService.proceso.id}/colaboradores/${posicionCodigo}/`;
-    const url2 = `${url1}encuesta/producto-canal/${lineaId}`;
+    const url2 = `${url1}encuesta/producto-canal/${perfilId}/${lineaId}`;
     return this.http.get<Encuesta>(url2);
   }
 
