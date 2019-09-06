@@ -151,9 +151,9 @@ export class CentroComponent implements OnInit {
       } else {
         this.sendEstado(false);
       }
-      this.sharedFormService.actualizarEstadoForm1(this.groupForm);
-      this.sharedFormService.actualizarPorcentajeForm1(this.porcTotal);
     });
+    this.sharedFormService.actualizarEstadoForm1(this.groupForm);
+    this.sharedFormService.actualizarPorcentajeForm1(this.porcTotal);
   }
 
   verificarLista(): boolean {
