@@ -5,6 +5,7 @@ import { Centro } from 'src/app/shared/models/centro';
 import * as fileSaver from 'file-saver';
 import { ReporteService } from 'src/app/shared/services/reporte.service';
 import { Tipo } from 'src/app/shared/models/tipo';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-reporte-consolidado',
@@ -32,6 +33,10 @@ export class ReporteConsolidadoComponent implements OnInit {
   }
 
   descargar() {
+    if (this.selectedProceso == null || this.selectedAreas.length == 0 || this.selectedCentros.length == 0 || this.selectedEstados.length == 0) {
+     swal.fire('Descargar Reporte', 'Por favor, seleccione los filtros.', 'error');
+     return;
+   }
     const filename = 'Reporte consolidado.xlsx';
     const filtro = {
       proceso: this.selectedProceso,

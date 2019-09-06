@@ -62,8 +62,8 @@ export class JustificacionComponent implements OnInit {
     this.myGroup.valueChanges
     .subscribe(data =>{
       this.sendEstado(this.myGroup.valid);
-      this.sharedFormService.actualizarEstadoForm2(this.myGroup);
     });
+    this.sharedFormService.actualizarEstadoForm2(this.myGroup);
   }
 
   onChangeOptions():void {
