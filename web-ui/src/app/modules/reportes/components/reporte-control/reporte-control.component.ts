@@ -7,6 +7,7 @@ import { ReporteService } from 'src/app/shared/services/reporte.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { FormControl } from '@angular/forms';
 import { Tipo } from 'src/app/shared/models/tipo';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-reporte-control',
@@ -34,6 +35,10 @@ export class ReporteControlComponent implements OnInit {
   }
 
   descargar() {
+    if (this.selectedProceso == null || this.selectedAreas.length == 0 || this.selectedCentros.length == 0 || this.selectedEstados.length == 0) {
+      swal.fire('Descargar Reporte', 'Por favor, seleccione los filtros.', 'error');
+      return;
+    }
     const filename = 'Reporte de control.xlsx';
     const filtro = {
       proceso: this.selectedProceso,
@@ -41,6 +46,7 @@ export class ReporteControlComponent implements OnInit {
       centros: this.selectedCentros,
       estados: this.selectedEstados
     };
+
     this.reporteService.generarReporteControl(filtro).subscribe(response => {
       fileSaver.saveAs(new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
     }, err => {

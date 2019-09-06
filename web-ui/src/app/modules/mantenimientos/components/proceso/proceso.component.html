@@ -23,24 +23,24 @@
         <td mat-cell *matCellDef="let proceso">{{proceso.usuario.nombreCompleto}}</td>
       </ng-container>
       <ng-container matColumnDef="activo">
-        <th mat-header-cell *matHeaderCellDef>ACTIVO</th>
-        <td mat-cell *matCellDef="let proceso">{{proceso.activo ? 'SÍ' : 'NO'}}</td>
+        <th mat-header-cell *matHeaderCellDef>ESTADO</th>
+        <td mat-cell *matCellDef="let proceso">{{proceso.activo ? 'ABIERTA' : 'CERRADA'}}</td>
       </ng-container>
       <ng-container matColumnDef="fechaInicio">
         <th mat-header-cell *matHeaderCellDef>FECHA DE INICIO</th>
-        <td mat-cell *matCellDef="let proceso">{{proceso.fechaInicio}}</td>
+        <td mat-cell *matCellDef="let proceso">{{proceso.fechaInicio | date:'dd-MM-yyyy'}}</td>
       </ng-container>
       <ng-container matColumnDef="fechaCierre">
         <th mat-header-cell *matHeaderCellDef>FECHA DE CIERRE</th>
-        <td mat-cell *matCellDef="let proceso">{{proceso.fechaCierre}}</td>
+        <td mat-cell *matCellDef="let proceso">{{proceso.fechaCierre | date:'dd-MM-yyyy'}}</td>
       </ng-container>
       <ng-container matColumnDef="fechaCreacion">
         <th mat-header-cell *matHeaderCellDef>FECHA DE CREACIÓN</th>
-        <td mat-cell *matCellDef="let proceso">{{proceso.fechaCreacion}}</td>
+        <td mat-cell *matCellDef="let proceso">{{proceso.fechaCreacion | date:'dd-MM-yyyy'}}</td>
       </ng-container>
       <ng-container matColumnDef="fechaActualizacion">
         <th mat-header-cell *matHeaderCellDef>FECHA DE ACTUALIZACIÓN</th>
-        <td mat-cell *matCellDef="let proceso">{{proceso.fechaActualizacion}}</td>
+        <td mat-cell *matCellDef="let proceso">{{proceso.fechaActualizacion | date:'dd-MM-yyyy'}}</td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="dcProcesos"></tr>
       <tr mat-row *matRowDef="let row; columns: dcProcesos; let i = index" [class.selected-row]="row === selectedProceso" (click)="setSelected(row, i)"></tr>

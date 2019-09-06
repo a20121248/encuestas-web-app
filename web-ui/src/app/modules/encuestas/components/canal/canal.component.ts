@@ -42,7 +42,7 @@ export class CanalComponent implements OnInit {
 
   getTotalPorcentaje() {
     if (this.lineaSeleccionada.lstObjetos != null) {
-      this.porcTotal = this.lineaSeleccionada.lstObjetos.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+      this.porcTotal = Math.round(this.lineaSeleccionada.lstObjetos.map(t => 100*t.porcentaje).reduce((acc, value) => acc + value, 0))/100;
       return this.porcTotal;
     }
     else {

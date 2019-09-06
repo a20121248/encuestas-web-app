@@ -21,7 +21,7 @@
   </small>
 
   <mat-form-field *ngIf="justificacion" class="mt-5">
-    <textarea matInput placeholder="Observaciones" [(ngModel)]="observaciones" cdkTextareaAutosize
+    <textarea matInput placeholder="Observaciones" [(ngModel)]="observaciones" cdkTextareaAutosize maxlength="250"
       cdkAutosizeMinRows="8" cdkAutosizeMaxRows="14"  formControlName="obs"></textarea>
       <mat-error *ngIf="obsJustControl.invalid && obsJustControl.touched" >
         Escribir observaciones de la justificación.
