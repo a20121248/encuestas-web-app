@@ -99,9 +99,9 @@ export class LineaCanalComponent implements OnInit {
         completo = false;
         this.sendEstado(false);
       }
-      this.sharedFormService.actualizarEstadoCompletoForm1(completo);
-      this.sharedFormService.actualizarEstadoForm1(this.groupForm);
     });
+    this.sharedFormService.actualizarEstadoCompletoForm1(completo);
+    this.sharedFormService.actualizarEstadoForm1(this.groupForm);
   }
 
   validatePorcentajesCompleto():boolean{

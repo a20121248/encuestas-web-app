@@ -63,9 +63,9 @@ export class CanalComponent implements OnInit {
       } else {
         this.sendEstado(false);
       }
-      this.sharedFormService.actualizarEstadoForm3(this.groupForm);
-      this.sharedFormService.actualizarPorcentajeForm3(this.porcTotal);
     });
+    this.sharedFormService.actualizarEstadoForm3(this.groupForm);
+    this.sharedFormService.actualizarPorcentajeForm3(this.porcTotal);
   }
 
   verificarLista(): boolean {
@@ -82,28 +82,40 @@ export class CanalComponent implements OnInit {
   }
 
   revisarEdicionFormulario(lineaID: number, canalID: number){
-    let form1Valid:boolean;
-    let form1Dirty:boolean;
-    let form2Valid:boolean;
-    let form2Dirty:boolean;
-
+    let form1valid:boolean;
+    let form1dirty: boolean;
+    let form1pristine: boolean;
+    let form2valid:boolean;
+    let form2dirty: boolean;
+    let form2pristine: boolean;
+    let form3dirty: boolean;
+    let form3pristine: boolean;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1dirty = data.dirty;
+      form1pristine = data.pristine;
+      form1valid = data.valid;
+      console.log(data);
+    });
+    this.sharedFormService.form2Actual.subscribe(data => {
+      form2dirty = data.dirty;
+      form2pristine = data.pristine;
+      form2valid = data.valid;
+      console.log(data);
+      
+    });
+    this.sharedFormService.form3Actual.subscribe(data => {
+      form3dirty = data.dirty;
+      form3pristine = data.pristine;
+      console.log(data);
+    });
     this.url = lineaID+"/"+canalID+"/producto-subcanal";
     console.log(this.url);
-    this.sharedFormService.form1Actual.subscribe( data => {
-      form1Valid = data.valid;
-      form1Dirty = data.dirty;
-    } );
-
-    this.sharedFormService.form2Actual.subscribe( data => {
-      form2Valid = data.valid;
-      form2Dirty = data.dirty;
-    } );
     // Valida si se haGuardado y las formas son validas, or si no se ha cambiado alguna forma y si son validas
-    if((this.haGuardado && this.groupForm.valid && form1Valid && form2Valid) || (this.groupForm.valid && !this.groupForm.dirty && form1Valid && !form1Dirty && form2Valid && !form2Dirty)){
+    if((this.haGuardado && form1pristine && form2pristine && form3pristine) || (this.groupForm.valid && !form3dirty && form1valid && !form1dirty && form2valid && !form2dirty)){
       this.router.navigate([this.url], { relativeTo: this.route });
     } else {
       // Valida si alguna de las formas ha sido cambiada
-      if((this.groupForm.valid && this.groupForm.dirty) || (form1Valid && form1Dirty)  || (form2Valid && form2Dirty)){
+      if((form1dirty) || (form2dirty)  || (form3dirty)){
         swal.fire({
           title: 'Cambios detectados',
           text: "Primero guarde antes de continuar.",
