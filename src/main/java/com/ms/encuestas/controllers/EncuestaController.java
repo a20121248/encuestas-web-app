@@ -114,11 +114,11 @@ public class EncuestaController {
 		this.encuestaService.saveProductoSubcanales(encuesta, procesoId, posicionCodigo, lineaId, canalId, encuestaTipoId);
 	}
 	
-	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal/{lineaId}")
+	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal/{perfilId}/{lineaId}")
 	@Transactional(readOnly = true)
-	public EncuestaObjetoObjetos getProductoCanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId) {
+	public EncuestaObjetoObjetos getProductoCanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId, @PathVariable Long lineaId) {
 		Long encuestaTipoId = new Long(6); // 6: Producto y Canal
-		return encuestaService.getProductoCanales(procesoId, posicionCodigo, encuestaTipoId, lineaId);
+		return encuestaService.getProductoCanales(procesoId, posicionCodigo, encuestaTipoId, perfilId, lineaId);
 	}
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal/{lineaId}")

@@ -2,3 +2,15 @@ mat-dialog-actions {
   padding: 15px 0 20px;
   place-content:flex-end;
 }
+
+mat-dialog-content {
+  div {
+    margin: 5px 0;
+  }
+  mat-radio-group {
+    margin: 5.5px 0 8.5px;
+    mat-radio-button + mat-radio-button {
+      margin-left: 40px;
+    }
+  }
+}

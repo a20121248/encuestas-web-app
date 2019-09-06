@@ -1,6 +1,6 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, APP_INITIALIZER, LOCALE_ID } from '@angular/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -20,7 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -86,6 +86,10 @@ import { ModalEliminarComponent } from './modules/mantenimientos/components/moda
 import { Page404Component } from './shared/components/error-pages/page404/page404.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { RolGuard } from './shared/guards/rol.guard';
+import { registerLocaleData } from '@angular/common';
+import localeES from '@angular/common/locales/es';
+
+registerLocaleData(localeES, 'es');
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -226,7 +230,7 @@ export function initializeApp(appConfig: AppConfig) {
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
     MatDatepickerModule,
-    MatNativeDateModule,
+    MatMomentDateModule,
     MatStepperModule,
     MatBadgeModule,
     MatRadioModule,
@@ -244,6 +248,7 @@ export function initializeApp(appConfig: AppConfig) {
       useFactory: initializeApp,
       deps: [AppConfig], multi: true
     },
+    { provide: LOCALE_ID, useValue: 'es' },
     MatDatepickerModule
   ],
   entryComponents: [

@@ -1,23 +1,41 @@
 <form class="pacifico-page" [formGroup]="formGroup" (ngSubmit)="submit()">
   <h1 mat-dialog-title>{{ titulo }}</h1>
   <mat-dialog-content fxLayout="column">
-    <mat-form-field>
-      <mat-label>Código</mat-label>
-      <input matInput formControlName="codigo">
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <mat-form-field fxFlex="20">
+        <mat-label>Código</mat-label>
+        <input matInput formControlName="codigo">
+      </mat-form-field>
+      <mat-form-field fxFlex="70">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre">
+      </mat-form-field>
+    </div>
+    <mat-form-field fxFlex>
+      <mat-label>Creador</mat-label>
+      <input matInput formControlName="creador" readonly>
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="nombre">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Fecha de cierre</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="fechaCierre" readonly>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+    <mat-radio-group aria-label="Seleccionar una opción">
+      <mat-radio-button value="1">Abierta</mat-radio-button>
+      <mat-radio-button value="2">Cerrada</mat-radio-button>
+    </mat-radio-group>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <mat-form-field fxFlex="45">
+        <mat-label>Fecha de inicio</mat-label>
+        <input matInput [matDatepicker]="fechaInicio" formControlName="fechaInicio" readonly>
+        <mat-datepicker-toggle matSuffix [for]="fechaInicio"></mat-datepicker-toggle>
+        <mat-datepicker #fechaInicio></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field fxFlex="45">
+        <mat-label>Fecha de cierre</mat-label>
+        <input matInput [matDatepicker]="fechaCierre" formControlName="fechaCierre" readonly>
+        <mat-datepicker-toggle matSuffix [for]="fechaCierre"></mat-datepicker-toggle>
+        <mat-datepicker #fechaCierre></mat-datepicker>
+      </mat-form-field>
+    </div>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-raised-button mat-dialog-close><i class="material-icons">reply</i>Cancelar</button>
-    <button mat-raised-button color="accent" type="submit"><i class="material-icons">add</i>Crear</button>
+    <button mat-raised-button color="accent" type="submit"><i class="material-icons">save</i>Crear</button>
   </mat-dialog-actions>
 </form>

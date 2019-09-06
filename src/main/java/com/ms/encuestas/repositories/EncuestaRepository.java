@@ -21,7 +21,6 @@ import com.ms.encuestas.models.EncuestaObjetoObjetos;
 import com.ms.encuestas.models.Justificacion;
 import com.ms.encuestas.models.Objeto;
 import com.ms.encuestas.models.ObjetoObjetos;
-import com.ms.encuestas.services.UsuarioService;
 
 @CrossOrigin(origins={})
 @Repository
@@ -238,7 +237,7 @@ public class EncuestaRepository {
 		paramMap.put("perfil_id", perfilId);
 		EncuestaObjeto encuesta = plantilla.queryForObject(sql, paramMap, new EncuestaObjetoMapper());
 		
-		sql = "SELECT DISTINCT B.id id,\n" + 
+		sql = "SELECT DISTINCT B.id,\n" + 
 		      "       B.nombre,\n" +
 		      "       B.codigo,\n" +
 		      "       B.fecha_creacion,\n" +
@@ -444,44 +443,47 @@ public class EncuestaRepository {
 		}
 	}
 	
-	public EncuestaObjetoObjetos getEncuestaProductoCanales(Long procesoId, String posicionCodigo, Long encuestaTipoId, Long lineaId) {			
-		String sql = "SELECT A.justificacion_id,\n" +
-			         "       B.nombre justificacion_nombre,\n" +
-			         "       A.justificacion_detalle,\n" +
-			         "       B.fecha_creacion justificacion_fecha_cre,\n" +
-			         "       B.fecha_actualizacion justificacion_fecha_act,\n" + 
-			         "       A.observaciones\n" +
-			         "  FROM encuestas A\n" +
-			         "  LEFT JOIN justificaciones B ON A.justificacion_id=B.id\n" + 
-			         " WHERE proceso_id=:proceso_id\n" +
-			         "   AND posicion_codigo=:posicion_codigo\n" + 
-			         "   AND encuesta_tipo_id=:encuesta_tipo_id";
-		Map<String, Object> paramMap = new HashMap<String, Object>();		
-		paramMap.put("proceso_id", procesoId);
-		paramMap.put("posicion_codigo", posicionCodigo);
-		paramMap.put("encuesta_tipo_id", encuestaTipoId);
-		paramMap.put("linea_id", lineaId);
-		EncuestaObjetoObjetos encuesta = plantilla.queryForObject(sql, paramMap, new EncuestaObjetoObjetosMapper());
+	public EncuestaObjetoObjetos getEncuestaProductoCanales(Long procesoId, String posicionCodigo, Long encuestaTipoId, Long perfilId, Long lineaId) {			
+	    String sql = "SELECT A.justificacion_id,\n" +
+	               "       B.nombre justificacion_nombre,\n" +
+	               "       A.justificacion_detalle,\n" +
+	               "       B.fecha_creacion justificacion_fecha_cre,\n" +
+	               "       B.fecha_actualizacion justificacion_fecha_act,\n" + 
+	               "       A.observaciones\n" +
+	               "  FROM encuestas A\n" +
+	               "  LEFT JOIN justificaciones B ON A.justificacion_id=B.id\n" + 
+	               " WHERE proceso_id=:proceso_id\n" +
+	               "   AND posicion_codigo=:posicion_codigo\n" + 
+	               "   AND encuesta_tipo_id=:encuesta_tipo_id";
+	    Map<String, Object> paramMap = new HashMap<String, Object>();   
+	    paramMap.put("proceso_id", procesoId);
+	    paramMap.put("posicion_codigo", posicionCodigo);
+	    paramMap.put("encuesta_tipo_id", encuestaTipoId);
+	    paramMap.put("linea_id", lineaId);
+	    paramMap.put("perfil_id", perfilId);
+	    EncuestaObjetoObjetos encuesta = plantilla.queryForObject(sql, paramMap, new EncuestaObjetoObjetosMapper());
 		
-		sql = "SELECT A1.id linea_id,\n" + 
-			  "       A1.codigo linea_codigo,\n" + 
-			  "       A1.nombre linea_nombre,\n" + 
-			  "       0 linea_porcentaje,\n" + 
-			  "       B1.id canal_id,\n" + 
-			  "       B1.codigo canal_codigo,\n" + 
-			  "       B1.nombre canal_nombre,\n" + 
-			  "       NVL(C.porcentaje,0)*100 canal_porcentaje\n" + 
-			  "  FROM objetos A1\n" + 
-			  "  JOIN objetos B1 ON 1=1\n" +
-			  "  LEFT JOIN encuesta_producto_canal C\n" + 
-			  "    ON C.proceso_id=:proceso_id\n" +
-			  "   AND C.posicion_codigo=:posicion_codigo\n" +
-			  "   AND C.producto_id=A1.id\n" + 
-			  "   AND C.canal_id=B1.id\n" +
-			  " WHERE A1.objeto_tipo_id=3\n" + // productos
-			  "   AND A1.padre_objeto_id=:linea_id\n" +
-			  "   AND B1.objeto_tipo_id=2\n" + // canales 
-			  " ORDER BY A1.id,B1.id";
+	    sql = "SELECT B1.id linea_id,\n" + 
+	          "       B1.codigo linea_codigo,\n" + 
+	          "       B1.nombre linea_nombre,\n" + 
+	          "       0 linea_porcentaje,\n" + 
+	          "       A2.id canal_id,\n" + 
+	          "       A2.codigo canal_codigo,\n" + 
+	          "       A2.nombre canal_nombre,\n" + 
+	          "       NVL(C1.porcentaje,0)*100 canal_porcentaje\n" + 
+	          "  FROM perfil_linea_canal A1\n" + 
+	          "  JOIN objetos A2\n" + 
+	          "    ON A2.id=A1.canal_id\n" + 
+	          "  JOIN objetos B1\n" + 
+	          "    ON B1.padre_objeto_id=A1.linea_id\n" + 
+	          "  LEFT JOIN encuesta_producto_canal C1\n" + 
+	          "    ON C1.proceso_id=:proceso_id\n" + 
+	          "   AND C1.posicion_codigo=:posicion_codigo\n" + 
+	          "   AND C1.producto_id=B1.id\n" + 
+	          "   AND C1.canal_id=A2.id\n" + 
+	          " WHERE A1.linea_id=:linea_id\n" + 
+	          "   AND A1.perfil_id=:perfil_id\n" + 
+	          " ORDER BY B1.nombre,A2.nombre";
 	   	encuesta.setLstItems(plantilla.query(sql, paramMap, new EncuestaLineaCanalesExtractor()));		
 		return encuesta;
 	}
