@@ -48,7 +48,9 @@ export class EncProductoCanalComponent implements OnInit {
     this.lineaId = this.activatedRoute.snapshot.paramMap.get('lineaId');
     this.usuarioService.getUsuarioByPosicionCodigo(this.posicionCodigo).subscribe(usuario => {
       this.usuarioSeleccionado = usuario;
-      this.productoCanalService.obtenerEncuesta(this.posicionCodigo, this.lineaId).subscribe(encuesta => {
+      this.productoCanalService.obtenerEncuesta(this.posicionCodigo,
+                                                this.usuarioSeleccionado.posicion.perfil.id,
+                                                this.lineaId).subscribe(encuesta => {
         this.encuesta = encuesta;
       });
     });
