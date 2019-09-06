@@ -94,19 +94,15 @@ export class CanalComponent implements OnInit {
       form1dirty = data.dirty;
       form1pristine = data.pristine;
       form1valid = data.valid;
-      console.log(data);
     });
     this.sharedFormService.form2Actual.subscribe(data => {
       form2dirty = data.dirty;
       form2pristine = data.pristine;
       form2valid = data.valid;
-      console.log(data);
-      
     });
     this.sharedFormService.form3Actual.subscribe(data => {
       form3dirty = data.dirty;
       form3pristine = data.pristine;
-      console.log(data);
     });
     this.url = lineaID+"/"+canalID+"/producto-subcanal";
     console.log(this.url);
