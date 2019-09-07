@@ -145,6 +145,7 @@ public class PosicionService implements PosicionServiceI {
         	XSSFSheet hoja = libro.getSheet("DATOS_POSICIONES");
         	if (hoja == null) {
         		logger.error("No se pudo procesar el Excel porque la hoja DATOS_POSICIONES no existe.");
+        		logger.info("======================FIN DE CARGA DE DATOS DE LAS POSICIONES====================================");
         		return;
         	}
         	
@@ -162,6 +163,7 @@ public class PosicionService implements PosicionServiceI {
 	   			Iterator<Cell> celdas = filas.next().cellIterator();
 	   			
 	   			String posicionCodigo = dataFormatter.formatCellValue(celdas.next());
+	   			if (posicionCodigo.equals("")) break;
 	   			String posicionNombre = dataFormatter.formatCellValue(celdas.next());
 	   			Posicion posicion = posiciones.stream().filter(item -> posicionCodigo.equals(item.getCodigo())).findAny().orElse(null);
 	   			if (posicion == null) {
@@ -328,6 +330,7 @@ public class PosicionService implements PosicionServiceI {
         	XSSFSheet hoja = libro.getSheet("POSICIONES");
         	if (hoja == null) {
 				logger.error("No se pudo procesar el Excel porque la hoja POSICIONES no existe.");
+				logger.info("======================FIN DE CARGA DE POSICIONES====================================");
 				return;
 			}
            
@@ -345,6 +348,7 @@ public class PosicionService implements PosicionServiceI {
 	   			Iterator<Cell> celdas = filas.next().cellIterator();
         	   
 	   			String codigo = dataFormatter.formatCellValue(celdas.next());
+	   			if (codigo.equals("")) break;	   			
 	   			String nombre = dataFormatter.formatCellValue(celdas.next());
 	   			String accion = dataFormatter.formatCellValue(celdas.next());
                

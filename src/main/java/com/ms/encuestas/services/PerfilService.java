@@ -127,6 +127,7 @@ public class PerfilService implements PerfilServiceI {
            XSSFSheet hoja = libro.getSheet("PERFILES");
 			if (hoja == null) {
 				logger.error("No se pudo procesar el Excel porque la hoja PERFILES no existe.");
+				logger.info("======================FIN CARGA DE PERFILES====================================");
 				return;
 			}
 			
@@ -144,6 +145,7 @@ public class PerfilService implements PerfilServiceI {
         	   Iterator<Cell> celdas = filas.next().cellIterator();
         	   
                String codigo = dataFormatter.formatCellValue(celdas.next());
+               if (codigo.equals("")) break;
                String nombre = dataFormatter.formatCellValue(celdas.next());
                String tipoNombre = dataFormatter.formatCellValue(celdas.next());
                Tipo tipo = perfilTipos.stream().filter(item -> tipoNombre.equals(item.getNombre())).findAny().orElse(null);
@@ -172,14 +174,17 @@ public class PerfilService implements PerfilServiceI {
                 		   logger.error(String.format("No se encontró una hoja con nombre '%s'. No se puede crear el perfil.",codigo));
                 	   } else {                		   
                 		   perfilId = perfilRepository.insert(perfil);
+                		   int cantRegistros = -1;
                 		   if (tipoNombre.equals("STAFF")) {
                 			   List<Centro> lstCentros = processExcelLstCentros(codigo, perfilId, hojaDetalle.iterator(), centros);
                 			   perfilRepository.insertLstCentros(perfilId, lstCentros);
+                			   cantRegistros = lstCentros.size();
                 		   } else {
                 			   List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfilId, hojaDetalle.iterator(), lineas, canales);
                 			   perfilRepository.insertLstLineasCanales(perfilId, lstLineasCanales);
+                			   cantRegistros = lstLineasCanales.size();
                 		   }
-                		   logger.info(String.format("Se creó el perfil '%s'.", codigo));
+                		   logger.info(String.format("Se creó el perfil '%s' con tipo '%s' con %d registros.", codigo, tipoNombre, cantRegistros));
                 	   }
             	   }
                } else if (accion.equals("EDITAR")) {

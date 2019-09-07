@@ -18,6 +18,7 @@ public class ProcesoMapper implements RowMapper<Proceso> {
 		proceso.setId(rs.getLong("id"));
 		proceso.setCodigo(rs.getString("codigo"));
 		proceso.setNombre(rs.getString("nombre"));
+		proceso.setActivo(rs.getInt("activo")==1);
 		proceso.setFechaInicio(rs.getDate("fecha_inicio"));
 		proceso.setFechaCierre(rs.getDate("fecha_cierre"));
 		proceso.setFechaCreacion(rs.getDate("fecha_creacion"));

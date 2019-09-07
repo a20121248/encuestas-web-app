@@ -96,6 +96,7 @@ public class CentroService implements CentroServiceI {
         	XSSFSheet hoja = libro.getSheet("CENTROS");
         	if (hoja == null) {
 				logger.error("No se pudo procesar el Excel porque la hoja CENTROS no existe.");
+				logger.info("======================FIN DE CARGA DE CENTROS DE COSTOS====================================");
 				return;
 			}
 
@@ -113,6 +114,7 @@ public class CentroService implements CentroServiceI {
         	   	Iterator<Cell> celdas = filas.next().cellIterator();
         	   
                	String codigo = dataFormatter.formatCellValue(celdas.next());
+               	if (codigo.equals("")) break;
                	String nombre = dataFormatter.formatCellValue(celdas.next());
                	String tipoNombre = dataFormatter.formatCellValue(celdas.next());
                	Tipo tipo = centroTipos.stream().filter(item -> tipoNombre.equals(item.getNombre())).findAny().orElse(null);
@@ -159,7 +161,7 @@ public class CentroService implements CentroServiceI {
         } catch (IOException e) {
            	logger.error(e.getMessage());
        	}
-        logger.info("======================INICIANDO CARGA DE CENTROS DE COSTOS====================================");
+        logger.info("======================FIN DE CARGA DE CENTROS DE COSTOS====================================");
 	}
 	
 	@Override

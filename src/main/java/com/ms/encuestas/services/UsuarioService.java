@@ -213,6 +213,7 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
         	XSSFSheet hoja = libro.getSheet("COLABORADORES");
 			if (hoja == null) {
 				logger.error("No se pudo procesar el Excel porque la hoja COLABORADORES no existe.");
+				logger.info("======================FIN DE CARGA DE COLABORADORES====================================");
 				return;
 			}
            
@@ -230,6 +231,7 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	   			Iterator<Cell> celdas = filas.next().cellIterator();
         	   
 	   			String codigo = dataFormatter.formatCellValue(celdas.next());
+	   			if (codigo.equals("")) break;
 	   			String usuarioVida = dataFormatter.formatCellValue(celdas.next());
 	   			String usuarioGenerales = dataFormatter.formatCellValue(celdas.next());
 	   			String nombreCompleto = dataFormatter.formatCellValue(celdas.next());

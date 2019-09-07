@@ -116,6 +116,7 @@ public class AreaService implements AreaServiceI {
         	XSSFSheet hoja = libro.getSheet("AREAS");
         	if (hoja == null) {
         		logger.error("No se pudo procesar el Excel porque la hoja AREAS no existe.");
+        		logger.info("======================FIN DE CARGA DE ÁREAS====================================");
         		return;
         	}
         	
