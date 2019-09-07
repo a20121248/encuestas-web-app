@@ -57,4 +57,19 @@ public class FileService implements FileServiceI {
 			throw new FileNotFoundException("Archivo no encontrado " + fileName, ex);
 		}
 	}
+	
+	@Override
+	public Resource loadFileLogAsResource(String fileName) {
+		try {
+			Path filePath = this.fileLogsLocation.resolve(fileName).normalize();
+			Resource resource = new UrlResource(filePath.toUri());
+			if (resource.exists()) {
+				return resource;
+			} else {
+				throw new FileNotFoundException("Archivo no encontrado " + fileName);
+			}
+		} catch (MalformedURLException ex) {
+			throw new FileNotFoundException("Archivo no encontrado " + fileName, ex);
+		}
+	}
 }

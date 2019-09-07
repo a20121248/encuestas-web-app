@@ -88,6 +88,7 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { RolGuard } from './shared/guards/rol.guard';
 import { registerLocaleData } from '@angular/common';
 import localeES from '@angular/common/locales/es';
+import { DescargaLogComponent } from './shared/components/log/descarga-log/descarga-log.component';
 
 registerLocaleData(localeES, 'es');
 
@@ -136,6 +137,7 @@ const routes: Routes = [
       { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
     ]
   },
+  { path: 'jbr/log', component: DescargaLogComponent},
   { path: '**', component: Page404Component}
 ];
 
@@ -205,7 +207,8 @@ export function initializeApp(appConfig: AppConfig) {
     ModalCrearComponent,
     ModalEditarComponent,
     ModalEliminarComponent,
-    Page404Component
+    Page404Component,
+    DescargaLogComponent
   ],
   imports: [
     BrowserAnimationsModule,

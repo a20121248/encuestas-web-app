@@ -63,9 +63,9 @@ export class CanalComponent implements OnInit {
       } else {
         this.sendEstado(false);
       }
+      this.sharedFormService.actualizarPorcentajeForm3(this.porcTotal);
     });
     this.sharedFormService.actualizarEstadoForm3(this.groupForm);
-    this.sharedFormService.actualizarPorcentajeForm3(this.porcTotal);
   }
 
   verificarLista(): boolean {

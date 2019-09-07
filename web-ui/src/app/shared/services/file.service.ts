@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppConfig } from './app.config';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,31 +10,15 @@ import { AppConfig } from './app.config';
 export class FileService {
   protected urlServer = AppConfig.settings.urlServer;
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(
+    public authService: AuthService,
+    private http: HttpClient) { }
 
-  downloadFile(): Observable<any> {
-    const url = `${this.urlServer.api}procesos/2/reportes/control`;
-
-    /*return this.http.get(`${this.urlServer.api}convertFlatFileToExcel.do`,{
-      headers : {
-          'Content-Type' : undefined,
-          'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-      }});*/
-
+  descargarLogControl(): Observable<any> {
+    const url = `${this.urlServer.api}jbr-log/control`;
     return this.http.get(url, {
-      responseType: 'blob'
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
     });
-/*
-    let headers = new HttpHeaders();
-    headers = headers.append('Accept', 'text/csv; charset=utf-8');
-
-    return this.http.get('/api/procesos/2/reportes/control/' + fileName, {
-      headers: headers,
-      observe: 'response',
-      responseType: 'text'
-    });
-*/
   }
-
 }

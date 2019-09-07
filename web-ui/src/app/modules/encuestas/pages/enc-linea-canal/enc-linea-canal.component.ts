@@ -137,16 +137,13 @@ export class EncLineaCanalComponent implements OnInit {
   }
 
   showCanalesByLinea(objeto: ObjetoObjetos) {
-    if(objeto.objeto.porcentaje==0){
-      this.lineaSeleccionada = null;
-      this.porcentajePadre = false;
-      // this.setButtonGuardar();
-    } else {
+    if(objeto.objeto.porcentaje>0){
       this.lineaSeleccionada = objeto;
       this.porcentajePadre = true;
-      // this.setButtonGuardar();
+    } else {
+      this.lineaSeleccionada = null;
+      this.porcentajePadre = false;
     }
-
   }
 
   goBack() {
