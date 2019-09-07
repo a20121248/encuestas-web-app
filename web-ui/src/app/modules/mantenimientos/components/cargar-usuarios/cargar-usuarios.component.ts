@@ -79,6 +79,7 @@ export class CargarUsuariosComponent implements OnInit, OnDestroy {
           this.tamanhoCargado = res.porcentaje * this.tamanhoTotal;
         }
       }, (err) => {
+        console.log(err);
         this.error = err;
       }, () => {
         this.obtenerCantidad();
