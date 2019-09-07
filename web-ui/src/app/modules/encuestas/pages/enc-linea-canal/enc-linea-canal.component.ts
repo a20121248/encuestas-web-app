@@ -137,7 +137,6 @@ export class EncLineaCanalComponent implements OnInit {
   }
 
   showCanalesByLinea(objeto: ObjetoObjetos) {
-    console.log(objeto);
     if(objeto.objeto.porcentaje>0){
       this.lineaSeleccionada = objeto;
       this.porcentajePadre = true;
@@ -145,7 +144,6 @@ export class EncLineaCanalComponent implements OnInit {
       this.lineaSeleccionada = null;
       this.porcentajePadre = false;
     }
-
   }
 
   goBack() {
