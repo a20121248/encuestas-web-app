@@ -159,7 +159,7 @@ public class UsuarioController {
 	@ResponseStatus(HttpStatus.OK)
 	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
 		try {
-			log.info(String.format("Leyendo el archivo ", file.getOriginalFilename()));
+			log.info(String.format("Leyendo el archivo '%s'.", file.getOriginalFilename()));
 			this.usuarioService.processExcel(file.getInputStream());
 		} catch (IOException e) {
 			log.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
