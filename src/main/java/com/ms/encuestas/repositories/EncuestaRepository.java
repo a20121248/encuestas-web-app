@@ -42,6 +42,10 @@ public class EncuestaRepository {
 		             "   AND posicion_codigo=:posicion_codigo\n" +
 		             "   AND encuesta_tipo_id=:encuesta_tipo_id";
 		
+		logger.info("proceso_id=" + procesoId);
+		logger.info("posicion_codigo=" + posicionCodigo);
+		logger.info("encuesta_tipo_id=" + encuestaTipoId);
+		
 		return plantilla.queryForObject(sql, paramMap, Long.class) == 1;
 	}
 	
@@ -58,7 +62,16 @@ public class EncuestaRepository {
 		paramMap.put("observaciones", observaciones);
 		Date fecha = new Date();
 		paramMap.put("fecha_creacion", fecha);
-		paramMap.put("fecha_actualizacion", fecha);        
+		paramMap.put("fecha_actualizacion", fecha);
+		
+		logger.info("proceso_id=" + procesoId);
+		logger.info("encuesta_tipo_id=" + encuestaTipoId);
+		logger.info("posicion_codigo=" + posicionCodigo);
+		logger.info("estado=" + 0);
+		logger.info("justificacion_id=" + justificacion.getId());
+		logger.info("justificacion_detalle=" + justificacion.getDetalle());
+		logger.info("observaciones=" + observaciones);
+		
 		plantilla.update(sql,paramMap);
 	}
 	
@@ -84,7 +97,16 @@ public class EncuestaRepository {
 		paramMap.put("observaciones", observaciones);
 		Date fecha = new Date();
 		paramMap.put("fecha_creacion", fecha);
-		paramMap.put("fecha_actualizacion", fecha);        
+		paramMap.put("fecha_actualizacion", fecha);
+		
+		logger.info("proceso_id=" + procesoId);
+		logger.info("encuesta_tipo_id=" + encuestaTipoId);
+		logger.info("posicion_codigo=" + posicionCodigo);
+		logger.info("estado=" + 1);
+		logger.info("justificacion_id=" + justificacion.getId());
+		logger.info("justificacion_detalle=" + justificacion.getDetalle());
+		logger.info("observaciones=" + observaciones);
+		
 		plantilla.update(sql, paramMap);
 	}
 	
@@ -105,6 +127,10 @@ public class EncuestaRepository {
 		paramMap.put("posicion_codigo", posicionCodigo);
 		paramMap.put("encuesta_tipo_id", encuestaTipoId);
 		EncuestaEmpresa encuesta = plantilla.queryForObject(sql, paramMap, new EncuestaMapper());
+		
+		logger.info("proceso_id=" + procesoId);
+		logger.info("encuesta_tipo_id=" + encuestaTipoId);
+		logger.info("posicion_codigo=" + posicionCodigo);
 		
 		sql = "SELECT A.id,\n" + 
 		      "       A.nombre,\n" +
@@ -385,6 +411,14 @@ public class EncuestaRepository {
 		paramMap.put("encuesta_tipo_id", encuestaTipoId);
 		paramMap.put("linea_id", lineaId);
 		paramMap.put("canal_id", canalId);
+		
+		logger.info("proceso_id=" + procesoId);
+		logger.info("posicion_codigo=" + posicionCodigo);
+		logger.info("encuesta_tipo_id=" + encuestaTipoId);
+		logger.info("linea_id=" + lineaId);
+		logger.info("canal_id=" + canalId);
+
+		
 		EncuestaObjetoObjetos encuesta = plantilla.queryForObject(sql, paramMap, new EncuestaObjetoObjetosMapper());
 		
 		sql = "SELECT A1.id linea_id,\n" +
@@ -423,6 +457,11 @@ public class EncuestaRepository {
 					 "   AND posicion_codigo=:posicion_codigo\n" +
 					 "   AND linea_id=:linea_id\n" +
 					 "   AND canal_id=:canal_id";
+		
+		logger.info("proceso_id=" + procesoId);
+		logger.info("posicion_codigo=" + posicionCodigo);
+		logger.info("linea_id=" + lineaId);
+		logger.info("canal_id=" + canalId);
 		
 		plantilla.update(sql,paramMap);
 		

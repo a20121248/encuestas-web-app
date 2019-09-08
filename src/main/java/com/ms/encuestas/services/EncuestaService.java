@@ -156,8 +156,10 @@ public class EncuestaService implements EncuestaServiceI {
 
 	@Override
 	public EncuestaObjetoObjetos getProductoSubcanales(Long procesoId, String posicionCodigo, Long encuestaTipoId, Long lineaId, Long canalId) {
-		if (!posicionRepository.exists(procesoId, posicionCodigo))
+		if (!posicionRepository.exists(procesoId, posicionCodigo)) {
+			logger.error("La posición " + procesoId + " no existe");
 			return null;
+		}
     	if (!encuestaRepository.hasEncuesta(procesoId, posicionCodigo, encuestaTipoId)) {
 			encuestaRepository.insertEncuestaCabecera(getJustificacionDefault(), getObservacionesDefault(), procesoId, posicionCodigo, encuestaTipoId);    		
     	}

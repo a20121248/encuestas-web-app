@@ -70,7 +70,7 @@ export class AuthService {
     const payload = this.obtenerDatosToken(accessToken);
     this._usuario = new Usuario();
     this._usuario.codigo = payload.codigo;
-    this._usuario.nombre = payload.nombre;
+    //this._usuario.nombre = payload.nombre;
     this._usuario.roles = payload.authorities;
 
     localStorage.setItem('usuario', JSON.stringify(this._usuario));
@@ -84,7 +84,6 @@ export class AuthService {
   obtenerDatosToken(accessToken: string): any {
     if (accessToken != null) {
       return JSON.parse(atob(accessToken.split('.')[1]));
-
     }
   }
 

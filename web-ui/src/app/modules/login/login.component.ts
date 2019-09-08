@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
-      swal.fire('Login', `Hola ${this.authService.usuario.nombre},<br>ya iniciaste sesión anteriormente.`, 'info');
+      swal.fire('Login', `Ya iniciaste sesión anteriormente.`, 'info');
       this.router.navigate(['/colaboradores']);
     }
     this.titleService.setTitle('Encuestas | Login');
@@ -65,9 +65,8 @@ export class LoginComponent implements OnInit {
 
           this.authService.guardarUsuario(response.access_token);
           this.authService.guardarToken(response.access_token);
-          let usuario = this.authService.usuario;
           this.router.navigate(['/colaboradores']);
-          swal.fire(`Encuestas PPTO`, `Hola ${usuario.nombre},<br>has iniciado sesión con éxito.`, 'success');
+          swal.fire(`Encuestas PPTO`, `Has iniciado sesión con éxito.`, 'success');
         }, err => {
           console.log(err);
           if (err.status == 400) {

@@ -44,6 +44,8 @@ export class ProcesoComponent implements OnInit {
   }
 
   crear(): void {
+    // TODO
+    //  NO JALAR EL USUARIO DEL AUTHSERVICE (TOKEN) PORQUE YA NO LO ESTA GUARDANDO
     const dialogConfig = new MatDialogConfig();
     dialogConfig.hasBackdrop = true;
     dialogConfig.width = '450px';

@@ -109,9 +109,9 @@ public class EncuestaController {
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-subcanal/{lineaId}/{canalId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createLineaCanal(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @PathVariable Long canalId, @RequestBody EncuestaObjetoObjetos encuesta) {
+	public void createProductoSubcanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @PathVariable Long canalId, @RequestBody EncuestaObjetoObjetos encuesta) {
 		Long encuestaTipoId = new Long(5); // 5: Producto y Subcanal
-		this.encuestaService.saveProductoSubcanales(encuesta, procesoId, posicionCodigo, lineaId, canalId, encuestaTipoId);
+		this.encuestaService.saveProductoSubcanales(encuesta, procesoId, posicionCodigo, encuestaTipoId, lineaId, canalId);
 	}
 	
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal/{perfilId}/{lineaId}")

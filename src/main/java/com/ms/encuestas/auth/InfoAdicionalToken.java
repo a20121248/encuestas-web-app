@@ -41,7 +41,7 @@ public class InfoAdicionalToken implements TokenEnhancer {
     			usuario = usuarioService.findByUsuarioVida(usuarioRed);
     		}
     		additionalInformation.put("codigo", usuario.getCodigo());
-    		additionalInformation.put("nombre", usuario.getNombreCompleto());
+    		//additionalInformation.put("nombre", usuario.getNombreCompleto());
 		}
 		
 		/*Map<String, Object> procesoResponse = new HashMap<>();
