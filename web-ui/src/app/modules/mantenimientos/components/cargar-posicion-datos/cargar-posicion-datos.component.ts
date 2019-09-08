@@ -22,6 +22,8 @@ export class CargarPosicionDatosComponent implements OnInit, OnDestroy {
   error: string;
   subscribeSubir: Subscription;
   subscribeCantidad: Subscription;
+  subscribeEliminar: Subscription;
+  subscribeDescargar: Subscription;
   porcentaje: number;
   tamanhoCargado: number;
   tamanhoTotal: number;
@@ -48,9 +50,15 @@ export class CargarPosicionDatosComponent implements OnInit, OnDestroy {
     if (this.subscribeCantidad != null) {
       this.subscribeCantidad.unsubscribe();
     }
+    if (this.subscribeEliminar != null) {
+      this.subscribeEliminar.unsubscribe();
+    }
   }
 
   obtenerCantidad(): void {
+    if (this.subscribeCantidad != null) {
+      this.subscribeCantidad.unsubscribe();
+    }
     this.subscribeCantidad = this.posicionService.countDatos(this.selectedProceso.id).subscribe(cantPosiciones => {
       this.cantPosiciones = cantPosiciones;
     });
@@ -75,6 +83,9 @@ export class CargarPosicionDatosComponent implements OnInit, OnDestroy {
     this.porcentaje = 0;
     const formData = new FormData();
     formData.append('file', this.selectedFile);
+    if (this.subscribeSubir != null) {
+      this.subscribeSubir.unsubscribe();
+    }
     this.subscribeSubir = this.posicionService.uploadDatos(this.selectedProceso.id, formData).subscribe(
       (res) => {
         if (res != null && res.porcentaje != null) {
@@ -113,8 +124,10 @@ export class CargarPosicionDatosComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Sí, eliminar'
     }).then((result) => {
       if (result.value) {
-        this.subscribeSubir.unsubscribe();
-        this.posicionService.deleteDatos(this.selectedProceso).subscribe(res => {
+        if (this.subscribeEliminar != null) {
+          this.subscribeEliminar.unsubscribe();
+        }
+        this.subscribeEliminar = this.posicionService.deleteDatos(this.selectedProceso).subscribe(res => {
           console.log(res);
         }, err => {
           console.log(err);

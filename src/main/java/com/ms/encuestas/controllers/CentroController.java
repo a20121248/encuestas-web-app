@@ -101,7 +101,7 @@ public class CentroController {
 	@ResponseStatus(HttpStatus.OK)
 	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
 		try {
-			logger.info(String.format("Leyendo el archivo ", file.getOriginalFilename()));
+			logger.info(String.format("Leyendo el archivo '%s'.", file.getOriginalFilename()));
 			this.centroService.processExcel(file.getInputStream());
 		} catch (IOException e) {
 			logger.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));

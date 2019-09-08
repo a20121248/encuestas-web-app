@@ -97,7 +97,7 @@ public class PosicionController {
 	@ResponseStatus(HttpStatus.OK)
 	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
 		try {
-			logger.info(String.format("Leyendo el archivo ", file.getOriginalFilename()));
+			logger.info(String.format("Leyendo el archivo '%s'.", file.getOriginalFilename()));
 			this.posicionService.processExcel(file.getInputStream());
 		} catch (IOException e) {
 			logger.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
@@ -121,7 +121,7 @@ public class PosicionController {
 	public void cargarDatosPosiciones(@PathVariable Long procesoId, @RequestParam("file") MultipartFile file) {
 		try {
 			Proceso proceso = procesoService.findById(procesoId);
-			logger.info(String.format("Leyendo el archivo ", file.getOriginalFilename()));
+			logger.info(String.format("Leyendo el archivo '%s'.", file.getOriginalFilename()));
 			posicionService.processExcelDatos(proceso, file.getInputStream());
 		} catch (IOException e) {
 			logger.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
