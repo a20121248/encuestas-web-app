@@ -49,7 +49,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		boolean error = false;
 		Usuario usuario = null;
     	if (strPUsuario.equals("admin.encuestas") || !usarAD) {
-    		if (strPUsuario.length()>5 && strPUsuario.substring(0, 5).equals("epps\\")) {    		
+    		if (strPUsuario.length()>5 && strPUsuario.substring(0, 5).toUpperCase().equals("EPPS\\")) {    		
     			usuario = usuarioService.findByUsuarioGenerales(strPUsuario);
     		} else {
     			usuario = usuarioService.findByUsuarioVida(strPUsuario);
@@ -70,12 +70,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         		SegCenServicio segCenServicio = new SegCenServicio();
             	ISegCenServicios segCenServicios = segCenServicio.getBasicHttpBindingISegCenServicios();
             	String response = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
-            	logger.info(String.format("Respuesta del SegCen: %s", response));
+            	logger.info(String.format("Respuesta del SegCen: '%s'.", response));
             	if (!response.equals("")) {
             		error = true;
             	}
             	
-        		if (strPUsuario.length()>5 && strPUsuario.substring(0, 5).equals("epps\\")) {
+        		if (strPUsuario.length()>5 && strPUsuario.substring(0, 5).toUpperCase().equals("EPPS\\")) {
         			usuario = usuarioService.findByUsuarioGenerales(strPUsuario);
         		} else {
         			usuario = usuarioService.findByUsuarioVida(strPUsuario);

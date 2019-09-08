@@ -299,9 +299,9 @@ public class UsuarioRepository {
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
 				     "       A.fecha_actualizacion usuario_fecha_actualizacion\n" +
 					 "  FROM usuarios A\n" +
-				     " WHERE A.usuario_generales=:usuario_red\n" +
+				     " WHERE upper(A.usuario_generales)=:usuario_red\n" +
 					 "   AND A.fecha_eliminacion IS NULL";
-		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_red", usuarioRed), new UsuarioMapper());
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_red", usuarioRed.toUpperCase()), new UsuarioMapper());
 	}
 	
 	public Usuario findByUsuarioVida(String usuarioRed) throws EmptyResultDataAccessException {
@@ -311,9 +311,9 @@ public class UsuarioRepository {
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
 				     "       A.fecha_actualizacion usuario_fecha_actualizacion\n" +
 					 "  FROM usuarios A\n" +
-				     " WHERE A.usuario_vida=:usuario_red\n" +
+				     " WHERE upper(A.usuario_vida)=:usuario_red\n" +
 					 "   AND A.fecha_eliminacion IS NULL";
-		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_red", usuarioRed), new UsuarioMapper());
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_red", usuarioRed.toUpperCase()), new UsuarioMapper());
 	}
 	
 	public Usuario findByCodigo(String usuarioCodigo) throws EmptyResultDataAccessException {

@@ -35,7 +35,7 @@ public class InfoAdicionalToken implements TokenEnhancer {
 			additionalInformation.put("nombre", "Administrador");
 		} else {
 			Usuario usuario;
-    		if (usuarioRed.length()>5 && usuarioRed.substring(0, 5).equals("epps\\")) {
+    		if (usuarioRed.length()>5 && usuarioRed.substring(0, 5).toUpperCase().equals("EPPS\\")) {
     			usuario = usuarioService.findByUsuarioGenerales(usuarioRed);
     		} else {
     			usuario = usuarioService.findByUsuarioVida(usuarioRed);
