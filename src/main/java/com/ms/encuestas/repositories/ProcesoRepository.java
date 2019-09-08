@@ -5,21 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.ms.encuestas.models.Division;
-import com.ms.encuestas.models.Justificacion;
 import com.ms.encuestas.models.Proceso;
 
 @Repository
 public class ProcesoRepository {
-	private Logger logger = LoggerFactory.getLogger(ProcesoRepository.class);
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 
@@ -53,15 +48,9 @@ public class ProcesoRepository {
 	}
 	
 	public Proceso findById(Long id) throws EmptyResultDataAccessException {
-		String sql = "SELECT A.id,\n" +
-					 "       A.codigo,\n" +
-					 "       A.nombre,\n" +
+		String sql = "SELECT A.*,\n" +
 					 "       B.codigo usuario_codigo,\n" +
-					 "       B.nombre_completo usuario_nombre_completo,\n" +
-					 "       A.fecha_inicio,\n" +
-					 "       A.fecha_cierre,\n" + 
-					 "       A.fecha_creacion,\n" + 
-					 "       A.fecha_actualizacion\n" + 
+					 "       B.nombre_completo usuario_nombre_completo\n" + 
 					 "  FROM procesos A\n" +
 					 "  LEFT JOIN usuarios B\n" +
 					 "    ON A.usuario_codigo=B.codigo\n" +
@@ -70,15 +59,9 @@ public class ProcesoRepository {
 	}
 	
 	public Proceso findByCodigo(String codigo) throws EmptyResultDataAccessException {
-		String sql = "SELECT A.id,\n" +
-				 	 "       A.codigo,\n" +
-				 	 "       A.nombre,\n" +
+		String sql = "SELECT A.*,\n" +
 				 	 "       B.codigo usuario_codigo,\n" +
-				 	 "       B.nombre_completo usuario_nombre_completo,\n" +
-				 	 "       A.fecha_inicio,\n" +
-				 	 "       A.fecha_cierre,\n" +
-				 	 "       A.fecha_creacion,\n" +
-				 	 "       A.fecha_actualizacion\n" + 
+				 	 "       B.nombre_completo usuario_nombre_completo\n" + 
 					 "  FROM procesos A\n" +
 					 "  LEFT JOIN usuarios B\n" +
 					 "    ON A.usuario_codigo=B.codigo\n" +
@@ -87,11 +70,12 @@ public class ProcesoRepository {
 	}
 	
 	public int insert(Proceso proceso) {
-		String sql = "INSERT INTO procesos(codigo,nombre,usuario_codigo,fecha_creacion,fecha_actualizacion)\n" +
-                     "VALUES(:codigo,:nombre,:usuario_codigo,:fecha_creacion,:fecha_actualizacion)";		
+		String sql = "INSERT INTO procesos(codigo,nombre,activo,usuario_codigo,fecha_creacion,fecha_actualizacion)\n" +
+                     "VALUES(:codigo,:nombre,:activo,:usuario_codigo,:fecha_creacion,:fecha_actualizacion)";		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("codigo", proceso.getCodigo());
 		paramMap.put("nombre", proceso.getNombre());
+		paramMap.put("activo", proceso.isActivo() ? 1 : 0);
 		paramMap.put("usuario_codigo", proceso.getUsuario().getCodigo());
 		Date fecha = new Date();
 		paramMap.put("fecha_creacion", fecha);
@@ -112,7 +96,7 @@ public class ProcesoRepository {
 		paramMap.put("id", proceso.getId());
 		paramMap.put("codigo", proceso.getCodigo());
 		paramMap.put("nombre", proceso.getNombre());
-		paramMap.put("activo", proceso.isActivo());
+		paramMap.put("activo", proceso.isActivo() ? 1 : 0);
 		paramMap.put("fecha_cierre", proceso.getFechaInicio());
 		paramMap.put("fecha_cierre", proceso.getFechaCierre());
 		paramMap.put("fecha_actualizacion", new Date());        

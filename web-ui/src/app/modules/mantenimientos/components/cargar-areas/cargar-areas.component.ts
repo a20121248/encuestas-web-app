@@ -24,7 +24,7 @@ export class CargarAreasComponent implements OnInit, OnDestroy {
   tamanhoTotal: number;
 
   constructor(private formBuilder: FormBuilder, private areaService: AreaService) {
-    this.titulo = 'CARGAR ÁREAS';
+    this.titulo = '3. CARGAR ÁREAS';
     this.porcentaje = 0;
     this.tamanhoCargado = 0;
     this.tamanhoTotal = 0;

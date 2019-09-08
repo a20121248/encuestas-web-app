@@ -3,7 +3,6 @@ package com.ms.encuestas.services;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -31,29 +30,17 @@ import org.springframework.stereotype.Service;
 import com.ms.encuestas.models.Area;
 import com.ms.encuestas.models.Centro;
 import com.ms.encuestas.models.DatosPosicion;
-import com.ms.encuestas.models.LineaCanal;
-import com.ms.encuestas.models.Objeto;
 import com.ms.encuestas.models.Perfil;
 import com.ms.encuestas.models.Posicion;
 import com.ms.encuestas.models.Proceso;
-import com.ms.encuestas.models.Tipo;
 import com.ms.encuestas.models.Usuario;
-import com.ms.encuestas.repositories.AreaRepository;
-import com.ms.encuestas.repositories.CentroRepository;
-import com.ms.encuestas.repositories.PerfilRepository;
 import com.ms.encuestas.repositories.PosicionRepository;
-import com.ms.encuestas.repositories.ProcesoRepository;
-import com.ms.encuestas.repositories.TipoRepository;
-import com.ms.encuestas.repositories.UsuarioRepository;
 import com.ms.encuestas.services.utils.ExcelServiceI;
 import com.ms.encuestas.services.utils.FileServiceI;
-import com.ms.encuestas.services.utils.LoggerServiceI;
 
 @Service
 public class PosicionService implements PosicionServiceI {
 	private Logger logger = LoggerFactory.getLogger(PosicionService.class);
-	@Autowired
-	private LoggerServiceI log;
 	@Autowired
 	private FileServiceI fileService;
 	@Autowired
@@ -251,7 +238,10 @@ public class PosicionService implements PosicionServiceI {
 	   			String accion = dataFormatter.formatCellValue(celdas.next());
 	   			if (accion.equals("CREAR")) {
 	   				posicionRepository.insertDatos(proceso, datos);
-	   				logger.info(String.format("FILA %d: Se registró al colaborador '%s' en '%s'.", numFila, usuarioNombre, responsableUsuarioNombre, proceso.getNombre()));
+	   				logger.info(String.format("FILA %d: Se registró al colaborador '%s' con responsable '%s' en la encuesta '%s'.", numFila, usuarioNombre, responsableUsuarioNombre, proceso.getNombre()));
+	   			} else if (accion.equals("ELIMINAR")) {
+	   				posicionRepository.deleteDatosColaborador(proceso.getId(), usuario.getCodigo());
+	   				logger.info(String.format("FILA %d: Se quitó al colaborador '%s' en la encuesta '%s'.", numFila, usuarioNombre, proceso.getNombre()));	   			
 	   			} else {
 	   		        logger.info(String.format("FILA %d: No se encontró la acción '%s'.", numFila, accion));
 	   			}

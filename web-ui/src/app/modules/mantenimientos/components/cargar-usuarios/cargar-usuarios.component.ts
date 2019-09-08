@@ -24,7 +24,7 @@ export class CargarUsuariosComponent implements OnInit, OnDestroy {
   tamanhoTotal: number;
 
   constructor(private formBuilder: FormBuilder, private usuarioService: UsuarioService) {
-    this.titulo = 'CARGAR COLABORADORES';
+    this.titulo = '1. CARGAR COLABORADORES';
     this.porcentaje = 0;
     this.tamanhoCargado = 0;
     this.tamanhoTotal = 0;

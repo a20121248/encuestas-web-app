@@ -24,7 +24,7 @@ export class CargarPerfilesComponent implements OnInit, OnDestroy {
   tamanhoTotal: number;
 
   constructor(private formBuilder: FormBuilder, private perfilService: PerfilService) {
-    this.titulo = 'CARGAR PERFILES';
+    this.titulo = '5. CARGAR PERFILES';
     this.porcentaje = 0;
     this.tamanhoCargado = 0;
     this.tamanhoTotal = 0;

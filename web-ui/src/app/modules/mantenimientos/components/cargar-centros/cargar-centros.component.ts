@@ -24,7 +24,7 @@ export class CargarCentrosComponent implements OnInit, OnDestroy {
   tamanhoTotal: number;
 
   constructor(private formBuilder: FormBuilder, private centroService: CentroService) {
-    this.titulo = 'CARGAR CENTROS DE COSTOS';
+    this.titulo = '4. CARGAR CENTROS';
     this.porcentaje = 0;
     this.tamanhoCargado = 0;
     this.tamanhoTotal = 0;

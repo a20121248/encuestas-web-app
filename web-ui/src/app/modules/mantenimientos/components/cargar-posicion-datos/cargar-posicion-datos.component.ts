@@ -27,7 +27,7 @@ export class CargarPosicionDatosComponent implements OnInit, OnDestroy {
   tamanhoTotal: number;
 
   constructor(private formBuilder: FormBuilder, private posicionService: PosicionService) {
-    this.titulo = 'DATOS DE LAS POSICIONES';
+    this.titulo = '6. DATOS DE LAS POSICIONES';
     this.porcentaje = 0;
     this.tamanhoCargado = 0;
     this.tamanhoTotal = 0;

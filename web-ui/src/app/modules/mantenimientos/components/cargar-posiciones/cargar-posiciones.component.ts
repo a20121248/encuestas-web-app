@@ -24,7 +24,7 @@ export class CargarPosicionesComponent implements OnInit, OnDestroy {
   tamanhoTotal: number;
 
   constructor(private formBuilder: FormBuilder, private posicionService: PosicionService) {
-    this.titulo = 'CARGAR POSICIONES';
+    this.titulo = '2. CARGAR POSICIONES';
     this.porcentaje = 0;
     this.tamanhoCargado = 0;
     this.tamanhoTotal = 0;

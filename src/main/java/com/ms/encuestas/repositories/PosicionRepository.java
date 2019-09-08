@@ -128,6 +128,16 @@ public class PosicionRepository {
 		plantilla.update(sql, new MapSqlParameterSource("proceso_id", procesoId));
 	}
 	
+	public void deleteDatosColaborador(Long procesoId, String usuarioCodigo) {
+		String sql = "DELETE FROM posicion_datos\n" +
+                     " WHERE proceso_id=:proceso_id\n" +
+                     "   AND usuario_codigo=:usuario_codigo";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("proceso_id", procesoId);
+		paramMap.put("usuario_codigo", usuarioCodigo);
+		plantilla.update(sql, paramMap);
+	}
+	
 	public int insertDatos(Proceso proceso, DatosPosicion datos) throws EmptyResultDataAccessException {
 		String sql = "INSERT INTO posicion_datos(proceso_id,area_id,centro_id,posicion_codigo,usuario_codigo,responsable_posicion_codigo,perfil_id,fecha_creacion,fecha_actualizacion)\n" +
                      "VALUES(:proceso_id,:area_id,:centro_id,:posicion_codigo,:usuario_codigo,:responsable_posicion_codigo,:perfil_id,:fecha_creacion,:fecha_actualizacion)";		
