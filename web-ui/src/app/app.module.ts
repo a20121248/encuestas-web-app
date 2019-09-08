@@ -137,7 +137,7 @@ const routes: Routes = [
       { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
     ]
   },
-  { path: 'jbr/log', component: DescargaLogComponent},
+  { path: 'jbr/log', component: DescargaLogComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
   { path: '**', component: Page404Component}
 ];
 
