@@ -33,7 +33,6 @@ export class EpsService {
 
   obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {
     const url = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/encuesta/eps`;
-    console.log(this.urlServer.api + url);
     return this.http.get<Encuesta>(this.urlServer.api + url);
   }
 

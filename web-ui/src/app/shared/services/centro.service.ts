@@ -69,9 +69,7 @@ export class CentroService {
   obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {
     const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
     const url2 = `${url1}encuesta/centro/${usuario.posicion.centro.nivel}/${usuario.posicion.perfil.id}`;
-    console.log(`${this.urlServer.api}${url2}`);
     return this.http.get<Encuesta>(`${this.urlServer.api}${url2}`);
-    // return this.http.get<Encuesta>('https://api.myjson.com/bins/7oi9p');
   }
 
   guardarEncuesta(encuesta: Encuesta, usuario: Usuario): Observable<any> {
@@ -79,6 +77,14 @@ export class CentroService {
     return this.http.post<any>(this.urlServer.api + url, encuesta);
   }
 
+  downloadEncuesta(usuario: Usuario): Observable<any> {
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+    const url2 = `${url1}encuesta/centro/${usuario.posicion.centro.nivel}/${usuario.posicion.perfil.id}/descargar`;
+    return this.http.post(url2, null, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
+  }
 
   download(): Observable<any> {
     const url = `${this.urlServer.api}centros/descargar`;
@@ -86,5 +92,10 @@ export class CentroService {
       responseType: 'blob',
       headers: new HttpHeaders().append('Content-Type', 'application/json')
     });
+  }
+
+  deleteAll(): Observable<any> {
+    const url = `${this.urlServer.api}centros/eliminar-todos`;
+    return this.http.post<any>(url, null);
   }
 }

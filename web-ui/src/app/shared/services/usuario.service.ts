@@ -62,8 +62,6 @@ export class UsuarioService {
   }
 
   getUsuarioByPosicionCodigo(codigo: string): Observable<Usuario> {
-    console.log('url');
-    console.log(`${this.urlServer.api}procesos/${this.authService.proceso.id}/usuarios/posicion/${codigo}`);
     return this.http.get<Usuario>(
       `${this.urlServer.api}procesos/${this.authService.proceso.id}/usuarios/posicion/${codigo}`
     );

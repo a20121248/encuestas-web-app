@@ -33,7 +33,7 @@ export class AuthService {
       this._proceso = JSON.parse(localStorage.getItem('proceso')) as Proceso;
       return this._proceso;
     }
-    return new Proceso();
+    return null;
   }
 
   setProceso(proceso: Proceso): void {
@@ -53,7 +53,6 @@ export class AuthService {
 
   login(usuario: Usuario): Observable<any> {
     const urlEndpoint = this.urlServer.oauth + 'token';
-    console.log(urlEndpoint);
     const credenciales = btoa('angularapp' + ':' + '12345');
     const httpHeaders = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',

@@ -85,9 +85,9 @@ export class LoginComponent implements OnInit {
         }
       );
     } else {
-      this.loginForm.get('codigo').markAsTouched({ onlySelf: true });
-      this.loginForm.get('contrasenha').markAsTouched({ onlySelf: true });
-      this.loginForm.get('dominio').markAsTouched({ onlySelf: true });
+      this.codigo.markAsTouched({ onlySelf: true });
+      this.contrasenha.markAsTouched({ onlySelf: true });
+      this.dominio.markAsTouched({ onlySelf: true });
     }
   }
 }

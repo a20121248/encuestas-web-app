@@ -21,7 +21,6 @@ export class RolGuard implements CanActivate, CanActivateChild, CanLoad {
         return false;
       }
       const rol = next.data.rol as string;
-      console.log(rol);
       if (this.authService.hasRole(rol)) {
         return true;
       }
