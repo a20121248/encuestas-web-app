@@ -591,7 +591,14 @@ public class ReporteRepository {
 				"        CONS.PORCENTAJE PONDERADO\r\n" + 
 				"FROM REP_estado_F USR_BASE\r\n" + 
 				"LEFT JOIN \r\n" + 
-				"  (SELECT A.PROCESO_ID,\r\n" + 
+				"  (SELECT F.PROCESO_ID,\r\n" + 
+				"          F.POSICION_CODIGO,\r\n" + 
+				"          NVL(usr.DIMENSION1_CODIGO,'N/A') DIMENSION1_CODIGO,\r\n" + 
+				"          NVL(usr.DIMENSION1,'N/A') DIMENSION1,\r\n" + 
+				"          NVL(usr.DIMENSION2_CODIGO,'N/A') DIMENSION2_CODIGO,\r\n" + 
+				"          NVL(usr.DIMENSION2,'N/A') DIMENSION2,\r\n" + 
+				"          NVL(usr.PORCENTAJE,0)PORCENTAJE \r\n" + 
+				"FROM (SELECT A.PROCESO_ID,\r\n" + 
 				"         A.POSICION_CODIGO,\r\n" + 
 				"         NVL(D.codigo,'N/A') DIMENSION1_CODIGO,\r\n" + 
 				"         NVL(D.nombre,'N/A') DIMENSION1,\r\n" + 
@@ -603,9 +610,18 @@ public class ReporteRepository {
 				"    LEFT JOIN perfil_centro C ON C.perfil_id = b.perfil_id\r\n" + 
 				"    LEFT JOIN centros D ON D.id = C.centro_id\r\n" + 
 				"    LEFT JOIN encuesta_centro E ON B.proceso_id=A.proceso_id AND E.posicion_codigo=A.posicion_codigo and E.centro_id = D.id\r\n" + 
-				"   WHERE A.perfil_tipo_id=1\r\n" + 
+				"   WHERE A.perfil_tipo_id=1 and E.porcentaje > 0) usr\r\n" + 
+				"right join REP_ESTADO_F F on  F.POSICION_CODIGO = usr.POSICION_CODIGO \r\n" + 
+				"where F.perfil_tipo_id = 1\r\n" + 
 				"  union\r\n" + 
-				"  SELECT A.PROCESO_ID,\r\n" + 
+				"  SELECT F.PROCESO_ID,\r\n" + 
+				"          F.POSICION_CODIGO,\r\n" + 
+				"          NVL(usr.DIMENSION1_CODIGO,'N/A') DIMENSION1_CODIGO,\r\n" + 
+				"          NVL(usr.DIMENSION1,'N/A') DIMENSION1,\r\n" + 
+				"          NVL(usr.DIMENSION2_CODIGO,'N/A') DIMENSION2_CODIGO,\r\n" + 
+				"          NVL(usr.DIMENSION2,'N/A') DIMENSION2,\r\n" + 
+				"          NVL(usr.PORCENTAJE,0)PORCENTAJE \r\n" + 
+				"FROM (SELECT A.PROCESO_ID,\r\n" + 
 				"         A.POSICION_CODIGO,\r\n" + 
 				"         NVL(D.codigo,'N/A') DIMENSION1_CODIGO,\r\n" + 
 				"         NVL(D.nombre,'N/A') DIMENSION1,\r\n" + 
@@ -619,7 +635,9 @@ public class ReporteRepository {
 				"    LEFT JOIN objetos D on D.objeto_tipo_id = 3 and D.padre_objeto_id = C.linea_id AND E1.PORCENTAJE >0\r\n" + 
 				"    LEFT JOIN ENCUESTA_PRODUCTO_CANAL E2 ON E2.proceso_id=A.proceso_id AND E2.posicion_codigo=A.posicion_codigo AND  E2.canal_id = C.canal_id and E2.producto_id = D.id\r\n" + 
 				"    LEFT JOIN OBJETOS E ON E.objeto_tipo_id = 2 and E.ID = C.canal_id AND E2.PORCENTAJE >0\r\n" + 
-				"   WHERE A.perfil_tipo_id=2 AND (E.codigo IS NOT NULL OR (D.codigo IS NULL AND E.codigo IS NULL))\r\n" + 
+				"   WHERE A.perfil_tipo_id=2 and E2.PORCENTAJE >0) usr\r\n" + 
+				"right join REP_ESTADO_F F on  F.POSICION_CODIGO = usr.POSICION_CODIGO \r\n" + 
+				"where F.perfil_tipo_id = 2\r\n" + 
 				"   union\r\n" + 
 				"   SELECT F.PROCESO_ID,\r\n" + 
 				"          F.POSICION_CODIGO,\r\n" + 

@@ -59,10 +59,9 @@ public class FileService implements FileServiceI {
 	}
 	
 	@Override
-	public Resource loadFileLogAsResource(String fileName) {
+	public Resource loadFileLogAsResource(Path fileName) {
 		try {
-			Path filePath = this.fileLogsLocation.resolve(fileName).normalize();
-			Resource resource = new UrlResource(filePath.toUri());
+			Resource resource = new UrlResource(fileName.toUri());
 			if (resource.exists()) {
 				return resource;
 			} else {
