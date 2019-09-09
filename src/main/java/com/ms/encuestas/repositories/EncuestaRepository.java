@@ -191,7 +191,7 @@ public class EncuestaRepository {
 			  " WHERE A.empresa_id=:empresa_id\n" +
 			  "   AND A.nivel>:nivel\n" +
 			  "   AND A.fecha_eliminacion IS NULL\n" +
-			  " ORDER BY A.nivel,A.id";
+			  " ORDER BY A.nivel,A.codigo";
 		logger.info(sql);
 		encuesta.setLstItems(plantilla.query(sql, paramMap, new CentroMapper()));		
 		return encuesta;
@@ -347,7 +347,7 @@ public class EncuestaRepository {
 			  "   AND D.linea_id=A.linea_id\n" + 
 			  "   AND D.canal_id=A.canal_id\n" + 
 			  " WHERE A.perfil_id=:perfil_id\n" + 
-			  " ORDER BY A.linea_id,A.canal_id";
+			  " ORDER BY B.nombre,C.nombre";
 		
 		paramMap.put("posicion_codigo", posicionCodigo);
 		paramMap.put("encuesta_tipo_id", encuestaTipoId);
@@ -440,7 +440,7 @@ public class EncuestaRepository {
 			  "   AND A1.padre_objeto_id=:linea_id" +
 			  "   AND B1.objeto_tipo_id=4\n" +  // subcanales 
 			  "   AND B1.padre_objeto_id=:canal_id\n" + 
-			  " ORDER BY A1.id,B1.id";
+			  " ORDER BY A1.nombre,B1.nombre";
 	   	encuesta.setLstItems(plantilla.query(sql, paramMap, new EncuestaLineaCanalesExtractor()));		
 		return encuesta;
 	}

@@ -3,8 +3,6 @@ package com.ms.encuestas.repositories;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.ms.encuestas.models.Area;
@@ -15,7 +13,6 @@ import com.ms.encuestas.models.Tipo;
 import com.ms.encuestas.models.Usuario;
 
 public class UsuarioMapper implements RowMapper<Usuario> {
-	private Logger logger = LoggerFactory.getLogger(UsuarioMapper.class);
 	@Override
 	public Usuario mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Perfil perfil;

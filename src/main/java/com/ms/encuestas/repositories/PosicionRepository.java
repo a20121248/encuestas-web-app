@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -49,78 +50,16 @@ public class PosicionRepository {
 	public List<Posicion> findAll() throws EmptyResultDataAccessException {
 		String sql = "SELECT *\n" +
 				     "  FROM posiciones\n" +
-				     " WHERE fecha_eliminacion IS NULL";
+				     " WHERE fecha_eliminacion IS NULL\n" +
+				     " ORDER BY nombre";
 		return plantilla.query(sql, new PosicionMapper());
 	}
 
-	public Posicion findByCodigo(String codigo) {
+	public Posicion findByCodigo(String codigo) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
 		String sql = "SELECT *\n" +
 				     "  FROM posiciones\n" +
-				     " WHERE codigo=:codigo\n" +
-				     "   AND fecha_eliminacion IS NULL";
-        return plantilla.queryForObject(sql,
-        		new MapSqlParameterSource("codigo", codigo),
-        		new PosicionMapper());
-	}
-	
-	public Posicion findByCodigoWithArea(String codigo) {
-		String sql = "SELECT A.codigo,\n" + 
-					 "       A.nombre,\n" + 
-					 "       A.fecha_creacion,\n" + 
-					 "       B.id area_id,\n" + 
-					 "       B.nombre area_nombre,\n" + 
-					 "       B.fecha_creacion area_fecha_creacion," +
-					 "       C.id division_id,\n" + 
-					 "       C.nombre division_nombre,\n" + 
-					 "       C.fecha_creacion division_fecha_creacion" +
-					 "  FROM posiciones A\n" + 
-					 "  JOIN areas B ON A.area_id=B.id\n" +
-					 "  JOIN divisiones C ON B.division_id=C.id\n" +
-					 " WHERE A.codigo=:codigo\n" +
-				     "   AND A.fecha_eliminacion IS NULL";
-        return plantilla.queryForObject(sql,
-        		new MapSqlParameterSource("codigo", codigo),
-        		new PosicionMapper());
-	}
-	
-	public Posicion findByCodigoWithCentro(String codigo) {
-		String sql = "SELECT A.codigo,\n" + 
-				 	 "       A.nombre,\n" + 
-				 	 "       A.fecha_creacion,\n" + 
-				 	 "       B.id centro_id,\n" + 
-				 	 "       B.nombre centro_nombre,\n" + 
-				 	 "       B.fecha_creacion centro_fecha_creacion\n" + 
-				 	 "  FROM posiciones A\n" + 
-				 	 "  JOIN centros B ON A.centro_id=B.id\n" + 
-				 	 " WHERE A.codigo=:codigo\n" +
-				 	 "   AND A.fecha_eliminacion IS NULL";
-		return plantilla.queryForObject(sql,
-				new MapSqlParameterSource("codigo", codigo),
-				new PosicionMapper());
-	}
-	
-	public Posicion findByCodigoWithAreaAndCentro(String codigo) {
-		String sql = "SELECT A.codigo,\n" + 
-				 	 "       A.nombre,\n" + 
-				 	 "       A.fecha_creacion,\n" + 
-				 	 "       B.id area_id,\n" + 
-				 	 "       B.nombre area_nombre,\n" + 
-				 	 "       B.fecha_creacion area_fecha_creacion," +
-				 	 "       C.id division_id,\n" + 
-				 	 "       C.nombre division_nombre,\n" + 
-				 	 "       C.fecha_creacion division_fecha_creacion," +
-				 	 "       D.id centro_id,\n" +
-				 	 "       D.codigo centro_codigo,\n" +
-				 	 "       D.nombre centro_nombre,\n" +
-				 	 "       D.nivel centro_nivel,\n" +
-				 	 "       D.fecha_creacion centro_fecha_creacion" +
-				 	 "  FROM posiciones A\n" + 
-				 	 "  JOIN areas B ON A.area_id=B.id\n" +
-				 	 "  JOIN divisiones C ON B.division_id=C.id\n" +
-				 	 "  JOIN centros D ON A.centro_id=D.id\n" +
-				 	 " WHERE A.codigo=:codigo\n" +
-				 	 "   AND A.fecha_eliminacion IS NULL";
-		return plantilla.queryForObject(sql, new MapSqlParameterSource("codigo", codigo), new PosicionMapper());
+				     " WHERE codigo=:codigo";
+        return plantilla.queryForObject(sql, new MapSqlParameterSource("codigo", codigo), new PosicionMapper());
 	}
 	
 	public void deleteDatosProceso(Long procesoId) {
@@ -230,7 +169,7 @@ public class PosicionRepository {
 		Date fecha = new Date();
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);
-		plantilla.update(sql,paramMap);
+		plantilla.update(sql, paramMap);
 		
 		return posicion;
 	}
@@ -244,7 +183,7 @@ public class PosicionRepository {
 		paramMap.put("codigo", posicion.getCodigo());
 		paramMap.put("nombre", posicion.getNombre());
 		paramMap.put("fecha_actualizacion", new Date());
-		plantilla.update(sql,paramMap);
+		plantilla.update(sql, paramMap);
 		
 		return posicion;
 	}
@@ -254,9 +193,9 @@ public class PosicionRepository {
 		plantilla.update(sql, new MapSqlParameterSource("codigo", posicion.getCodigo()));
 	}
 	
-	public void deleteById(Long id) {
-		String sql = "DELETE FROM posiciones WHERE id=:id";
-		plantilla.update(sql, new MapSqlParameterSource("id", id));
+	public void deleteAll() {
+		String sql = "DELETE FROM posiciones";
+		plantilla.update(sql, (MapSqlParameterSource) null);
 	}
 	
 	public List<Map<String,Object>> findAllListEmpty() throws EmptyResultDataAccessException {
@@ -277,5 +216,15 @@ public class PosicionRepository {
 					 " WHERE fecha_eliminacion IS NULL\n" + 
 					 " ORDER BY fecha_creacion";
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
+	}
+
+	public List<String> findAllUsuarioCodigosByProcesoId(Long procesoId) {
+		String sql = "SELECT usuario_codigo FROM posicion_datos WHERE proceso_id=:proceso_id";
+		return plantilla.queryForList(sql, new MapSqlParameterSource("proceso_id", procesoId), String.class);
+	}
+
+	public List<String> findAllPosicionCodigosByProcesoId(Long procesoId) {
+		String sql = "SELECT posicion_codigo FROM posicion_datos WHERE proceso_id=:proceso_id";
+		return plantilla.queryForList(sql, new MapSqlParameterSource("proceso_id", procesoId), String.class);
 	}
 }

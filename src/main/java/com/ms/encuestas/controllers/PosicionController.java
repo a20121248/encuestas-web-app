@@ -59,21 +59,6 @@ public class PosicionController {
 	public Posicion show(@PathVariable String codigo) {
 		return posicionService.findByCodigo(codigo);
 	}
-
-	@GetMapping("/posiciones-con-area-y-centro/{codigo}")
-	public Posicion showWithAreaAndCentro(@PathVariable String codigo) {
-		return posicionService.findByCodigoWithAreaAndCentro(codigo);
-	}
-	
-	@GetMapping("/posiciones-con-area/{codigo}")
-	public Posicion showWithArea(@PathVariable String codigo) {
-		return posicionService.findByCodigoWithArea(codigo);
-	}
-	
-	@GetMapping("/posiciones-con-centro/{codigo}")
-	public Posicion showWithCentro(@PathVariable String codigo) {
-		return posicionService.findByCodigoWithCentro(codigo);
-	}
 	
 	@PutMapping("/posiciones")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -144,5 +129,11 @@ public class PosicionController {
 	@ResponseStatus(HttpStatus.OK)
 	public void create(@RequestBody Proceso proceso) {
 		posicionService.deleteDatos(proceso);
+	}
+	
+	@PostMapping("/posiciones/eliminar-todos")
+	@ResponseStatus(HttpStatus.OK)
+	public void deleteAll() {
+		posicionService.deleteAll();
 	}
 }

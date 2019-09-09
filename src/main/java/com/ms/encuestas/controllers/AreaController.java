@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ms.encuestas.models.Area;
-import com.ms.encuestas.models.Division;
 import com.ms.encuestas.services.AreaServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
@@ -50,11 +49,6 @@ public class AreaController {
 	public List<Area> index() {
 		return areaService.findAll();
 	}
-	
-	@GetMapping("/areas-con-division")
-	public List<Area> showWithDivision() {
-		return this.areaService.findAllWithDivision();
-	}	
 
 	@GetMapping("/areas/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id) {
@@ -72,21 +66,14 @@ public class AreaController {
 		}
 		return new ResponseEntity<Area>(area, HttpStatus.OK);
 	}
-	
-	@GetMapping("/areas-con-division/{id}")
-	public Area showWithDivision(@PathVariable Long id) {
-		return this.areaService.findByIdWithDivision(id);
-	}
 
 	@PutMapping("/areas")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Area update(@RequestBody Area area, @PathVariable Long id) {
-		Area currentCentro = this.areaService.findById(id);
-		currentCentro.setNombre(area.getNombre());
-		//currentCentro.setApellido(centro.get());
-		//currentCentro.setEmail(centro.getEmail());
-		this.areaService.save(currentCentro);
-		return currentCentro;
+		Area currentArea = this.areaService.findById(id);
+		currentArea.setNombre(area.getNombre());
+		this.areaService.save(currentArea);
+		return currentArea;
 	}
 
 	@DeleteMapping("/areas/{id}")
@@ -100,7 +87,7 @@ public class AreaController {
 	@ResponseStatus(HttpStatus.OK)
 	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
 		try {
-			logger.info(String.format("Leyendo el archivo ", file.getOriginalFilename()));
+			logger.info(String.format("Leyendo el archivo '%s'.", file.getOriginalFilename()));
 			this.areaService.processExcel(file.getInputStream());
 		} catch (IOException e) {
 			logger.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
@@ -117,5 +104,11 @@ public class AreaController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+	}
+	
+	@PostMapping("/areas/eliminar-todos")
+	@ResponseStatus(HttpStatus.OK)
+	public void deleteAll() {
+		areaService.deleteAll();
 	}
 }

@@ -25,27 +25,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.ms.encuestas.models.Area;
-import com.ms.encuestas.models.Centro;
-import com.ms.encuestas.models.DatosPosicion;
-import com.ms.encuestas.models.LineaCanal;
-import com.ms.encuestas.models.Objeto;
-import com.ms.encuestas.models.Perfil;
-import com.ms.encuestas.models.Posicion;
-import com.ms.encuestas.models.Proceso;
-import com.ms.encuestas.models.Tipo;
-import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.repositories.AreaRepository;
-import com.ms.encuestas.repositories.JustificacionRepository;
 import com.ms.encuestas.services.utils.ExcelServiceI;
 import com.ms.encuestas.services.utils.FileServiceI;
 
 @Service
 public class AreaService implements AreaServiceI {
 	private Logger logger = LoggerFactory.getLogger(AreaService.class);
-	
 	@Autowired
 	private FileServiceI fileService;
 	@Autowired
@@ -53,27 +43,47 @@ public class AreaService implements AreaServiceI {
 	@Autowired
 	private AreaRepository areaRepository;
 
-	public long count() {
+	public Long count() {
 		return areaRepository.count();
 	}
 
-	public List<Area> findAll() {
-		return areaRepository.findAll();
+	@Override
+	public List<String> findAllCodigos() {
+		List<String> codigos = areaRepository.findAllCodigos();
+		if (codigos == null) {
+			logger.info("No existe ningún área registrada en la base de datos.");
+			codigos = new ArrayList<String>();
+		}
+		return codigos; 
 	}
 	
-	public List<Area> findAllWithDivision() {
-		return areaRepository.findAllWithDivision();
-	}
+	public List<Area> findAll() {
+		try {
+			return areaRepository.findAll();
+		} catch(EmptyResultDataAccessException e) {
+			logger.info("No existe ninguna área registrada en la base de datos.");
+			return new ArrayList<Area>();
+		}
+	}	
 
 	public Area findById(Long id) {
-		return areaRepository.findById(id);
+		try {
+			return areaRepository.findById(id);
+		} catch(EmptyResultDataAccessException e) {
+			return null;
+		} catch(IncorrectResultSizeDataAccessException e) {
+			logger.error(String.format("No se pudo obtener el área con ID='%d' porque está repetida en la base de datos.", id));
+			return null;
+		}
 	}
 	
 	public Area findByCodigo(String codigo) {
 		try {
 			return areaRepository.findByCodigo(codigo);
 		} catch(EmptyResultDataAccessException e) {
-			logger.info(String.format("No existe el área con código '%s' en la base de datos.", codigo));
+			return null;
+		} catch(IncorrectResultSizeDataAccessException e) {
+			logger.error(String.format("No se pudo obtener el área con código '%s' porque está repetida en la base de datos.", codigo));
 			return null;
 		}
 	}
@@ -92,26 +102,18 @@ public class AreaService implements AreaServiceI {
 		// TODO Auto-generated method stub
 
 	}
-
-	public Area findByIdWithDivision(Long id) {
-		return areaRepository.findByIdWithDivision(id);
-	}
 	
-	@Override
-	public List<String> findAllCodigos() {
-		List<String> codigos = areaRepository.findAllCodigos();
-		if (codigos == null) {
-			logger.info("No existe ningún área registrada en la base de datos.");
-			codigos = new ArrayList<String>();
-		}
-		return codigos; 
+	public void deleteAll() {
+		areaRepository.deleteAll();
+		logger.info("Se eliminaron todas las áreas.");
 	}
 	
 	@Override
 	public void processExcel(InputStream file) {
 		logger.info("======================INICIANDO CARGA DE ÁREAS====================================");
 		List<String> areaCodigos = findAllCodigos();
-	
+		List<String> areaCodigosLeidos = new ArrayList<String>();
+		
         try (XSSFWorkbook libro = new XSSFWorkbook(file)) {
         	XSSFSheet hoja = libro.getSheet("AREAS");
         	if (hoja == null) {
@@ -144,22 +146,26 @@ public class AreaService implements AreaServiceI {
 	   			area.setDivision(division);
 
 	   			if (accion.equals("CREAR")) {
-	   				if (!areaCodigos.contains(codigo)) {
-	   					areaRepository.insert(area);
-	   					logger.info(String.format("FILA %d: Se creó el área '%s'.", numFila, codigo));
+	   				if (areaCodigosLeidos.contains(codigo)) {
+	   					logger.error(String.format("FILA %d: La posición con código '%s' ya fue procesada para crearse en este Excel. Corregir el archivo y probar una nueva carga.", numFila, codigo));
+	   				} else if (areaCodigos.contains(codigo)) {
+	   					logger.error(String.format("FILA %d: No se pudo crear el área '%s' porque el código '%s' ya fue usado.", numFila, nombre, codigo));
 	   				} else {
-	   					logger.info(String.format("FILA %d: No se pudo crear el área '%s' porque el código '%s' ya fue usado.", numFila, nombre, codigo));
+	   					areaRepository.insert(area);
+	   					areaCodigosLeidos.add(codigo);
+	   					logger.info(String.format("FILA %d: Se creó el área '%s'.", numFila, codigo));
 	   				}
 	   			} else if (accion.equals("EDITAR")) {
 	   				Area areaBuscada = findByCodigo(codigo);
 	   				if (areaBuscada != null) {
+	   					area.setId(areaBuscada.getId());
 	   					areaRepository.update(area);
 	   					logger.info(String.format("FILA %d: Se editó el área con código '%s'.", numFila, codigo));
 	   				} else {
 	   					logger.error(String.format("FILA %d: No se pudo editar el área con código '%s' porque no se encontró en la base de datos.", numFila, codigo));
 	   				}
 	   			} else if (accion.equals("ELIMINAR")) {
-	   				Area areaBuscada = areaRepository.findByCodigo(codigo);
+	   				Area areaBuscada = findByCodigo(codigo);
 	   				if (areaBuscada != null) {
 	   					areaRepository.delete(areaBuscada);
 	   					logger.info(String.format("FILA %d: Se eliminó el área con código '%s'.", numFila, codigo));

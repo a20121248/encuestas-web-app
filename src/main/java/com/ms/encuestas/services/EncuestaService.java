@@ -7,23 +7,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ms.encuestas.models.EncuestaCanal;
 import com.ms.encuestas.models.EncuestaCentro;
 import com.ms.encuestas.models.EncuestaEmpresa;
-import com.ms.encuestas.models.EncuestaLinea;
-import com.ms.encuestas.models.EncuestaLineaCanal;
 import com.ms.encuestas.models.EncuestaObjeto;
 import com.ms.encuestas.models.EncuestaObjetoObjetos;
-import com.ms.encuestas.models.EncuestaProductoCanal;
-import com.ms.encuestas.models.EncuestaProductoSubcanal;
 import com.ms.encuestas.models.Justificacion;
 import com.ms.encuestas.repositories.EncuestaRepository;
 import com.ms.encuestas.repositories.PosicionRepository;
 
 @Service
 public class EncuestaService implements EncuestaServiceI {
-	private Logger logger = LoggerFactory.getLogger(EncuestaService.class);
-	
+	private Logger logger = LoggerFactory.getLogger(EncuestaService.class);	
     @Autowired
     private EncuestaRepository encuestaRepository;
     @Autowired

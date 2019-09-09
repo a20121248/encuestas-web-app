@@ -3,17 +3,13 @@ package com.ms.encuestas.repositories;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.ms.encuestas.models.Area;
 import com.ms.encuestas.models.Centro;
-import com.ms.encuestas.models.Division;
 import com.ms.encuestas.models.Posicion;
 
 public class PosicionMapper implements RowMapper<Posicion> {
-	private Logger logger = LoggerFactory.getLogger(PosicionMapper.class);
 	@Override
 	public Posicion mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Posicion posicion = new Posicion();

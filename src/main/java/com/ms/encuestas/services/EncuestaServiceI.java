@@ -1,14 +1,9 @@
 package com.ms.encuestas.services;
 
 import com.ms.encuestas.models.EncuestaEmpresa;
-import com.ms.encuestas.models.EncuestaCanal;
 import com.ms.encuestas.models.EncuestaCentro;
-import com.ms.encuestas.models.EncuestaLinea;
-import com.ms.encuestas.models.EncuestaLineaCanal;
 import com.ms.encuestas.models.EncuestaObjeto;
 import com.ms.encuestas.models.EncuestaObjetoObjetos;
-import com.ms.encuestas.models.EncuestaProductoCanal;
-import com.ms.encuestas.models.EncuestaProductoSubcanal;
 
 public interface EncuestaServiceI {
 	public EncuestaEmpresa getEmpresa(Long procesoId, String posicionCodigo, Long encuestaTipoId);

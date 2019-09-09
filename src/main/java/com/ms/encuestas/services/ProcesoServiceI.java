@@ -10,8 +10,7 @@ public interface ProcesoServiceI {
 	public List<Proceso> findAll();
 	public Proceso findById(Long id);
 	public Proceso findByCodigo(String codigo);
-	public int store(Proceso proceso);
-	public int update(Proceso proceso);
-	public void delete(Proceso proceso);
+	public Proceso insert(Proceso proceso);
+	public Proceso update(Proceso proceso);
 	public void deleteById(Long id);
 }

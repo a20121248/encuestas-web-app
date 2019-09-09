@@ -16,6 +16,7 @@ public interface PerfilServiceI {
 	public int save(Perfil perfil);
 	public void delete(Perfil perfil);
 	public void deleteById(Long id);
+	public void deleteAll();
 	public void processExcel(InputStream file);
 	public Resource downloadExcel();
 }

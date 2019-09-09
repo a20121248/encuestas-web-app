@@ -1,23 +1,18 @@
 package com.ms.encuestas.repositories;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.ms.encuestas.models.Centro;
 import com.ms.encuestas.models.Rol;
 
 @Repository
 public class RolRepository {
-	private Logger logger = LoggerFactory.getLogger(RolRepository.class);
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 	
@@ -27,20 +22,13 @@ public class RolRepository {
 	}
 	
 	public List<Rol> findAll() {
-		String sql = "SELECT id,\n" +
-					 "       nombre,\n" +
-					 "       fecha_creacion\n" +
-					 "  FROM roles";
+		String sql = "SELECT * FROM roles";
 		return plantilla.query(sql, new RolMapper());
 	}
 	
 	public Rol findById(Long id) {
-		String queryStr = "SELECT id,\n" +
-                		  "       nombre,\n" +
-                		  "       fecha_creacion\n" +
-                		  "  FROM roles\n" +
-                		  " WHERE id=:id";
-        return plantilla.queryForObject(queryStr,new MapSqlParameterSource("id", id),new RolMapper());
+		String queryStr = "SELECT * FROM roles WHERE id=:id";
+        return plantilla.queryForObject(queryStr,new MapSqlParameterSource("id", id), new RolMapper());
 	}
 	
 	public List<Rol> findAllByUsuarioCodigo(String usuarioCodigo) {

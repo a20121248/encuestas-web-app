@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.ms.encuestas.models.Empresa;
 import com.ms.encuestas.models.Objeto;
 
 public class ObjetoMapper implements RowMapper<Objeto> {

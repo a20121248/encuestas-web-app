@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.ms.encuestas.models.Centro;
@@ -51,6 +52,17 @@ public class CentroService implements CentroServiceI {
 		return centroRepository.count(empresaId);
 	}
 
+	@Override
+	public List<String> findAllCodigos() {
+		List<String> codigos = centroRepository.findAllCodigos();
+		if (codigos == null) {
+			logger.info("No existe ningún centro de costos registrado en la base de datos.");
+			codigos = new ArrayList<String>();
+		}
+		return codigos; 
+	}
+	
+	@Override
 	public List<Centro> findAll() {
 		try {
 			return centroRepository.findAll();
@@ -60,8 +72,28 @@ public class CentroService implements CentroServiceI {
 		}
 	}
 
+	@Override
 	public Centro findById(Long id) {
-		return centroRepository.findById(id);
+		try {
+			return centroRepository.findById(id);
+		} catch(EmptyResultDataAccessException e) {
+			return null;
+		} catch(IncorrectResultSizeDataAccessException e) {
+			logger.error(String.format("No se pudo obtener el centro de costos con ID='%d' porque está repetido en la base de datos.", id));
+			return null;
+		}
+	}
+	
+	@Override
+	public Centro findByCodigo(String codigo) {
+		try {
+			return centroRepository.findByCodigo(codigo);
+		} catch(EmptyResultDataAccessException e) {
+			return null;
+		} catch(IncorrectResultSizeDataAccessException e) {
+			logger.error(String.format("No se pudo obtener el centros de costos con código '%s' porque está repetido en la base de datos.", codigo));
+			return null;
+		}
 	}
 
 	public Centro save(Centro centro) {
@@ -77,13 +109,17 @@ public class CentroService implements CentroServiceI {
 	}
 	
 	@Override
-	public List<String> findAllCodigos() {
-		List<String> codigos = centroRepository.findAllCodigos();
-		if (codigos == null) {
-			logger.info("No existe ningún centro de costos registrado en la base de datos.");
-			codigos = new ArrayList<String>();
-		}
-		return codigos; 
+	public void deleteAllCentros() {
+		Long empresaId = new Long(1); // Pacifico Seguros
+		centroRepository.deleteAll(empresaId);
+		logger.info("Se eliminaron todos los centros de costos.");
+	}
+	
+	@Override
+	public void deleteAllLineasEps() {
+		Long empresaId = new Long(2); // Pacifico EPS
+		centroRepository.deleteAll(empresaId);
+		logger.info("Se eliminaron todas las líneas EPS.");
 	}
 
 	@Override
@@ -91,6 +127,7 @@ public class CentroService implements CentroServiceI {
 		logger.info("======================INICIANDO CARGA DE CENTROS DE COSTOS====================================");
 		List<Tipo> centroTipos = tipoRepository.getCentroTypes();
 		List<String> centroCodigos = findAllCodigos();
+		List<String> centroCodigosLeidos = new ArrayList<String>();
 		
         try (XSSFWorkbook libro = new XSSFWorkbook(file)) {
         	XSSFSheet hoja = libro.getSheet("CENTROS");
@@ -131,22 +168,26 @@ public class CentroService implements CentroServiceI {
         	   	Long empresaId = new Long(1);
         	   	
                	if (accion.equals("CREAR")) {
-	   				if (!centroCodigos.contains(codigo)) {
-	   					centroRepository.insert(centro, empresaId);
-	   					logger.info(String.format("FILA %d: Se creó el centro de costos '%s'.", numFila, codigo));
+               		if (centroCodigosLeidos.contains(codigo)) {
+	   					logger.error(String.format("FILA %d: La posición con código '%s' ya fue procesada para crearse en este Excel. Corregir el archivo y probar una nueva carga.", numFila, codigo));
+	   				} else if (centroCodigos.contains(codigo)) {
+	   					logger.error(String.format("FILA %d: No se pudo crear el centro de costos '%s' porque el código '%s' ya fue usado.", numFila, nombre, codigo));
 	   				} else {
-	   					logger.info(String.format("FILA %d: No se pudo crear el centro de costos '%s' porque el código '%s' ya fue usado.", numFila, nombre, codigo));
+	   					centroRepository.insert(centro, empresaId);
+	   					centroCodigosLeidos.add(codigo);
+	   					logger.info(String.format("FILA %d: Se creó el centro de costos '%s'.", numFila, codigo));
 	   				}
                	} else if (accion.equals("EDITAR")) {
-	   				Centro centroBuscado = centroRepository.findByCodigo(codigo);
+	   				Centro centroBuscado = findByCodigo(codigo);
 	   				if (centroBuscado != null) {
+	   					centro.setId(centroBuscado.getId());
 	   					centroRepository.update(centro, empresaId);
 	   					logger.info(String.format("FILA %d: Se editó el centro de costos con código '%s'.", numFila, codigo));
 	   				} else {
 	   					logger.error(String.format("FILA %d: No se pudo editar el centro de costos con código '%s' porque no se encontró en la base de datos.", numFila, codigo));
 	   				}
                	} else if (accion.equals("ELIMINAR")) {
-	   				Centro centroBuscado = centroRepository.findByCodigo(codigo);
+	   				Centro centroBuscado = findByCodigo(codigo);
 	   				if (centroBuscado != null) {
 	   					centroRepository.delete(centroBuscado);
 	   					logger.info(String.format("FILA %d: Se eliminó el usuario con código '%s'.", numFila, codigo));
@@ -154,7 +195,7 @@ public class CentroService implements CentroServiceI {
 	   					logger.error(String.format("FILA %d: No se pudo eliminar el usuario con código '%s' porque no se encontró en la base de datos.", numFila, codigo));
 	   				}
                	} else {
-            	   	logger.info(String.format("No se realizó ninguna acción en el centro de costos %s porque la acción '%s' no existe.", codigo, accion));
+            	   	logger.error(String.format("No se realizó ninguna acción en el centro de costos %s porque la acción '%s' no existe.", codigo, accion));
                	}
            	}
            	libro.close();
