@@ -2,7 +2,6 @@ package com.ms.encuestas.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Proceso implements Serializable {
 	private static final long serialVersionUID = 1L;
