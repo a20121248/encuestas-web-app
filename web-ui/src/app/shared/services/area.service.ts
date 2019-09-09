@@ -51,7 +51,6 @@ export class AreaService {
 
   findAll(): Observable<Area[]> {
     const url = `${this.urlServer.api}areas`;
-    console.log(url);
     return this.http.get<Area[]>(url);
   }
 }

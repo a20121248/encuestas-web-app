@@ -1,9 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Proceso } from 'src/app/shared/models/Proceso';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 
 export const MY_FORMATS = {
   parse: {
@@ -24,6 +25,7 @@ export const MY_FORMATS = {
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' }}
   ]
 })
 export class ModalEditarComponent implements OnInit {
@@ -32,6 +34,7 @@ export class ModalEditarComponent implements OnInit {
   proceso: Proceso;
   estados: string[];
   selectedEstado: string;
+
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef<ModalEditarComponent>,
               @Inject(MAT_DIALOG_DATA) private data) { }
@@ -41,18 +44,43 @@ export class ModalEditarComponent implements OnInit {
     this.titulo = this.data.titulo;
     this.proceso = this.data.proceso;
     this.formGroup = this.formBuilder.group({
-      id: this.proceso.id,
-      codigo: this.proceso.codigo,
-      nombre: this.proceso.nombre,
-      creador: this.data.creador.nombre,
-      fechaInicio: this.proceso.fechaInicio,
-      fechaCierre: this.proceso.fechaCierre,
-      fechaCreacion: this.proceso.fechaCreacion,
-      fechaActualizacion: this.proceso.fechaActualizacion
+      codigo: [this.proceso.codigo, Validators.required],
+      nombre: [this.proceso.nombre, Validators.required],
+      estado: [this.proceso.activo ? '1' : '2', Validators.required],
+      fechaInicio: [this.proceso.fechaInicio, Validators.required],
+      fechaCierre: [this.proceso.fechaCierre, Validators.required]
     });
   }
 
+  get codigo() { return this.formGroup.get('codigo'); }
+  get nombre() { return this.formGroup.get('nombre'); }
+  get estado() { return this.formGroup.get('estado'); }
+  get fechaInicio() { return this.formGroup.get('fechaInicio'); }
+  get fechaCierre() { return this.formGroup.get('fechaCierre'); }
+
+  get errorFechas() {
+    if (this.fechaInicio.value == null || this.fechaCierre.value == null) {
+      return false;
+    }
+    if (this.fechaInicio.value < this.fechaCierre.value) {
+      return false;
+    }
+    return true;
+  }
+
   submit() {
-    this.dialogRef.close(this.formGroup.value);
+    if (this.formGroup.valid && !this.errorFechas) {
+      this.formGroup.value.id = this.proceso.id;
+      this.formGroup.value.activo = this.formGroup.value.estado == '1' ? true : false;
+      this.formGroup.value.fechaCreacion = this.proceso.fechaCreacion;
+      this.formGroup.value.fechaActualizacion = this.proceso.fechaActualizacion;
+      this.dialogRef.close(this.formGroup.value);
+    } else {
+      this.codigo.markAsTouched({ onlySelf: true });
+      this.nombre.markAsTouched({ onlySelf: true });
+      this.estado.markAsTouched({ onlySelf: true });
+      this.fechaInicio.markAsTouched({ onlySelf: true });
+      this.fechaCierre.markAsTouched({ onlySelf: true });
+    }
   }
 }

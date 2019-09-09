@@ -12,6 +12,7 @@
           <button mat-raised-button color="warn" (click)="crear()"><i class="material-icons">add</i>Crear</button>
           <button mat-raised-button color="warn" (click)="editar()"><i class="material-icons">create</i>Editar</button>
           <button mat-raised-button color="warn" (click)="eliminar()"><i class="material-icons">clear</i>Eliminar</button>
+          <button mat-raised-button (click)="eliminar()"><i class="material-icons">delete</i>Limpiar</button>
         </div>
         <div class="table-responsive">
           <table mat-table [dataSource]="centros">
@@ -59,6 +60,7 @@
             <tr mat-header-row *matHeaderRowDef="dcCentros"></tr>
             <tr mat-row *matRowDef="let row; columns: dcCentros;" [class.selected-row]="row === selectedCentro" (click)="setSelected(row)"></tr>
           </table>
+          <p *ngIf="centros && centros.length==0" style="font-size:13px;margin:1em 0 .1em;">No existen centros de costos en la base de datos.</p>
         </div>
       </mat-card>
     </div>
