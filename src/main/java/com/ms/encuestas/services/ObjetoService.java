@@ -1,17 +1,16 @@
 package com.ms.encuestas.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.ms.encuestas.models.Division;
 import com.ms.encuestas.models.Objeto;
-import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.repositories.ObjetoRepository;
-import com.ms.encuestas.repositories.ProcesoRepository;
 
 @Service
 public class ObjetoService implements ObjetoServiceI {
@@ -32,12 +31,22 @@ public class ObjetoService implements ObjetoServiceI {
 	
 	@Override
 	public List<Objeto> findAllLineas() {
-		return objetoRepository.findAll(new Long(1));
+		try {
+			return objetoRepository.findAll(new Long(1));
+		} catch(EmptyResultDataAccessException e) {
+			logger.info("No existe ninguna línea registrada en la base de datos.");
+			return new ArrayList<Objeto>();
+		}
 	}
 	
 	@Override
 	public List<Objeto> findAllCanales() {
-		return objetoRepository.findAll(new Long(2));
+		try {
+			return objetoRepository.findAll(new Long(2));
+		} catch(EmptyResultDataAccessException e) {
+			logger.info("No existe ningún canal registrado en la base de datos.");
+			return new ArrayList<Objeto>();
+		}
 	}
 	
 	@Override

@@ -1,5 +1,6 @@
 package com.ms.encuestas.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -19,53 +20,62 @@ public class ProcesoService implements ProcesoServiceI {
 	private ProcesoRepository procesoRepository;
 	
 	@Override
+	public Long count() {
+		return procesoRepository.count();
+	}
+	
+	@Override
 	public Proceso getCurrentProceso() {
 		try {
 			return procesoRepository.getCurrentProceso();
 		} catch(EmptyResultDataAccessException e) {
-			logger.info("No se encontró un proceso activo en la base de datos.");
+			logger.info("No se encontró una encuesta activa en la base de datos.");
+			return null;
+		}
+	}
+
+	@Override
+	public List<Proceso> findAll() {
+		try {
+			return procesoRepository.findAll();
+		} catch(EmptyResultDataAccessException e) {
+			logger.info("No existe ninguna encuesta registrada en la base de datos.");
+			return new ArrayList<Proceso>();
+		}
+	}
+	
+	@Override
+	public Proceso findById(Long id) {
+		try {
+			return procesoRepository.findById(id);
+		} catch(EmptyResultDataAccessException e) {
+			logger.info(String.format("No se encontró la encuesta con ID=%d.", id));
 			return null;
 		}
 	}
 	
 	@Override
-	public Long count() {
-		return procesoRepository.count();
-	}
-
-	@Override
-	public List<Proceso> findAll() {
-		return procesoRepository.findAll();
-	}
-	
-	@Override
-	public Proceso findById(Long id) {
-		return procesoRepository.findById(id);
-	}
-	
-	@Override
 	public Proceso findByCodigo(String codigo) {
-		return procesoRepository.findByCodigo(codigo);
+		try {
+			return procesoRepository.findByCodigo(codigo);
+		} catch(EmptyResultDataAccessException e) {
+			logger.info(String.format("No se encontró la encuesta con código '%s'.", codigo));
+			return null;
+		}
 	}
 	
 	@Override
-	public int store(Proceso proceso) {
+	public Proceso insert(Proceso proceso) {
 		return procesoRepository.insert(proceso);
 	}
 	
 	@Override
-	public int update(Proceso proceso) {
+	public Proceso update(Proceso proceso) {
 		return procesoRepository.update(proceso);
 	}
 
 	@Override
-	public void delete(Proceso proceso) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
+		procesoRepository.deleteById(id);
 	}
 }

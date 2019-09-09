@@ -5,15 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.ms.encuestas.models.Perfil;
 import com.ms.encuestas.models.Rol;
 import com.ms.encuestas.models.Usuario;
 
@@ -292,7 +290,7 @@ public class UsuarioRepository {
 		return plantilla.query(sql, paramMap, new UsuarioMapper());
 	}
 
-	public Usuario findByUsuarioGenerales(String usuarioRed) throws EmptyResultDataAccessException {
+	public Usuario findByUsuarioGenerales(String usuarioRed) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
@@ -304,7 +302,7 @@ public class UsuarioRepository {
 		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_red", usuarioRed.toUpperCase()), new UsuarioMapper());
 	}
 	
-	public Usuario findByUsuarioVida(String usuarioRed) throws EmptyResultDataAccessException {
+	public Usuario findByUsuarioVida(String usuarioRed) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
@@ -316,7 +314,7 @@ public class UsuarioRepository {
 		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_red", usuarioRed.toUpperCase()), new UsuarioMapper());
 	}
 	
-	public Usuario findByCodigo(String usuarioCodigo) throws EmptyResultDataAccessException {
+	public Usuario findByCodigo(String usuarioCodigo) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
@@ -475,8 +473,12 @@ public class UsuarioRepository {
 	}
 	
 	public void delete(Usuario usuario) {
-		String sql = "DELETE FROM usuarios WHERE codigo=:codigo";
+		String sql = "DELETE FROM usuarios WHERE codigo=:codigo AND codigo!='admin.encuestas'";
 		plantilla.update(sql, new MapSqlParameterSource("codigo", usuario.getCodigo()));
+	}
+	
+	public void deleteAll() {
+		plantilla.update("DELETE FROM usuarios WHERE codigo!='admin.encuestas'", (MapSqlParameterSource) null);
 	}
 	
 	public List<Rol> findRolesByCodigo(String codigo) {
@@ -493,7 +495,8 @@ public class UsuarioRepository {
 		String sql = "SELECT NULL matricula,\n" + 
 				 	 "       NULL usuario_vida,\n" + 
 				 	 "       NULL usuario_generales,\n" + 
-				 	 "       NULL nombre_completo,\n" + 
+				 	 "       NULL nombre_completo,\n" +
+				 	 "       NULL rol,\n" +
 				 	 "       NULL fecha_creacion,\n" +
 				 	 "       NULL fecha_actualizacion\n" +
 				 	 "  FROM DUAL";
@@ -501,15 +504,21 @@ public class UsuarioRepository {
 	}
 	
 	public List<Map<String,Object>> findAllList() throws EmptyResultDataAccessException {
-		String sql = "SELECT codigo matricula,\n" + 
-					 "       usuario_vida,\n" + 
-					 "       usuario_generales,\n" + 
-					 "       nombre_completo,\n" + 
-					 "       fecha_creacion,\n" +
-					 "       fecha_actualizacion\n" +
-					 "  FROM usuarios\n" + 
-					 " WHERE fecha_eliminacion IS NULL\n" + 
-					 " ORDER BY fecha_creacion";
+		String sql = "SELECT A.codigo matricula,\n" + 
+					 "       A.usuario_vida,\n" + 
+					 "       A.usuario_generales,\n" + 
+					 "       A.nombre_completo,\n" +
+					 "       CASE WHEN (B.rol_id=1) THEN 'ADMINISTRADOR'\n" +
+					 "            WHEN (B.rol_id=2) THEN 'USUARIO'\n" +
+					 "            ELSE 'NO ENCONTRADO'\n" +
+					 "       END ROL,\n" +
+					 "       A.fecha_creacion,\n" +
+					 "       A.fecha_actualizacion\n" +
+					 "  FROM usuarios A\n" +
+					 "  LEFT JOIN (SELECT usuario_codigo, min(rol_id) rol_id FROM rol_usuario GROUP BY usuario_codigo) B\n" +
+					 "    ON B.usuario_codigo=A.codigo\n" + 
+					 " WHERE A.fecha_eliminacion IS NULL\n" + 
+					 " ORDER BY A.fecha_creacion";
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
 	}
 }

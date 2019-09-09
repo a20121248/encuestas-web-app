@@ -102,7 +102,7 @@ public class PerfilRepository {
         return plantilla.queryForObject(sql, new MapSqlParameterSource("codigo", codigo), new PerfilMapper());
 	}
 	
-	public Long insert(Perfil perfil) throws EmptyResultDataAccessException {
+	public Perfil insert(Perfil perfil) throws EmptyResultDataAccessException {
 		String sql = "INSERT INTO perfiles(codigo,nombre,perfil_tipo_id,fecha_creacion,fecha_actualizacion)\n" +
                      "VALUES(:codigo,:nombre,:perfil_tipo_id,:fecha_creacion,:fecha_actualizacion)";		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -112,13 +112,14 @@ public class PerfilRepository {
 		Date fecha = new Date();
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);
-		plantilla.update(sql,paramMap);
+		plantilla.update(sql, paramMap);
 		
 		sql = "SELECT perfiles_seq.currval FROM DUAL";
-		return plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class);
+		perfil.setId(plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class));
+		return perfil;
 	}
 		
-	public Long update(Perfil perfil) throws EmptyResultDataAccessException {
+	public Perfil update(Perfil perfil) throws EmptyResultDataAccessException {
 		String sql = "UPDATE perfiles\n" +
 					 "   SET codigo=:codigo,\n" +
 					 "       nombre=:nombre,\n" +
@@ -132,10 +133,15 @@ public class PerfilRepository {
 		paramMap.put("perfil_tipo_id", perfil.getTipo().getId());
 		paramMap.put("fecha_actualizacion", new Date());
 		plantilla.update(sql,paramMap);
-		return perfil.getId();
+		return perfil;
 	}
 	
-	public int insertLstCentros(Long perfilId, List<Centro> lstCentros) throws EmptyResultDataAccessException {
+	public void deleteDetalleCentros(Long perfilId) {
+		String sql = "DELETE FROM perfil_centro WHERE perfil_id=:perfil_id";
+		plantilla.update(sql, new MapSqlParameterSource("perfil_id", perfilId));
+	}
+	
+	public Long insertLstCentros(Long perfilId, List<Centro> lstCentros) throws EmptyResultDataAccessException {
 		String sql = "INSERT INTO perfil_centro(perfil_id,centro_id,fecha_creacion,fecha_actualizacion)\n" +
 					 "VALUES(:perfil_id,:centro_id,:fecha_creacion,:fecha_actualizacion)";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -143,17 +149,11 @@ public class PerfilRepository {
 		Date fecha = new Date();
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);
-		
 		for (Centro centro : lstCentros) {
 			paramMap.put("centro_id", centro.getId());
 			plantilla.update(sql,paramMap);
 		}
-		return 1;
-	}
-
-	public void deleteDetalleCentros(Long perfilId) {
-		String sql = "DELETE FROM perfil_centro WHERE perfil_id=:perfil_id";
-		plantilla.update(sql, new MapSqlParameterSource("perfil_id", perfilId));
+		return perfilId;
 	}
 	
 	public void deleteDetalleLineasCanales(Long perfilId) {
@@ -161,7 +161,7 @@ public class PerfilRepository {
 		plantilla.update(sql, new MapSqlParameterSource("perfil_id", perfilId));
 	}
 	
-	public int insertLstLineasCanales(Long perfilId, List<LineaCanal> lstLineasCanales) throws EmptyResultDataAccessException {
+	public Long insertLstLineasCanales(Long perfilId, List<LineaCanal> lstLineasCanales) throws EmptyResultDataAccessException {
 		String sql = "INSERT INTO perfil_linea_canal(perfil_id,linea_id,canal_id,fecha_creacion,fecha_actualizacion)\n" +
                      "VALUES(:perfil_id,:linea_id,:canal_id,:fecha_creacion,:fecha_actualizacion)";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -174,26 +174,41 @@ public class PerfilRepository {
 			paramMap.put("canal_id", lineaCanal.getCanal().getId());
 			plantilla.update(sql,paramMap);
 		}
-		return 1;
+		return perfilId;
 	}
 	
-	public void delete(Perfil perfil) throws EmptyResultDataAccessException {
+	public void delete(Perfil perfil) {
+		plantilla.update("DELETE FROM perfiles WHERE id=:id", new MapSqlParameterSource("id", perfil.getId()));
+		if (perfil.getTipo().getNombre().equals("STAFF")) {
+			plantilla.update("DELETE FROM perfil_centro WHERE perfil_id=:perfil_id", new MapSqlParameterSource("perfil_id", perfil.getId()));
+		} else {
+			plantilla.update("DELETE FROM perfil_linea_canal WHERE perfil_id=:perfil_id", new MapSqlParameterSource("perfil_id", perfil.getId()));
+		}
+	}
+
+	public void deleteAll() {
+		plantilla.update("DELETE FROM perfiles", (MapSqlParameterSource) null);
+		plantilla.update("DELETE FROM perfil_centro", (MapSqlParameterSource) null);
+		plantilla.update("DELETE FROM perfil_linea_canal", (MapSqlParameterSource) null);
+	}
+	
+	public void softDelete(Perfil perfil) throws EmptyResultDataAccessException {
 		String sql = "UPDATE perfiles\n" +
 				 	 "   SET fecha_eliminacion=:fecha_eliminacion" +
 				 	 " WHERE id=:id";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", perfil.getId());
 		paramMap.put("fecha_eliminacion", new Date());
-		plantilla.update(sql,paramMap);
+		plantilla.update(sql, paramMap);
 	}
 	
-	public void deleteById(Long id) throws EmptyResultDataAccessException {
+	public void softDeleteById(Long id) throws EmptyResultDataAccessException {
 		String sql = "UPDATE perfiles\n" +
 				 	 "   SET fecha_eliminacion=:fecha_eliminacion" +
 				 	 " WHERE id=:id";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("id", id);
 		paramMap.put("fecha_eliminacion", new Date());
-		plantilla.update(sql,paramMap);
+		plantilla.update(sql, paramMap);
 	}
 }

@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ms.encuestas.models.Centro;
+import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.services.CentroService;
 import com.ms.encuestas.services.CentroServiceI;
 
@@ -105,10 +106,8 @@ public class CentroController {
 			this.centroService.processExcel(file.getInputStream());
 		} catch (IOException e) {
 			logger.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
-		}
-		
-	}
-	
+		}		
+	}	
 	
 	@PostMapping("/centros/descargar")
 	@Transactional(readOnly = true)
@@ -120,5 +119,11 @@ public class CentroController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+	}
+	
+	@PostMapping("/centros/eliminar-todos")
+	@ResponseStatus(HttpStatus.OK)
+	public void deleteAllCentros() {
+		centroService.deleteAllCentros();
 	}
 }

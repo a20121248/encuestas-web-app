@@ -1,6 +1,5 @@
 package com.ms.encuestas.auth;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,11 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -40,20 +37,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		logger.info(String.format("Probando la autenticacion con usuario: %s", authentication.getName()));
-		logger.info(String.format("Probando la autenticacion con contrasenia: %s", authentication.getCredentials().toString()));
-		
     	String strPUsuario = authentication.getName();
     	String strPContrasenia = authentication.getCredentials().toString();
     	
 		boolean error = false;
 		Usuario usuario = null;
     	if (strPUsuario.equals("admin.encuestas") || !usarAD) {
-    		if (strPUsuario.length()>5 && strPUsuario.substring(0, 5).toUpperCase().equals("EPPS\\")) {    		
-    			usuario = usuarioService.findByUsuarioGenerales(strPUsuario);
-    		} else {
-    			usuario = usuarioService.findByUsuarioVida(strPUsuario);
-    		}
+    		usuario = usuarioService.findByUsuarioRed(strPUsuario);
     		if (usuario == null) {
     			error = true;
     		} else if (!passwordEncoder().matches(strPContrasenia,usuario.getContrasenha())) {
@@ -70,17 +60,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         		SegCenServicio segCenServicio = new SegCenServicio();
             	ISegCenServicios segCenServicios = segCenServicio.getBasicHttpBindingISegCenServicios();
             	String response = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
-            	logger.info(String.format("Respuesta del SegCen: '%s'.", response));
-            	if (!response.equals("")) {
+            	if (response.equals("")) {
+            		logger.info(String.format("Respuesta del SegCen: '%s'.", response));
+            	} else {
+            		logger.error(String.format("Respuesta del SegCen: '%s'.", response));
             		error = true;
             	}
             	
-        		if (strPUsuario.length()>5 && strPUsuario.substring(0, 5).toUpperCase().equals("EPPS\\")) {
-        			usuario = usuarioService.findByUsuarioGenerales(strPUsuario);
-        		} else {
-        			usuario = usuarioService.findByUsuarioVida(strPUsuario);
-        		}
-        		
+            	usuario = usuarioService.findByUsuarioRed(strPUsuario);        		
         		if (usuario == null) {
         			error = true;
         		}

@@ -1,12 +1,8 @@
 package com.ms.encuestas.repositories;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -15,20 +11,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.ms.encuestas.models.Area;
 import com.ms.encuestas.models.Centro;
-import com.ms.encuestas.models.Empresa;
-import com.ms.encuestas.models.EncuestaCentro;
-import com.ms.encuestas.models.EncuestaEmpresa;
-import com.ms.encuestas.models.EncuestaObjeto;
-import com.ms.encuestas.models.EncuestaObjetoObjetos;
-import com.ms.encuestas.models.Justificacion;
-import com.ms.encuestas.models.Objeto;
-import com.ms.encuestas.models.ObjetoObjetos;
 import com.ms.encuestas.models.Tipo;
 
 @CrossOrigin(origins={})
 @Repository
 public class ReporteRepository {
-	private Logger logger = LoggerFactory.getLogger(ReporteRepository.class);
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 	

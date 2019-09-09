@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -35,18 +36,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ms.encuestas.models.Area;
-import com.ms.encuestas.models.Centro;
-import com.ms.encuestas.models.DatosPosicion;
-import com.ms.encuestas.models.LineaCanal;
-import com.ms.encuestas.models.Objeto;
-import com.ms.encuestas.models.Perfil;
-import com.ms.encuestas.models.Posicion;
-import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.models.Rol;
-import com.ms.encuestas.models.Tipo;
 import com.ms.encuestas.models.Usuario;
-import com.ms.encuestas.repositories.PosicionRepository;
 import com.ms.encuestas.repositories.RolRepository;
 import com.ms.encuestas.repositories.UsuarioRepository;
 import com.ms.encuestas.services.utils.ExcelServiceI;
@@ -64,8 +55,6 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	private UsuarioRepository usuarioRepository;
 	@Autowired
 	private RolRepository rolRepository;
-	@Autowired
-	private PosicionRepository posicionRepository;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -127,7 +116,9 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 		try {
 			return usuarioRepository.findByCodigo(codigo);
 		} catch(EmptyResultDataAccessException e) {
-			logger.info(String.format("No se encontró al usuario '%s' en la base de datos.", codigo));
+			return null;
+		} catch(IncorrectResultSizeDataAccessException e) {
+			logger.error(String.format("No se pudo obtener al colaborador con código '%s' porque está repetido en la base de datos.", codigo));
 			return null;
 		}
 	}
@@ -149,14 +140,6 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	public Usuario findByCodigoWithPosicion(String codigo) {
 		return usuarioRepository.findByCodigoWithPosicion(codigo);
 	}
-	
-	@Override
-	@Transactional(readOnly = true)
-	public Usuario findByCodigoWithPosicionFull(String codigo) {
-		Usuario usuario = usuarioRepository.findByCodigoWithPosicion(codigo);
-		usuario.setPosicion(posicionRepository.findByCodigoWithAreaAndCentro(usuario.getPosicion().getCodigo()));
-		return usuario;
-	}
 
 	@Override
 	@Transactional(readOnly = true)
@@ -165,14 +148,16 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 		return null;
 	}
 
+	@Override
 	public void delete(Usuario usuario) {
 		// TODO Auto-generated method stub
 		
 	}
-
-	public void deleteById(String codigo) {
-		// TODO Auto-generated method stub
-		
+	
+	@Override
+	public void deleteAll() {
+		usuarioRepository.deleteAll();
+		logger.info("Se eliminaron todos los colaboradores de la base de datos.");	
 	}
 
 	@Override
@@ -185,29 +170,30 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	}
 
 	@Override
-	public Usuario findByUsuarioGenerales(String usuarioRed) {
+	public Usuario findByUsuarioRed(String usuarioRed) {
+		String tipo = "";
 		try {
-			return usuarioRepository.findByUsuarioGenerales(usuarioRed);
+			if (usuarioRed.length()>5 && usuarioRed.substring(0, 5).toUpperCase().equals("EPPS\\")) {
+				tipo = "GENERALES";
+				return usuarioRepository.findByUsuarioGenerales(usuarioRed);
+			} else {
+				tipo = "VIDA";
+				return usuarioRepository.findByUsuarioVida(usuarioRed);
+			}			
 		} catch(EmptyResultDataAccessException e) {
-			logger.info(String.format("No se encontró al usuario '%s' en la base de datos de Generales.", usuarioRed));
+			logger.error(String.format("El usuario de red '%s' no existe en la base de datos de %s.", usuarioRed, tipo));
+			return null;
+		} catch(IncorrectResultSizeDataAccessException e) {
+			logger.error(String.format("El usuario de red '%s' está repetido en la base de datos de %s.", usuarioRed, tipo));
 			return null;
 		}
 	}
-
-	@Override
-	public Usuario findByUsuarioVida(String usuarioRed) {
-		try {
-			return usuarioRepository.findByUsuarioVida(usuarioRed);
-		} catch(EmptyResultDataAccessException e) {
-			logger.info(String.format("No se encontró al usuario '%s' en la base de datos de Vida.", usuarioRed));
-			return null;
-		}
-	}
-
+	
 	@Override
 	public void processExcel(InputStream file) {
 		logger.info("======================INICIANDO CARGA DE COLABORADORES====================================");
 		List<String> usuarioCodigos = findAllCodigos();
+		List<String> usuarioCodigosLeidos = new ArrayList<String>();
 		
 		try (XSSFWorkbook libro = new XSSFWorkbook(file)) {
         	XSSFSheet hoja = libro.getSheet("COLABORADORES");
@@ -245,26 +231,30 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	   			usuario.setNombreCompleto(nombreCompleto);
 
 	   			if (accion.equals("CREAR")) {
-	   				if (!usuarioCodigos.contains(codigo)) {
+	   				if (usuarioCodigosLeidos.contains(codigo)) {
+	   					logger.error(String.format("FILA %d: La matrícula '%s' ya fue procesada para crearse en este Excel. Corregir el archivo y probar una nueva carga.", numFila, codigo));
+	   				} else if (usuarioCodigos.contains(codigo)) {
+	   					logger.error(String.format("FILA %d: No se pudo crear el colaborador '%s' porque el código '%s' ya fue usado.", numFila, nombreCompleto, codigo));
+	   				} else {
 	   					if (rolNombre.equals("USUARIO")) {
 		   					rolRepository.deletesRolesUsuario(codigo);
 	   						rolRepository.insertRolUsuario(new Long(2), codigo);
 		   					usuarioRepository.insert(usuario);
-		   					logger.info(String.format("FILA %d: Se creó el colaborador '%s'.", numFila, codigo));
+		   		   			usuarioCodigosLeidos.add(codigo);
+		   					logger.info(String.format("FILA %d: Se creó el colaborador con matrícula '%s'.", numFila, codigo));
 	   					} else if (rolNombre.equals("ADMINISTRADOR")) {
 	   						rolRepository.deletesRolesUsuario(codigo);
 	   						rolRepository.insertRolUsuario(new Long(1), codigo);
 	   						rolRepository.insertRolUsuario(new Long(2), codigo);
 		   					usuarioRepository.insert(usuario);
-		   					logger.info(String.format("FILA %d: Se creó el colaborador '%s'.", numFila, codigo));
+		   					usuarioCodigosLeidos.add(codigo);
+		   					logger.info(String.format("FILA %d: Se creó el colaborador con matrícula '%s'.", numFila, codigo));
 	   					} else {
-	   						logger.info(String.format("FILA %d: No se pudo crear el colaborador '%s' porque el rol '%s' no existe.", numFila, nombreCompleto, rolNombre));
+	   						logger.error(String.format("FILA %d: No se pudo crear el colaborador '%s' porque el rol '%s' no existe.", numFila, nombreCompleto, rolNombre));
 	   					}
-	   				} else {
-	   					logger.info(String.format("FILA %d: No se pudo crear el colaborador '%s' porque el código '%s' ya fue usado.", numFila, nombreCompleto, codigo));
 	   				}
 	   			} else if (accion.equals("EDITAR")) {
-	   				Usuario usuarioBuscado = usuarioRepository.findByCodigo(codigo);
+	   				Usuario usuarioBuscado = findByCodigo(codigo);
 	   				if (usuarioBuscado != null) {
 	   					if (rolNombre.equals("USUARIO")) {
 		   					rolRepository.deletesRolesUsuario(codigo);
@@ -278,21 +268,22 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 		   					usuarioRepository.update(usuario);
 		   					logger.info(String.format("FILA %d: Se editó el colaborador con código '%s'.", numFila, codigo));
 	   					} else {
-	   						logger.info(String.format("FILA %d: No se pudo crear el colaborador '%s' porque el rol '%s' no existe.", numFila, nombreCompleto, rolNombre));
+	   						logger.error(String.format("FILA %d: No se pudo crear el colaborador '%s' porque el rol '%s' no existe.", numFila, nombreCompleto, rolNombre));
 	   					}
 	   				} else {
-	   					logger.error(String.format("FILA %d: No se pudo editar el colaborador con código '%s' porque no se encontró en la base de datos.", numFila, codigo));
+	   					logger.error(String.format("FILA %d: No se pudo editar el colaborador con matrícula '%s' porque no se encontró en la base de datos.", numFila, codigo));
 	   				}
 	   			} else if (accion.equals("ELIMINAR")) {
-	   				Usuario usuarioBuscado = usuarioRepository.findByCodigo(codigo);
+	   				Usuario usuarioBuscado = findByCodigo(codigo);
 	   				if (usuarioBuscado != null) {
 	   					usuarioRepository.delete(usuarioBuscado);
-	   					logger.info(String.format("FILA %d: Se eliminó el colaborador con código '%s'.", numFila, codigo));
+	   					rolRepository.deletesRolesUsuario(codigo);
+	   					logger.info(String.format("FILA %d: Se eliminó el colaborador con matrícula '%s'.", numFila, codigo));
 	   				} else {
-	   					logger.error(String.format("FILA %d: No se pudo eliminar el colaborador con código '%s' porque no se encontró en la base de datos.", numFila, codigo));
+	   					logger.error(String.format("FILA %d: No se pudo eliminar el colaborador con matrícula '%s' porque no se encontró en la base de datos.", numFila, codigo));
 	   				}
 	   			} else {
-	   				logger.error(String.format("FILA %d: No se realizó ninguna acción en el colaborador con código '%s' porque la acción '%s' no existe.", numFila, codigo, accion));
+	   				logger.error(String.format("FILA %d: No se realizó ninguna acción en el colaborador con matrícula '%s' porque la acción '%s' no existe.", numFila, codigo, accion));
 	   			}
 	   		}
 	   		libro.close();
@@ -333,6 +324,7 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
     		row.createCell(colNum).setCellValue((String) fila.get("USUARIO_VIDA"));sh.setColumnWidth(colNum++, 4000);
     		row.createCell(colNum).setCellValue((String) fila.get("USUARIO_GENERALES"));sh.setColumnWidth(colNum++, 4000);
     		row.createCell(colNum).setCellValue((String) fila.get("NOMBRE_COMPLETO"));sh.setColumnWidth(colNum++, 8000);
+    		row.createCell(colNum).setCellValue((String) fila.get("ROL"));sh.setColumnWidth(colNum++, 5000);
     		row.createCell(colNum).setCellValue((Date) fila.get("FECHA_CREACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
     		row.createCell(colNum).setCellValue((Date) fila.get("FECHA_ACTUALIZACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
         }

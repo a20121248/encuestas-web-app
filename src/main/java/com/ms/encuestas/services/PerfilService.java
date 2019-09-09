@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.ms.encuestas.models.Centro;
@@ -73,7 +74,9 @@ public class PerfilService implements PerfilServiceI {
 		try {
 			return perfilRepository.findById(id);
 		} catch(EmptyResultDataAccessException e) {
-			logger.info(String.format("No se encontró el perfil con ID=%d en la base de datos.", id));
+			return null;
+		} catch(IncorrectResultSizeDataAccessException e) {
+			logger.error(String.format("No se pudo obtener el perfil con ID='%d' porque está repetido en la base de datos.", id));
 			return null;
 		}
 	}
@@ -83,7 +86,9 @@ public class PerfilService implements PerfilServiceI {
 		try {
 			return perfilRepository.findByCodigo(codigo);
 		} catch(EmptyResultDataAccessException e) {
-			logger.info(String.format("No se encontró el perfil '%s' en la base de datos.", codigo));
+			return null;
+		} catch(IncorrectResultSizeDataAccessException e) {
+			logger.error(String.format("No se pudo obtener el perfil con código '%s' porque está repetido en la base de datos.", codigo));
 			return null;
 		}
 	}
@@ -98,10 +103,16 @@ public class PerfilService implements PerfilServiceI {
 	public void delete(Perfil perfil) {
 		perfilRepository.delete(perfil);
 	}
-
+	
 	@Override
 	public void deleteById(Long id) {
-		perfilRepository.deleteById(id);
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void deleteAll() {
+		perfilRepository.deleteAll();
+		logger.info("Se eliminaron todos los perfiles de la base de datos.");
 	}
 	
 	@Override
@@ -122,6 +133,7 @@ public class PerfilService implements PerfilServiceI {
 		List<Objeto> lineas = objetoService.findAllLineas();
 		List<Objeto> canales = objetoService.findAllCanales();
 		List<String> perfilCodigos = findAllCodigos();
+		List<String> perfilCodigosLeidos = new ArrayList<String>();
 		
         try (XSSFWorkbook libro = new XSSFWorkbook(file)) {
            XSSFSheet hoja = libro.getSheet("PERFILES");
@@ -163,60 +175,62 @@ public class PerfilService implements PerfilServiceI {
         	   perfil.setCodigo(codigo);
         	   perfil.setNombre(nombre);
         	   perfil.setTipo(tipo);
-        	   Long perfilId = new Long(0);
 
                if (accion.equals("CREAR")) {
-            	   if (perfilCodigos.contains(codigo)) {
-            		   logger.error(String.format("No se puede crear el perfil '%s' porque el código '%s' ya fue usado.", nombre, codigo));
-            	   } else {
-            		   hojaDetalle = libro.getSheet(codigo);
-                	   if (hojaDetalle == null) {
-                		   logger.error(String.format("No se encontró una hoja con nombre '%s'. No se puede crear el perfil.",codigo));
-                	   } else {                		   
-                		   perfilId = perfilRepository.insert(perfil);
-                		   int cantRegistros = -1;
-                		   if (tipoNombre.equals("STAFF")) {
-                			   List<Centro> lstCentros = processExcelLstCentros(codigo, perfilId, hojaDetalle.iterator(), centros);
-                			   perfilRepository.insertLstCentros(perfilId, lstCentros);
-                			   cantRegistros = lstCentros.size();
-                		   } else {
-                			   List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfilId, hojaDetalle.iterator(), lineas, canales);
-                			   perfilRepository.insertLstLineasCanales(perfilId, lstLineasCanales);
-                			   cantRegistros = lstLineasCanales.size();
-                		   }
-                		   logger.info(String.format("Se creó el perfil '%s' con tipo '%s' con %d registros.", codigo, tipoNombre, cantRegistros));
-                	   }
-            	   }
-               } else if (accion.equals("EDITAR")) {
-        		   hojaDetalle = libro.getSheet(codigo);
+            	   	if (perfilCodigosLeidos.contains(codigo)) {
+	   					logger.error(String.format("FILA %d: El perfil con código '%s' ya fue procesado para crearse en este Excel. Corregir el archivo y probar una nueva carga.", numFila, codigo));
+	   				} else if (perfilCodigos.contains(codigo)) {
+	   					logger.error(String.format("FILA %d: No se puede crear el perfil '%s' porque el código '%s' ya fue usado.", numFila, nombre, codigo));
+	   				} else {
+	   					hojaDetalle = libro.getSheet(codigo);
+	   					if (hojaDetalle == null) {
+	   						logger.error(String.format("FILA %d: No se encontró una hoja con nombre '%s'. No se puede crear el perfil.", numFila, codigo));
+	   					} else {
+	   						perfil = perfilRepository.insert(perfil);
+	   						perfilCodigosLeidos.add(codigo);
+	   						int cantRegistros = -1;
+	   						if (tipoNombre.equals("STAFF")) {
+	   							List<Centro> lstCentros = processExcelLstCentros(codigo, perfil.getId(), hojaDetalle.iterator(), centros);
+	   							perfilRepository.insertLstCentros(perfil.getId(), lstCentros);
+	   							cantRegistros = lstCentros.size();
+	   						} else {
+	   							List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfil.getId(), hojaDetalle.iterator(), lineas, canales);
+	   							perfilRepository.insertLstLineasCanales(perfil.getId(), lstLineasCanales);
+	   							cantRegistros = lstLineasCanales.size();
+	   						}
+	   						logger.info(String.format("FILA %d: Se creó el perfil '%s' de tipo '%s' con %d registros.", numFila, codigo, tipoNombre, cantRegistros));
+	   					}
+	   				}
+               	} else if (accion.equals("EDITAR")) {
+               		hojaDetalle = libro.getSheet(codigo);
             	   if (hojaDetalle == null) {
-            		   logger.error(String.format("No se encontró una hoja con nombre '%s'. No se puede actualizar el perfil.",codigo));
+            		   logger.error(String.format("FILA %d: No se encontró una hoja con nombre '%s'. No se puede actualizar el perfil.", numFila, codigo));
             	   } else {            		   
-            		   Perfil perfilBuscado = perfilRepository.findByCodigo(codigo);
+            		   Perfil perfilBuscado = findByCodigo(codigo);
             		   if (perfilBuscado != null) {
             			   perfil.setId(perfilBuscado.getId());
-            			   perfilId = perfilRepository.update(perfil);
+            			   perfil = perfilRepository.update(perfil);
             			   int cantRegistros = -1;
             			   if (tipoNombre.equals("STAFF")) {
-            				   List<Centro> lstCentros = processExcelLstCentros(codigo, perfilId, hojaDetalle.iterator(), centros);
-            				   perfilRepository.deleteDetalleCentros(perfilId);
-            				   perfilRepository.deleteDetalleLineasCanales(perfilId);
-            				   perfilRepository.insertLstCentros(perfilId, lstCentros);
+            				   List<Centro> lstCentros = processExcelLstCentros(codigo, perfil.getId(), hojaDetalle.iterator(), centros);
+            				   perfilRepository.deleteDetalleCentros(perfil.getId());
+            				   perfilRepository.deleteDetalleLineasCanales(perfil.getId());
+            				   perfilRepository.insertLstCentros(perfil.getId(), lstCentros);
             				   cantRegistros = lstCentros.size();
             			   } else {
-            				   List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfilId, hojaDetalle.iterator(), lineas, canales);
-            				   perfilRepository.deleteDetalleCentros(perfilId);
-            				   perfilRepository.deleteDetalleLineasCanales(perfilId);
-            				   perfilRepository.insertLstLineasCanales(perfilId, lstLineasCanales);
+            				   List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfil.getId(), hojaDetalle.iterator(), lineas, canales);
+            				   perfilRepository.deleteDetalleCentros(perfil.getId());
+            				   perfilRepository.deleteDetalleLineasCanales(perfil.getId());
+            				   perfilRepository.insertLstLineasCanales(perfil.getId(), lstLineasCanales);
             				   cantRegistros = lstLineasCanales.size();
             			   }
-            			   logger.info(String.format("Se actualizó el perfil con código '%s' al tipo %s con %d registros.", codigo, tipoNombre, cantRegistros));
+            			   logger.info(String.format("FILA %d: Se actualizó el perfil con código '%s' al tipo %s con %d registros.", numFila, codigo, tipoNombre, cantRegistros));
             		   } else {
-            			   logger.error(String.format("No se pudo actualizar el perfil '%s' porque no se encontró en la base de datos.", codigo));
+            			   logger.error(String.format("FILA %d: No se pudo actualizar el perfil con código '%s' porque no se encontró en la base de datos.", numFila, codigo));
             		   }            	   
             	   }
                } else if (accion.equals("ELIMINAR")) {
-            	   Perfil perfilBuscado = perfilRepository.findByCodigo(codigo);
+            	   Perfil perfilBuscado = findByCodigo(codigo);
             	   if (perfilBuscado != null) {
             		   perfilRepository.delete(perfilBuscado);
             		   logger.info(String.format("Se eliminó el perfil '%s'.", codigo));
