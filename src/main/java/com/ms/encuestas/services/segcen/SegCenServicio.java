@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "SegCenServicio", targetNamespace = "http://tempuri.org/", wsdlLocation = "http://10.200.36.208/swSegCen/service.svc?wsdl")
+@WebServiceClient(name = "SegCenServicio", targetNamespace = "http://tempuri.org/", wsdlLocation = "http://pvida73.pacificovida.com/swSegCen/service.svc?wsdl")
 public class SegCenServicio
     extends Service
 {
@@ -30,7 +30,7 @@ public class SegCenServicio
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://10.200.36.208/swSegCen/service.svc?wsdl");
+            url = new URL("http://pvida73.pacificovida.com/swSegCen/service.svc?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
