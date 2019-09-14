@@ -1,10 +1,14 @@
 package com.ms.encuestas.controllers;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,6 +74,18 @@ public class EncuestaController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createCentro(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaCentro encuesta) {
 		this.encuestaService.saveCentro(encuesta, new Long(1), procesoId, posicionCodigo, new Long(3));
+	}
+	
+	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro/{nivel}/{perfilId}/descargar")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<?> downloadCentroExcel(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable int nivel, @PathVariable Long perfilId) {
+		Resource resource = this.encuestaService.downloadCentroExcel(new Long(1), procesoId, posicionCodigo, new Long(3), nivel, perfilId);
+        String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
 	}
 	
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea/{perfilId}")

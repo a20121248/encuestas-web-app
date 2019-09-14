@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
-
 import { Centro } from 'src/app/shared/models/centro';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { CustomValidatorsService } from 'src/app/shared/services/custom-validators.service';
 import { SharedFormService } from 'src/app/shared/services/shared-form.service';
+import { CentroService } from 'src/app/shared/services/centro.service';
+import * as fileSaver from 'file-saver';
 
 @Component({
   selector: 'app-form-centro',
@@ -26,9 +27,7 @@ export class CentroComponent implements OnInit {
   porcTotal: number;
 
 
-  constructor(
-    private sharedFormService: SharedFormService
-  ) {
+  constructor(private sharedFormService: SharedFormService, private centroService: CentroService) {
     this.groupForm = new FormGroup({});
   }
 
@@ -39,7 +38,6 @@ export class CentroComponent implements OnInit {
       this.groupHeaderClick(row);
     });
     this.onChanges();
-
   }
 
   customFilterPredicate(data: Centro | Group, filter: string): boolean {
@@ -167,6 +165,17 @@ export class CentroComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  descargar(): void {
+    const filename = `Encuesta de centros de costos.xlsx`;
+    this.centroService.downloadEncuesta(this.usuarioSeleccionado).subscribe(
+      res => {
+        fileSaver.saveAs(new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 }
 

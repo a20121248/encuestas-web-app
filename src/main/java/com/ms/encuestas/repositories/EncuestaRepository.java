@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,8 +27,7 @@ import com.ms.encuestas.models.ObjetoObjetos;
 @CrossOrigin(origins={})
 @Repository
 public class EncuestaRepository {
-	private Logger logger = LoggerFactory.getLogger(EncuestaRepository.class);
-	
+	private Logger logger = LoggerFactory.getLogger(EncuestaRepository.class);	
 	@Autowired
 	private NamedParameterJdbcTemplate plantilla;
 	
@@ -195,6 +196,46 @@ public class EncuestaRepository {
 		logger.info(sql);
 		encuesta.setLstItems(plantilla.query(sql, paramMap, new CentroMapper()));		
 		return encuesta;
+	}
+	
+	public List<Map<String,Object>> getEncuestaCentroListEmpty() throws EmptyResultDataAccessException {
+		String sql = "SELECT NULL centro_codigo,\n" +
+	                 "       NULL centro_nombre,\n" +
+	                 "       NULL centro_nivel,\n" +
+	                 "       NULL centro_grupo,\n" +
+	                 "       NULL porcentaje";
+		return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
+	}
+	
+	public List<Map<String,Object>> getEncuestaCentroList(Long empresaId, Long procesoId, String posicionCodigo, Long encuestaTipoId, int nivel, Long perfilId) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();		
+		paramMap.put("proceso_id", procesoId);
+		paramMap.put("empresa_id", empresaId);
+		paramMap.put("perfil_id", perfilId);
+		paramMap.put("posicion_codigo", posicionCodigo);
+		paramMap.put("encuesta_tipo_id", encuestaTipoId);
+		paramMap.put("nivel", nivel);
+		
+		String sql = "SELECT A.codigo,\n" +
+				     "       A.nombre,\n" +
+				     "       A.nivel,\n" +
+				     "       A.grupo,\n" +
+				     "       NVL(B.porcentaje,0)*100 porcentaje\n" + 
+				     "  FROM centros A\n" + 
+				     "  LEFT JOIN encuesta_centro B\n" +
+				     "    ON A.id=B.centro_id\n" +
+				     "   AND B.proceso_id=:proceso_id\n" +
+				     "   AND B.posicion_codigo=:posicion_codigo\n";
+		if (empresaId.intValue() != 2) {
+			  sql += "  JOIN perfil_centro C\n" +
+				     "    ON C.perfil_id=:perfil_id\n" + 
+                     "   AND A.id=C.centro_id\n";
+		}
+			  sql += " WHERE A.empresa_id=:empresa_id\n" +
+                     "   AND A.nivel>:nivel\n" +
+                     "   AND A.fecha_eliminacion IS NULL\n" +
+			         " ORDER BY A.nivel,A.codigo";		
+		return plantilla.queryForList(sql, paramMap);
 	}
 	
 	public void insertLstEmpresas(List<Empresa> lstEmpresas, Long procesoId, String posicionCodigo) {

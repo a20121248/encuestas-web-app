@@ -157,17 +157,35 @@ public class PerfilService implements PerfilServiceI {
         	   Iterator<Cell> celdas = filas.next().cellIterator();
         	   
                String codigo = dataFormatter.formatCellValue(celdas.next());
-               if (codigo.equals("")) break;
-               String nombre = dataFormatter.formatCellValue(celdas.next());
-               String tipoNombre = dataFormatter.formatCellValue(celdas.next());
-               Tipo tipo = perfilTipos.stream().filter(item -> tipoNombre.equals(item.getNombre())).findAny().orElse(null);
-               String accion = dataFormatter.formatCellValue(celdas.next());
+               if (codigo == null) {
+        		   logger.info(String.format("FILA %d: No se puede procesar el perfil porque el campo código está vacío.", numFila));
+        		   continue;
+               } else if (codigo.equals("")) {
+            	   break;
+               }
                
+               String nombre = dataFormatter.formatCellValue(celdas.next());
+               if (nombre == null) {
+        		   logger.info(String.format("FILA %d: No se puede procesar el perfil porque el campo nombre está vacío.", numFila));
+        		   continue;
+               }
+               
+               String tipoNombre = dataFormatter.formatCellValue(celdas.next());
+               if (tipoNombre == null) {
+        		   logger.info(String.format("FILA %d: No se puede procesar el perfil porque el campo tipo está vacío.", numFila));
+        		   continue;
+               }
+               Tipo tipo = perfilTipos.stream().filter(item -> tipoNombre.equals(item.getNombre())).findAny().orElse(null);
         	   if (tipo == null) {
-        		   String msj = String.format("FILA %d: No se puede procesar el perfil con código '%s' porque el tipo '%s' no existe.", numFila, codigo, tipoNombre);
-        		   logger.info(msj);
+        		   logger.info(String.format("FILA %d: No se puede procesar el perfil con código '%s' porque el tipo '%s' no existe.", numFila, codigo, tipoNombre));
         		   continue;
         	   }
+        	   
+               String accion = dataFormatter.formatCellValue(celdas.next());
+               if (accion == null) {
+        		   logger.info(String.format("FILA %d: No se puede procesar el perfil porque el campo tipo está vacío.", numFila));
+        		   continue;
+               }
         	   
         	   XSSFSheet hojaDetalle;
                
@@ -190,11 +208,11 @@ public class PerfilService implements PerfilServiceI {
 	   						perfilCodigosLeidos.add(codigo);
 	   						int cantRegistros = -1;
 	   						if (tipoNombre.equals("STAFF")) {
-	   							List<Centro> lstCentros = processExcelLstCentros(codigo, perfil.getId(), hojaDetalle.iterator(), centros);
+	   							List<Centro> lstCentros = processExcelLstCentros(codigo, perfil, hojaDetalle.iterator(), centros);
 	   							perfilRepository.insertLstCentros(perfil.getId(), lstCentros);
 	   							cantRegistros = lstCentros.size();
 	   						} else {
-	   							List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfil.getId(), hojaDetalle.iterator(), lineas, canales);
+	   							List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfil, hojaDetalle.iterator(), lineas, canales);
 	   							perfilRepository.insertLstLineasCanales(perfil.getId(), lstLineasCanales);
 	   							cantRegistros = lstLineasCanales.size();
 	   						}
@@ -212,13 +230,13 @@ public class PerfilService implements PerfilServiceI {
             			   perfil = perfilRepository.update(perfil);
             			   int cantRegistros = -1;
             			   if (tipoNombre.equals("STAFF")) {
-            				   List<Centro> lstCentros = processExcelLstCentros(codigo, perfil.getId(), hojaDetalle.iterator(), centros);
+            				   List<Centro> lstCentros = processExcelLstCentros(codigo, perfil, hojaDetalle.iterator(), centros);
             				   perfilRepository.deleteDetalleCentros(perfil.getId());
             				   perfilRepository.deleteDetalleLineasCanales(perfil.getId());
             				   perfilRepository.insertLstCentros(perfil.getId(), lstCentros);
             				   cantRegistros = lstCentros.size();
             			   } else {
-            				   List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfil.getId(), hojaDetalle.iterator(), lineas, canales);
+            				   List<LineaCanal> lstLineasCanales = processExcelLstLineasCanales(codigo, perfil, hojaDetalle.iterator(), lineas, canales);
             				   perfilRepository.deleteDetalleCentros(perfil.getId());
             				   perfilRepository.deleteDetalleLineasCanales(perfil.getId());
             				   perfilRepository.insertLstLineasCanales(perfil.getId(), lstLineasCanales);
@@ -233,12 +251,12 @@ public class PerfilService implements PerfilServiceI {
             	   Perfil perfilBuscado = findByCodigo(codigo);
             	   if (perfilBuscado != null) {
             		   perfilRepository.delete(perfilBuscado);
-            		   logger.info(String.format("Se eliminó el perfil '%s'.", codigo));
+            		   logger.info(String.format("FILA %d: Se eliminó el perfil con código '%s'.", numFila, codigo));
             	   } else {
-            		   logger.error(String.format("No se pudo eliminar el perfil '%s' porque no se encontró en la base de datos.", codigo));
+            		   logger.error(String.format("FILA %d: No se pudo eliminar el perfil con código '%s' porque no se encontró en la base de datos.", numFila, codigo));
             	   }
                } else {
-            	   logger.error(String.format("No se realizó ninguna acción en el perfil %s porque la acción '%s' no existe.", codigo, accion));
+            	   logger.error(String.format("FILA %d: No se realizó ninguna acción en el perfil con código '%s' porque la acción '%s' no existe.", numFila, codigo, accion));
                }           	
            }
            libro.close();
@@ -248,14 +266,55 @@ public class PerfilService implements PerfilServiceI {
        logger.info("======================FIN DE CARGA DE PERFILES====================================");
 	}
 	
-	private List<Centro> processExcelLstCentros(String hojaNombre, Long perfilId, Iterator<Row> filas, List<Centro> centros) {
-   		int numFilasOmitir = 6;
-   		for (int i = 0; i < numFilasOmitir; ++i) filas.next();
-   		
+	private List<Centro> processExcelLstCentros(String hojaNombre, Perfil perfil, Iterator<Row> filas, List<Centro> centros) {
+        int numFilasOmitir = 6;
         DataFormatter dataFormatter = new DataFormatter();
         List<Centro> lstCentros = new ArrayList<Centro>();
+        boolean hayError = false;
+        
+        Iterator<Cell> celdas = filas.next().cellIterator();
+        
+        celdas = filas.next().cellIterator();
+        celdas.next(); // primera columna
+        String perfilCodigo = dataFormatter.formatCellValue(celdas.next());
+        if (perfilCodigo == null) {
+        	hayError = true;
+        	logger.error(String.format("HOJA %s, FILA %d: El código está vacío.", hojaNombre, 2));
+        } else if (!perfilCodigo.equals(perfil.getCodigo())) {
+        	hayError = true;
+        	logger.error(String.format("HOJA %s, FILA %d: El código '%s' no coincide con '%s', el cual es indicado en la hoja PERFILES.", hojaNombre, 2, perfilCodigo, perfil.getCodigo()));
+        }
+        
+        celdas = filas.next().cellIterator();
+        celdas.next(); // primera columna
+        String perfilNombre = dataFormatter.formatCellValue(celdas.next());
+        if (perfilNombre == null) {
+        	hayError = true;
+        	logger.error(String.format("HOJA %s, FILA %d: El nombre está vacío.", hojaNombre, 3));
+        } else if (!perfilNombre.equals(perfil.getNombre())) {
+        	hayError = true;
+        	logger.error(String.format("HOJA %s, FILA %d: El nombre '%s' no coincide con '%s', el cual es indicado en la hoja PERFILES.", hojaNombre, 3, perfilNombre, perfil.getNombre()));
+        }
+        
+        celdas = filas.next().cellIterator();
+        celdas.next(); // primera columna
+        String perfilTipo = dataFormatter.formatCellValue(celdas.next());
+        if (perfilTipo == null) {
+        	hayError = true;
+        	logger.error(String.format("HOJA %s, FILA %d: El tipo está vacío.", hojaNombre, 4));
+        } else if (!perfilTipo.equals(perfil.getTipo().getNombre())) {
+        	hayError = true;
+        	logger.error(String.format("HOJA %s, FILA %d: El tipo '%s' no coincide con '%s', el cual es indicado en la hoja PERFILES.", hojaNombre, 4, perfilTipo, perfil.getTipo().getNombre()));
+        }
+   		filas.next(); //linea blanco
+   		filas.next(); //titulo tabla
+   		
+   		if (hayError) {
+        	return lstCentros;
+   		}
+   		
         for (int numFila = numFilasOmitir+1; filas.hasNext(); ++numFila) {
-     	   	Iterator<Cell> celdas = filas.next().cellIterator();
+     	   	celdas = filas.next().cellIterator();
      	   
             String codigo = dataFormatter.formatCellValue(celdas.next());
             String nombre = dataFormatter.formatCellValue(celdas.next());
@@ -273,14 +332,55 @@ public class PerfilService implements PerfilServiceI {
 		return lstCentros;
 	}
 	
-	private List<LineaCanal> processExcelLstLineasCanales(String hojaNombre, Long perfilId, Iterator<Row> filas, List<Objeto> lineas, List<Objeto> canales) {
-   		int numFilasOmitir = 6;
-   		for (int i = 0; i < numFilasOmitir; ++i) filas.next();
-   		
+	private List<LineaCanal> processExcelLstLineasCanales(String hojaNombre, Perfil perfil, Iterator<Row> filas, List<Objeto> lineas, List<Objeto> canales) {
+        int numFilasOmitir = 6;
         DataFormatter dataFormatter = new DataFormatter();
         List<LineaCanal> lstLineasCanales = new ArrayList<LineaCanal>();
+        boolean hayError = false;
+        
+        Iterator<Cell> celdas = filas.next().cellIterator();
+        
+        celdas = filas.next().cellIterator();
+        celdas.next(); // primera columna
+        String perfilCodigo = dataFormatter.formatCellValue(celdas.next());
+        if (perfilCodigo == null) {
+        	hayError = true;
+        	logger.error(String.format("HOJA %s, FILA %d: El código está vacío.", hojaNombre, 2));
+        } else if (!perfilCodigo.equals(perfil.getCodigo())) {
+        	hayError = true;
+        	logger.error(String.format("HOJA %s, FILA %d: El código '%s' no coincide con '%s', el cual es indicado en la hoja PERFILES.", hojaNombre, 2, perfilCodigo, perfil.getCodigo()));
+        }
+        
+        celdas = filas.next().cellIterator();
+        celdas.next(); // primera columna
+        String perfilNombre = dataFormatter.formatCellValue(celdas.next());
+        if (perfilNombre == null) {
+        	hayError = true;
+        	logger.error(String.format("HOJA %s, FILA %d: El nombre está vacío.", hojaNombre, 3));
+        } else if (!perfilNombre.equals(perfil.getNombre())) {
+        	hayError = true;
+        	logger.error(String.format("HOJA %s, FILA %d: El nombre '%s' no coincide con '%s', el cual es indicado en la hoja PERFILES.", hojaNombre, 3, perfilNombre, perfil.getNombre()));
+        }
+        
+        celdas = filas.next().cellIterator();
+        celdas.next(); // primera columna
+        String perfilTipo = dataFormatter.formatCellValue(celdas.next());
+        if (perfilTipo == null) {
+        	hayError = true;
+        	logger.error(String.format("HOJA %s, FILA %d: El tipo está vacío.", hojaNombre, 4));
+        } else if (!perfilTipo.equals(perfil.getTipo().getNombre())) {
+        	hayError = true;
+        	logger.error(String.format("HOJA %s, FILA %d: El tipo '%s' no coincide con '%s', el cual es indicado en la hoja PERFILES.", hojaNombre, 4, perfilTipo, perfil.getTipo().getNombre()));
+        }
+   		filas.next(); //linea blanco
+   		filas.next(); //titulo tabla
+   		
+   		if (hayError) {
+        	return lstLineasCanales;
+   		}
+
         for (int numFila = numFilasOmitir+1; filas.hasNext(); ++numFila) {
-     	   	Iterator<Cell> celdas = filas.next().cellIterator();
+     	   	celdas = filas.next().cellIterator();
      	   
             String lineaCodigo = dataFormatter.formatCellValue(celdas.next());
             String lineaNombre = dataFormatter.formatCellValue(celdas.next());

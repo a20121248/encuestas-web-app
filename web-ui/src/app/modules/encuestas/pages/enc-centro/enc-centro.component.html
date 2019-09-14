@@ -8,7 +8,7 @@
   <mat-card class="cuadro mat-elevation-z4 mt-4">
     <div class="row">
       <div class="col-md-7">
-        <app-form-centro *ngIf="lstCentros" [lstCentros]="lstCentros"
+        <app-form-centro *ngIf="lstCentros" [lstCentros]="lstCentros" [usuarioSeleccionado]="usuarioSeleccionado"
           (estadoFormCentroToParent)="estadoFormCentros($event)">
         </app-form-centro>
       </div>

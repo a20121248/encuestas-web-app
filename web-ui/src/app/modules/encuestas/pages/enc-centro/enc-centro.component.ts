@@ -102,7 +102,7 @@ export class EncCentroComponent implements OnInit {
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.centroComponent.lstCentros;
     this.encuesta.justificacion = this.justificacionComponent.justificacion;
-    
+
     if (this.encuesta.justificacion.id != 5) {
       this.encuesta.justificacion.detalle = null;
     }
