@@ -1,5 +1,10 @@
 package com.ms.encuestas;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -8,10 +13,13 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
+@ComponentScan
 public class EncuestasWebAppApplication extends SpringBootServletInitializer implements CommandLineRunner {
 	private static final LoggerWrapper LOGGER = LoggerWrapper.getLogger(EncuestasWebAppApplication.class);	
 	
@@ -73,6 +81,34 @@ public class EncuestasWebAppApplication extends SpringBootServletInitializer imp
                 "SELECT id, first_name, last_name FROM customers WHERE first_name = ?", new Object[] { "Josh" },
                 (rs, rowNum) -> new Customer(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"))
         ).forEach(customer -> LOGGER.info(customer.toString()));*/
+    }
+    
+    @Bean
+    public DataSource jndiDataSource() throws IllegalArgumentException,
+                                              NamingException {
+    	DataSource dataSource = null;
+    	System.out.println("value of datasource"+dataSource);
+    	try {
+			Context initialContext = new InitialContext();
+			System.out.println("value of datasource"+dataSource);
+			
+			dataSource = (DataSource) (initialContext.lookup("java:jboss/datasources/encuestasPpto"));
+			System.out.println("value of datasource"+dataSource);
+			
+			if(dataSource != null) {
+		    	dataSource.getConnection();
+		    }
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+//        JndiObjectFactoryBean bean = new JndiObjectFactoryBean();           // create JNDI data source
+//        bean.setJndiName("java:/comp/env/jndiDataSource");  // jndiDataSource is name of JNDI data source 
+//        bean.setProxyInterface(DataSource.class);
+//        bean.setLookupOnStartup(false);
+//        bean.afterPropertiesSet();
+//        return (DataSource) bean.getObject();
+    	return dataSource;
     }
 
 }
