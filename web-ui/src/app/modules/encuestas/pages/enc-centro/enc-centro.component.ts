@@ -18,6 +18,7 @@ import { Usuario } from 'src/app/shared/models/usuario';
 import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { Title } from '@angular/platform-browser';
 import { SharedFormService } from 'src/app/shared/services/shared-form.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-enc-centro',
@@ -68,31 +69,6 @@ export class EncCentroComponent implements OnInit {
     this.titleService.setTitle('Encuestas | Centros de costos');
   }
 
-  // onChanges() {
-  //   let validForm1: boolean;
-  //   let validForm2: boolean;
-  //   let completeForm1: number;
-  //   this.sharedFormService.form1Actual
-  //     .subscribe(data => {
-  //       if(data == null) validForm1 = false;
-  //       else validForm1 = data.valid;
-  //     });
-  //   this.sharedFormService.form2Actual
-  //     .subscribe(data => {
-  //       if(data == null) validForm2 = false;
-  //       else validForm2 = data.valid;
-  //     });
-  //   this.sharedFormService.form1PorcentajeActual
-  //   .subscribe( data => {
-  //     completeForm1 = data;
-  //   });
-  //   console.log(validForm1 && validForm2 && completeForm1 == 100);
-  //   if(validForm1 && validForm2 && completeForm1 == 100){
-  //     if(this.btnGuardar != null) this.setButtonGuardar(true);
-  //   } else {
-  //     if(this.btnGuardar != null) this.setButtonGuardar(false);
-  //   }
-  // }
   estadoFormJustificacion(value: boolean) {
     this.estadoJustificacion = value;
     this.setButtonGuardar();
@@ -112,10 +88,21 @@ export class EncCentroComponent implements OnInit {
   }
 
   guardarEncuesta() {
+    let form1: FormGroup;
+    let form2: FormGroup;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1 = data;
+      form1.markAsPristine({onlySelf:true});
+    });
+    this.sharedFormService.form2Actual.subscribe(data => {
+      form2 = data;
+      form2.markAsPristine({onlySelf:true});
+    });
     this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.centroComponent.lstCentros;
     this.encuesta.justificacion = this.justificacionComponent.justificacion;
+
     if (this.encuesta.justificacion.id != 5) {
       this.encuesta.justificacion.detalle = null;
     }
@@ -124,18 +111,25 @@ export class EncCentroComponent implements OnInit {
       response => console.log(response), err => console.log(err)
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
+    this.sharedFormService.actualizarEstadoForm1(form1);
+    this.sharedFormService.actualizarEstadoForm2(form2);
   }
 
   goBack() {
     let form1dirty: boolean;
+    let form1pristine: boolean;
     let form2dirty: boolean;
+    let form2pristine: boolean;
     this.sharedFormService.form1Actual.subscribe(data => {
       form1dirty = data.dirty;
+      form1pristine = data.pristine;
     });
     this.sharedFormService.form2Actual.subscribe(data => {
       form2dirty = data.dirty;
+      form2pristine = data.pristine;
     });
-    if (this.haGuardado) {
+
+    if (this.haGuardado && form1pristine && form2pristine) {
       this.location.back();
     } else {
       if (form1dirty || form2dirty) {

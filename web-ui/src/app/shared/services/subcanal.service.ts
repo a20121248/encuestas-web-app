@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
-import { throwError, of, Observable } from 'rxjs';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpErrorResponse
-} from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { Router } from '@angular/router';
 import { AppConfig } from 'src/app/shared/services/app.config';
 import { Objeto } from '../models/objeto';
 
@@ -16,19 +11,32 @@ import { Objeto } from '../models/objeto';
 export class SubcanalService {
   protected urlServer = AppConfig.settings.urlServer;
 
-  constructor(
-    public authService: AuthService,
-    private http: HttpClient,
-    private router: Router
-  ) {}
-
-
-  errorHandler(error: any): void {
-    console.log(error);
+  constructor(public authService: AuthService,
+              private http: HttpClient) {
   }
 
   findAll(): Observable<Objeto[]> {
     const url = `${this.urlServer.api}subcanales`;
     return this.http.get<Objeto[]>(url);
+  }
+
+  deleteAll(): Observable<any> {
+    const url = `${this.urlServer.api}subcanales/eliminar-todos`;
+    return this.http.post<any>(url, null);
+  }
+
+  create(subcanal: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}subcanales`;
+    return this.http.post<any>(url, subcanal);
+  }
+
+  edit(subcanal: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}subcanales`;
+    return this.http.put<any>(url, subcanal);
+  }
+
+  delete(subcanal: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}subcanales/${subcanal.id}`;
+    return this.http.delete<any>(url);
   }
 }

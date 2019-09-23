@@ -1,5 +1,10 @@
-<mat-card *ngIf="verificarLista()" class="encuesta mat-elevation-z2">
-  <h4 class="card-header text-center py-3">ASIGNACIÓN POR CENTRO DE COSTOS</h4>
+<mat-card *ngIf="verificarLista()" fxFlex fxLayout="column" class="encuesta mat-elevation-z2">
+  <div fxFlex fxLayout="row" class="card-header" fxLayoutAlign="center center">
+    <h4>ASIGNACIÓN POR CENTRO DE COSTOS</h4>
+    <button mat-icon-button matSuffix>
+      <mat-icon (click)="descargar()" [ngStyle]="{'color':'#585a5b'}">cloud_download</mat-icon>
+    </button>
+  </div>
   <div class="table-responsive cuadro" style="overflow: auto; height: 70vh; padding-top: 0; padding-bottom: 0;">
     <table mat-table [dataSource]="dataSource" class="design">
       <ng-container matColumnDef="codigo">
@@ -24,7 +29,7 @@
         <th mat-header-cell *matHeaderCellDef>PORCENTAJE</th>
         <td mat-cell *matCellDef="let centro">
           <mat-form-field>
-            <input matInput type="number" [(ngModel)]="centro.porcentaje" [formControlName]="centro.id">
+            <input matInput type="number" max="100" min="0" [(ngModel)]="centro.porcentaje" [formControlName]="centro.id">
             <span matSuffix>%</span>
           </mat-form-field>
           <mat-error *ngIf="validacionItemControl(centro.id).hasError('negativo')" class="invalid"> Valor negativo

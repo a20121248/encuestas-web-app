@@ -1,23 +1,37 @@
 <form class="pacifico-page" [formGroup]="formGroup" (ngSubmit)="submit()">
   <h1 mat-dialog-title>{{ titulo }}</h1>
   <mat-dialog-content fxLayout="column">
-    <mat-form-field>
-      <mat-label>Código</mat-label>
-      <input matInput formControlName="codigo">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="nombre">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Fecha de cierre</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="fechaCierre" readonly>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+    <ng-template ngFor let-campos [ngForOf]="this.data.camposArr">
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <ng-template ngFor let-campo [ngForOf]="campos">
+          <mat-form-field *ngIf="campo.type=='text'" fxFlex="{{campo.width}}">
+            <mat-label>{{campo.label}}</mat-label>
+            <input matInput maxlength="{{campo.maxLength}}" formControlName="{{campo.name}}" oninput="this.value = this.value.toUpperCase()">
+            <mat-hint align="end">{{formGroup.get(campo.name).value.length}} / {{campo.maxLength}}</mat-hint>
+            <mat-error *ngIf="formGroup.get(campo.name).hasError('required') && formGroup.get(campo.name).touched">{{campo.messages[0]}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="campo.type=='number'" fxFlex="{{campo.width}}">
+            <mat-label>{{campo.label}}</mat-label>
+            <input matInput type="number" min="{{campo.items.min}}" max="{{campo.items.max}}" formControlName="{{campo.name}}">
+            <mat-error *ngIf="formGroup.get(campo.name).hasError('required') && formGroup.get(campo.name).touched">{{campo.messages[0]}}</mat-error>
+          </mat-form-field>  
+  
+          <mat-form-field *ngIf="campo.type=='select'" fxFlex="{{campo.width}}">
+            <mat-label>{{campo.label}}</mat-label>
+            <mat-select formControlName="{{campo.name}}">
+              <mat-option *ngFor="let item of campo.items" [value]="item">
+                {{item.nombre}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formGroup.get(campo.name).hasError('required') && formGroup.get(campo.name).touched">{{campo.messages[0]}}</mat-error>
+          </mat-form-field>
+        </ng-template>
+      </div>
+    </ng-template>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-raised-button mat-dialog-close><i class="material-icons">reply</i>Cancelar</button>
-    <button mat-raised-button color="accent" type="submit"><i class="material-icons">add</i>Crear</button>
+    <button mat-raised-button color="accent" type="submit"><i class="material-icons">save</i>Crear</button>
   </mat-dialog-actions>
 </form>

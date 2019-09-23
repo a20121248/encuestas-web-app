@@ -3,7 +3,7 @@
     "name": "#{envName}"
   },
   "urlServer": {
-    "api": "https://psjbsdes0100.ppsdes.com.pe:7008/api/",
-    "oauth": "https://psjbsdes0100.ppsdes.com.pe:7008/oauth/"
+    "api": "https://encuestappto.pacifico.com.pe/api/",
+    "oauth": "https://encuestappto.pacifico.com.pe/oauth/"
   }
 }

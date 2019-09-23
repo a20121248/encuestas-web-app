@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpEventType, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppConfig } from 'src/app/shared/services/app.config';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -32,7 +32,7 @@ export class UsuarioService {
   }
 
   upload(formData: FormData): Observable<any> {
-    const url = `${this.urlServer.api}centros/cargar`;
+    const url = `${this.urlServer.api}usuarios/cargar`;
     return this.http.post<any>(url, formData, {
       reportProgress: true,
       observe: 'events'
@@ -49,13 +49,19 @@ export class UsuarioService {
     );
   }
 
+  download(): Observable<any> {
+    const url = `${this.urlServer.api}usuarios/descargar`;
+    return this.http.post(url, null, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
+  }
+
   getUsuario(codigo: string): Observable<Usuario> {
     return this.http.get<Usuario>(this.urlServer.api + 'usuarios/' + codigo);
   }
 
   getUsuarioByPosicionCodigo(codigo: string): Observable<Usuario> {
-    console.log('url');
-    console.log(`${this.urlServer.api}procesos/${this.authService.proceso.id}/usuarios/posicion/${codigo}`);
     return this.http.get<Usuario>(
       `${this.urlServer.api}procesos/${this.authService.proceso.id}/usuarios/posicion/${codigo}`
     );
@@ -64,5 +70,30 @@ export class UsuarioService {
   getUsuariosDependientes(procesoId: number, posicionCodigo: string): Observable<Usuario[]> {
     const url = `procesos/${procesoId}/usuarios-dependientes/${posicionCodigo}`;
     return this.http.get<Usuario[]>(`${this.urlServer.api}${url}`);
+  }
+
+  findAll(): Observable<Usuario[]> {
+    const url = `${this.urlServer.api}usuarios`;
+    return this.http.get<Usuario[]>(url);
+  }
+
+  deleteAll(): Observable<any> {
+    const url = `${this.urlServer.api}usuarios/eliminar-todos`;
+    return this.http.post<any>(url, null);
+  }
+
+  create(usuario: Usuario): Observable<any> {
+    const url = `${this.urlServer.api}usuarios`;
+    return this.http.post<any>(url, usuario);
+  }
+
+  edit(usuario: Usuario): Observable<any> {
+    const url = `${this.urlServer.api}usuarios`;
+    return this.http.put<any>(url, usuario);
+  }
+
+  delete(usuario: Usuario): Observable<any> {
+    const url = `${this.urlServer.api}usuarios/${usuario.codigo}`;
+    return this.http.delete<any>(url);
   }
 }

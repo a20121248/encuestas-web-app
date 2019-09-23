@@ -19,6 +19,7 @@ import { Justificacion } from 'src/app/shared/models/justificacion';
 import { ObjetoObjetos } from 'src/app/shared/models/objeto-objetos';
 import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 import { BehaviorSubject } from 'rxjs';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-enc-linea-canal',
@@ -106,6 +107,21 @@ export class EncLineaCanalComponent implements OnInit {
   }
 
   guardarEncuesta() {
+    let form1: FormGroup;
+    let form2: FormGroup;
+    let form3: FormGroup;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1 = data;
+      form1.markAsPristine({onlySelf:true});
+    });
+    this.sharedFormService.form2Actual.subscribe(data => {
+      form2 = data;
+      form2.markAsPristine({onlySelf:true});
+    });
+    this.sharedFormService.form3Actual.subscribe(data => {
+      form3 = data;
+      form3.markAsPristine({onlySelf:true});
+    });
     this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.lineaCanalComponent.lstLineaCanales;
@@ -115,35 +131,42 @@ export class EncLineaCanalComponent implements OnInit {
       response => console.log(response), err => console.log(err)
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
+    this.sharedFormService.actualizarEstadoForm1(form1);
+    this.sharedFormService.actualizarEstadoForm2(form2);
+    this.sharedFormService.actualizarEstadoForm3(form3);
   }
 
   showCanalesByLinea(objeto: ObjetoObjetos) {
-    if(objeto.objeto.porcentaje==0){
-      this.lineaSeleccionada = null;
-      this.porcentajePadre = false;
-      // this.setButtonGuardar();
-    } else {
+    if(objeto.objeto.porcentaje>0){
       this.lineaSeleccionada = objeto;
       this.porcentajePadre = true;
-      // this.setButtonGuardar();
+    } else {
+      this.lineaSeleccionada = null;
+      this.porcentajePadre = false;
     }
-
   }
 
   goBack() {
-    let form1dirty:boolean;
-    let form2dirty:boolean;
-    let form3dirty:boolean;
+    let form1dirty: boolean;
+    let form1pristine: boolean;
+    let form2dirty: boolean;
+    let form2pristine: boolean;
+    let form3dirty: boolean;
+    let form3pristine: boolean;
     this.sharedFormService.form1Actual.subscribe(data => {
       form1dirty = data.dirty;
+      form1pristine = data.pristine;
     });
     this.sharedFormService.form2Actual.subscribe(data => {
       form2dirty = data.dirty;
+      form2pristine = data.pristine;
     });
     this.sharedFormService.form3Actual.subscribe(data => {
       form3dirty = data.dirty;
-    });
-    if(this.haGuardado){
+      form3pristine = data.pristine;
+    });  
+    
+    if (this.haGuardado  && form1pristine && form2pristine && form3pristine) {
       this.location.back();
     } else {
       if( form1dirty || form2dirty || form3dirty){

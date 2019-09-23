@@ -1,29 +1,20 @@
 package com.ms.encuestas.services;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.poi.hpsf.SummaryInformation;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.ms.encuestas.models.Area;
@@ -100,6 +91,9 @@ public class ReporteService implements ReporteServiceI {
         	row.createCell(colNum).setCellValue((String) fila.get("PERFIL"));
         	sh.setColumnWidth(colNum++, 4000);
         	row.createCell(colNum++).setCellValue((String) fila.get("PERFIL_TIPO"));
+        	row.createCell(colNum++).setCellValue((String) fila.get("RESPONSABLE_MATRICULA"));
+    		row.createCell(colNum).setCellValue((String) fila.get("RESPONSABLE"));
+    		sh.setColumnWidth(colNum++, 8000);
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_1"));
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_2"));
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_3"));
@@ -168,11 +162,13 @@ public class ReporteService implements ReporteServiceI {
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_3"));
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_4"));
         	row.createCell(colNum++).setCellValue((String) fila.get("ESTADO_GLOBAL"));        	
-        	row.createCell(colNum).setCellValue((Date) fila.get("ULTIMA_MODIFICACION")); sh.setColumnWidth(colNum++, 3000);        	
+        	row.createCell(colNum).setCellValue((Date) fila.get("ULTIMA_MODIFICACION")); sh.setColumnWidth(colNum, 3000);  
+        	row.getCell(colNum++).setCellStyle(dateStyle);
         	row.createCell(colNum).setCellValue((String) fila.get("EMPRESA")); sh.setColumnWidth(colNum++, 4000);
         	row.createCell(colNum++).setCellValue(((BigDecimal) fila.get("EMPRESA_PORCENTAJE")).doubleValue());        	
         	row.createCell(colNum).setCellValue((String) fila.get("LINEA_EPS")); sh.setColumnWidth(colNum++, 4000);
         	row.createCell(colNum++).setCellValue(((BigDecimal) fila.get("LINEA_EPS_PORCENTAJE")).doubleValue());
+        	row.createCell(colNum++).setCellValue(((BigDecimal) fila.get("PONDERADO")).doubleValue());
         }
         excelService.crearArchivo(wb, result);        	
 		return fileService.loadFileAsResource(result);
@@ -194,7 +190,7 @@ public class ReporteService implements ReporteServiceI {
 		Path currentRelativePath = Paths.get("");
 		String currentPath = currentRelativePath.toAbsolutePath().toString();
 		
-		List<String> alphabets = Arrays.asList(currentPath, "storage", "app", "reportes", "Reporte de empresa.xlsx");
+		List<String> alphabets = Arrays.asList(currentPath, "storage", "app", "reportes", "Reporte consolidado.xlsx");
 		String result = String.join(File.separator, alphabets);
 		
         SXSSFWorkbook wb = excelService.crearLibro();
@@ -203,7 +199,7 @@ public class ReporteService implements ReporteServiceI {
         List<Map<String,Object>> data = reporteRepository.reporteConsolidado(procesoId, areas, centros, estados);
         
         if (data == null || data.size() == 0) {
-        	data = reporteRepository.reporteEmpresasVacio();
+        	data = reporteRepository.reporteConsolidadoVacio();
         	excelService.crearCabecera(sh, 0, data);
             excelService.crearArchivo(wb, result);        	
     		return fileService.loadFileAsResource(result);
@@ -233,12 +229,13 @@ public class ReporteService implements ReporteServiceI {
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_3"));
         	row.createCell(colNum++).setCellValue((String) fila.get("ETAPA_4"));
         	row.createCell(colNum++).setCellValue((String) fila.get("ESTADO_GLOBAL"));        	
-        	row.createCell(colNum).setCellValue((Date) fila.get("ULTIMA_MODIFICACION")); sh.setColumnWidth(colNum++, 3000);        	
+        	row.createCell(colNum).setCellValue((Date) fila.get("ULTIMA_MODIFICACION")); sh.setColumnWidth(colNum, 3000);
+        	row.getCell(colNum++).setCellStyle(dateStyle);
         	row.createCell(colNum++).setCellValue((String) fila.get("DIMENSION1_CODIGO"));
         	row.createCell(colNum++).setCellValue((String) fila.get("DIMENSION1"));
         	row.createCell(colNum++).setCellValue((String) fila.get("DIMENSION2_CODIGO"));
         	row.createCell(colNum++).setCellValue((String) fila.get("DIMENSION2"));
-        	row.createCell(colNum++).setCellValue(((BigDecimal) fila.get("PORCENTAJE")).doubleValue());
+        	row.createCell(colNum++).setCellValue(((BigDecimal) fila.get("PONDERADO")).doubleValue());
         }
         excelService.crearArchivo(wb, result);        	
 		return fileService.loadFileAsResource(result);

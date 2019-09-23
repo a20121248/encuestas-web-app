@@ -3,16 +3,12 @@ package com.ms.encuestas.repositories;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.ms.encuestas.models.EncuestaObjeto;
 import com.ms.encuestas.models.Justificacion;
 
 public class EncuestaObjetoMapper implements RowMapper<EncuestaObjeto> {
-	private Logger logger = LoggerFactory.getLogger(EncuestaObjetoMapper.class);
-	
 	@Override
 	public EncuestaObjeto mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Justificacion justificacion;

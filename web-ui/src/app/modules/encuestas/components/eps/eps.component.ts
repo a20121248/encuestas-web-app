@@ -33,7 +33,7 @@ export class EpsComponent implements OnInit {
 
   getTotalPorcentaje(){
     if (this.lstEps != null) {
-      this. porcTotal = this.lstEps.map(t => t.porcentaje).reduce((acc, value) => acc + value, 0);
+      this. porcTotal = Math.round(this.lstEps.map(t => 100*t.porcentaje).reduce((acc, value) => acc + value, 0))/100;
       return this.porcTotal;
     } else {
       this.porcTotal = 0;
@@ -57,8 +57,8 @@ export class EpsComponent implements OnInit {
       } else {
         this.sendEstado(false);
       }
-      this.sharedFormService.actualizarEstadoForm1(this.groupForm);
     });
+    this.sharedFormService.actualizarEstadoForm1(this.groupForm);
   }
 
   verificarLista(): boolean {

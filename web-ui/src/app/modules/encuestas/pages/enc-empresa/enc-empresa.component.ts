@@ -85,14 +85,18 @@ export class EncEmpresaComponent implements OnInit {
 
   goBack() {
     let form1dirty: boolean;
+    let form1pristine: boolean;
     let form2dirty: boolean;
+    let form2pristine: boolean;
     this.sharedFormService.form1Actual.subscribe(data => {
       form1dirty = data.dirty;
+      form1pristine = data.pristine;
     });
     this.sharedFormService.form2Actual.subscribe(data => {
       form2dirty = data.dirty;
+      form2pristine = data.pristine;
     });
-    if (this.haGuardado) {
+    if (this.haGuardado  && form1pristine && form2pristine) {
       this.location.back();
     } else {
       if (form1dirty || form2dirty) {
@@ -110,6 +114,16 @@ export class EncEmpresaComponent implements OnInit {
   }
 
   guardarEncuesta() {
+    let form1: FormGroup;
+    let form2: FormGroup;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1 = data;
+      form1.markAsPristine({onlySelf:true});
+    });
+    this.sharedFormService.form2Actual.subscribe(data => {
+      form2 = data;
+      form2.markAsPristine({onlySelf:true});
+    });
     this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.empresaComponent.lstEmpresas;
@@ -122,5 +136,7 @@ export class EncEmpresaComponent implements OnInit {
       console.log(response), err => console.log(err)
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
+    this.sharedFormService.actualizarEstadoForm1(form1);
+    this.sharedFormService.actualizarEstadoForm2(form2);
   }
 }

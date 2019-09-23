@@ -15,6 +15,7 @@ import { UsuarioService } from 'src/app/shared/services/usuario.service';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { Title } from '@angular/platform-browser';
 import { SharedFormService } from 'src/app/shared/services/shared-form.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-enc-eps',
@@ -39,8 +40,7 @@ export class EncEPSComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-  @ViewChild("btnGuardar",{static: false})
-  btnGuardar: ElementRef;
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -78,6 +78,11 @@ export class EncEPSComponent implements OnInit {
   }
 
   guardarEncuesta() {
+    let form1: FormGroup;
+    this.sharedFormService.form1Actual.subscribe(data => {
+      form1 = data;
+      form1.markAsPristine({onlySelf:true});
+    });
     this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.epsComponent.lstEps;
@@ -85,14 +90,19 @@ export class EncEPSComponent implements OnInit {
       response => console.log(response), err => console.log(err)
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
+    this.sharedFormService.actualizarEstadoForm1(form1);
   }
 
   goBack() {
-    let form1dirty:boolean;
+    let form1dirty: boolean;
+    let form1pristine: boolean;
+
     this.sharedFormService.form1Actual.subscribe(data => {
       form1dirty = data.dirty;
+      form1pristine = data.pristine;
     });
-    if(this.haGuardado){
+
+    if(this.haGuardado && form1pristine){
       this.location.back();
     } else {
       if(form1dirty){

@@ -1,16 +1,18 @@
 package com.ms.encuestas.models;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Usuario implements Serializable/*, UserDetails*/ {
 	private static final long serialVersionUID = 1L;
 	private String codigo;
+	private String usuarioVida;
+	private String usuarioGenerales;
 	private String contrasenha;
 	private String nombreCompleto;
-	private Date fechaCreacion;
-	private Date fechaActualizacion;
+	private LocalDateTime fechaCreacion;
+	private LocalDateTime fechaActualizacion;
 	private List<Rol> lstRoles;
 	private Posicion posicion;
 	private boolean estado;
@@ -21,6 +23,22 @@ public class Usuario implements Serializable/*, UserDetails*/ {
 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
+	}
+	
+	public String getUsuarioVida() {
+		return usuarioVida;
+	}
+
+	public void setUsuarioVida(String usuarioVida) {
+		this.usuarioVida = usuarioVida;
+	}
+
+	public String getUsuarioGenerales() {
+		return usuarioGenerales;
+	}
+
+	public void setUsuarioGenerales(String usuarioGenerales) {
+		this.usuarioGenerales = usuarioGenerales;
 	}
 
 	public String getContrasenha() {
@@ -39,19 +57,19 @@ public class Usuario implements Serializable/*, UserDetails*/ {
 		this.nombreCompleto = nombreCompleto;
 	}
 
-	public Date getFechaCreacion() {
+	public LocalDateTime getFechaCreacion() {
 		return fechaCreacion;
 	}
 
-	public void setFechaCreacion(Date fechaCreacion) {
+	public void setFechaCreacion(LocalDateTime fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
-	
-	public Date getFechaActualizacion() {
+
+	public LocalDateTime getFechaActualizacion() {
 		return fechaActualizacion;
 	}
 
-	public void setFechaActualizacion(Date fechaActualizacion) {
+	public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
 	}
 

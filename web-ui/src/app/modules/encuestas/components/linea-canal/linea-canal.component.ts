@@ -48,7 +48,7 @@ export class LineaCanalComponent implements OnInit {
 
   getTotalPorcentaje() {
     if (this.lstLineaCanales != null) {
-      this.porcTotal = this.lstLineaCanales.map(t => t.objeto.porcentaje).reduce((acc, value) => acc + value, 0);
+      this.porcTotal = Math.round(this.lstLineaCanales.map(t => 100*t.objeto.porcentaje).reduce((acc, value) => acc + value, 0))/100;
       return this.porcTotal;
     }
     else {
@@ -99,9 +99,9 @@ export class LineaCanalComponent implements OnInit {
         completo = false;
         this.sendEstado(false);
       }
-      this.sharedFormService.actualizarEstadoCompletoForm1(completo);
-      this.sharedFormService.actualizarEstadoForm1(this.groupForm);
     });
+    this.sharedFormService.actualizarEstadoCompletoForm1(completo);
+    this.sharedFormService.actualizarEstadoForm1(this.groupForm);
   }
 
   validatePorcentajesCompleto():boolean{

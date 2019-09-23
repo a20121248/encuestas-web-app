@@ -24,21 +24,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ms.encuestas.models.EncuestaEmpresa;
 import com.ms.encuestas.models.Posicion;
 import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.services.PosicionServiceI;
 import com.ms.encuestas.services.ProcesoServiceI;
+import com.ms.encuestas.services.UsuarioServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
 public class ProcesoController {
     private static final Logger logger = LoggerFactory.getLogger(ProcesoController.class);
-
 	@Autowired
 	private ProcesoServiceI procesoService;
+	@Autowired
+	private UsuarioServiceI usuarioService;
 	@Autowired
 	private PosicionServiceI posicionService;
 
@@ -84,34 +85,42 @@ public class ProcesoController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public Proceso create(Authentication authentication, @RequestBody Proceso proceso) {
 		User user = (User) authentication.getPrincipal();
-		Usuario usuario = new Usuario();
-		usuario.setCodigo(user.getUsername());
+		Usuario usuario = usuarioService.findByUsuarioRed(user.getUsername());
 		proceso.setUsuario(usuario);
-		this.procesoService.store(proceso);
-		return this.procesoService.findByCodigo(proceso.getCodigo());
+		proceso = procesoService.insert(proceso);
+		logger.info(String.format("El usuario con matrícula '%s' creó la encuesta con código '%s'.", usuario.getCodigo(), proceso.getCodigo()));
+		return proceso;
 	}
 	
 	@PutMapping("/procesos")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Proceso update(Authentication authentication, @RequestBody Proceso proceso) {
 		User user = (User) authentication.getPrincipal();
-		Usuario usuario = new Usuario();
-		usuario.setCodigo(user.getUsername());
+		Usuario usuario = usuarioService.findByUsuarioRed(user.getUsername());
 		
-		Proceso currentProceso = this.procesoService.findById(proceso.getId());
-		currentProceso.setCodigo(proceso.getCodigo());
-		currentProceso.setNombre(proceso.getNombre());
-		currentProceso.setUsuario(usuario);
-		currentProceso.setFechaCierre(proceso.getFechaCierre());
-		this.procesoService.update(currentProceso);
-		return currentProceso;
+		Proceso procesoBuscado = procesoService.findById(proceso.getId());
+		if (procesoBuscado != null) {
+			proceso.setUsuario(usuario);
+			procesoService.update(proceso);
+			logger.info(String.format("El usuario con matrícula '%s' actualizó la encuesta con código '%s'.", usuario.getCodigo(), proceso.getCodigo()));
+		} else {
+			logger.error(String.format("No se pudo actualizar la encuesta con ID=%d porque no se encontró en la base de datos.", proceso.getId()));
+		}
+		return proceso;
 	}
 
 	@DeleteMapping("/procesos/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(Authentication authentication, @PathVariable Long id) {
-		Proceso proceso = this.procesoService.findById(id);
-		this.procesoService.delete(proceso);
+		User user = (User) authentication.getPrincipal();
+		Usuario usuario = usuarioService.findByUsuarioRed(user.getUsername());
+		
+		Proceso procesoBuscado = procesoService.findById(id);
+		if (procesoBuscado != null) {
+			procesoService.deleteById(id);
+			logger.info(String.format("El usuario con matrícula '%s' actualizó la encuesta con código '%s'.", usuario.getCodigo(), procesoBuscado.getCodigo()));
+		} else {
+			logger.error(String.format("No se pudo eliminar la encuesta con ID=%d porque no se encontró en la base de datos.", id));
+		}		
 	}
-
 }

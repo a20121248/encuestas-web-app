@@ -2,7 +2,8 @@ import { Posicion } from './posicion';
 
 export class Usuario {
   codigo: string; // Matricula
-  nombre: string;
+  usuarioVida: string;
+  usuarioGenerales: string;
   contrasenha: string;
   nombreCompleto: string;
   usuarioRed: string;

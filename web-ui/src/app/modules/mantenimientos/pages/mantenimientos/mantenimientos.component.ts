@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ProcesoService } from 'src/app/shared/services/proceso.service';
 import { Proceso } from 'src/app/shared/models/Proceso';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-mantenimientos',
   templateUrl: './mantenimientos.component.html',
   styleUrls: ['./mantenimientos.component.scss']
 })
-export class MantenimientosComponent implements OnInit {
+export class MantenimientosComponent implements OnInit, OnDestroy {
   titulo = 'MANTENIMIENTO';
-  links = [['Mantenimiento de usuarios', 'usuarios'],
+  links = [['Mantenimiento de colaboradores', 'colaboradores'],
            ['Mantenimiento de posiciones', 'posiciones'],
            ['Mantenimiento de áreas', 'areas'],
            ['Mantenimiento de centros de costos', 'centros-de-costos'],
@@ -22,14 +23,14 @@ export class MantenimientosComponent implements OnInit {
            ['Mantenimiento de datos de la posición', 'posiciones']];
   procesos: Proceso[];
   selectedProceso: Proceso;
+  subscribeProceso: Subscription;
 
   constructor(
     private titleService: Title,
     private procesoService: ProcesoService) {
-      this.procesoService.findAll().subscribe(procesos => {
+      this.subscribeProceso = this.procesoService.findAll().subscribe(procesos => {
         this.procesos = procesos;
         this.selectedProceso = procesos[procesos.length - 1];
-        console.log(this.selectedProceso);
       });
     }
 
@@ -37,4 +38,7 @@ export class MantenimientosComponent implements OnInit {
     this.titleService.setTitle('Mantenimiento');
   }
 
+  ngOnDestroy(): void {
+    this.subscribeProceso.unsubscribe();
+  }
 }

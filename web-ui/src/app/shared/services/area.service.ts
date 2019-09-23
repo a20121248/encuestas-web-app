@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Area } from '../models/area';
 import { AppConfig } from './app.config';
-import { HttpClient, HttpEventType } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -36,6 +36,14 @@ export class AreaService {
     );
   }
 
+  download(): Observable<any> {
+    const url = `${this.urlServer.api}areas/descargar`;
+    return this.http.post(url, null, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
+  }
+
   findById(areaId: number): Observable<Area> {
     const url = `${this.urlServer.api}areas/${areaId}`;
     return this.http.get<Area>(url);
@@ -43,7 +51,26 @@ export class AreaService {
 
   findAll(): Observable<Area[]> {
     const url = `${this.urlServer.api}areas`;
-    console.log(url);
     return this.http.get<Area[]>(url);
+  }
+
+  deleteAll(): Observable<any> {
+    const url = `${this.urlServer.api}areas/eliminar-todos`;
+    return this.http.post<any>(url, null);
+  }
+
+  create(area: Area): Observable<any> {
+    const url = `${this.urlServer.api}areas`;
+    return this.http.post<any>(url, area);
+  }
+
+  edit(area: Area): Observable<any> {
+    const url = `${this.urlServer.api}areas`;
+    return this.http.put<any>(url, area);
+  }
+
+  delete(area: Area): Observable<any> {
+    const url = `${this.urlServer.api}centros/${area.id}`;
+    return this.http.delete<any>(url);
   }
 }

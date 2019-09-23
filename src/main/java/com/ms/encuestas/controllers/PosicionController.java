@@ -1,8 +1,16 @@
 package com.ms.encuestas.controllers;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,10 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,11 +31,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ms.encuestas.models.Empresa;
 import com.ms.encuestas.models.Posicion;
 import com.ms.encuestas.models.Proceso;
-import com.ms.encuestas.models.Usuario;
-import com.ms.encuestas.repositories.PosicionRepository;
 import com.ms.encuestas.services.PosicionServiceI;
 import com.ms.encuestas.services.ProcesoServiceI;
 
@@ -46,51 +47,101 @@ public class PosicionController {
 	private ProcesoServiceI procesoService;
 	
 	@GetMapping("/posiciones/cantidad")
-	public Long count() {
+	public Long count(Authentication authentication) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de posiciones en la base de datos.", user.getUsername()));
 		return posicionService.count();
 	}
 	
+	@GetMapping("/procesos/{procesoId}/cantidad-datos-posiciones")
+	public Long countDatos(Authentication authentication, @PathVariable Long procesoId) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de posiciones en la encuesta con ID=%d en la base de datos.", user.getUsername(), procesoId));
+		return posicionService.countDatos(procesoId);
+	}
+	
 	@GetMapping("/posiciones")
-	public List<Posicion> index() {
+	public List<Posicion> index(Authentication authentication) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó todas las posiciones en la base de datos.", user.getUsername()));
 		return posicionService.findAll();
 	}
 	
 	@GetMapping("/posiciones/{codigo}")
-	public Posicion show(@PathVariable String codigo) {
-		return posicionService.findByCodigo(codigo);
-	}
-
-	@GetMapping("/posiciones-con-area-y-centro/{codigo}")
-	public Posicion showWithAreaAndCentro(@PathVariable String codigo) {
-		return posicionService.findByCodigoWithAreaAndCentro(codigo);
+	public ResponseEntity<?> show(Authentication authentication, @PathVariable String codigo) {
+		User user = (User) authentication.getPrincipal();
+		Posicion posicion = null;
+		Map<String, Object> response = new HashMap<>();
+		try {
+			logger.info(String.format("El usuario '%s' buscó la posición con código '%s' en la base de datos.", user.getUsername(), codigo));
+			posicion = posicionService.findByCodigo(codigo);
+		} catch (EmptyResultDataAccessException er) {
+			response.put("mensaje", String.format("La posición con código '%s' no existe en la base de datos.", codigo));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		} catch (DataAccessException dae) {
+			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
+			response.put("error", String.format("%s. %s", dae.getMessage(), dae.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Posicion>(posicion, HttpStatus.OK);
 	}
 	
-	@GetMapping("/posiciones-con-area/{codigo}")
-	public Posicion showWithArea(@PathVariable String codigo) {
-		return posicionService.findByCodigoWithArea(codigo);
-	}
-	
-	@GetMapping("/posiciones-con-centro/{codigo}")
-	public Posicion showWithCentro(@PathVariable String codigo) {
-		return posicionService.findByCodigoWithCentro(codigo);
+	@PostMapping("/posiciones")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Posicion create(Authentication authentication, @RequestBody Posicion posicion) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' creó la posición con código '%s'.", user.getUsername(), posicion.getCodigo()));
+		return posicionService.insert(posicion);
 	}
 	
 	@PutMapping("/posiciones")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Posicion update(@RequestBody Posicion posicion, @PathVariable String codigo) {
-		Posicion currentCentro = posicionService.findByCodigo(codigo);
-		currentCentro.setNombre(posicion.getNombre());
-		//currentCentro.setApellido(centro.get());
-		//currentCentro.setEmail(centro.getEmail());
-		posicionService.save(currentCentro);
-		return currentCentro;
+	public Posicion update(Authentication authentication, @RequestBody Posicion posicion) {
+		User user = (User) authentication.getPrincipal();
+		Posicion posicionBuscada = posicionService.findByCodigo(posicion.getCodigo());		
+		if (posicionBuscada != null) {
+			logger.info(String.format("El usuario '%s' actualizó la posición con código '%s'.", user.getUsername(), posicion.getCodigo()));
+			return posicionService.update(posicion);
+		} else {
+			logger.error(String.format("El usuario '%s' no pudo actualizar la posición con código '%s' porque no se encontró en la base de datos.", user.getUsername(), posicion.getCodigo()));
+			return null;
+		}
 	}
 
 	@DeleteMapping("/posiciones/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable String codigo) {
-		Posicion currentPosicion = posicionService.findByCodigo(codigo);
-		posicionService.delete(currentPosicion);
+	public void delete(Authentication authentication, @PathVariable String codigo) {
+		User user = (User) authentication.getPrincipal();		
+		Posicion posicionBuscada = posicionService.findByCodigo(codigo);
+		if (posicionBuscada != null) {
+			logger.info(String.format("El usuario '%s' eliminó la posición con código '%s'.", user.getUsername(), posicionBuscada.getCodigo()));
+			posicionService.deleteByCodigo(codigo);
+		} else {
+			logger.error(String.format("El usuario '%s' no pudo eliminar la posición con código '%s' porque no se encontró en la base de datos.", user.getUsername(), codigo));
+		}
+	}
+	
+	@PostMapping("/posiciones/cargar")
+	@ResponseStatus(HttpStatus.OK)
+	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
+		try {
+			logger.info(String.format("Leyendo el archivo '%s'.", file.getOriginalFilename()));
+			this.posicionService.processExcel(file.getInputStream());
+		} catch (IOException e) {
+			logger.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
+		}
+	}
+	
+	@PostMapping("/posiciones/descargar")
+	@Transactional(readOnly = true)
+	public ResponseEntity<?> downloadExcel() {
+		Resource resource = posicionService.downloadExcel();
+        String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
 	}
 
 	@PostMapping("/procesos/{procesoId}/cargar-datos-posiciones")
@@ -98,8 +149,7 @@ public class PosicionController {
 	public void cargarDatosPosiciones(@PathVariable Long procesoId, @RequestParam("file") MultipartFile file) {
 		try {
 			Proceso proceso = procesoService.findById(procesoId);
-			posicionService.deleteDatos(proceso);
-			logger.info(String.format("Leyendo el archivo ", file.getOriginalFilename()));
+			logger.info(String.format("Leyendo el archivo '%s'.", file.getOriginalFilename()));
 			posicionService.processExcelDatos(proceso, file.getInputStream());
 		} catch (IOException e) {
 			logger.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
@@ -120,7 +170,17 @@ public class PosicionController {
 	
 	@PostMapping("posiciones/eliminar-datos")
 	@ResponseStatus(HttpStatus.OK)
-	public void create(@RequestBody Proceso proceso) {
+	public void deleteAllDatos(Authentication authentication, @RequestBody Proceso proceso) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' eliminó todas las posiciones de la encuesta con código '%s' de la base de datos.", user.getUsername(), proceso.getCodigo()));
 		posicionService.deleteDatos(proceso);
+	}
+	
+	@PostMapping("/posiciones/eliminar-todos")
+	@ResponseStatus(HttpStatus.OK)
+	public void deleteAll(Authentication authentication) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' eliminó todas las posiciones de la base de datos.", user.getUsername()));
+		posicionService.deleteAll();
 	}
 }

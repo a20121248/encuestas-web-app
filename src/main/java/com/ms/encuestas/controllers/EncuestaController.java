@@ -1,10 +1,14 @@
 package com.ms.encuestas.controllers;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,6 +76,18 @@ public class EncuestaController {
 		this.encuestaService.saveCentro(encuesta, new Long(1), procesoId, posicionCodigo, new Long(3));
 	}
 	
+	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro/{nivel}/{perfilId}/descargar")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<?> downloadCentroExcel(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable int nivel, @PathVariable Long perfilId) {
+		Resource resource = this.encuestaService.downloadCentroExcel(new Long(1), procesoId, posicionCodigo, new Long(3), nivel, perfilId);
+        String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+	}
+	
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea/{perfilId}")
 	@Transactional(readOnly = true)
 	public EncuestaObjeto getLinea(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId) {
@@ -109,16 +125,16 @@ public class EncuestaController {
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-subcanal/{lineaId}/{canalId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createLineaCanal(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @PathVariable Long canalId, @RequestBody EncuestaObjetoObjetos encuesta) {
+	public void createProductoSubcanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @PathVariable Long canalId, @RequestBody EncuestaObjetoObjetos encuesta) {
 		Long encuestaTipoId = new Long(5); // 5: Producto y Subcanal
-		this.encuestaService.saveProductoSubcanales(encuesta, procesoId, posicionCodigo, lineaId, canalId, encuestaTipoId);
+		this.encuestaService.saveProductoSubcanales(encuesta, procesoId, posicionCodigo, encuestaTipoId, lineaId, canalId);
 	}
 	
-	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal/{lineaId}")
+	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal/{perfilId}/{lineaId}")
 	@Transactional(readOnly = true)
-	public EncuestaObjetoObjetos getProductoCanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId) {
+	public EncuestaObjetoObjetos getProductoCanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId, @PathVariable Long lineaId) {
 		Long encuestaTipoId = new Long(6); // 6: Producto y Canal
-		return encuestaService.getProductoCanales(procesoId, posicionCodigo, encuestaTipoId, lineaId);
+		return encuestaService.getProductoCanales(procesoId, posicionCodigo, encuestaTipoId, perfilId, lineaId);
 	}
 	
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal/{lineaId}")

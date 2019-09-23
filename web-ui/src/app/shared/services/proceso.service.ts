@@ -29,19 +29,16 @@ export class ProcesoService {
 
   crear(proceso: Proceso): Observable<any> {
     const url = `${this.urlServer.api}procesos`;
-    console.log(url);
     return this.http.post<any>(url, proceso);
   }
 
   editar(proceso: Proceso): Observable<any> {
     const url = `${this.urlServer.api}procesos`;
-    console.log(url);
     return this.http.put<any>(url, proceso);
   }
 
   delete(proceso: Proceso): Observable<any> {
     const url = `${this.urlServer.api}procesos/${proceso.id}`;
-    console.log(url);
     return this.http.delete<any>(url);
   }
 }

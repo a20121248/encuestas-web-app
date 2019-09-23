@@ -1,14 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Usuario } from '../models/usuario';
 import { Encuesta } from 'src/app/shared/models/encuesta';
-import { throwError, of, Observable } from 'rxjs';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpErrorResponse
-} from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { Router } from '@angular/router';
 import { AppConfig } from 'src/app/shared/services/app.config';
 import { Objeto } from '../models/objeto';
 
@@ -18,15 +13,8 @@ import { Objeto } from '../models/objeto';
 export class LineaService {
   protected urlServer = AppConfig.settings.urlServer;
 
-  constructor(
-    public authService: AuthService,
-    private http: HttpClient,
-    private router: Router
-  ) {}
-
-
-  errorHandler(error: any): void {
-    console.log(error);
+  constructor(public authService: AuthService,
+              private http: HttpClient) {
   }
 
   findAll(): Observable<Objeto[]> {
@@ -52,4 +40,23 @@ export class LineaService {
     return this.http.post<any>(`${this.urlServer.api}${url2}`, encuesta);
   }
 
+  deleteAll(): Observable<any> {
+    const url = `${this.urlServer.api}lineas/eliminar-todos`;
+    return this.http.post<any>(url, null);
+  }
+
+  create(linea: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}lineas`;
+    return this.http.post<any>(url, linea);
+  }
+
+  edit(linea: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}lineas`;
+    return this.http.put<any>(url, linea);
+  }
+
+  delete(linea: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}lineas/${linea.id}`;
+    return this.http.delete<any>(url);
+  }
 }

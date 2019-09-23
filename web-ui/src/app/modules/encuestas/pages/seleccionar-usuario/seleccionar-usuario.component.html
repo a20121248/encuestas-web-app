@@ -3,7 +3,7 @@
     <h1>{{ titulo.toUpperCase() }}</h1>
   </mat-card>
   <mat-card class="cuadro mat-elevation-z4 mt-4">
-    <div *ngIf="procesoActual != null && authService.usuario.posicion != null; else errorUsuario">
+    <div *ngIf="authService.proceso != null && authService.usuario.posicion != null; else errorUsuario">
       <div class="table-responsive">
         <table mat-table [dataSource]="lstUsuario">
           <ng-container matColumnDef="codigo">
@@ -57,12 +57,17 @@
     <ng-template #errorUsuario>
       <h4 style="margin-top:1em;">Se encontraron los siguientes errores:</h4>
       <ol style="margin:.4em 0;">
-        <li *ngIf="procesoActual == null">
-          Usted no está asignado a ningún proceso de encuestas.
+        <li *ngIf="authService.proceso == null; else procesoBien">
+          No existe ninguna encuesta activa.
         </li>
-        <li *ngIf="authService.usuario.posicion == null">
-          Usted no cuenta con una posición registrada en el proceso.
-        </li>
+        <ng-template #procesoBien>
+          <li *ngIf="authService.usuario.codigo == null">
+            Usted no cuenta con una matrícula.
+          </li>
+          <li *ngIf="authService.usuario.posicion == null">
+            Usted no cuenta con una posición registrada en la encuesta.
+          </li>
+        </ng-template>
       </ol>
       <p style="margin-top:.5em;">Contactar con Helpdesk.</p>
     </ng-template>
