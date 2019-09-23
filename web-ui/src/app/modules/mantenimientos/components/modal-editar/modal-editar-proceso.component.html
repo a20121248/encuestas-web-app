@@ -1,0 +1,41 @@
+<form class="pacifico-page" [formGroup]="formGroup" (ngSubmit)="submit()">
+  <h1 mat-dialog-title>{{ titulo }}</h1>
+  <mat-dialog-content fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <mat-form-field fxFlex="20">
+        <mat-label>Código</mat-label>
+        <input matInput formControlName="codigo">
+        <mat-error *ngIf="codigo.hasError('required') && codigo.touched">Ingrese un código</mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="70">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre">
+        <mat-error *ngIf="nombre.hasError('required') && nombre.touched">Ingrese un nombre</mat-error>
+      </mat-form-field>
+    </div>
+    <mat-radio-group aria-label="Seleccionar una opción" formControlName="estado">
+      <mat-radio-button value="1">Abierta</mat-radio-button>
+      <mat-radio-button value="2">Cerrada</mat-radio-button>
+    </mat-radio-group>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <mat-form-field fxFlex="45">
+        <mat-label>Fecha de inicio</mat-label>
+        <input matInput [matDatepicker]="fechaInicioMat" formControlName="fechaInicio" readonly>
+        <mat-datepicker-toggle matSuffix [for]="fechaInicioMat"></mat-datepicker-toggle>
+        <mat-datepicker #fechaInicioMat></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field fxFlex="45">
+        <mat-label>Fecha de cierre</mat-label>
+        <input matInput [matDatepicker]="fechaCierreMat" formControlName="fechaCierre" readonly>
+        <mat-datepicker-toggle matSuffix [for]="fechaCierreMat"></mat-datepicker-toggle>
+        <mat-datepicker #fechaCierreMat></mat-datepicker>
+        <mat-error *ngIf="fechaCierre.hasError('required') && fechaCierre.touched">Ingrese una fecha de cierre</mat-error>
+        <span *ngIf="errorFechas" class="error">Ingrese una fecha mayor a la fecha de inicio</span>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign="end">
+    <button mat-raised-button mat-dialog-close><i class="material-icons">reply</i>Cancelar</button>
+    <button mat-raised-button color="accent" type="submit"><i class="material-icons">save</i>Guardar</button>
+  </mat-dialog-actions>
+</form>

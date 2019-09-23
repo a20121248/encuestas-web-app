@@ -1,6 +1,6 @@
 package com.ms.encuestas.repositories;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,13 +62,15 @@ public class AreaRepository {
 		paramMap.put("codigo", area.getCodigo());
 		paramMap.put("nombre", area.getNombre());
 		paramMap.put("division", area.getDivision());
-		Date fecha = new Date();
+		LocalDateTime fecha = LocalDateTime.now();
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);
 		plantilla.update(sql,paramMap);
 		
 		sql = "SELECT areas_seq.currval FROM DUAL";
 		area.setId(plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class));
+		area.setFechaCreacion(fecha);
+		area.setFechaActualizacion(fecha);
 		return area;
 	}
 	
@@ -84,10 +86,17 @@ public class AreaRepository {
 		paramMap.put("codigo", area.getCodigo());
 		paramMap.put("nombre", area.getNombre());
 		paramMap.put("division", area.getDivision());
-		paramMap.put("fecha_actualizacion", new Date());
-		plantilla.update(sql,paramMap);
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		plantilla.update(sql, paramMap);
 		
+		area.setFechaActualizacion(fecha);
 		return area;
+	}
+
+	public void deleteById(Long id) {
+		String sql = "DELETE FROM areas WHERE id=:id";
+		plantilla.update(sql, new MapSqlParameterSource("id", id));
 	}
 	
 	public void delete(Area area) {

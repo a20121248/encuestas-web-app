@@ -1,6 +1,9 @@
 package com.ms.encuestas.repositories;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -36,6 +39,53 @@ public class ObjetoRepository {
 		return plantilla.query(sql, new MapSqlParameterSource("objeto_tipo_id", objetoTipoId), new ObjetoMapper());
 	}
 	
+	public void deleteAll(Long objetoTipoId) {
+		String sql = "DELETE FROM objetos WHERE objeto_tipo_id=:objeto_tipo_id";
+		plantilla.update(sql, new MapSqlParameterSource("objeto_tipo_id", objetoTipoId));
+	}
+	
+	public Objeto insert(Objeto objeto, Long objetoTipoId) throws EmptyResultDataAccessException {
+		String sql = "INSERT INTO objetos(codigo,nombre,objeto_tipo_id,padre_objeto_id,fecha_creacion,fecha_actualizacion)\n" +
+                     "VALUES(:codigo,:nombre,:objeto_tipo_id,:padre_objeto_id,:fecha_creacion,:fecha_actualizacion)";		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("codigo", objeto.getCodigo());
+		paramMap.put("nombre", objeto.getNombre());
+		paramMap.put("objeto_tipo_id", objetoTipoId);
+		paramMap.put("padre_objeto_id", objeto.getObjetoPadre().getId());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_creacion", fecha);
+		paramMap.put("fecha_actualizacion", fecha);        
+		plantilla.update(sql,paramMap);
+		
+		sql = "SELECT objetos_seq.currval FROM DUAL";
+		objeto.setId(plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class));
+		objeto.setFechaCreacion(fecha);
+		objeto.setFechaActualizacion(fecha);
+		return objeto;
+	}
+	
+	public Objeto update(Objeto objeto, Long objetoTipoId) throws EmptyResultDataAccessException {
+		String sql = "UPDATE objetos\n" +
+				 	 "   SET codigo=:codigo,\n" +
+				 	 "       nombre=:nombre,\n" +
+				 	 "		 objeto_tipo_id=:objeto_tipo_id,\n" +
+				 	 "		 padre_objeto_id=:padre_objeto_id,\n" +
+				 	 "		 fecha_actualizacion=:fecha_actualizacion\n" +
+				 	 " WHERE id=:id";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", objeto.getId());
+		paramMap.put("codigo", objeto.getCodigo());
+		paramMap.put("nombre", objeto.getNombre());
+		paramMap.put("objeto_tipo_id", objetoTipoId);
+		paramMap.put("padre_objeto_id", objeto.getObjetoPadre() != null ? objeto.getObjetoPadre().getId() : 0);
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		plantilla.update(sql, paramMap);
+		
+		objeto.setFechaActualizacion(fecha);
+		return objeto;
+	}
+	
 	public Objeto findById(Long id) throws EmptyResultDataAccessException {
 		String sql = "SELECT A.*,\n" +
 					 "       B.id padre_id,\n" + 
@@ -49,5 +99,9 @@ public class ObjetoRepository {
 					 " WHERE A.id=:id";
 		return plantilla.queryForObject(sql, new MapSqlParameterSource("id", id), new ObjetoMapper());
 	}
-
+	
+	public void deleteById(Long id) {
+		String sql = "DELETE FROM objetos WHERE id=:id";
+		plantilla.update(sql, new MapSqlParameterSource("id", id));
+	}
 }

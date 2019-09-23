@@ -1,12 +1,12 @@
 <form [formGroup]="myGroup">
   <mat-form-field *ngIf="justificacion" class="mt-4">
-    <mat-select  placeholder="Justificación" [(ngModel)]="justificacion.id" formControlName="idJust"  required>
+    <mat-select placeholder="Justificación" [(ngModel)]="justificacion.id" formControlName="idJust" required>
       <mat-option *ngFor="let item of lstJustificaciones" [value]="item.id" >
         <span>{{ item.nombre }}</span>
       </mat-option>
     </mat-select>
     <mat-error *ngIf="idJustControl.invalid && idJustControl.touched" >
-      Escoger opcion
+      Escoger opción
     </mat-error>
   </mat-form-field>
 

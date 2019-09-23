@@ -1,6 +1,55 @@
 <div class="container pacifico-page">
   <mat-card class="cuadro mat-elevation-z4 mt-4 mb-4 text-center">
-    <h1>{{ titulo }}</h1>
+    <h1>{{ tituloPagina }}</h1>
   </mat-card>
+  <div class="row">
+    <div class="col-md-12">
+      <mat-card class="cuadro mt-5">
+        <mat-card class="titulo mat-elevation-z4">
+          {{ titulo }}
+        </mat-card>
+        <div class="col-md-12 text-right mt-2 mb-3">
+          <button mat-raised-button color="warn" (click)="crear()"><i class="material-icons">add</i>Crear</button>
+          <button mat-raised-button color="warn" (click)="editar()"><i class="material-icons">create</i>Editar</button>
+          <button mat-raised-button color="warn" (click)="eliminar()"><i class="material-icons">clear</i>Eliminar</button>
+          <button mat-raised-button (click)="cargar()"><i class="material-icons">cloud_upload</i>Cargar</button>
+          <button mat-raised-button (click)="limpiar()"><i class="material-icons">delete</i>Limpiar</button>
+        </div>
+        <div class="table-responsive">
+          <table mat-table [dataSource]="areas">
+            <ng-container matColumnDef="codigo">
+              <th mat-header-cell *matHeaderCellDef>CÓDIGO</th>
+              <td mat-cell *matCellDef="let area">{{area.codigo}}</td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
+              <td mat-cell *matCellDef="let area">{{area.nombre}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="division">
+              <th mat-header-cell *matHeaderCellDef>DIVISIÓN</th>
+              <td mat-cell *matCellDef="let area">{{area.division}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaCreacion">
+              <th mat-header-cell *matHeaderCellDef>FECHA DE CREACIÓN</th>
+              <td mat-cell *matCellDef="let area">{{area.fechaCreacion | date:'dd/MM/yyyy HH:mm'}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaActualizacion">
+              <th mat-header-cell *matHeaderCellDef>FECHA DE ACTUALIZACIÓN</th>
+              <td mat-cell *matCellDef="let area">{{area.fechaActualizacion | date:'dd/MM/yyyy HH:mm'}}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="dcAreas"></tr>
+            <tr mat-row *matRowDef="let row; columns: dcAreas; let i = index" [class.selected-row]="row === selectedArea" (click)="setSelected(row, i)"></tr>
+          </table>
+          <p *ngIf="areas && areas.length==0" style="font-size:13px;margin:1em 0 .1em;">No existen áreas en la base de datos.</p>
+        </div>
+      </mat-card>
+    </div>
+  </div>
 </div>
 <app-footer></app-footer>

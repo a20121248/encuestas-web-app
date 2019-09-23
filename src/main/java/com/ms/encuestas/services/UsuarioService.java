@@ -140,18 +140,22 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	public Usuario findByCodigoWithPosicion(String codigo) {
 		return usuarioRepository.findByCodigoWithPosicion(codigo);
 	}
-
+	
 	@Override
-	@Transactional(readOnly = true)
-	public Usuario save(Usuario usuario) {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteByCodigo(String codigo) {
+		usuarioRepository.deleteByCodigo(codigo);		
 	}
 
 	@Override
-	public void delete(Usuario usuario) {
-		// TODO Auto-generated method stub
-		
+	@Transactional(readOnly = true)
+	public Usuario insert(Usuario usuario) {
+		return usuarioRepository.insert(usuario);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Usuario update(Usuario usuario) {
+		return usuarioRepository.update(usuario);
 	}
 	
 	@Override

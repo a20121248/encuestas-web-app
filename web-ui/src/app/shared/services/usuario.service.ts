@@ -71,4 +71,29 @@ export class UsuarioService {
     const url = `procesos/${procesoId}/usuarios-dependientes/${posicionCodigo}`;
     return this.http.get<Usuario[]>(`${this.urlServer.api}${url}`);
   }
+
+  findAll(): Observable<Usuario[]> {
+    const url = `${this.urlServer.api}usuarios`;
+    return this.http.get<Usuario[]>(url);
+  }
+
+  deleteAll(): Observable<any> {
+    const url = `${this.urlServer.api}usuarios/eliminar-todos`;
+    return this.http.post<any>(url, null);
+  }
+
+  create(usuario: Usuario): Observable<any> {
+    const url = `${this.urlServer.api}usuarios`;
+    return this.http.post<any>(url, usuario);
+  }
+
+  edit(usuario: Usuario): Observable<any> {
+    const url = `${this.urlServer.api}usuarios`;
+    return this.http.put<any>(url, usuario);
+  }
+
+  delete(usuario: Usuario): Observable<any> {
+    const url = `${this.urlServer.api}usuarios/${usuario.codigo}`;
+    return this.http.delete<any>(url);
+  }
 }

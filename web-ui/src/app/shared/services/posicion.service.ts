@@ -89,4 +89,29 @@ export class PosicionService {
     const url = `${this.urlServer.api}posiciones/eliminar-datos`;
     return this.http.post<any>(url, proceso);
   }
+
+  findAll(): Observable<Posicion[]> {
+    const url = `${this.urlServer.api}posiciones`;
+    return this.http.get<Posicion[]>(url);
+  }
+
+  deleteAll(): Observable<any> {
+    const url = `${this.urlServer.api}posiciones/eliminar-todos`;
+    return this.http.post<any>(url, null);
+  }
+
+  create(posicion: Posicion): Observable<any> {
+    const url = `${this.urlServer.api}posiciones`;
+    return this.http.post<any>(url, posicion);
+  }
+
+  edit(posicion: Posicion): Observable<any> {
+    const url = `${this.urlServer.api}posiciones`;
+    return this.http.put<any>(url, posicion);
+  }
+
+  delete(posicion: Posicion): Observable<any> {
+    const url = `${this.urlServer.api}posiciones/${posicion.codigo}`;
+    return this.http.delete<any>(url);
+  }
 }

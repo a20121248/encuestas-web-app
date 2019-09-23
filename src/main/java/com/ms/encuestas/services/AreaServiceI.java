@@ -13,8 +13,8 @@ public interface AreaServiceI {
 	public List<Area> findAll();
 	public Area findById(Long id);
 	public Area findByCodigo(String codigo);
-	public Area save(Area area);
-	public void delete(Area area);
+	public Area insert(Area area);
+	public Area update(Area area);
 	public void deleteById(Long id);
 	public void deleteAll();
 	public void processExcel(InputStream file);

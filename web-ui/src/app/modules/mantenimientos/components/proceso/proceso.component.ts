@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ɵConsole } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ProcesoService } from 'src/app/shared/services/proceso.service';
 import { Proceso } from 'src/app/shared/models/Proceso';
 import { MatDialog, MatDialogRef, MatDialogConfig} from '@angular/material/dialog';

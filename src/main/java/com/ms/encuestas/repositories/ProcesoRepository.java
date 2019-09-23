@@ -1,6 +1,6 @@
 package com.ms.encuestas.repositories;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,13 +79,15 @@ public class ProcesoRepository {
 		paramMap.put("usuario_codigo", proceso.getUsuario().getCodigo());
 		paramMap.put("fecha_inicio", proceso.getFechaInicio());
 		paramMap.put("fecha_cierre", proceso.getFechaCierre());
-		Date fecha = new Date();
+		LocalDateTime fecha = LocalDateTime.now();
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);        
 		plantilla.update(sql, paramMap);
 		
 		sql = "SELECT procesos_seq.currval FROM DUAL";
 		proceso.setId(plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class));
+		proceso.setFechaCreacion(fecha);
+		proceso.setFechaActualizacion(fecha);
 		return proceso;
 	}
 	
@@ -107,8 +109,11 @@ public class ProcesoRepository {
 		paramMap.put("usuario_codigo", proceso.getUsuario().getCodigo());
 		paramMap.put("fecha_inicio", proceso.getFechaInicio());
 		paramMap.put("fecha_cierre", proceso.getFechaCierre());
-		paramMap.put("fecha_actualizacion", new Date());        
-		plantilla.update(sql, paramMap);		
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		plantilla.update(sql, paramMap);
+		
+		proceso.setFechaActualizacion(fecha);
 		return proceso;
 	}
 	

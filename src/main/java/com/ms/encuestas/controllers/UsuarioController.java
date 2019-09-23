@@ -10,15 +10,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -32,18 +38,84 @@ import com.ms.encuestas.services.UsuarioServiceI;
 @RestController
 @RequestMapping("/api")
 public class UsuarioController {
-	private final Logger log = LoggerFactory.getLogger(UsuarioController.class);
+	private final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
 	@Autowired
 	private UsuarioServiceI usuarioService;	
 
 	@GetMapping("/usuarios/cantidad")
-	public Long count() throws Exception {
+	public Long count(Authentication authentication) throws Exception {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de colaboradores en la base de datos.", user.getUsername()));
 		return usuarioService.count();
 	}
 
 	@GetMapping("/usuarios")
-	public List<Usuario> index() throws Exception {
+	public List<Usuario> index(Authentication authentication) throws Exception {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó todos los colaboradores en la base de datos.", user.getUsername()));
 		return usuarioService.findAll();
+	}
+	
+	@PostMapping("/usuarios/eliminar-todos")
+	@ResponseStatus(HttpStatus.OK)
+	public void deleteAll(Authentication authentication) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' eliminó a todos los colaboradores de la base de datos.", user.getUsername()));
+		usuarioService.deleteAll();
+	}
+	
+	@GetMapping("/usuarios/{codigo}")
+	public ResponseEntity<?> show(Authentication authentication, @PathVariable String codigo) {
+		User user = (User) authentication.getPrincipal();
+		Usuario usuario = null;
+		Map<String, Object> response = new HashMap<>();
+		try {
+			logger.info(String.format("El usuario '%s' buscó al colaborador con código '%s'.", user.getUsername(), codigo));
+			usuario = usuarioService.findByCodigo(codigo);
+		} catch (EmptyResultDataAccessException er) {
+			response.put("mensaje", String.format("El colaborador con código '%s' no existe en la base de datos.", codigo));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		} catch (DataAccessException dae) {
+			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
+			response.put("error", String.format("%s. %s", dae.getMessage(), dae.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+	}
+
+	@PostMapping("/usuarios")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Usuario create(Authentication authentication, @RequestBody Usuario usuario) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' creó al colaborador con código '%s'.", user.getUsername(), usuario.getCodigo()));
+		return usuarioService.insert(usuario);
+	}
+
+	@PutMapping("/usuarios")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Usuario update(Authentication authentication, @RequestBody Usuario usuario) {
+		User user = (User) authentication.getPrincipal();		
+		Usuario usuarioBuscado = usuarioService.findByCodigo(usuario.getCodigo());
+		if (usuarioBuscado != null) {
+			logger.info(String.format("El usuario '%s' actualizó al colaborador con código '%s'.", user.getUsername(), usuario.getCodigo()));
+			return usuarioService.update(usuario);
+		} else {
+			logger.error(String.format("El usuario '%s' no pudo actualizar al colaborador con código '%s' porque no se encontró en la base de datos.", user.getUsername(), usuario.getCodigo()));
+			return null;
+		}
+	}
+
+	@DeleteMapping("/usuarios/{codigo}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(Authentication authentication, @PathVariable String codigo) {
+		User user = (User) authentication.getPrincipal();		
+		Usuario usuarioBuscado = usuarioService.findByCodigo(codigo);
+		if (usuarioBuscado != null) {
+			logger.info(String.format("El usuario '%s' eliminó al colaborador con código '%s'.", user.getUsername(), usuarioBuscado.getCodigo()));
+			usuarioService.deleteByCodigo(codigo);
+		} else {
+			logger.error(String.format("El usuario '%s' no pudo eliminar al colaborador con código '%s' porque no se encontró en la base de datos.", user.getUsername(), codigo));
+		}
 	}
 	
 	@GetMapping("/procesos/{procesoId}/usuarios-dependientes/{posicionCodigo}")
@@ -103,10 +175,10 @@ public class UsuarioController {
 	@ResponseStatus(HttpStatus.OK)
 	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
 		try {
-			log.info(String.format("Leyendo el archivo '%s'.", file.getOriginalFilename()));
+			logger.info(String.format("Leyendo el archivo '%s'.", file.getOriginalFilename()));
 			this.usuarioService.processExcel(file.getInputStream());
 		} catch (IOException e) {
-			log.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
+			logger.info(String.format("Error leyendo el archivo: %s - %s", e.getMessage(), e.getCause()));
 		}
 	}
 	
@@ -120,11 +192,5 @@ public class UsuarioController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
-	}
-	
-	@PostMapping("/usuarios/eliminar-todos")
-	@ResponseStatus(HttpStatus.OK)
-	public void deleteAll() {
-		usuarioService.deleteAll();
-	}
+	}	
 }

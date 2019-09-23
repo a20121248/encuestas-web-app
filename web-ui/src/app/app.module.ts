@@ -89,6 +89,9 @@ import { RolGuard } from './shared/guards/rol.guard';
 import { registerLocaleData } from '@angular/common';
 import localeES from '@angular/common/locales/es';
 import { DescargaLogComponent } from './shared/components/log/descarga-log/descarga-log.component';
+import { LineasEpsComponent } from './modules/mantenimientos/pages/lineas-eps/lineas-eps.component';
+import { JustificacionesComponent } from './modules/mantenimientos/pages/justificaciones/justificaciones.component';
+import { EmpresasComponent } from './modules/mantenimientos/pages/empresas/empresas.component';
 
 registerLocaleData(localeES, 'es');
 
@@ -134,7 +137,7 @@ const routes: Routes = [
       { path: 'subcanales', component: SubcanalesComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
       { path: 'perfiles', component: PerfilesComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
       { path: 'posiciones', component: PosicionesComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
-      { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
+      { path: 'colaboradores', component: UsuariosComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
     ]
   },
   { path: 'jbr/log', component: DescargaLogComponent, canActivate: [AuthGuard, RolGuard], data: {rol: 'ROLE_ADMIN'} },
@@ -208,7 +211,10 @@ export function initializeApp(appConfig: AppConfig) {
     ModalEditarComponent,
     ModalEliminarComponent,
     Page404Component,
-    DescargaLogComponent
+    DescargaLogComponent,
+    LineasEpsComponent,
+    JustificacionesComponent,
+    EmpresasComponent
   ],
   imports: [
     BrowserAnimationsModule,

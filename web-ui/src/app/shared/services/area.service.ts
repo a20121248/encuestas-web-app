@@ -53,4 +53,24 @@ export class AreaService {
     const url = `${this.urlServer.api}areas`;
     return this.http.get<Area[]>(url);
   }
+
+  deleteAll(): Observable<any> {
+    const url = `${this.urlServer.api}areas/eliminar-todos`;
+    return this.http.post<any>(url, null);
+  }
+
+  create(area: Area): Observable<any> {
+    const url = `${this.urlServer.api}areas`;
+    return this.http.post<any>(url, area);
+  }
+
+  edit(area: Area): Observable<any> {
+    const url = `${this.urlServer.api}areas`;
+    return this.http.put<any>(url, area);
+  }
+
+  delete(area: Area): Observable<any> {
+    const url = `${this.urlServer.api}centros/${area.id}`;
+    return this.http.delete<any>(url);
+  }
 }

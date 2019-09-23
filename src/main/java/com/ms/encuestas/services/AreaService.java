@@ -88,19 +88,19 @@ public class AreaService implements AreaServiceI {
 		}
 	}
 
-	public Area save(Area area) {
-		// TODO Auto-generated method stub
-		return null;
+	@Override
+	public Area insert(Area area) {
+		return areaRepository.insert(area);
 	}
-
-	public void delete(Area area) {
-		// TODO Auto-generated method stub
-
+	
+	@Override
+	public Area update(Area area) {
+		return areaRepository.update(area);
 	}
-
+	
+	@Override
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
-
+		areaRepository.deleteById(id);
 	}
 	
 	public void deleteAll() {

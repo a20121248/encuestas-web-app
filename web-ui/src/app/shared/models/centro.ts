@@ -1,3 +1,5 @@
+import { Tipo } from './tipo';
+
 export class Centro {
   id: number;
   codigo: string;
@@ -5,8 +7,10 @@ export class Centro {
   nivel: number;
   grupo: string;
   tipoId: number;
+  tipo: Tipo;
   empresaId: number;
   fechaCreacion: Date;
+  fechaActualizacion: Date;
   porcentaje: number;
   procesoId: number;
   agrupador: string;

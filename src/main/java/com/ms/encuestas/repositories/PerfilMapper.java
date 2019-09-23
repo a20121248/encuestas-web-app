@@ -20,8 +20,8 @@ public class PerfilMapper implements RowMapper<Perfil> {
 			Tipo tipo = new Tipo();
 			tipo.setId(rs.getLong("tipo_id"));
 			tipo.setNombre(rs.getString("tipo_nombre"));
-			tipo.setFechaCreacion(rs.getDate("tipo_fecha_creacion"));
-			tipo.setFechaActualizacion(rs.getDate("tipo_fecha_actualizacion"));			
+			tipo.setFechaCreacion(rs.getTimestamp("tipo_fecha_creacion").toLocalDateTime());
+			tipo.setFechaActualizacion(rs.getTimestamp("tipo_fecha_actualizacion").toLocalDateTime());			
 			perfil.setTipo(tipo);
 			
 		} catch (java.sql.SQLException e) {

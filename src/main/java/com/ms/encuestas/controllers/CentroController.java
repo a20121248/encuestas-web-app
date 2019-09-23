@@ -1,7 +1,6 @@
 package com.ms.encuestas.controllers;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ms.encuestas.models.Centro;
-import com.ms.encuestas.models.Proceso;
-import com.ms.encuestas.services.CentroService;
+import com.ms.encuestas.models.Tipo;
 import com.ms.encuestas.services.CentroServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
@@ -44,22 +45,39 @@ public class CentroController {
 	@Autowired
 	private CentroServiceI centroService;
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@GetMapping("/centros/cantidad")
-	public Long count() {
+	public Long count(Authentication authentication) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de centros de costos en la base de datos.", user.getUsername()));
 		Long empresaId = new Long(1);
 		return centroService.count(empresaId);
 	}
 	
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	@GetMapping("/centros/tipos")
+	public List<Tipo> findAllTipos(Authentication authentication) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó los tipos de centros de costos en la base de datos.", user.getUsername()));
+		return centroService.findAllTipos();
+	}
+	
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@GetMapping("/centros")
-	public List<Centro> index() throws Exception {
+	public List<Centro> index(Authentication authentication) throws Exception {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó todos los centros de costos en la base de datos.", user.getUsername()));
 		return centroService.findAll();
 	}
 	
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@GetMapping("/centros/{id}")
-	public ResponseEntity<?> show(@PathVariable Long id) {
+	public ResponseEntity<?> show(Authentication authentication, @PathVariable Long id) {
+		User user = (User) authentication.getPrincipal();
 		Centro centro = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
+			logger.info(String.format("El usuario '%s' buscó el centro de costos con ID=%d en la base de datos.", user.getUsername(), id));
 			centro = this.centroService.findById(id);
 		} catch (EmptyResultDataAccessException er) {
 			response.put("mensaje", String.format("El centro %d no existe en la base de datos.", id));
@@ -72,32 +90,45 @@ public class CentroController {
 		return new ResponseEntity<Centro>(centro, HttpStatus.OK);
 	}
 
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/centros")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Centro create(@RequestBody Centro centro) {
-		centro.setFechaCreacion(new Date());
-		this.centroService.save(centro);
-		return centro;
+	public Centro create(Authentication authentication, @RequestBody Centro centro) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' creó el centro de costos con código '%s'.", user.getUsername(), centro.getCodigo()));
+		return centroService.insert(centro);
 	}
 
-	@PutMapping("/centros/{id}")
+	@Secured("ROLE_ADMIN")
+	@PutMapping("/centros")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Centro update(@RequestBody Centro centro, @PathVariable Long id) {
-		Centro currentCentro = this.centroService.findById(id);
-		currentCentro.setNombre(centro.getNombre());
-		//currentCentro.setApellido(centro.get());
-		//currentCentro.setEmail(centro.getEmail());
-		this.centroService.save(currentCentro);
-		return currentCentro;
-	}
-
-	@DeleteMapping("/centros/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long id) {
-		Centro currentCentro = this.centroService.findById(id);
-		this.centroService.delete(currentCentro);
+	public Centro update(Authentication authentication, @RequestBody Centro centro) {
+		User user = (User) authentication.getPrincipal();
+		Centro centroBuscado = centroService.findById(centro.getId());
+		if (centroBuscado != null) {
+			logger.info(String.format("El usuario '%s' actualizó el centro de costos con código '%s'.", user.getUsername(), centro.getCodigo()));
+			return centroService.update(centro);
+		} else {
+			logger.error(String.format("El usuario '%s' no pudo actualizar el centro de costos con ID=%d porque no se encontró en la base de datos.", centro.getId()));
+			return null;
+		}
 	}
 	
+	@Secured("ROLE_ADMIN")
+	@DeleteMapping("/centros/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(Authentication authentication, @PathVariable Long id) {
+		User user = (User) authentication.getPrincipal();		
+		Centro centroBuscado = centroService.findById(id);
+		if (centroBuscado != null) {
+			logger.info(String.format("El usuario '%s' eliminó el centro de costos con código '%s'.", user.getUsername(), centroBuscado.getCodigo()));
+			centroService.deleteById(id);
+		} else {
+			logger.error(String.format("El usuario '%s' no pudo eliminar la encuesta con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+		}
+	}
+	
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/centros/cargar")
 	@ResponseStatus(HttpStatus.OK)
 	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
@@ -109,6 +140,7 @@ public class CentroController {
 		}		
 	}	
 	
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/centros/descargar")
 	@Transactional(readOnly = true)
 	public ResponseEntity<?> downloadCentros() {
@@ -121,9 +153,12 @@ public class CentroController {
                 .body(resource);
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/centros/eliminar-todos")
 	@ResponseStatus(HttpStatus.OK)
-	public void deleteAllCentros() {
+	public void deleteAllCentros(Authentication authentication) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' eliminó todas los centros de costos de la base de datos.", user.getUsername()));
 		centroService.deleteAllCentros();
 	}
 }

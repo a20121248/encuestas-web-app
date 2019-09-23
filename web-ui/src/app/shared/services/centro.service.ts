@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { Centro } from 'src/app/shared/models/centro';
 import { Encuesta } from 'src/app/shared/models/encuesta';
 import { Usuario } from '../models/usuario';
+import { Tipo } from '../models/tipo';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,11 @@ export class CentroService {
   findAll(): Observable<Centro[]> {
     const url = `${this.urlServer.api}centros`;
     return this.http.get<Centro[]>(url);
+  }
+
+  findAllTipos(): Observable<Tipo[]> {
+    const url = `${this.urlServer.api}centros/tipos`;
+    return this.http.get<Tipo[]>(url);
   }
 
   upload(formData: FormData): Observable<any> {
@@ -98,5 +104,20 @@ export class CentroService {
   deleteAll(): Observable<any> {
     const url = `${this.urlServer.api}centros/eliminar-todos`;
     return this.http.post<any>(url, null);
+  }
+
+  create(centro: Centro): Observable<any> {
+    const url = `${this.urlServer.api}centros`;
+    return this.http.post<any>(url, centro);
+  }
+
+  edit(centro: Centro): Observable<any> {
+    const url = `${this.urlServer.api}centros`;
+    return this.http.put<any>(url, centro);
+  }
+
+  delete(centro: Centro): Observable<any> {
+    const url = `${this.urlServer.api}centros/${centro.id}`;
+    return this.http.delete<any>(url);
   }
 }

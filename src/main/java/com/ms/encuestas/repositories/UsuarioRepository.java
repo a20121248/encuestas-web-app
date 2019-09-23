@@ -1,6 +1,6 @@
 package com.ms.encuestas.repositories;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -268,6 +268,8 @@ public class UsuarioRepository {
 	
 	public List<Usuario> findAll() throws EmptyResultDataAccessException {
 		String sql = "SELECT B.codigo usuario_codigo,\n" +
+				     "       B.usuario_vida,\n" +
+				     "       B.usuario_generales,\n" +
 				 	 "       B.contrasenha usuario_contrasenha,\n" + 
 				 	 "       B.nombre_completo usuario_nombre_completo,\n" + 
 				 	 "       B.fecha_creacion usuario_fecha_creacion,\n" + 
@@ -281,17 +283,25 @@ public class UsuarioRepository {
 				 	 "       D.nombre posicion_nombre,\n" + 
 				 	 "       D.fecha_creacion posicion_fecha_creacion,\n" + 
 				 	 "       D.fecha_actualizacion posicion_fecha_actualizacion\n" +
-				 	 "  FROM usuarios B \n" + 
+				 	 "  FROM usuarios B\n" + 
 				 	 "  LEFT JOIN posicion_datos A ON A.usuario_codigo=B.codigo AND A.proceso_id=0\n" + 
 				 	 "  LEFT JOIN areas C ON A.area_id=C.id\n" +
 				 	 "  LEFT JOIN posiciones D ON A.posicion_codigo=D.codigo\n" +
-				 	 " WHERE B.fecha_eliminacion IS NULL";
+				 	 " WHERE B.fecha_eliminacion IS NULL\n" +
+				 	 "   AND B.codigo!='admin.encuestas'\n" +
+				 	 " ORDER BY B.nombre_completo";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		return plantilla.query(sql, paramMap, new UsuarioMapper());
 	}
 
+	public void deleteAll() {
+		plantilla.update("DELETE FROM usuarios WHERE codigo!='admin.encuestas'", (MapSqlParameterSource) null);
+	}
+	
 	public Usuario findByUsuarioGenerales(String usuarioRed) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
+				     "       A.usuario_vida,\n" +
+				     "       A.usuario_generales,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
@@ -304,6 +314,8 @@ public class UsuarioRepository {
 	
 	public Usuario findByUsuarioVida(String usuarioRed) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
+			         "       A.usuario_vida,\n" +
+			         "       A.usuario_generales,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
@@ -316,6 +328,8 @@ public class UsuarioRepository {
 	
 	public Usuario findByCodigo(String usuarioCodigo) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
+			         "       A.usuario_vida,\n" +
+			         "       A.usuario_generales,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
@@ -328,6 +342,8 @@ public class UsuarioRepository {
 	
 	public Usuario findByCodigoAndProceso(String usuarioCodigo, Long procesoId) throws EmptyResultDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
+			         "       A.usuario_vida,\n" +
+			         "       A.usuario_generales,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
@@ -369,6 +385,8 @@ public class UsuarioRepository {
 	
 	public Usuario findByPosicionCodigo(String posicionCodigo, Long procesoId) throws EmptyResultDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
+			         "       A.usuario_vida,\n" +
+			         "       A.usuario_generales,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
@@ -416,6 +434,8 @@ public class UsuarioRepository {
 	
 	public Usuario findByCodigoWithPosicion(String codigo) throws EmptyResultDataAccessException {
 		String sql = "SELECT A.codigo usuario_codigo,\n" +
+			         "       A.usuario_vida,\n" +
+			         "       A.usuario_generales,\n" +
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
@@ -428,13 +448,7 @@ public class UsuarioRepository {
 					 "  JOIN posiciones C ON B.posicion_codigo=C.codigo\n" + 
 					 " WHERE A.codigo=:codigo\n" + 
 					 "   AND A.fecha_eliminacion IS NULL";		
-		return plantilla.queryForObject(sql,
-				new MapSqlParameterSource("codigo", codigo),
-				new UsuarioMapper());
-	}
-
-	public Usuario save(Usuario usuario) {
-		return null;
+		return plantilla.queryForObject(sql, new MapSqlParameterSource("codigo", codigo), new UsuarioMapper());
 	}
 
 	public Usuario insert(Usuario usuario) throws EmptyResultDataAccessException {
@@ -446,11 +460,13 @@ public class UsuarioRepository {
 		paramMap.put("usuario_vida", usuario.getUsuarioVida());
 		paramMap.put("usuario_generales", usuario.getUsuarioGenerales());
 		paramMap.put("nombre_completo", usuario.getNombreCompleto());
-		Date fecha = new Date();
+		LocalDateTime fecha = LocalDateTime.now();
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);
-		plantilla.update(sql,paramMap);
+		plantilla.update(sql, paramMap);
 		
+		usuario.setFechaCreacion(fecha);
+		usuario.setFechaActualizacion(fecha);
 		return usuario;
 	}
 	
@@ -466,9 +482,11 @@ public class UsuarioRepository {
 		paramMap.put("usuario_vida", usuario.getUsuarioVida());
 		paramMap.put("usuario_generales", usuario.getUsuarioGenerales());
 		paramMap.put("nombre_completo", usuario.getNombreCompleto());
-		paramMap.put("fecha_actualizacion", new Date());
-		plantilla.update(sql,paramMap);
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		plantilla.update(sql, paramMap);
 		
+		usuario.setFechaActualizacion(fecha);
 		return usuario;
 	}
 	
@@ -477,8 +495,9 @@ public class UsuarioRepository {
 		plantilla.update(sql, new MapSqlParameterSource("codigo", usuario.getCodigo()));
 	}
 	
-	public void deleteAll() {
-		plantilla.update("DELETE FROM usuarios WHERE codigo!='admin.encuestas'", (MapSqlParameterSource) null);
+	public void deleteByCodigo(String codigo) {
+		String sql = "DELETE FROM usuarios WHERE codigo=:codigo";
+		plantilla.update(sql, new MapSqlParameterSource("codigo", codigo));
 	}
 	
 	public List<Rol> findRolesByCodigo(String codigo) {

@@ -17,8 +17,9 @@ public interface UsuarioServiceI {
 	public Usuario findByCodigoAndProceso(String codigo, Long procesoId);
 	public Usuario findByPosicionCodigo(String posicionCodigo, Long procesoId);
 	public Usuario findByCodigoWithPosicion(String codigo);
-	public Usuario save(Usuario usuario);
-	public void delete(Usuario usuario);
+	public Usuario insert(Usuario usuario);
+	public Usuario update(Usuario usuario);
+	public void deleteByCodigo(String codigo);
 	public List<Usuario> findUsuariosDependientesByCodigo(Long procesoId, String usuarioCodigo);
 	List<GrantedAuthority> getRolesByCodigo(String codigo);
 	public void processExcel(InputStream file);

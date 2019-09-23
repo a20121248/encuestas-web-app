@@ -12,6 +12,8 @@
           <button mat-raised-button color="warn" (click)="crear()"><i class="material-icons">add</i>Crear</button>
           <button mat-raised-button color="warn" (click)="editar()"><i class="material-icons">create</i>Editar</button>
           <button mat-raised-button color="warn" (click)="eliminar()"><i class="material-icons">clear</i>Eliminar</button>
+          <button mat-raised-button (click)="cargar()"><i class="material-icons">cloud_upload</i>Cargar</button>
+          <button mat-raised-button (click)="limpiar()"><i class="material-icons">delete</i>Limpiar</button>
         </div>
         <div class="table-responsive">
           <table mat-table [dataSource]="subcanales">
@@ -39,16 +41,16 @@
 
             <ng-container matColumnDef="fechaCreacion">
               <th mat-header-cell *matHeaderCellDef>FECHA DE CREACIÓN</th>
-              <td mat-cell *matCellDef="let subcanal">{{subcanal.fechaCreacion}}</td>
+              <td mat-cell *matCellDef="let subcanal">{{subcanal.fechaCreacion | date:'dd/MM/yyyy HH:mm'}}</td>
             </ng-container>
 
             <ng-container matColumnDef="fechaActualizacion">
               <th mat-header-cell *matHeaderCellDef>FECHA DE ACTUALIZACIÓN</th>
-              <td mat-cell *matCellDef="let subcanal">{{subcanal.fechaActualizacion}}</td>
+              <td mat-cell *matCellDef="let subcanal">{{subcanal.fechaActualizacion | date:'dd/MM/yyyy HH:mm'}}</td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="dcSubcanales"></tr>
-            <tr mat-row *matRowDef="let row; columns: dcSubcanales;" [class.selected-row]="row === selectedSubcanal" (click)="setSelected(row)"></tr>
+            <tr mat-row *matRowDef="let row; columns: dcSubcanales; let i = index" [class.selected-row]="row === selectedSubcanal" (click)="setSelected(row, i)"></tr>
           </table>
         </div>
       </mat-card>

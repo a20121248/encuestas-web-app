@@ -15,14 +15,16 @@ public interface PosicionServiceI {
 	public List<String> findAllPosicionCodigosByProceso(Proceso proceso);
 	public List<String> findAllUsuarioCodigosByProceso(Proceso proceso);
 	public List<Posicion> findAll();
+	public void deleteAll();
 	public Posicion findByProcesoIdAndUsuarioCodigo(Long procesoId, String usuarioCodigo);
 	public Posicion findByCodigo(String codigo);
-	public Posicion save(Posicion posicion);
+	public void deleteByCodigo(String codigo);
+	public Posicion insert(Posicion posicion);
+	public Posicion update(Posicion posicion);
 	public void delete(Posicion posicion);
 	public void processExcel(InputStream file);
 	public Resource downloadExcel();
 	public void processExcelDatos(Proceso proceso, InputStream file);
 	public Resource downloadExcelDatos();
 	public void deleteDatos(Proceso proceso);
-	public void deleteAll();
 }

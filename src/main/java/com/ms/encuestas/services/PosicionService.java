@@ -27,6 +27,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ms.encuestas.models.Area;
 import com.ms.encuestas.models.Centro;
@@ -118,12 +119,24 @@ public class PosicionService implements PosicionServiceI {
 			return null;
 		}
 	}
-
+	
 	@Override
-	public Posicion save(Posicion posicion) {
-		return null;
+	public void deleteByCodigo(String codigo) {
+		posicionRepository.deleteByCodigo(codigo);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public Posicion insert(Posicion posicion) {
+		return posicionRepository.insert(posicion);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Posicion update(Posicion posicion) {
+		return posicionRepository.update(posicion);
+	}
+	
 	@Override
 	public void delete(Posicion posicion) {
 		posicionRepository.delete(posicion);

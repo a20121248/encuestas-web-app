@@ -1,16 +1,16 @@
 package com.ms.encuestas.models;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Area implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String codigo;
 	private String nombre;
-	private Date fechaCreacion;
-	private Date fechaActualizacion;
 	private String division;
+	private LocalDateTime fechaCreacion;
+	private LocalDateTime fechaActualizacion;
 	private String agrupador;
 
 	public Long getId() {
@@ -37,28 +37,28 @@ public class Area implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public Date getFechaCreacion() {
-		return fechaCreacion;
-	}
-
-	public void setFechaCreacion(Date fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
-	
-	public Date getFechaActualizacion() {
-		return fechaActualizacion;
-	}
-
-	public void setFechaActualizacion(Date fechaActualizacion) {
-		this.fechaActualizacion = fechaActualizacion;
-	}
-
 	public String getDivision() {
 		return division;
 	}
 
 	public void setDivision(String division) {
 		this.division = division;
+	}
+	
+	public LocalDateTime getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(LocalDateTime fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public LocalDateTime getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 	
 	public String getAgrupador() {

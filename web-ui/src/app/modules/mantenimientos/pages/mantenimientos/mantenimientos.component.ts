@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 })
 export class MantenimientosComponent implements OnInit, OnDestroy {
   titulo = 'MANTENIMIENTO';
-  links = [['Mantenimiento de usuarios', 'usuarios'],
+  links = [['Mantenimiento de colaboradores', 'colaboradores'],
            ['Mantenimiento de posiciones', 'posiciones'],
            ['Mantenimiento de áreas', 'areas'],
            ['Mantenimiento de centros de costos', 'centros-de-costos'],

@@ -63,6 +63,16 @@ public class CentroService implements CentroServiceI {
 	}
 	
 	@Override
+	public List<Tipo> findAllTipos() {
+		List<Tipo> tipos = tipoRepository.getCentroTypes();
+		if (tipos == null) {
+			logger.info("No existe ningún tipo de centro de costos registrado en la base de datos.");
+			tipos = new ArrayList<Tipo>();
+		}
+		return tipos;
+	}
+	
+	@Override
 	public List<Centro> findAll() {
 		try {
 			return centroRepository.findAll();
@@ -96,16 +106,26 @@ public class CentroService implements CentroServiceI {
 		}
 	}
 
-	public Centro save(Centro centro) {
-		return null;
+	@Override
+	public Centro insert(Centro centro) {
+		Long empresaId = new Long(1); // Pacifico Seguros
+		return centroRepository.insert(centro, empresaId);
+	}
+	
+	@Override
+	public Centro update(Centro centro) {
+		Long empresaId = new Long(1); // Pacifico Seguros
+		return centroRepository.update(centro, empresaId);
 	}
 
+	@Override
 	public void delete(Centro centro) {
-		return;
+		centroRepository.delete(centro);
 	}
-
+	
+	@Override
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
+		centroRepository.deleteById(id);
 	}
 	
 	@Override

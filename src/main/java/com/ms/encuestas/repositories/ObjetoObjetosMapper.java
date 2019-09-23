@@ -23,8 +23,8 @@ public class ObjetoObjetosMapper implements RowMapper<ObjetoObjetos> {
 		objeto.setCodigo(rs.getString("codigo"));
 		objeto.setNombre(rs.getString("nombre"));
 		objeto.setPorcentaje(porcentaje);
-		objeto.setFechaCreacion(rs.getDate("fecha_creacion"));
-		objeto.setFechaActualizacion(rs.getDate("fecha_actualizacion"));
+		objeto.setFechaCreacion(rs.getTimestamp("fecha_creacion").toLocalDateTime());
+		objeto.setFechaActualizacion(rs.getTimestamp("fecha_actualizacion").toLocalDateTime());
 		
 		ObjetoObjetos objetoObjetos = new ObjetoObjetos();
 		objetoObjetos.setObjeto(objeto);

@@ -1,6 +1,6 @@
 package com.ms.encuestas.repositories;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +88,7 @@ public class PosicionRepository {
 		paramMap.put("usuario_codigo", datos.getUsuario().getCodigo());
 		paramMap.put("responsable_posicion_codigo", datos.getResponsablePosicion().getCodigo());
 		paramMap.put("perfil_id", datos.getPerfil().getId());
-		Date fecha = new Date();
+		LocalDateTime fecha = LocalDateTime.now();
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);
 		return plantilla.update(sql, paramMap);
@@ -160,17 +160,24 @@ public class PosicionRepository {
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
 	}
 	
+	public void deleteByCodigo(String codigo) {
+		String sql = "DELETE FROM posiciones WHERE codigo=:codigo";
+		plantilla.update(sql, new MapSqlParameterSource("codigo", codigo));
+	}
+	
 	public Posicion insert(Posicion posicion) throws EmptyResultDataAccessException {
 		String sql = "INSERT INTO posiciones(codigo,nombre,fecha_creacion,fecha_actualizacion)\n" +
                      "VALUES(:codigo,:nombre,:fecha_creacion,:fecha_actualizacion)";		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("codigo", posicion.getCodigo());
 		paramMap.put("nombre", posicion.getNombre());
-		Date fecha = new Date();
+		LocalDateTime fecha = LocalDateTime.now();
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);
 		plantilla.update(sql, paramMap);
 		
+		posicion.setFechaCreacion(fecha);
+		posicion.setFechaActualizacion(fecha);
 		return posicion;
 	}
 	
@@ -182,9 +189,11 @@ public class PosicionRepository {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("codigo", posicion.getCodigo());
 		paramMap.put("nombre", posicion.getNombre());
-		paramMap.put("fecha_actualizacion", new Date());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
 		plantilla.update(sql, paramMap);
 		
+		posicion.setFechaActualizacion(fecha);
 		return posicion;
 	}
 	

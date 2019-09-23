@@ -1,6 +1,6 @@
 package com.ms.encuestas.repositories;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +63,9 @@ public class CentroRepository {
 					 "       A.nombre centro_nombre,\n" + 
 					 "       A.nivel centro_nivel,\n" + 
 					 "       B.id centro_tipo_id,\n" + 
-					 "       B.nombre centro_tipo_nombre,\n" + 
+					 "       B.nombre centro_tipo_nombre,\n" +
+					 "       B.fecha_creacion tipo_fecha_creacion,\n" +
+					 "       B.fecha_actualizacion tipo_fecha_actualizacion,\n" +
 					 "       A.grupo centro_grupo,\n" + 
 					 "       A.fecha_creacion centro_fecha_creacion,\n" + 
 					 "       A.fecha_actualizacion centro_fecha_actualizacion\n" + 
@@ -124,13 +126,15 @@ public class CentroRepository {
 		paramMap.put("centro_tipo_id", centro.getTipo().getId());
 		paramMap.put("grupo", centro.getGrupo());
 		paramMap.put("empresa_id", empresaId);
-		Date fecha = new Date();
+		LocalDateTime fecha = LocalDateTime.now();
 		paramMap.put("fecha_creacion", fecha);
 		paramMap.put("fecha_actualizacion", fecha);        
 		plantilla.update(sql,paramMap);
 		
 		sql = "SELECT centros_seq.currval FROM DUAL";
 		centro.setId(plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class));
+		centro.setFechaCreacion(fecha);
+		centro.setFechaActualizacion(fecha);
 		return centro;
 	}
 	
@@ -152,15 +156,22 @@ public class CentroRepository {
 		paramMap.put("centro_tipo_id", centro.getTipo().getId());
 		paramMap.put("grupo", centro.getGrupo());
 		paramMap.put("empresa_id", empresaId);
-		paramMap.put("fecha_actualizacion", new Date());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
 		plantilla.update(sql, paramMap);
 		
+		centro.setFechaActualizacion(fecha);
 		return centro;
 	}
 
 	public void delete(Centro centro) {
 		String sql = "DELETE FROM centros WHERE id=:id";
 		plantilla.update(sql, new MapSqlParameterSource("id", centro.getId()));
+	}
+	
+	public void deleteById(Long id) {
+		String sql = "DELETE FROM centros WHERE id=:id";
+		plantilla.update(sql, new MapSqlParameterSource("id", id));
 	}
 	
 	public void deleteAll(Long empresaId) {
