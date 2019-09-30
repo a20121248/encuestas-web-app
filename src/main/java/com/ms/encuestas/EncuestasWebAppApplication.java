@@ -83,32 +83,32 @@ public class EncuestasWebAppApplication extends SpringBootServletInitializer imp
         ).forEach(customer -> LOGGER.info(customer.toString()));*/
     }
     
-    @Bean
-    public DataSource jndiDataSource() throws IllegalArgumentException,
-                                              NamingException {
-    	DataSource dataSource = null;
-    	System.out.println("value of datasource"+dataSource);
-    	try {
-			Context initialContext = new InitialContext();
-			System.out.println("value of datasource"+dataSource);
-			
-			dataSource = (DataSource) (initialContext.lookup("java:jboss/datasources/encuestasPpto"));
-			System.out.println("value of datasource"+dataSource);
-			
-			if(dataSource != null) {
-		    	dataSource.getConnection();
-		    }
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-//        JndiObjectFactoryBean bean = new JndiObjectFactoryBean();           // create JNDI data source
-//        bean.setJndiName("java:/comp/env/jndiDataSource");  // jndiDataSource is name of JNDI data source 
-//        bean.setProxyInterface(DataSource.class);
-//        bean.setLookupOnStartup(false);
-//        bean.afterPropertiesSet();
-//        return (DataSource) bean.getObject();
-    	return dataSource;
-    }
+//    @Bean
+//    public DataSource jndiDataSource() throws IllegalArgumentException,
+//                                              NamingException {
+//    	DataSource dataSource = null;
+//    	System.out.println("value of datasource"+dataSource);
+//    	try {
+//			Context initialContext = new InitialContext();
+//			System.out.println("value of datasource"+dataSource);
+//			
+//			dataSource = (DataSource) (initialContext.lookup("java:jboss/datasources/encuestasPpto"));
+//			System.out.println("value of datasource"+dataSource);
+//			
+//			if(dataSource != null) {
+//		    	dataSource.getConnection();
+//		    }
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+////        JndiObjectFactoryBean bean = new JndiObjectFactoryBean();           // create JNDI data source
+////        bean.setJndiName("java:/comp/env/jndiDataSource");  // jndiDataSource is name of JNDI data source 
+////        bean.setProxyInterface(DataSource.class);
+////        bean.setLookupOnStartup(false);
+////        bean.afterPropertiesSet();
+////        return (DataSource) bean.getObject();
+//    	return dataSource;
+//    }
 
 }

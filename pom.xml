@@ -89,7 +89,28 @@
 	      	<artifactId>javax.servlet-api</artifactId>
 	      	<scope>provided</scope>
 	    </dependency>
+	   	<dependency>
+	    	<groupId>org.codehaus.mojo</groupId>
+	    	<artifactId>sonar-maven-plugin</artifactId>
+	    	<version>3.6.0.1398</version>
+	    	<type>pom</type>
+	    </dependency>
 	</dependencies>
+	<profiles>
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- Optional URL to server. Default value is http://localhost:9000 -->
+                <sonar.host.url>
+                  http://localhost:9000
+                </sonar.host.url>
+            </properties>
+        </profile>
+     </profiles>
+	
 	<build>
 		<plugins>
 			<plugin>
