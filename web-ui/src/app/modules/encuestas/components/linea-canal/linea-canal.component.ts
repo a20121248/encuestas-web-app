@@ -22,6 +22,7 @@ export class LineaCanalComponent implements OnInit {
 
   @Output() estadoFormLineaToParent = new EventEmitter();
   @Output() sendLinea = new EventEmitter();
+  @Output() sendDownloadToParent = new EventEmitter();
   selectedElement: ObjetoObjetos | null;
 
   //dcLinea = ['codigo', 'nombre', 'porcentaje', 'estado'];
@@ -86,6 +87,10 @@ export class LineaCanalComponent implements OnInit {
 
   sendEstado(value: boolean) {
     this.estadoFormLineaToParent.emit(value);
+  }
+
+  descargar(): void {
+    this.sendDownloadToParent.emit();
   }
 
   onChanges():void{

@@ -16,7 +16,7 @@ export class ProductoSubcanalComponent implements OnInit {
   @Input() haGuardado:boolean;
 
   @Output() estadoFormProdSubCanToParent = new EventEmitter();
-
+  @Output() sendDownloadToParent = new EventEmitter();
   lstCabeceraTableObtenida: string[];
   lstCabeceraTableDynamico: string[];
   sumaTotal: number;
@@ -65,7 +65,6 @@ export class ProductoSubcanalComponent implements OnInit {
     this.sumaTotal = 0;
     if (this.lstProductoSubcanales != null) {
       this.lstProductoSubcanales.forEach(element => {
-        console.log(element);
         this.sumaTotal += Math.round(element.lstObjetos.map(t => 100*t.porcentaje).reduce((acc, value) => acc + value, 0))/100;
         this.sumaTotal = Math.round(100*this.sumaTotal) / 100;
       });
@@ -79,6 +78,10 @@ export class ProductoSubcanalComponent implements OnInit {
 
   sendEstado(value: boolean) {
     this.estadoFormProdSubCanToParent.emit(value);
+  }
+
+  descargar(): void {
+    this.sendDownloadToParent.emit();
   }
 
   validacionItemControl(value:string):AbstractControl{

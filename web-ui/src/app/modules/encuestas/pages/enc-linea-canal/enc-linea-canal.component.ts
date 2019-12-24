@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
+import * as fileSaver from 'file-saver';
 
 import { LineaCanalService } from 'src/app/shared/services/linea-canal.service';
 import { LineaCanalComponent } from 'src/app/modules/encuestas/components/linea-canal/linea-canal.component';
@@ -134,6 +135,17 @@ export class EncLineaCanalComponent implements OnInit {
     this.sharedFormService.actualizarEstadoForm1(form1);
     this.sharedFormService.actualizarEstadoForm2(form2);
     this.sharedFormService.actualizarEstadoForm3(form3);
+  }
+
+  descargarEncuesta(): void {
+    const filename = `${this.usuarioSeleccionado.codigo} - Encuesta de lineas y canales.xlsx`;
+    this.lineaCanalService.downloadEncuesta(this.usuarioSeleccionado).subscribe(
+      res => {
+        fileSaver.saveAs(new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
   showCanalesByLinea(objeto: ObjetoObjetos) {

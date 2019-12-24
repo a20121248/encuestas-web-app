@@ -25,12 +25,12 @@ public class UsuarioRepository {
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null, String.class);
 	}
 
-	  public List<Usuario> findUsuariosDependientesByCodigo(Long procesoId, String posicionCodigo) {
-          String sql = "SELECT usr.usuario_codigo,\n" + 
-                  "       usr.usuario_contrasenha,\n" + 
-                  "       usr.usuario_nombre_completo,\n" + 
-                  "       usr.usuario_fecha_creacion,\n" + 
-                  "       usr.usuario_fecha_actualizacion,\n" + 
+	public List<Usuario> findUsuariosDependientes(Long procesoId, String posicionCodigo) {
+		String sql = "SELECT usr.usuario_codigo,\n" + 
+                     "       usr.usuario_contrasenha,\n" + 
+                     "       usr.usuario_nombre_completo,\n" + 
+                     "       usr.usuario_fecha_creacion,\n" + 
+                     "       usr.usuario_fecha_actualizacion,\n" + 
                   "       usr.area_id,\n" + 
                   "       usr.area_nombre,\n" + 
                   "       usr.area_division,\n" + 
@@ -258,6 +258,28 @@ public class UsuarioRepository {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("procesoId", procesoId);
         paramMap.put("posicionCodigo", posicionCodigo);
+		return plantilla.query(sql, paramMap, new UsuarioMapper());
+	}
+	
+	public List<Usuario> findUsuariosDependientesReplicar(Long procesoId, String posicionCodigo, String responsablePosicionCodigo, Long perfilId) {
+		String sql = "SELECT A.usuario_codigo,\n" + 
+			         "       B.nombre_completo usuario_nombre_completo,\n" +
+			         "       B.fecha_creacion usuario_fecha_creacion,\n" +
+			         "       B.fecha_actualizacion usuario_fecha_actualizacion,\n" +
+			         "       A.posicion_codigo,\n" +
+			         "       C.nombre posicion_nombre\n" +
+			         "  FROM posicion_datos A\n" + 
+			         "  JOIN usuarios B ON A.usuario_codigo=B.codigo\n" +
+			         "  JOIN posiciones C ON A.posicion_codigo=C.codigo\n" + 
+				     " WHERE A.proceso_id=:proceso_id\n" +
+			         "   AND A.responsable_posicion_codigo=:responsable_posicion_codigo\n" +
+				     "   AND A.perfil_id=:perfil_id\n" +
+				     "   AND A.posicion_codigo!=:posicion_codigo";
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("proceso_id", procesoId);
+        paramMap.put("responsable_posicion_codigo", responsablePosicionCodigo);
+        paramMap.put("perfil_id", perfilId);
+        paramMap.put("posicion_codigo", posicionCodigo);
 		return plantilla.query(sql, paramMap, new UsuarioMapper());
 	}
 	

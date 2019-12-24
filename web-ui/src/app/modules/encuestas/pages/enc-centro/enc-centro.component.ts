@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ElementRef, Renderer2 } from "@angular/core";
 import { ViewChild } from "@angular/core";
 import { Location } from "@angular/common";
-
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
+import * as fileSaver from 'file-saver';
 
 //-------------------COMPONENTES LOCALES----------------------------------
 
@@ -113,6 +113,17 @@ export class EncCentroComponent implements OnInit {
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
     this.sharedFormService.actualizarEstadoForm1(form1);
     this.sharedFormService.actualizarEstadoForm2(form2);
+  }
+
+  descargarEncuesta() {
+    const filename = `${this.usuarioSeleccionado.codigo} - Encuesta de centros de costos.xlsx`;
+    this.centroService.downloadEncuesta(this.usuarioSeleccionado).subscribe(
+      res => {
+        fileSaver.saveAs(new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
   goBack() {

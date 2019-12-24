@@ -3,7 +3,9 @@ package com.ms.encuestas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
@@ -19,6 +21,7 @@ public class EncuestasWebAppApplication extends SpringBootServletInitializer imp
 	private BCryptPasswordEncoder passwordEnconder;
 	
 	public static void main(String[] args) {
+		//args = new String[]{"--spring.config.location=file:c:/properties/application.properties"};
 		SpringApplication.run(EncuestasWebAppApplication.class, args);
 	}
 	

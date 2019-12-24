@@ -18,6 +18,7 @@ export class ProductoCanalComponent implements OnInit {
   @Input() haGuardado:boolean;
 
   @Output() estadoFormProdCanToParent = new EventEmitter();
+  @Output() sendDownloadToParent = new EventEmitter();
   lstCabeceraTableObtenida: string[];
   lstCabeceraTableDynamico: string[];
   sumaTotal: number;
@@ -79,6 +80,10 @@ export class ProductoCanalComponent implements OnInit {
 
   sendEstado(value: boolean) {
     this.estadoFormProdCanToParent.emit(value);
+  }
+
+  descargar(): void {
+    this.sendDownloadToParent.emit();
   }
 
   validacionItemControl(value:string):AbstractControl{

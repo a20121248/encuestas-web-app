@@ -1,5 +1,10 @@
 <mat-card *ngIf="verificarLista()" class="encuesta mat-elevation-z2">
-  <h4 class="card-header text-center py-3">ASIGNACIÓN POR PRODUCTO - SUBCANAL</h4>
+  <h4 class="card-header text-center py-3">
+    ASIGNACIÓN POR PRODUCTO - SUBCANAL
+    <button mat-icon-button matSuffix>
+      <mat-icon (click)="descargar()" [ngStyle]="{'color':'#585a5b'}">cloud_download</mat-icon>
+    </button>
+  </h4>
   <div class="table-responsive mt-1" style="overflow: auto; height: 75vh; padding-top: 0; padding-bottom: 0;">
     <table mat-table [dataSource]="lstProductoSubcanales">
       <ng-container matColumnDef="productos" sticky>

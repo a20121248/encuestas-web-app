@@ -1,11 +1,8 @@
 package com.ms.encuestas.services;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -34,13 +31,11 @@ import com.ms.encuestas.models.Tipo;
 import com.ms.encuestas.repositories.CentroRepository;
 import com.ms.encuestas.repositories.TipoRepository;
 import com.ms.encuestas.services.utils.ExcelServiceI;
-import com.ms.encuestas.services.utils.FileServiceI;
 
 @Service
 public class CentroService implements CentroServiceI {
 	private Logger logger = LoggerFactory.getLogger(CentroService.class);
-	@Autowired
-	private FileServiceI fileService;
+
 	@Autowired
 	private ExcelServiceI excelService;
 	@Autowired
@@ -195,7 +190,7 @@ public class CentroService implements CentroServiceI {
 	   				} else {
 	   					centroRepository.insert(centro, empresaId);
 	   					centroCodigosLeidos.add(codigo);
-	   					logger.info(String.format("FILA %d: Se creó el centro de costos '%s'.", numFila, codigo));
+	   					logger.info(String.format("FILA %d: Se creó el centro de costos '%s %s'.", numFila, codigo, nombre));
 	   				}
                	} else if (accion.equals("EDITAR")) {
 	   				Centro centroBuscado = findByCodigo(codigo);
@@ -226,41 +221,35 @@ public class CentroService implements CentroServiceI {
 	}
 	
 	@Override
-	public Resource downloadExcel() {		
-		Path currentRelativePath = Paths.get("");
-		String currentPath = currentRelativePath.toAbsolutePath().toString();
-		
-		List<String> alphabets = Arrays.asList(currentPath, "storage", "app", "reportes", "Centros de costos.xlsx");
-		String result = String.join(File.separator, alphabets);
-		
+	public Resource downloadExcel() {
         SXSSFWorkbook wb = excelService.crearLibro();
+        CellStyle cabeceraEstilo = excelService.cabeceraEstilo(wb);
+        CellStyle bordeEstilo = excelService.bordeEstilo(wb);
+        CellStyle fechaEstilo = excelService.fechaEstilo(wb);
         SXSSFSheet sh = wb.createSheet("CENTROS");
 
         List<Map<String,Object>> data = centroRepository.findAllList();
+        List<Integer> widths = Arrays.asList(3000, 12000, 5000, 3000, 4000, 3000, 3000);        
         
         if (data == null || data.size() == 0) {
         	data = centroRepository.findAllListEmpty();
-        	excelService.crearCabecera(sh, 0, data);
-            excelService.crearArchivo(wb, result);        	
-    		return fileService.loadFileAsResource(result);
+        	excelService.crearCabecera(sh, 0, data, widths, cabeceraEstilo);
+            return excelService.crearResource(wb);
         }
         
         int rowNum = 0;
-        excelService.crearCabecera(sh, rowNum++, data);
-		CellStyle dateStyle = wb.createCellStyle();
-	    dateStyle.setDataFormat((short)14);
+        excelService.crearCabecera(sh, rowNum++, data, widths, cabeceraEstilo);
         for (Map<String, Object> fila: data) {
-    		Row row = sh.createRow(rowNum++);
     		int colNum = 0;
-        	row.createCell(colNum).setCellValue((String) fila.get("CODIGO"));sh.setColumnWidth(colNum++, 3000);
-        	row.createCell(colNum).setCellValue((String) fila.get("NOMBRE"));sh.setColumnWidth(colNum++, 12000);
-        	row.createCell(colNum).setCellValue((String) fila.get("TIPO"));sh.setColumnWidth(colNum++, 5000);
-        	row.createCell(colNum).setCellValue(((BigDecimal) fila.get("NIVEL")).intValue());sh.setColumnWidth(colNum++, 3000);
-        	row.createCell(colNum).setCellValue((String) fila.get("GRUPO"));sh.setColumnWidth(colNum++, 4000);
-        	row.createCell(colNum).setCellValue((Date) fila.get("FECHA_CREACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
-        	row.createCell(colNum).setCellValue((Date) fila.get("FECHA_ACTUALIZACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
-        }
-        excelService.crearArchivo(wb, result);        	
-		return fileService.loadFileAsResource(result);
+    		Row row = sh.createRow(rowNum++);
+    		excelService.createCell(row, colNum++, (String) fila.get("CODIGO"), bordeEstilo);
+    		excelService.createCell(row, colNum++, (String) fila.get("NOMBRE"), bordeEstilo);
+    		excelService.createCell(row, colNum++, (String) fila.get("TIPO"), bordeEstilo);
+    		excelService.createCell(row, colNum++, ((BigDecimal) fila.get("NIVEL")).intValue(), bordeEstilo);
+    		excelService.createCell(row, colNum++, (String) fila.get("GRUPO"), bordeEstilo);
+    		excelService.createCell(row, colNum++, (Date) fila.get("FECHA_CREACION"), fechaEstilo);
+    		excelService.createCell(row, colNum++, (Date) fila.get("FECHA_ACTUALIZACION"), fechaEstilo);
+        }        
+        return excelService.crearResource(wb);
 	}
 }

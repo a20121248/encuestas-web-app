@@ -143,7 +143,7 @@ public class CentroController {
 	@Secured("ROLE_ADMIN")
 	@PostMapping("/centros/descargar")
 	@Transactional(readOnly = true)
-	public ResponseEntity<?> downloadCentros() {
+	public ResponseEntity<?> downloadCentros() throws IOException {
 		Resource resource = centroService.downloadExcel();
         String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         

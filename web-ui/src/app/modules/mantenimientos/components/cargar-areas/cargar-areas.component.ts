@@ -88,7 +88,7 @@ export class CargarAreasComponent implements OnInit, OnDestroy {
   }
 
   descargar(): void {
-    const filename = 'Áreas.xlsx';
+    const filename = 'Areas.xlsx';
     this.areaService.download().subscribe(
       res => {
         fileSaver.saveAs(new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);

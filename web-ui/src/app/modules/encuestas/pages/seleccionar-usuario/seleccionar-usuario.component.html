@@ -2,6 +2,7 @@
   <mat-card class="cuadro mat-elevation-z4 mt-4 mb-4 text-center">
     <h1>{{ titulo.toUpperCase() }}</h1>
   </mat-card>
+  <div class="text-right"><a mat-raised-button class="" color="primary" [routerLink]="['replicar']">REPLICAR</a></div>
   <mat-card class="cuadro mat-elevation-z4 mt-4">
     <div *ngIf="authService.proceso != null && authService.usuario.posicion != null; else errorUsuario">
       <div class="table-responsive">

@@ -30,10 +30,10 @@ export const MY_FORMATS = {
 })
 export class ModalCrearComponent implements OnInit {
   formGroup: FormGroup;
-  
+  titulo: string;
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef<ModalCrearComponent>,
-              @Inject(MAT_DIALOG_DATA) private data) { }
+              @Inject(MAT_DIALOG_DATA) public data) { }
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({});

@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-md-7">
         <app-form-linea *ngIf="usuarioSeleccionado && lstLineas" [usuario]="usuarioSeleccionado" [lstLineas]="lstLineas" [haGuardado]="haGuardado"
-          (estadoFormLineaToParent)="estadoFormLineas($event)">
+        (sendDownloadToParent)="descargarEncuesta($event)" (estadoFormLineaToParent)="estadoFormLineas($event)">
         </app-form-linea>
       </div>
       <div class="col-md-5">

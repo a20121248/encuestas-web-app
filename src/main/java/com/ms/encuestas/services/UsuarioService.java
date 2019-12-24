@@ -1,10 +1,7 @@
 package com.ms.encuestas.services;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -41,14 +38,11 @@ import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.repositories.RolRepository;
 import com.ms.encuestas.repositories.UsuarioRepository;
 import com.ms.encuestas.services.utils.ExcelServiceI;
-import com.ms.encuestas.services.utils.FileServiceI;
 
 @Service
 public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	private Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 	
-	@Autowired
-	private FileServiceI fileService;
 	@Autowired
 	private ExcelServiceI excelService;
 	@Autowired
@@ -58,8 +52,21 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Usuario> findUsuariosDependientesByCodigo(Long procesoId, String usuarioCodigo) {
-		return usuarioRepository.findUsuariosDependientesByCodigo(procesoId, usuarioCodigo);
+	public List<Usuario> findUsuariosDependientes(Long procesoId, String posicionCodigo) {
+		return usuarioRepository.findUsuariosDependientes(procesoId, posicionCodigo);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Usuario> findUsuariosDependientesCompletados(Long procesoId, String posicionCodigo) {
+		List<Usuario> usuarios = usuarioRepository.findUsuariosDependientes(procesoId, posicionCodigo);
+		return usuarios.stream().filter(item -> item.isEstado()).collect(Collectors.toList());
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Usuario> findUsuariosDependientesReplicar(Long procesoId, String posicionCodigo, String responsablePosicionCodigo, Long perfilId) {
+		return usuarioRepository.findUsuariosDependientesReplicar(procesoId, posicionCodigo, responsablePosicionCodigo, perfilId);
 	}
 	
 	@Override
@@ -299,40 +306,34 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 
 	@Override
 	public Resource downloadExcel() {
-		Path currentRelativePath = Paths.get("");
-		String currentPath = currentRelativePath.toAbsolutePath().toString();
-		
-		List<String> alphabets = Arrays.asList(currentPath, "storage", "app", "reportes", "Colaboradores.xlsx");
-		String result = String.join(File.separator, alphabets);
-		
         SXSSFWorkbook wb = excelService.crearLibro();
+        CellStyle cabeceraEstilo = excelService.cabeceraEstilo(wb);
+        CellStyle bordeEstilo = excelService.bordeEstilo(wb);
+        CellStyle fechaEstilo = excelService.fechaEstilo(wb);
         SXSSFSheet sh = wb.createSheet("COLABORADORES");
 
         List<Map<String,Object>> data = usuarioRepository.findAllList();
+        List<Integer> widths = Arrays.asList(3000, 4000, 4000, 8000, 5000, 3000, 3000);
         
         if (data == null || data.size() == 0) {
         	data = usuarioRepository.findAllListEmpty();
-        	excelService.crearCabecera(sh, 0, data);
-            excelService.crearArchivo(wb, result);
-    		return fileService.loadFileAsResource(result);
+        	excelService.crearCabecera(sh, 0, data, widths, cabeceraEstilo);
+        	return excelService.crearResource(wb);
         }
         
         int rowNum = 0;
-        excelService.crearCabecera(sh, rowNum++, data);
-		CellStyle dateStyle = wb.createCellStyle();
-	    dateStyle.setDataFormat((short)14);
+        excelService.crearCabecera(sh, rowNum++, data, widths, cabeceraEstilo);
         for (Map<String, Object> fila: data) {
-    		Row row = sh.createRow(rowNum++);
     		int colNum = 0;
-    		row.createCell(colNum).setCellValue((String) fila.get("MATRICULA"));sh.setColumnWidth(colNum++, 3000);
-    		row.createCell(colNum).setCellValue((String) fila.get("USUARIO_VIDA"));sh.setColumnWidth(colNum++, 4000);
-    		row.createCell(colNum).setCellValue((String) fila.get("USUARIO_GENERALES"));sh.setColumnWidth(colNum++, 4000);
-    		row.createCell(colNum).setCellValue((String) fila.get("NOMBRE_COMPLETO"));sh.setColumnWidth(colNum++, 8000);
-    		row.createCell(colNum).setCellValue((String) fila.get("ROL"));sh.setColumnWidth(colNum++, 5000);
-    		row.createCell(colNum).setCellValue((Date) fila.get("FECHA_CREACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
-    		row.createCell(colNum).setCellValue((Date) fila.get("FECHA_ACTUALIZACION"));sh.setColumnWidth(colNum, 3000);row.getCell(colNum++).setCellStyle(dateStyle);
+    		Row row = sh.createRow(rowNum++);    		
+    		excelService.createCell(row, colNum++, (String) fila.get("MATRICULA"), bordeEstilo);
+    		excelService.createCell(row, colNum++, (String) fila.get("USUARIO_VIDA"), bordeEstilo);
+    		excelService.createCell(row, colNum++, (String) fila.get("USUARIO_GENERALES"), bordeEstilo);
+    		excelService.createCell(row, colNum++, (String) fila.get("NOMBRE_COMPLETO"), bordeEstilo);
+    		excelService.createCell(row, colNum++, (String) fila.get("ROL"), bordeEstilo);
+    		excelService.createCell(row, colNum++, (Date) fila.get("FECHA_CREACION"), fechaEstilo);
+    		excelService.createCell(row, colNum++, (Date) fila.get("FECHA_ACTUALIZACION"), fechaEstilo);
         }
-        excelService.crearArchivo(wb, result);        	
-		return fileService.loadFileAsResource(result);
+        return excelService.crearResource(wb);
 	}
 }

@@ -72,6 +72,21 @@ export class UsuarioService {
     return this.http.get<Usuario[]>(`${this.urlServer.api}${url}`);
   }
 
+  getUsuariosDependientesCompletados(procesoId: number, posicionCodigo: string): Observable<Usuario[]> {
+    const url = `procesos/${procesoId}/usuarios-dependientes-completados/${posicionCodigo}`;
+    return this.http.get<Usuario[]>(`${this.urlServer.api}${url}`);
+  }
+
+  getUsuariosDependientesReplicar(procesoId: number, posicionCodigo: string, responsablePosicionCodigo: string, perfilId: number): Observable<Usuario[]> {
+    const url = `procesos/${procesoId}/usuarios-dependientes-replicar/${posicionCodigo}/${responsablePosicionCodigo}/${perfilId}`;
+    return this.http.get<Usuario[]>(`${this.urlServer.api}${url}`);
+  }
+
+  replicar(procesoId: number, posicionCodigo: string, usuarios: Usuario[]): Observable<any> {
+    const url = `procesos/${procesoId}/colaboradores/${posicionCodigo}/replicar`;
+    return this.http.post<any>(this.urlServer.api + url, usuarios);
+  }
+
   findAll(): Observable<Usuario[]> {
     const url = `${this.urlServer.api}usuarios`;
     return this.http.get<Usuario[]>(url);

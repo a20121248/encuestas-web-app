@@ -84,9 +84,18 @@ public class UsuarioMapper implements RowMapper<Usuario> {
 		try {
 			usuario = new Usuario();
 			usuario.setCodigo(rs.getString("usuario_codigo"));
-			usuario.setUsuarioVida(rs.getString("usuario_vida"));
-			usuario.setUsuarioGenerales(rs.getString("usuario_generales"));
-			usuario.setContrasenha(rs.getString("usuario_contrasenha"));
+			try {
+				usuario.setUsuarioVida(rs.getString("usuario_vida"));
+			} catch (java.sql.SQLException e1) {			
+			}
+			try {
+				usuario.setUsuarioGenerales(rs.getString("usuario_generales"));
+			} catch (java.sql.SQLException e1) {			
+			}
+			try {
+				usuario.setContrasenha(rs.getString("usuario_contrasenha"));
+			} catch (java.sql.SQLException e1) {			
+			}
 			usuario.setNombreCompleto(rs.getString("usuario_nombre_completo"));
 			usuario.setFechaCreacion(rs.getTimestamp("usuario_fecha_creacion").toLocalDateTime());
 			usuario.setFechaActualizacion(rs.getTimestamp("usuario_fecha_actualizacion").toLocalDateTime());
@@ -94,10 +103,12 @@ public class UsuarioMapper implements RowMapper<Usuario> {
 		} catch (java.sql.SQLException e) {
 			usuario = null;
 		}
+		
 		try {
 			if(rs.getBoolean("estado") == true)
 				usuario.setEstado(false);
-			else usuario.setEstado(true);
+			else
+				usuario.setEstado(true);
 		} catch (java.sql.SQLException e) {
 			usuario.setEstado(false);
 		}

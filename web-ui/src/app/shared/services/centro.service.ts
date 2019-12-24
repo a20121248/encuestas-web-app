@@ -84,7 +84,6 @@ export class CentroService {
   }
 
   downloadEncuesta(usuario: Usuario): Observable<any> {
-    //const url = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/encuesta/centro/descargar`;
     const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
     const url2 = `${this.urlServer.api}${url1}encuesta/centro/${usuario.posicion.centro.nivel}/${usuario.posicion.perfil.id}/descargar`;
     return this.http.post(url2, null, {

@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-md-12">
         <app-form-producto-subcanal *ngIf="lstItems" [lstProductoSubcanales]="lstItems"
-        (estadoFormProdSubCanToParent)="estadoFormProductoSubcanal($event)">
+        (sendDownloadToParent)="descargarEncuesta($event)" (estadoFormProdSubCanToParent)="estadoFormProductoSubcanal($event)">
       </app-form-producto-subcanal>
       </div>
       <div class="col-md-12 text-right mt-3">

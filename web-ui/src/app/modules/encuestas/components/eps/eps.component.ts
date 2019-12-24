@@ -17,6 +17,7 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 export class EpsComponent implements OnInit {
   @Input() lstEps: Eps[];
   @Output() sendestadoFormEpsToParent = new EventEmitter();
+  @Output() sendDownloadToParent = new EventEmitter();
   dcEps = ['nombre', 'porcentaje'];
   porcTotal: number;
   groupForm: FormGroup;
@@ -31,7 +32,7 @@ export class EpsComponent implements OnInit {
     this.onChanges();
   }
 
-  getTotalPorcentaje(){
+  getTotalPorcentaje() {
     if (this.lstEps != null) {
       this. porcTotal = Math.round(this.lstEps.map(t => 100*t.porcentaje).reduce((acc, value) => acc + value, 0))/100;
       return this.porcTotal;
@@ -43,6 +44,10 @@ export class EpsComponent implements OnInit {
 
   sendEstado(value: boolean) {
     this.sendestadoFormEpsToParent.emit(value);
+  }
+
+  descargar(): void {
+    this.sendDownloadToParent.emit();
   }
 
   validacionItemControl(value:number):AbstractControl{

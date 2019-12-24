@@ -17,9 +17,10 @@ import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 export class EmpresaComponent implements OnInit {
   @Input() lstEmpresas: Empresa[];
   @Input() usuario: Usuario;
-  @Input() haGuardado:boolean;
+  @Input() haGuardado: boolean;
 
   @Output() estadoFormEmpresaToParent = new EventEmitter();
+  @Output() sendDownloadToParent = new EventEmitter();
   //dcEmpresa = ['nombre', 'porcentaje', 'estado', 'ir'];
   dcEmpresa = ['nombre', 'porcentaje', 'ir'];
   url: string;
@@ -131,5 +132,9 @@ export class EmpresaComponent implements OnInit {
         });
       }
     }
+  }
+
+  descargar(): void {
+    this.sendDownloadToParent.emit();
   }
 }

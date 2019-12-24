@@ -21,7 +21,7 @@ export class LineaComponent implements OnInit {
   @Input() haGuardado: boolean;
 
   @Output() estadoFormLineaToParent = new EventEmitter();
-
+  @Output() sendDownloadToParent = new EventEmitter();
   //dcLinea = ['codigo', 'nombre', 'porcentaje', 'estado', 'ir'];
   dcLinea = ['codigo', 'nombre', 'porcentaje', 'ir'];
   url: string;
@@ -54,6 +54,10 @@ export class LineaComponent implements OnInit {
 
   sendEstado(value: boolean) {
     this.estadoFormLineaToParent.emit(value);
+  }
+
+  descargar(): void {
+    this.sendDownloadToParent.emit();
   }
 
   verificarLista(): boolean {

@@ -24,6 +24,7 @@ import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatChipsModule } from '@angular/material/chips';
 import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
@@ -92,6 +93,7 @@ import { DescargaLogComponent } from './shared/components/log/descarga-log/desca
 import { LineasEpsComponent } from './modules/mantenimientos/pages/lineas-eps/lineas-eps.component';
 import { JustificacionesComponent } from './modules/mantenimientos/pages/justificaciones/justificaciones.component';
 import { EmpresasComponent } from './modules/mantenimientos/pages/empresas/empresas.component';
+import { EncReplicarComponent } from './modules/encuestas/pages/enc-replicar/enc-replicar.component';
 
 registerLocaleData(localeES, 'es');
 
@@ -99,6 +101,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'colaboradores', pathMatch: 'full', canActivate: [AuthGuard] },
   { path: 'colaboradores', component: SeleccionarUsuarioComponent, canActivate: [AuthGuard] },
+  { path: 'colaboradores/replicar', component: EncReplicarComponent, canActivate: [AuthGuard] },
   { path: 'colaboradores/:codigo/encuesta', component: EncEmpresaComponent, canActivate: [AuthGuard] },
   {
     path: 'colaboradores/:codigo/encuesta',
@@ -214,7 +217,8 @@ export function initializeApp(appConfig: AppConfig) {
     DescargaLogComponent,
     LineasEpsComponent,
     JustificacionesComponent,
-    EmpresasComponent
+    EmpresasComponent,
+    EncReplicarComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -225,6 +229,7 @@ export function initializeApp(appConfig: AppConfig) {
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
+    MatChipsModule,
     MatFormFieldModule,
     MatGridListModule,
     MatIconModule,

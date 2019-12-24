@@ -5,8 +5,6 @@ import { Centro } from 'src/app/shared/models/centro';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { CustomValidatorsService } from 'src/app/shared/services/custom-validators.service';
 import { SharedFormService } from 'src/app/shared/services/shared-form.service';
-import { CentroService } from 'src/app/shared/services/centro.service';
-import * as fileSaver from 'file-saver';
 
 @Component({
   selector: 'app-form-centro',
@@ -20,6 +18,8 @@ export class CentroComponent implements OnInit {
   @Input() haGuardado: boolean;
 
   @Output() estadoFormCentroToParent = new EventEmitter();
+  @Output() sendDownloadToParent = new EventEmitter();
+
   dcCentro = ['codigo', 'nombre', 'nivel', 'porcentaje'];
   dataSource = new MatTableDataSource<Centro | Group>([]);
   groupByColumns: string[] = ['grupo'];
@@ -27,7 +27,7 @@ export class CentroComponent implements OnInit {
   porcTotal: number;
 
 
-  constructor(private sharedFormService: SharedFormService, private centroService: CentroService) {
+  constructor(private sharedFormService: SharedFormService) {
     this.groupForm = new FormGroup({});
   }
 
@@ -168,18 +168,9 @@ export class CentroComponent implements OnInit {
   }
 
   descargar(): void {
-    const filename = `Encuesta de centros de costos.xlsx`;
-    this.centroService.downloadEncuesta(this.usuarioSeleccionado).subscribe(
-      res => {
-        fileSaver.saveAs(new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
-      }, err => {
-        console.log(err);
-      }
-    );
+    this.sendDownloadToParent.emit();
   }
 }
-
-
 
 export class Group {
   level: number = 0;

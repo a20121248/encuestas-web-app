@@ -9,12 +9,12 @@
     <div class="row">
       <div class="col-md-7">
         <app-form-centro *ngIf="lstCentros" [lstCentros]="lstCentros" [usuarioSeleccionado]="usuarioSeleccionado"
-          (estadoFormCentroToParent)="estadoFormCentros($event)">
+        (sendDownloadToParent)="descargarEncuesta($event)" (estadoFormCentroToParent)="estadoFormCentros($event)">
         </app-form-centro>
       </div>
       <div class="col-md-5">
         <app-form-justificacion [justificacion]="justificacion" [observaciones]="observaciones"
-          (estadoFormJustToParent)="estadoFormJustificacion($event)">
+        (estadoFormJustToParent)="estadoFormJustificacion($event)">
         </app-form-justificacion>
       </div>
       <div class="col-md-12 text-right mt-3">

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Usuario } from '../models/usuario';
 import { Encuesta } from 'src/app/shared/models/encuesta';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { AppConfig } from 'src/app/shared/services/app.config';
 import { Objeto } from '../models/objeto';
@@ -32,12 +32,16 @@ export class LineaService {
   guardarEncuesta(encuesta: Encuesta, usuario: Usuario): Observable<any> {
     const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
     const url2 = `${url1}encuesta/linea`;
-    console.log(`${this.urlServer.api}${url2}`);
-    console.log('inicio guardar:');
-    console.log(encuesta);
-    console.log(usuario);
-    console.log('fin guardar:');
     return this.http.post<any>(`${this.urlServer.api}${url2}`, encuesta);
+  }
+
+  downloadEncuesta(usuario: Usuario): Observable<any> {
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+    const url2 = `${this.urlServer.api}${url1}encuesta/linea/${usuario.posicion.perfil.id}/descargar`;
+    return this.http.post(url2, null, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
   }
 
   deleteAll(): Observable<any> {

@@ -45,4 +45,13 @@ export class ProductoSubcanalService {
     const url2 = `${url1}encuesta/producto-subcanal/${lineaId}/${canalId}`;
     return this.http.post<any>(`${this.urlServer.api}${url2}`, encuesta);
   }
+
+  downloadEncuesta(usuario: Usuario, lineaId: string, canalId: string): Observable<any> {
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+    const url2 = `${this.urlServer.api}${url1}encuesta/producto-subcanal/${lineaId}/${canalId}/descargar`;
+    return this.http.post(url2, null, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
+  }
 }

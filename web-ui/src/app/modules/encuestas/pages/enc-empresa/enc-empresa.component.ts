@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Renderer2, ContentChild } fro
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
+import * as fileSaver from 'file-saver';
 
 import { Empresa } from 'src/app/shared/models/empresa';
 import { EmpresaComponent } from 'src/app/modules/encuestas/components/empresa/empresa.component';
@@ -138,5 +139,16 @@ export class EncEmpresaComponent implements OnInit {
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
     this.sharedFormService.actualizarEstadoForm1(form1);
     this.sharedFormService.actualizarEstadoForm2(form2);
+  }
+
+  descargarEncuesta(): void {
+    const filename = `${this.usuarioSeleccionado.codigo} - Encuesta de empresas.xlsx`;
+    this.empresaService.downloadEncuesta(this.usuarioSeleccionado).subscribe(
+      res => {
+        fileSaver.saveAs(new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 }

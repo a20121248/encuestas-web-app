@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.slf4j.Logger;
@@ -43,12 +44,14 @@ public class ProcesoController {
 	@Autowired
 	private PosicionServiceI posicionService;
 
+	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/{procesoId}/usuarios/{usuarioCodigo}/posicion")
 	public Posicion findByProcesoIdAndUsuarioCodigo(Authentication authentication, @PathVariable Long procesoId, @PathVariable String usuarioCodigo) {
 		// User user = (User) authentication.getPrincipal();
 		return posicionService.findByProcesoIdAndUsuarioCodigo(procesoId, usuarioCodigo);
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/actual")
 	public Proceso getCurrentProceso() {
 		return procesoService.getCurrentProceso();

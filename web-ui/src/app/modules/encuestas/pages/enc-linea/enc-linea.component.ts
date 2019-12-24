@@ -4,7 +4,7 @@ import { Location } from "@angular/common";
 import swal from "sweetalert2";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Title } from "@angular/platform-browser";
-
+import * as fileSaver from 'file-saver';
 //-------------------COMPONENTES LOCALES----------------------------------
 
 import { Linea } from "src/app/shared/models/linea";
@@ -149,5 +149,16 @@ export class EncLineaComponent implements OnInit {
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
     this.sharedFormService.actualizarEstadoForm1(form1);
     this.sharedFormService.actualizarEstadoForm2(form2);
+  }
+
+  descargarEncuesta(): void {
+    const filename = `${this.usuarioSeleccionado.codigo} - Encuesta de lineas.xlsx`;
+    this.lineaService.downloadEncuesta(this.usuarioSeleccionado).subscribe(
+      res => {
+        fileSaver.saveAs(new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 }

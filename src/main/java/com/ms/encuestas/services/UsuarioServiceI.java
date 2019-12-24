@@ -20,7 +20,9 @@ public interface UsuarioServiceI {
 	public Usuario insert(Usuario usuario);
 	public Usuario update(Usuario usuario);
 	public void deleteByCodigo(String codigo);
-	public List<Usuario> findUsuariosDependientesByCodigo(Long procesoId, String usuarioCodigo);
+	public List<Usuario> findUsuariosDependientes(Long procesoId, String usuarioCodigo);
+	public List<Usuario> findUsuariosDependientesCompletados(Long procesoId, String usuarioCodigo);
+	public List<Usuario> findUsuariosDependientesReplicar(Long procesoId, String posicionCodigo, String responsablePosicionCodigo, Long perfilId);
 	List<GrantedAuthority> getRolesByCodigo(String codigo);
 	public void processExcel(InputStream file);
 	public Resource downloadExcel();

@@ -1,7 +1,11 @@
 <mat-card *ngIf="verificarLista()" class="encuesta mat-elevation-z2">
-  <h4 class="card-header text-center py-3">DETALLE LINEA</h4>
+  <h4 class="card-header text-center py-3">
+    ASIGNACIÓN POR LÍNEA
+    <button mat-icon-button matSuffix>
+      <mat-icon (click)="descargar()" [ngStyle]="{'color':'#585a5b'}">cloud_download</mat-icon>
+    </button>
+  </h4>
   <div class="table-responsive cuadro">
-
     <table mat-table [dataSource]="lstLineas">
       <ng-container matColumnDef="codigo">
         <th mat-header-cell *matHeaderCellDef> CODIGO </th>

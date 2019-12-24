@@ -25,6 +25,6 @@ public interface PosicionServiceI {
 	public void processExcel(InputStream file);
 	public Resource downloadExcel();
 	public void processExcelDatos(Proceso proceso, InputStream file);
-	public Resource downloadExcelDatos();
+	public Resource downloadExcelDatos(Long procesoId);
 	public void deleteDatos(Proceso proceso);
 }

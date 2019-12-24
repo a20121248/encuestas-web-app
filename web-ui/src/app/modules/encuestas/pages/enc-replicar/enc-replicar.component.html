@@ -1,0 +1,49 @@
+<div class="container pacifico-page">
+  <mat-card class="cuadro mat-elevation-z4 mt-4 mb-4 text-center">
+    <h1>{{ titulo.toUpperCase() }}</h1>
+  </mat-card>
+  <mat-card class="cuadro mat-elevation-z4 mt-4">
+    <div class="row">
+      <div class="col-md-4">
+        <ng-select [items]="usuariosOrigen"
+                   bindLabel="nombreCompleto"
+                   placeholder="Seleccionar el colaborador de origen"
+                   (change)="updateUsers($event)"
+                   [clearable]="true"
+                   class="disable-arrow disable-dropdown disable-clear-all"
+                   [(ngModel)]="selectedUsuarioOrigen">
+        </ng-select>
+        <mat-chip-list *ngIf="selectedUsuarioOrigen">
+          <mat-chip color="primary" selected>{{selectedUsuarioOrigen.posicion.perfil.tipo.nombre}}</mat-chip>
+          <mat-chip color="accent" selected>{{selectedUsuarioOrigen.posicion.perfil.nombre}}</mat-chip>
+        </mat-chip-list>
+      </div>
+      <div class="col-md-8">
+        <ng-select [items]="usuariosDestino"
+                   [multiple]="true"
+                   bindLabel="nombreCompleto"
+                   [selectableGroup]="true"
+                   [closeOnSelect]="false"
+                   placeholder="Seleccionar los colaboradores destino"
+                   [(ngModel)]="selectedUsuariosDestino">
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+          <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>{{item.nombreCompleto}}
+          </ng-template>
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+          <div class="ng-value" *ngFor="let item of items | slice:0:3">
+            <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            <span class="ng-value-label">{{item.nombreCompleto != null ? item.nombreCompleto : item.agrupador}}</span>
+          </div>
+          <div class="ng-value" *ngIf="items.length > 3">
+            <span class="ng-value-label">{{items.length - 3}} más...</span>
+          </div>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+    <div class="text-center">
+      <button mat-raised-button color="warn" (click)="replicar()" [disabled]="usuariosDestino.length==0"><i class="material-icons">unarchive</i>Replicar</button>
+    </div>    
+  </mat-card>
+</div>
+<app-footer></app-footer>

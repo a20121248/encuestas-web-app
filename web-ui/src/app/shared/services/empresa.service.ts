@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { AppConfig } from 'src/app/shared/services/app.config';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -39,5 +39,14 @@ export class EmpresaService {
   guardarEncuesta(encuesta: Encuesta, usuario: Usuario): Observable<any> {
     const url = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/encuesta/empresas`;
     return this.http.post<any>(this.urlServer.api + url, encuesta);
+  }
+
+  downloadEncuesta(usuario: Usuario): Observable<any> {
+    const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
+    const url2 = `${this.urlServer.api}${url1}encuesta/empresas/descargar`;
+    return this.http.post(url2, null, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
   }
 }

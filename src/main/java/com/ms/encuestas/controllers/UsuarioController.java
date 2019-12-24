@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +43,7 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioServiceI usuarioService;	
 
+	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/usuarios/cantidad")
 	public Long count(Authentication authentication) throws Exception {
 		User user = (User) authentication.getPrincipal();
@@ -49,6 +51,7 @@ public class UsuarioController {
 		return usuarioService.count();
 	}
 
+	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/usuarios")
 	public List<Usuario> index(Authentication authentication) throws Exception {
 		User user = (User) authentication.getPrincipal();
@@ -56,6 +59,7 @@ public class UsuarioController {
 		return usuarioService.findAll();
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@PostMapping("/usuarios/eliminar-todos")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteAll(Authentication authentication) {
@@ -64,6 +68,7 @@ public class UsuarioController {
 		usuarioService.deleteAll();
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/usuarios/{codigo}")
 	public ResponseEntity<?> show(Authentication authentication, @PathVariable String codigo) {
 		User user = (User) authentication.getPrincipal();
@@ -91,6 +96,7 @@ public class UsuarioController {
 		return usuarioService.insert(usuario);
 	}
 
+	@Secured({"ROLE_USER"})
 	@PutMapping("/usuarios")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Usuario update(Authentication authentication, @RequestBody Usuario usuario) {
@@ -104,7 +110,8 @@ public class UsuarioController {
 			return null;
 		}
 	}
-
+	
+	@Secured({"ROLE_USER"})
 	@DeleteMapping("/usuarios/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(Authentication authentication, @PathVariable String codigo) {
@@ -118,11 +125,25 @@ public class UsuarioController {
 		}
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/{procesoId}/usuarios-dependientes/{posicionCodigo}")
 	public List<Usuario> findUsuariosDependientes(@PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
-		return usuarioService.findUsuariosDependientesByCodigo(procesoId, posicionCodigo);
+		return usuarioService.findUsuariosDependientes(procesoId, posicionCodigo);
+	}
+	
+	@Secured({"ROLE_USER"})
+	@GetMapping("/procesos/{procesoId}/usuarios-dependientes-completados/{posicionCodigo}")
+	public List<Usuario> findUsuariosDependientesCompletados(@PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
+		return usuarioService.findUsuariosDependientesCompletados(procesoId, posicionCodigo);
+	}
+	
+	//@Secured({"ROLE_USER"})
+	@GetMapping("/procesos/{procesoId}/usuarios-dependientes-replicar/{posicionCodigo}/{responsablePosicionCodigo}/{perfilId}")
+	public List<Usuario> findUsuariosReplicar(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable String responsablePosicionCodigo, @PathVariable Long perfilId) throws Exception {
+		return usuarioService.findUsuariosDependientesReplicar(procesoId, posicionCodigo, responsablePosicionCodigo, perfilId);
 	}
 
+	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/{procesoId}/usuarios/{codigo}")
 	public Usuario show(@PathVariable Long procesoId, @PathVariable String codigo) {
 		return this.usuarioService.findByCodigoAndProceso(codigo, procesoId);

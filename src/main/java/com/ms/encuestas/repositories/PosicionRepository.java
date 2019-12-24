@@ -129,7 +129,7 @@ public class PosicionRepository {
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
 	}
 	
-	public List<Map<String, Object>> findAllDatosList() throws EmptyResultDataAccessException {
+	public List<Map<String, Object>> findAllDatosList(Long procesoId) throws EmptyResultDataAccessException {
 		String sql = "SELECT B.codigo posicion_codigo,\n" + 
 					 "       B.nombre posicion_nombre,\n" + 
 					 "       C.codigo matricula,\n" + 
@@ -155,9 +155,9 @@ public class PosicionRepository {
 					 "  LEFT JOIN posiciones G ON A.responsable_posicion_codigo=G.codigo\n" + 
 					 "  LEFT JOIN posicion_datos H ON H.posicion_codigo=G.codigo AND A.proceso_id=H.proceso_id\n" + 
 					 "  LEFT JOIN usuarios I ON H.usuario_codigo=I.codigo\n" + 
-					 " WHERE A.proceso_id=1\n" + 
+					 " WHERE A.proceso_id=:proceso_id\n" + 
 					 " ORDER BY A.fecha_creacion";
-		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
+		return plantilla.queryForList(sql, new MapSqlParameterSource("proceso_id", procesoId));
 	}
 	
 	public void deleteByCodigo(String codigo) {

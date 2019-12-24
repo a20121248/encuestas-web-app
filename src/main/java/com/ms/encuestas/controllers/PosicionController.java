@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +47,7 @@ public class PosicionController {
 	@Autowired
 	private ProcesoServiceI procesoService;
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/posiciones/cantidad")
 	public Long count(Authentication authentication) {
 		User user = (User) authentication.getPrincipal();
@@ -53,6 +55,7 @@ public class PosicionController {
 		return posicionService.count();
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/{procesoId}/cantidad-datos-posiciones")
 	public Long countDatos(Authentication authentication, @PathVariable Long procesoId) {
 		User user = (User) authentication.getPrincipal();
@@ -60,6 +63,7 @@ public class PosicionController {
 		return posicionService.countDatos(procesoId);
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/posiciones")
 	public List<Posicion> index(Authentication authentication) {
 		User user = (User) authentication.getPrincipal();
@@ -67,6 +71,7 @@ public class PosicionController {
 		return posicionService.findAll();
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/posiciones/{codigo}")
 	public ResponseEntity<?> show(Authentication authentication, @PathVariable String codigo) {
 		User user = (User) authentication.getPrincipal();
@@ -86,6 +91,7 @@ public class PosicionController {
 		return new ResponseEntity<Posicion>(posicion, HttpStatus.OK);
 	}
 	
+	@Secured({"ROLE_USER"})
 	@PostMapping("/posiciones")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Posicion create(Authentication authentication, @RequestBody Posicion posicion) {
@@ -159,7 +165,7 @@ public class PosicionController {
 	@PostMapping("/procesos/{procesoId}/descargar-datos-posiciones")
 	@Transactional(readOnly = true)
 	public ResponseEntity<?> downloadDatos(@PathVariable Long procesoId) {
-		Resource resource = posicionService.downloadExcelDatos();
+		Resource resource = posicionService.downloadExcelDatos(procesoId);
         String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         
         return ResponseEntity.ok()

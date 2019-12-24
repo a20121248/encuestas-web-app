@@ -3,7 +3,7 @@ import { ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import * as fileSaver from 'file-saver';
 import { Encuesta } from 'src/app/shared/models/encuesta';
 import { Eps } from 'src/app/shared/models/eps';
 import { EpsComponent } from 'src/app/modules/encuestas/components/eps/eps.component';
@@ -40,7 +40,6 @@ export class EncEPSComponent implements OnInit {
   justificacionComponent: JustificacionComponent;
   @ViewChild(UsuarioDatosComponent, { static: false })
   usuarioDatosComponent: UsuarioDatosComponent;
-
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -91,6 +90,17 @@ export class EncEPSComponent implements OnInit {
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
     this.sharedFormService.actualizarEstadoForm1(form1);
+  }
+
+  descargarEncuesta() {
+    const filename = `${this.usuarioSeleccionado.codigo} - Encuesta de lineas EPS.xlsx`;
+    this.epsService.downloadEncuesta(this.usuarioSeleccionado).subscribe(
+      res => {
+        fileSaver.saveAs(new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
   goBack() {

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/co
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
+import * as fileSaver from 'file-saver';
 
 import { Encuesta } from 'src/app/shared/models/encuesta';
 import { Justificacion } from 'src/app/shared/models/justificacion';
@@ -85,6 +86,17 @@ export class EncProductoSubcanalComponent implements OnInit {
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
     this.sharedFormService.actualizarEstadoForm1(form1);
+  }
+
+  descargarEncuesta(): void {
+    const filename = `${this.usuarioSeleccionado.codigo} - Encuesta de productos y subcanales.xlsx`;
+    this.productoSubcanalService.downloadEncuesta(this.usuarioSeleccionado, this.lineaId, this.canalId).subscribe(
+      res => {
+        fileSaver.saveAs(new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
   goBack() {
