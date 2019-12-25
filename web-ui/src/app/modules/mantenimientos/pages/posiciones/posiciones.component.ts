@@ -23,7 +23,7 @@ export class PosicionesComponent implements OnInit, OnDestroy {
   posiciones: Posicion[];
   selectedIndex: number;
   selectedPosicion: Posicion;
-  dcPosiciones = ['codigo', 'nombre', 'fechaCreacion', 'fechaActualizacion'];
+  dcPosiciones = ['codigo', 'nombre', 'fechaCreacion', 'fechaActualizacion', 'fechaEliminacion'];
   crearDialogRef: MatDialogRef<ModalCrearComponent>;
   editarDialogRef: MatDialogRef<ModalEditarComponent>;
   eliminarDialogRef: MatDialogRef<ModalEliminarComponent>;
@@ -124,6 +124,32 @@ export class PosicionesComponent implements OnInit, OnDestroy {
     });
   }
 
+  cambiarEstado() {
+    if (this.selectedPosicion == null) {
+      swal.fire('Deshabilitar posición', 'Por favor, seleccione una posición.', 'error');
+    } else if (this.selectedPosicion.fechaEliminacion == null) {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.posicionService.softDelete(this.selectedPosicion).subscribe(response => {
+        this.posiciones[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    } else {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.posicionService.softUndelete(this.selectedPosicion).subscribe(response => {
+        this.posiciones[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    }
+  }
+
   eliminar() {
     if (this.selectedPosicion == null) {
       swal.fire('Eliminar posición', 'Por favor, seleccione una posición.', 'error');
@@ -149,17 +175,14 @@ export class PosicionesComponent implements OnInit, OnDestroy {
             console.log(err);
           }, () => {
             this.selectedIndex = -1;
-            this.selectedPosicion = null;
             swal.fire(`Eliminar posición '${this.selectedPosicion.codigo}'`, 'La posición ha sido eliminada.', 'success');
+            this.selectedPosicion = null;
           });
         }
       });
     }
   }
-
-  cargar(): void {
-  }
-
+  
   limpiar(): void {
     swal.fire({
       title: `Eliminar posiciones`,

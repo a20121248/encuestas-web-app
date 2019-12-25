@@ -8,6 +8,8 @@ export class Usuario {
   nombreCompleto: string;
   usuarioRed: string;
   fechaCreacion: Date;
+  fechaActualizacion: Date;
+  fechaEliminacion: Date;
   posicionResponsableCodigo: string;
   roles: string[];
   procesoId: number;
@@ -19,5 +21,5 @@ export class Usuario {
   // Logica2* => Observar el estado de completitud por usuario de su encuesta empresa.
   // (convendría agregar un campo adicional a la tabla encuestas
   // estado de la encuesta (que ya esta) y
-  // estado de las encuestas hijo directo (nueva columna)cuando esten completos sus hijos cambia a true <=== y este dato enviarías en el json)
+  // estado de las encuestas hijo directo (nueva columna) cuando esten completos sus hijos cambia a true <=== y este dato enviarías en el json)
 }

@@ -3,12 +3,12 @@ tr.mat-row {
 }
 
 .mat-column-codigo {
-  width: 10%;
+  width: 8%;
   text-align: center;
 }
 
 .mat-column-nombre {
-  width: 35%;
+  width: 30%;
 }
 
 .mat-column-nivel {
@@ -22,16 +22,21 @@ tr.mat-row {
 }
 
 .mat-column-grupo {
-  width: 15%;
+  width: 13%;
   text-align: center;
 }
 
 .mat-column-fechaCreacion {
-  width: 15%;
+  width: 13%;
   text-align: center;
 }
 
 .mat-column-fechaActualizacion {
-  width: 15%;
+  width: 13%;
+  text-align: center;
+}
+
+.mat-column-fechaEliminacion {
+  width: 13%;
   text-align: center;
 }

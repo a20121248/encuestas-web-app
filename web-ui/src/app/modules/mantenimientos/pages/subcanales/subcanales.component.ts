@@ -25,7 +25,7 @@ export class SubcanalesComponent implements OnInit, OnDestroy {
   canales: Objeto[];
   selectedIndex: number;
   selectedSubcanal: Objeto;
-  dcSubcanales = ['codigo', 'nombre', 'canalCodigo', 'canalNombre', 'fechaCreacion', 'fechaActualizacion'];
+  dcSubcanales = ['codigo', 'nombre', 'canalCodigo', 'canalNombre', 'fechaCreacion', 'fechaActualizacion', 'fechaEliminacion'];
   crearDialogRef: MatDialogRef<ModalCrearComponent>;
   editarDialogRef: MatDialogRef<ModalEditarComponent>;
   eliminarDialogRef: MatDialogRef<ModalEliminarComponent>;
@@ -145,6 +145,32 @@ export class SubcanalesComponent implements OnInit, OnDestroy {
     });
   }
 
+  cambiarEstado() {
+    if (this.selectedSubcanal == null) {
+      swal.fire('Deshabilitar subcanal', 'Por favor, seleccione un subcanal.', 'error');
+    } else if (this.selectedSubcanal.fechaEliminacion == null) {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.subcanalService.softDelete(this.selectedSubcanal).subscribe(response => {
+        this.subcanales[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    } else {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.subcanalService.softUndelete(this.selectedSubcanal).subscribe(response => {
+        this.subcanales[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    }
+  }
+
   eliminar() {
     if (this.selectedSubcanal == null) {
       swal.fire('Eliminar subcanal', 'Por favor, seleccione un subcanal.', 'error');
@@ -170,15 +196,12 @@ export class SubcanalesComponent implements OnInit, OnDestroy {
             console.log(err);
           }, () => {
             this.selectedIndex = -1;
-            this.selectedSubcanal = null;
             swal.fire(`Eliminar subcanal '${this.selectedSubcanal.codigo}'`, 'El subcanal ha sido eliminado.', 'success');
+            this.selectedSubcanal = null;
           });
         }
       });
     }
-  }
-
-  cargar(): void {
   }
 
   limpiar(): void {

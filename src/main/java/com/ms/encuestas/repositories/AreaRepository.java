@@ -32,7 +32,6 @@ public class AreaRepository {
 	public List<Area> findAll() throws EmptyResultDataAccessException {
 		String sql = "SELECT *\n" +
 					 "  FROM areas\n" +
-					 " WHERE fecha_eliminacion IS NULL\n" +
 					 " ORDER BY codigo";
 		return plantilla.query(sql, new AreaMapper());
 	}
@@ -129,5 +128,40 @@ public class AreaRepository {
 					 " WHERE fecha_eliminacion IS NULL\n" + 
 					 " ORDER BY fecha_creacion";
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);
+	}
+	
+	public Area softDelete(Area area) throws EmptyResultDataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", area.getId());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		paramMap.put("fecha_eliminacion", fecha);
+		
+		String sql = "UPDATE areas\n" +
+			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
+			 	     "		 fecha_eliminacion=:fecha_eliminacion\n" +
+			 	     " WHERE id=:id";
+		plantilla.update(sql, paramMap);
+		
+		area.setFechaActualizacion(fecha);
+		area.setFechaEliminacion(fecha);
+		return area;
+	}
+	
+	public Area softUndelete(Area area) throws EmptyResultDataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", area.getId());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		
+		String sql = "UPDATE areas\n" +
+			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
+			 	     "		 fecha_eliminacion=NULL\n" +
+			 	     " WHERE id=:id";
+		plantilla.update(sql, paramMap);
+		
+		area.setFechaActualizacion(fecha);
+		area.setFechaEliminacion(null);
+		return area;
 	}
 }

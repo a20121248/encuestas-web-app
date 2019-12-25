@@ -101,12 +101,9 @@ export class EncCentroComponent implements OnInit {
     this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.centroComponent.lstCentros;
-    this.encuesta.justificacion = this.justificacionComponent.justificacion;
-
-    if (this.encuesta.justificacion.id != 5) {
-      this.encuesta.justificacion.detalle = null;
-    }
-    this.encuesta.observaciones = this.justificacionComponent.observaciones;
+    this.encuesta.justificacion = this.justificacionComponent.justificacionControl.value;
+    this.encuesta.justificacion.detalle = this.justificacionComponent.detalleControl.value;
+    this.encuesta.observaciones = this.justificacionComponent.observacionesControl.value;
     this.centroService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
       response => console.log(response), err => console.log(err)
     );
@@ -115,7 +112,7 @@ export class EncCentroComponent implements OnInit {
     this.sharedFormService.actualizarEstadoForm2(form2);
   }
 
-  descargarEncuesta() {
+  descargarEncuesta(): void {
     const filename = `${this.usuarioSeleccionado.codigo} - Encuesta de centros de costos.xlsx`;
     this.centroService.downloadEncuesta(this.usuarioSeleccionado).subscribe(
       res => {

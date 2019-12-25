@@ -128,13 +128,11 @@ export class EncEmpresaComponent implements OnInit {
     this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.empresaComponent.lstEmpresas;
-    this.encuesta.justificacion = this.justificacionComponent.justificacion;
-    if (this.encuesta.justificacion.id != 5) {
-      this.encuesta.justificacion.detalle = null;
-    }
-    this.encuesta.observaciones = this.justificacionComponent.observaciones;
-    this.empresaService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(response =>
-      console.log(response), err => console.log(err)
+    this.encuesta.justificacion = this.justificacionComponent.justificacionControl.value;
+    this.encuesta.justificacion.detalle = this.justificacionComponent.detalleControl.value;
+    this.encuesta.observaciones = this.justificacionComponent.observacionesControl.value;
+    this.empresaService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
+      response => console.log(response), err => console.log(err)
     );
     swal.fire('Guardar encuesta', 'Se guardó la encuesta.', 'success');
     this.sharedFormService.actualizarEstadoForm1(form1);

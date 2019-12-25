@@ -162,4 +162,14 @@ public class ObjetoService implements ObjetoServiceI {
 	public void deleteById(Long id) {
 		objetoRepository.deleteById(id);
 	}
+	
+	@Override
+	public Objeto softDelete(Objeto objeto) {
+		return objetoRepository.softDelete(objeto);
+	}
+	
+	@Override
+	public Objeto softUndelete(Objeto objeto) {
+		return objetoRepository.softUndelete(objeto);
+	}
 }

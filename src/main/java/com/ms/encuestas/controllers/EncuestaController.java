@@ -47,7 +47,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/empresas")
 	@Transactional(readOnly = true)
-	public EncuestaEmpresa getEmpresa(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
+	public EncuestaEmpresa getEmpresa(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la encuesta de empresas.", user.getUsername()));
 		Long encuestaTipoId = new Long(1);
 		return encuestaService.getEmpresa(procesoId, posicionCodigo, encuestaTipoId);
 	}
@@ -56,7 +58,8 @@ public class EncuestaController {
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/empresas")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createEmpresa(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaEmpresa encuesta) {
-		//User user = (User) authentication.getPrincipal();
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' guardó la encuesta de empresas.", user.getUsername()));
 		Long encuestaTipoId = new Long(1);
 		this.encuestaService.saveEmpresa(encuesta, procesoId, posicionCodigo, encuestaTipoId);
 	}
@@ -64,7 +67,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/empresas/descargar")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> downloadEmpresaExcel(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
+	public ResponseEntity<?> downloadEmpresaExcel(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' exportó la encuesta de empresas.", user.getUsername()));
 		Resource resource = this.encuestaService.downloadEmpresaExcel(procesoId, posicionCodigo);
         String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         
@@ -77,7 +82,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps")
 	@Transactional(readOnly = true)
-	public EncuestaCentro getEps(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
+	public EncuestaCentro getEps(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la encuesta de líneas EPS.", user.getUsername()));
 		Long empresaId = new Long(2);
 		Long encuestaTipoId = new Long(2);
 		int nivel = 0;
@@ -88,7 +95,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createEps(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaCentro encuesta) {
+	public void createEps(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaCentro encuesta) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' guardó la encuesta de líneas EPS.", user.getUsername()));
 		Long empresaId = new Long(2);
 		Long encuestaTipoId = new Long(2);
 		this.encuestaService.saveCentro(encuesta, empresaId, procesoId, posicionCodigo, encuestaTipoId);
@@ -97,7 +106,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/eps/descargar")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> downloadEpsExcel(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
+	public ResponseEntity<?> downloadEpsExcel(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' exportó la encuesta de líneas EPS.", user.getUsername()));
 		Long empresaId = new Long(2);
 		int nivel = 0; // Dummy
 		Long perfilId = new Long(0); // Dummy
@@ -113,21 +124,27 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro/{nivel}/{perfilId}")
 	@Transactional(readOnly = true)
-	public EncuestaCentro getCentro(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable int nivel, @PathVariable Long perfilId) {
+	public EncuestaCentro getCentro(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable int nivel, @PathVariable Long perfilId) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la encuesta de centros de costos.", user.getUsername()));
 		return encuestaService.getCentro(new Long(1), procesoId, posicionCodigo, new Long(3), nivel, perfilId);
 	}
 	
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createCentro(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaCentro encuesta) {
+	public void createCentro(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaCentro encuesta) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' guardó la encuesta de centros de costos.", user.getUsername()));
 		this.encuestaService.saveCentro(encuesta, new Long(1), procesoId, posicionCodigo, new Long(3));
 	}
 	
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/centro/{nivel}/{perfilId}/descargar")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> downloadCentroExcel(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable int nivel, @PathVariable Long perfilId) {
+	public ResponseEntity<?> downloadCentroExcel(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable int nivel, @PathVariable Long perfilId) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' exportó la encuesta de centros de costos.", user.getUsername()));
 		Long empresaId = new Long(1);
 		Resource resource = this.encuestaService.downloadCentroExcel(empresaId, procesoId, posicionCodigo, nivel, perfilId);
         String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -141,7 +158,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea/{perfilId}")
 	@Transactional(readOnly = true)
-	public EncuestaObjeto getLinea(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId) {
+	public EncuestaObjeto getLinea(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la encuesta de líneas.", user.getUsername()));
 		Long encuestaTipoId = new Long(7); // 7: Linea
 		return encuestaService.getLinea(procesoId, posicionCodigo, encuestaTipoId, perfilId);
 	}
@@ -149,7 +168,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea")
 	@ResponseStatus(HttpStatus.CREATED) 
-	public void createLinea(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaObjeto encuesta) {
+	public void createLinea(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaObjeto encuesta) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' guardó la encuesta de líneas.", user.getUsername()));
 		Long encuestaTipoId = new Long(7); // 7: Linea
 		this.encuestaService.saveLinea(encuesta, procesoId, posicionCodigo, encuestaTipoId);
 	}
@@ -157,7 +178,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea/{perfilId}/descargar")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> downloadLineaExcel(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId) {
+	public ResponseEntity<?> downloadLineaExcel(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' exportó la encuesta de líneas.", user.getUsername()));
 		Resource resource = this.encuestaService.downloadLineaExcel(procesoId, posicionCodigo, perfilId);
         String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         
@@ -170,7 +193,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea-canal/{perfilId}")
 	@Transactional(readOnly = true)
-	public EncuestaObjetoObjetos getLineaCanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId) {
+	public EncuestaObjetoObjetos getLineaCanales(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la encuesta de líneas y canales.", user.getUsername()));
 		Long encuestaTipoId = new Long(4); // 4: Linea y Canal
 		return encuestaService.getLineaCanales(procesoId, posicionCodigo, encuestaTipoId, perfilId);
 	}
@@ -178,7 +203,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea-canal")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createLineaCanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaObjetoObjetos encuesta) {
+	public void createLineaCanales(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody EncuestaObjetoObjetos encuesta) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' guardó la encuesta de líneas y canales.", user.getUsername()));
 		Long encuestaTipoId = new Long(4); // 4: Linea y Canal
 		this.encuestaService.saveLineaCanales(encuesta, procesoId, posicionCodigo, encuestaTipoId);
 	}
@@ -186,7 +213,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/linea-canal/{perfilId}/descargar")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> downloadLineaCanalesExcel(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId) {
+	public ResponseEntity<?> downloadLineaCanalesExcel(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' exportó la encuesta de líneas y canales.", user.getUsername()));
 		Resource resource = this.encuestaService.downloadLineaCanalesExcel(procesoId, posicionCodigo, perfilId);
         String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         
@@ -199,7 +228,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-subcanal/{lineaId}/{canalId}")
 	@Transactional(readOnly = true)
-	public EncuestaObjetoObjetos getProductoSubcanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @PathVariable Long canalId) {
+	public EncuestaObjetoObjetos getProductoSubcanales(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @PathVariable Long canalId) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la encuesta de productos y subcanales.", user.getUsername()));
 		Long encuestaTipoId = new Long(5); // 5: Producto y Subcanal
 		return encuestaService.getProductoSubcanales(procesoId, posicionCodigo, encuestaTipoId, lineaId, canalId);
 	}
@@ -207,7 +238,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-subcanal/{lineaId}/{canalId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createProductoSubcanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @PathVariable Long canalId, @RequestBody EncuestaObjetoObjetos encuesta) {
+	public void createProductoSubcanales(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @PathVariable Long canalId, @RequestBody EncuestaObjetoObjetos encuesta) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' guardó la encuesta de productos y subcanales.", user.getUsername()));
 		Long encuestaTipoId = new Long(5); // 5: Producto y Subcanal
 		this.encuestaService.saveProductoSubcanales(encuesta, procesoId, posicionCodigo, encuestaTipoId, lineaId, canalId);
 	}
@@ -215,7 +248,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-subcanal/{lineaId}/{canalId}/descargar")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> downloadProductoSubcanalesExcel(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @PathVariable Long canalId) {
+	public ResponseEntity<?> downloadProductoSubcanalesExcel(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @PathVariable Long canalId) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' exportó la encuesta de productos y subcanales.", user.getUsername()));
 		Resource resource = this.encuestaService.downloadProductoSubcanalesExcel(procesoId, posicionCodigo, lineaId, canalId);
         String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         
@@ -228,7 +263,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@GetMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal/{perfilId}/{lineaId}")
 	@Transactional(readOnly = true)
-	public EncuestaObjetoObjetos getProductoCanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId, @PathVariable Long lineaId) {
+	public EncuestaObjetoObjetos getProductoCanales(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId, @PathVariable Long lineaId) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la encuesta de productos y canales.", user.getUsername()));
 		Long encuestaTipoId = new Long(6); // 6: Producto y Canal
 		return encuestaService.getProductoCanales(procesoId, posicionCodigo, encuestaTipoId, perfilId, lineaId);
 	}
@@ -236,7 +273,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal/{lineaId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createProductoCanales(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @RequestBody EncuestaObjetoObjetos encuesta) {
+	public void createProductoCanales(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long lineaId, @RequestBody EncuestaObjetoObjetos encuesta) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' guardó la encuesta de productos y canales.", user.getUsername()));
 		Long encuestaTipoId = new Long(6); // 6: Producto y Canal
 		this.encuestaService.saveProductoCanales(encuesta, procesoId, posicionCodigo, encuestaTipoId, lineaId);
 	}
@@ -244,7 +283,9 @@ public class EncuestaController {
 	@Secured("ROLE_USER")
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/encuesta/producto-canal/{perfilId}/{lineaId}/descargar")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> downloadProductoCanalesExcel(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId, @PathVariable Long lineaId) {
+	public ResponseEntity<?> downloadProductoCanalesExcel(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable Long perfilId, @PathVariable Long lineaId) {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' exportó la encuesta de productos y canales.", user.getUsername()));		
 		Resource resource = this.encuestaService.downloadProductoCanalesExcel(procesoId, posicionCodigo, perfilId, lineaId);
         String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         
@@ -258,12 +299,12 @@ public class EncuestaController {
 	@PostMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}/replicar")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void replicar(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @RequestBody List<Usuario> usuarios) {
-		User user = (User) authentication.getPrincipal();		
+		User user = (User) authentication.getPrincipal();
 		logger.info(String.format("El usuario '%s' procede a replicar la encuesta de %d colaboradores.", user.getUsername(), usuarios.size()));
 		this.encuestaService.replicarEncuestas(procesoId, posicionCodigo, usuarios);
 	}
 	
-	@Secured("ROLE_ADMIN")
+	@Secured("ROLE_USER")
 	@DeleteMapping("/procesos/{procesoId}/colaboradores/{posicionCodigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo) {

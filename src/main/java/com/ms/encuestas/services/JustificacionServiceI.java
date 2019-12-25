@@ -11,4 +11,6 @@ public interface JustificacionServiceI {
 	public int save(Justificacion justificacion);
 	public void delete(Justificacion justificacion);
 	public void deleteById(Long id);
+	public Justificacion softDelete(Justificacion justificacion);
+	public Justificacion softUndelete(Justificacion justificacion);
 }

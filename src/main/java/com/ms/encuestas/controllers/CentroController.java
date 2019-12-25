@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ms.encuestas.models.Centro;
+import com.ms.encuestas.models.Objeto;
 import com.ms.encuestas.models.Tipo;
 import com.ms.encuestas.services.CentroServiceI;
 
@@ -127,6 +128,36 @@ public class CentroController {
 			logger.error(String.format("El usuario '%s' no pudo eliminar la encuesta con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
 		}
 	}
+	
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/centros/{id}/soft-delete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Centro softDelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Centro centroBuscado = centroService.findById(id);
+        if (centroBuscado != null) {
+        	centroBuscado = centroService.softDelete(centroBuscado);
+            logger.info(String.format("El usuario '%s' deshabilitó el centro con código '%s'.", user.getUsername(), centroBuscado.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar el centro con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return centroBuscado;
+    }
+    
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/centros/{id}/soft-undelete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Centro softUndelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Centro centroBuscado = centroService.findById(id);
+        if (centroBuscado != null) {
+        	centroBuscado = centroService.softUndelete(centroBuscado);
+            logger.info(String.format("El usuario '%s' habilitó el centro con código '%s'.", user.getUsername(), centroBuscado.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo habilitar el centro con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return centroBuscado;
+    }
 	
 	@Secured("ROLE_ADMIN")
 	@PostMapping("/centros/cargar")

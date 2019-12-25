@@ -252,4 +252,14 @@ public class CentroService implements CentroServiceI {
         }        
         return excelService.crearResource(wb);
 	}
+
+	@Override
+	public Centro softDelete(Centro centro) {
+		return centroRepository.softDelete(centro);
+	}
+
+	@Override
+	public Centro softUndelete(Centro centro) {
+		return centroRepository.softUndelete(centro);
+	}
 }

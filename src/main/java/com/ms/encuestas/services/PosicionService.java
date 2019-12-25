@@ -453,4 +453,14 @@ public class PosicionService implements PosicionServiceI {
         }
         return excelService.crearResource(wb);
 	}
+
+	@Override
+	public Posicion softDelete(Posicion posicion) {
+		return posicionRepository.softDelete(posicion);
+	}
+
+	@Override
+	public Posicion softUndelete(Posicion posicion) {
+		return posicionRepository.softUndelete(posicion);
+	}
 }

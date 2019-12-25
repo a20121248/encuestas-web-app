@@ -14,6 +14,7 @@ public class Centro implements Serializable {
 	private double porcentaje;
 	private LocalDateTime fechaCreacion;
 	private LocalDateTime fechaActualizacion;
+	private LocalDateTime fechaEliminacion;
 	private String agrupador;
 
 	public Long getId() {
@@ -62,6 +63,14 @@ public class Centro implements Serializable {
 
 	public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+	
+	public LocalDateTime getFechaEliminacion() {
+		return fechaEliminacion;
+	}
+
+	public void setFechaEliminacion(LocalDateTime fechaEliminacion) {
+		this.fechaEliminacion = fechaEliminacion;
 	}
 	
 	public Tipo getTipo() {

@@ -8,19 +8,24 @@ tr.mat-row {
 }
 
 .mat-column-nombre {
-  width: 30%;
+  width: 25%;
 }
 
 .mat-column-division {
-  width: 30%;
+  width: 26%;
 }
 
 .mat-column-fechaCreacion {
-  width: 15%;
+  width: 13%;
 text-align: center;
 }
 
 .mat-column-fechaActualizacion {
-  width: 15%;
+  width: 13%;
+  text-align: center;
+}
+
+.mat-column-fechaEliminacion {
+  width: 13%;
   text-align: center;
 }

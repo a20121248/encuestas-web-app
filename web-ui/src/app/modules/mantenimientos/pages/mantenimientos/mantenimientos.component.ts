@@ -18,9 +18,9 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
            ['Mantenimiento de líneas', 'lineas'],
            ['Mantenimiento de canales', 'canales'],
            ['Mantenimiento de productos', 'productos'],
-           ['Mantenimiento de subcanales', 'subcanales'],
+           ['Mantenimiento de subcanales', 'subcanales']/*,
            ['Mantenimiento de perfiles', 'perfiles'],
-           ['Mantenimiento de datos de la posición', 'posiciones']];
+           ['Mantenimiento de datos de la posición', 'posiciones']*/];
   procesos: Proceso[];
   selectedProceso: Proceso;
   subscribeProceso: Subscription;

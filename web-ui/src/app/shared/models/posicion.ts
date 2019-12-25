@@ -7,6 +7,7 @@ export class Posicion {
   nombre: string;
   fechaCreacion: Date;
   fechaActualizacion: Date;
+  fechaEliminacion: Date;
   area: Area;
   centro: Centro;
   perfil: Perfil;

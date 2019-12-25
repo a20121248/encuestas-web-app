@@ -39,4 +39,14 @@ export class ProductoService {
     const url = `${this.urlServer.api}productos/${producto.id}`;
     return this.http.delete<any>(url);
   }
+
+  softDelete(producto: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}productos/${producto.id}/soft-delete`;
+    return this.http.put<any>(url, null);
+  }
+
+  softUndelete(producto: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}productos/${producto.id}/soft-undelete`;
+    return this.http.put<any>(url, null);
+  }
 }

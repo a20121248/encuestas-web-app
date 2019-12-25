@@ -16,6 +16,8 @@ public interface AreaServiceI {
 	public Area insert(Area area);
 	public Area update(Area area);
 	public void deleteById(Long id);
+	public Area softDelete(Area area);
+	public Area softUndelete(Area area);
 	public void deleteAll();
 	public void processExcel(InputStream file);
 	public Resource downloadExcel();

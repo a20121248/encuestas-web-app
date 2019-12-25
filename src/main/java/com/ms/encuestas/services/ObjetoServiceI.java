@@ -27,4 +27,6 @@ public interface ObjetoServiceI {
 	public Objeto updateSubcanal(Objeto objeto);
 	public Objeto findById(Long id);
 	public void deleteById(Long id);
+	public Objeto softDelete(Objeto objeto);
+	public Objeto softUndelete(Objeto objeto);
 }

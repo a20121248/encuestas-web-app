@@ -4,4 +4,5 @@ export class Justificacion {
   detalle: string;
   fechaCreacion: Date;
   fechaActualizacion: Date;
+  fechaEliminacion: Date;
 }

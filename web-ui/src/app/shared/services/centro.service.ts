@@ -119,4 +119,14 @@ export class CentroService {
     const url = `${this.urlServer.api}centros/${centro.id}`;
     return this.http.delete<any>(url);
   }
+
+  softDelete(centro: Centro): Observable<any> {
+    const url = `${this.urlServer.api}centros/${centro.id}/soft-delete`;
+    return this.http.put<any>(url, null);
+  }
+
+  softUndelete(centro: Centro): Observable<any> {
+    const url = `${this.urlServer.api}centros/${centro.id}/soft-undelete`;
+    return this.http.put<any>(url, null);
+  }
 }

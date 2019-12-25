@@ -3,12 +3,12 @@ tr.mat-row {
 }
 
 .mat-column-codigo {
-  width: 10%;
+  width: 8%;
   text-align: center;
 }
 
 .mat-column-nombre {
-  width: 27%;
+  width: 26%;
 }
 
 .mat-column-canalCodigo {
@@ -21,11 +21,16 @@ tr.mat-row {
 }
 
 .mat-column-fechaCreacion {
-  width: 15%;
+  width: 11%;
   text-align: center;
 }
 
 .mat-column-fechaActualizacion {
-  width: 15%;
+  width: 11%;
+  text-align: center;
+}
+
+.mat-column-fechaEliminacion {
+  width: 11%;
   text-align: center;
 }

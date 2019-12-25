@@ -266,6 +266,7 @@ public class UsuarioRepository {
 			         "       B.nombre_completo usuario_nombre_completo,\n" +
 			         "       B.fecha_creacion usuario_fecha_creacion,\n" +
 			         "       B.fecha_actualizacion usuario_fecha_actualizacion,\n" +
+			         "       B.fecha_eliminacion usuario_fecha_eliminacion,\n" +
 			         "       A.posicion_codigo,\n" +
 			         "       C.nombre posicion_nombre\n" +
 			         "  FROM posicion_datos A\n" + 
@@ -295,7 +296,8 @@ public class UsuarioRepository {
 				 	 "       B.contrasenha usuario_contrasenha,\n" + 
 				 	 "       B.nombre_completo usuario_nombre_completo,\n" + 
 				 	 "       B.fecha_creacion usuario_fecha_creacion,\n" + 
-				 	 "       B.fecha_actualizacion usuario_fecha_actualizacion,\n" + 
+				 	 "       B.fecha_actualizacion usuario_fecha_actualizacion,\n" +
+				 	 "       B.fecha_eliminacion usuario_fecha_eliminacion,\n" +
 				 	 "       A.area_id,\n" + 
 				 	 "       C.nombre area_nombre,\n" +
 				 	 "       C.division area_division,\n" +
@@ -309,8 +311,7 @@ public class UsuarioRepository {
 				 	 "  LEFT JOIN posicion_datos A ON A.usuario_codigo=B.codigo AND A.proceso_id=0\n" + 
 				 	 "  LEFT JOIN areas C ON A.area_id=C.id\n" +
 				 	 "  LEFT JOIN posiciones D ON A.posicion_codigo=D.codigo\n" +
-				 	 " WHERE B.fecha_eliminacion IS NULL\n" +
-				 	 "   AND B.codigo!='admin.encuestas'\n" +
+				 	 " WHERE B.codigo!='admin.encuestas'\n" +
 				 	 " ORDER BY B.nombre_completo";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		return plantilla.query(sql, paramMap, new UsuarioMapper());
@@ -327,10 +328,10 @@ public class UsuarioRepository {
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
-				     "       A.fecha_actualizacion usuario_fecha_actualizacion\n" +
+				     "       A.fecha_actualizacion usuario_fecha_actualizacion,\n" +
+				     "       A.fecha_eliminacion usuario_fecha_eliminacion\n" +
 					 "  FROM usuarios A\n" +
-				     " WHERE upper(A.usuario_generales)=:usuario_red\n" +
-					 "   AND A.fecha_eliminacion IS NULL";
+				     " WHERE upper(A.usuario_generales)=:usuario_red";
 		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_red", usuarioRed.toUpperCase()), new UsuarioMapper());
 	}
 	
@@ -341,10 +342,10 @@ public class UsuarioRepository {
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
-				     "       A.fecha_actualizacion usuario_fecha_actualizacion\n" +
+				     "       A.fecha_actualizacion usuario_fecha_actualizacion,\n" +
+				     "       A.fecha_eliminacion usuario_fecha_eliminacion\n" +
 					 "  FROM usuarios A\n" +
-				     " WHERE upper(A.usuario_vida)=:usuario_red\n" +
-					 "   AND A.fecha_eliminacion IS NULL";
+				     " WHERE upper(A.usuario_vida)=:usuario_red";
 		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_red", usuarioRed.toUpperCase()), new UsuarioMapper());
 	}
 	
@@ -355,10 +356,10 @@ public class UsuarioRepository {
 				     "       A.contrasenha usuario_contrasenha,\n" +
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
-				     "       A.fecha_actualizacion usuario_fecha_actualizacion\n" +
+				     "       A.fecha_actualizacion usuario_fecha_actualizacion,\n" +
+				     "       A.fecha_eliminacion usuario_fecha_eliminacion\n" +
 					 "  FROM usuarios A\n" +
-				     " WHERE A.codigo=:usuario_codigo\n" +
-					 "   AND A.fecha_eliminacion IS NULL";
+				     " WHERE A.codigo=:usuario_codigo";
 		return plantilla.queryForObject(sql, new MapSqlParameterSource("usuario_codigo", usuarioCodigo), new UsuarioMapper());
 	}
 	
@@ -370,6 +371,7 @@ public class UsuarioRepository {
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
 				     "       A.fecha_actualizacion usuario_fecha_actualizacion,\n" +
+				     "       A.fecha_eliminacion usuario_fecha_eliminacion,\n" +
 				     "       B.posicion_codigo,\n" +
 				     "       C.nombre posicion_nombre,\n" +
 				     "       C.fecha_creacion posicion_fecha_creacion,\n" +
@@ -397,8 +399,7 @@ public class UsuarioRepository {
 					 "  LEFT JOIN centros E ON B.centro_id=E.id\n" +
 					 "  LEFT JOIN centro_tipos F ON E.centro_tipo_id=F.id\n" +
 				     " WHERE A.codigo=:usuario_codigo\n" +
-					 "   AND B.proceso_id=:proceso_id\n" +
-					 "   AND A.fecha_eliminacion IS NULL";
+					 "   AND B.proceso_id=:proceso_id";
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("usuario_codigo", usuarioCodigo);
         paramMap.put("proceso_id", procesoId);
@@ -413,6 +414,7 @@ public class UsuarioRepository {
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
 				     "       A.fecha_actualizacion usuario_fecha_actualizacion,\n" +
+				     "       A.fecha_eliminacion usuario_fecha_eliminacion,\n" +				     
 				     "       B.posicion_codigo,\n" +
 				     "       C.nombre posicion_nombre,\n" +
 				     "       C.fecha_creacion posicion_fecha_creacion,\n" +
@@ -446,8 +448,7 @@ public class UsuarioRepository {
 					 "  LEFT JOIN perfiles H ON B.perfil_id=H.id\n" +
 					 "  LEFT JOIN perfil_tipos I ON H.perfil_tipo_id=I.id\n" +
 				     " WHERE proceso_id=:procesoId\n" +
-					 "   AND B.posicion_codigo=:posicionCodigo\n" +
-					 "   AND A.fecha_eliminacion IS NULL";
+					 "   AND B.posicion_codigo=:posicionCodigo";
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("procesoId", procesoId);
         paramMap.put("posicionCodigo", posicionCodigo);
@@ -462,14 +463,14 @@ public class UsuarioRepository {
 				     "       A.nombre_completo usuario_nombre_completo,\n" +
 				     "       A.fecha_creacion usuario_fecha_creacion,\n" +
 				     "       A.fecha_actualizacion usuario_fecha_actualizacion,\n" +
+				     "       A.fecha_eliminacion usuario_fecha_eliminacion,\n" +
 					 "       B.posicion_codigo,\n" + 
 					 "       C.nombre posicion_nombre,\n" + 
 					 "       C.fecha_creacion posicion_fecha_creacion\n" +
 					 "  FROM usuarios A\n" + 
 					 "  JOIN posicion_datos B ON A.codigo=B.usuario_codigo\n" + 
 					 "  JOIN posiciones C ON B.posicion_codigo=C.codigo\n" + 
-					 " WHERE A.codigo=:codigo\n" + 
-					 "   AND A.fecha_eliminacion IS NULL";		
+					 " WHERE A.codigo=:codigo";		
 		return plantilla.queryForObject(sql, new MapSqlParameterSource("codigo", codigo), new UsuarioMapper());
 	}
 
@@ -522,13 +523,47 @@ public class UsuarioRepository {
 		plantilla.update(sql, new MapSqlParameterSource("codigo", codigo));
 	}
 	
+	public Usuario softDelete(Usuario centro) throws EmptyResultDataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("codigo", centro.getCodigo());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		paramMap.put("fecha_eliminacion", fecha);
+		
+		String sql = "UPDATE usuarios\n" +
+			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
+			 	     "		 fecha_eliminacion=:fecha_eliminacion\n" +
+			 	     " WHERE codigo=:codigo";
+		plantilla.update(sql, paramMap);
+		
+		centro.setFechaActualizacion(fecha);
+		centro.setFechaEliminacion(fecha);
+		return centro;
+	}
+	
+	public Usuario softUndelete(Usuario centro) throws EmptyResultDataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("codigo", centro.getCodigo());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		
+		String sql = "UPDATE usuarios\n" +
+			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
+			 	     "		 fecha_eliminacion=NULL\n" +
+			 	     " WHERE codigo=:codigo";
+		plantilla.update(sql, paramMap);
+		
+		centro.setFechaActualizacion(fecha);
+		centro.setFechaEliminacion(null);
+		return centro;
+	}
+	
 	public List<Rol> findRolesByCodigo(String codigo) {
 		String sql = "SELECT B.*\n" +
 					 "  FROM rol_usuario A\n" +
 					 "  JOIN roles B\n" +
 					 "    ON A.rol_id=B.id\n" + 
-					 " WHERE A.usuario_codigo=:codigo\n" + 
-					 "   AND B.fecha_eliminacion IS NULL";
+					 " WHERE A.usuario_codigo=:codigo";
 		return plantilla.query(sql, new MapSqlParameterSource("codigo", codigo), new RolMapper());
 	}
 	

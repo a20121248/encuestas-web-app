@@ -19,6 +19,8 @@ public interface CentroServiceI {
 	public Centro update(Centro centro);
 	public void delete(Centro centro);
 	public void deleteById(Long id);
+	public Centro softDelete(Centro centro);
+	public Centro softUndelete(Centro centro);
 	public void deleteAllCentros();
 	public void deleteAllLineasEps();
 	public void processExcel(InputStream file);

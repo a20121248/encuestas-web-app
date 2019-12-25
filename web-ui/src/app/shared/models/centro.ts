@@ -11,6 +11,7 @@ export class Centro {
   empresaId: number;
   fechaCreacion: Date;
   fechaActualizacion: Date;
+  fechaEliminacion: Date;
   porcentaje: number;
   procesoId: number;
   agrupador: string;

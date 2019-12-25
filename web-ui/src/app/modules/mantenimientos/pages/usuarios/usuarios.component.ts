@@ -23,7 +23,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   usuarios: Usuario[];
   selectedIndex: number;
   selectedUsuario: Usuario;
-  dcUsuarios = ['codigo', 'usuarioVida', 'usuarioGenerales', 'nombreCompleto', 'fechaCreacion', 'fechaActualizacion'];
+  dcUsuarios = ['codigo', 'usuarioVida', 'usuarioGenerales', 'nombreCompleto', 'fechaCreacion', 'fechaActualizacion', 'fechaEliminacion'];
   crearDialogRef: MatDialogRef<ModalCrearComponent>;
   editarDialogRef: MatDialogRef<ModalEditarComponent>;
   eliminarDialogRef: MatDialogRef<ModalEliminarComponent>;
@@ -148,6 +148,32 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     });
   }
 
+  cambiarEstado() {
+    if (this.selectedUsuario == null) {
+      swal.fire('Deshabilitar colaborador', 'Por favor, seleccione un colaborador.', 'error');
+    } else if (this.selectedUsuario.fechaEliminacion == null) {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.usuarioService.softDelete(this.selectedUsuario).subscribe(response => {
+        this.usuarios[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    } else {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.usuarioService.softUndelete(this.selectedUsuario).subscribe(response => {
+        this.usuarios[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    }
+  }
+
   eliminar() {
     if (this.selectedUsuario == null) {
       swal.fire('Eliminar colaborador', 'Por favor, seleccione un colaborador.', 'error');
@@ -179,9 +205,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         }
       });
     }
-  }
-
-  cargar(): void {
   }
 
   limpiar(): void {

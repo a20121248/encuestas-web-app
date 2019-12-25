@@ -25,7 +25,6 @@ export class LineaService {
   obtenerEncuesta(usuario: Usuario): Observable<Encuesta> {
     const url1 = `procesos/${this.authService.proceso.id}/colaboradores/${usuario.posicion.codigo}/`;
     const url2 = `${url1}encuesta/linea/${usuario.posicion.perfil.id}`;
-    console.log(`${this.urlServer.api}${url2}`);
     return this.http.get<Encuesta>(`${this.urlServer.api}${url2}`);
   }
 
@@ -62,5 +61,15 @@ export class LineaService {
   delete(linea: Objeto): Observable<any> {
     const url = `${this.urlServer.api}lineas/${linea.id}`;
     return this.http.delete<any>(url);
+  }
+
+  softDelete(linea: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}lineas/${linea.id}/soft-delete`;
+    return this.http.put<any>(url, null);
+  }
+
+  softUndelete(linea: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}lineas/${linea.id}/soft-undelete`;
+    return this.http.put<any>(url, null);
   }
 }

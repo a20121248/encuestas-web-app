@@ -39,4 +39,14 @@ export class CanalService {
     const url = `${this.urlServer.api}canales/${canal.id}`;
     return this.http.delete<any>(url);
   }
+
+  softDelete(canal: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}canales/${canal.id}/soft-delete`;
+    return this.http.put<any>(url, null);
+  }
+
+  softUndelete(canal: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}canales/${canal.id}/soft-undelete`;
+    return this.http.put<any>(url, null);
+  }
 }

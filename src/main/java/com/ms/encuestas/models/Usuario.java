@@ -13,6 +13,7 @@ public class Usuario implements Serializable/*, UserDetails*/ {
 	private String nombreCompleto;
 	private LocalDateTime fechaCreacion;
 	private LocalDateTime fechaActualizacion;
+	private LocalDateTime fechaEliminacion;
 	private List<Rol> lstRoles;
 	private Posicion posicion;
 	private boolean estado;
@@ -71,6 +72,14 @@ public class Usuario implements Serializable/*, UserDetails*/ {
 
 	public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+	
+	public LocalDateTime getFechaEliminacion() {
+		return fechaEliminacion;
+	}
+
+	public void setFechaEliminacion(LocalDateTime fechaEliminacion) {
+		this.fechaEliminacion = fechaEliminacion;
 	}
 
 	public List<Rol> getLstRoles() {

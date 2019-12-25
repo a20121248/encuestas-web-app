@@ -6,12 +6,6 @@ import { JustificacionService } from 'src/app/shared/services/justificacion.serv
 import { CustomValidatorsService } from 'src/app/shared/services/custom-validators.service';
 import { SharedFormService } from 'src/app/shared/services/shared-form.service';
 
-
-export interface Justificacion {
-  nombre: string;
-  id: number;
-}
-
 @Component({
   selector: 'app-form-justificacion',
   templateUrl: './justificacion.component.html',
@@ -21,37 +15,37 @@ export class JustificacionComponent implements OnInit {
   lstJustificaciones: Justificacion[];
   @Input() observaciones: string;
   @Input() justificacion: Justificacion;
-  myGroup: FormGroup;
-  @Output() estadoFormJustToParent =  new EventEmitter();
+  @Output() estadoFormJustToParent = new EventEmitter();
+  justificacionGroup: FormGroup;
 
   constructor(
     private justificacionService: JustificacionService,
     private sharedFormService: SharedFormService) {
-      this.justificacionService.getJustificaciones().subscribe(justificaciones => {
-        this.lstJustificaciones = justificaciones;
-      });
-      this.myGroup = new FormGroup({
-        idJust: new FormControl('', Validators.compose([Validators.required,CustomValidatorsService.validarVacio])),
-        detalleJust: new FormControl(null),
-        obs: new FormControl(this.observaciones)
-     });
     }
 
   ngOnInit() {
-    this.onChangeOptions();
-    this.onChangesValue();
+    this.justificacionService.getJustificaciones().subscribe(justificaciones => {
+      this.lstJustificaciones = justificaciones;
+      this.justificacionGroup = new FormGroup({
+        justificacionControl: new FormControl(this.justificacion.id != 0 ? this.lstJustificaciones[this.justificacion.id-1] : this.justificacion, Validators.compose([Validators.required,CustomValidatorsService.validarVacio])),
+        detalleControl: new FormControl(this.justificacion.detalle),
+        observacionesControl: new FormControl(this.observaciones)
+      });
+      this.onChangeOptions();
+      this.onChangesValue();
+    });
   }
 
-  get idJustControl(){
-    return this.myGroup.get("idJust");
+  get justificacionControl() {
+    return this.justificacionGroup.get("justificacionControl");
   }
 
-  get detalleJustControl(){
-    return this.myGroup.get("detalleJust");
+  get detalleControl() {
+    return this.justificacionGroup.get("detalleControl");
   }
 
-  get obsJustControl(){
-    return this.myGroup.get("obs");
+  get observacionesControl() {
+    return this.justificacionGroup.get("observacionesControl");
   }
 
   sendEstado(value: boolean) {
@@ -59,23 +53,21 @@ export class JustificacionComponent implements OnInit {
   }
 
   onChangesValue(): void {
-    this.myGroup.valueChanges
-    .subscribe(data =>{
-      this.sendEstado(this.myGroup.valid);
+    this.justificacionGroup.valueChanges.subscribe(data => {
+      this.sendEstado(this.justificacionGroup.valid);
     });
-    this.sharedFormService.actualizarEstadoForm2(this.myGroup);
+    this.sharedFormService.actualizarEstadoForm2(this.justificacionGroup);
   }
 
   onChangeOptions():void {
-    this.myGroup.get('idJust').valueChanges
-    .subscribe(data =>{
-      if(data != 5){
-        this.myGroup.get('detalleJust').clearValidators();
-        this.myGroup.get('detalleJust').setValue(null);
+    this.justificacionControl.valueChanges.subscribe(data => {
+      if(data.nombre != 'OTROS') {
+        this.detalleControl.clearValidators();
+        this.detalleControl.setValue(null);
       } else {
-        this.myGroup.get('detalleJust').setValidators(([Validators.required]));
+        this.detalleControl.setValidators(([Validators.required]));
       }
-      this.myGroup.get('detalleJust').updateValueAndValidity();
+      this.detalleControl.updateValueAndValidity();
     });
   }
 }

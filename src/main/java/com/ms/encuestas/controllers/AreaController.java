@@ -33,17 +33,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ms.encuestas.models.Area;
+import com.ms.encuestas.models.Objeto;
 import com.ms.encuestas.services.AreaServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
 public class AreaController {
-	private final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
+	private final Logger logger = LoggerFactory.getLogger(AreaController.class);
 	@Autowired
 	private AreaServiceI areaService;
 	
-	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/areas/cantidad")
 	public Long count(Authentication authentication) {
 		User user = (User) authentication.getPrincipal();
@@ -51,7 +52,7 @@ public class AreaController {
 		return areaService.count();
 	}
 	
-	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/areas")
 	public List<Area> index(Authentication authentication) {
 		User user = (User) authentication.getPrincipal();
@@ -126,6 +127,36 @@ public class AreaController {
 			logger.error(String.format("El usuario '%s' no pudo eliminar el área con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
 		}
 	}
+	
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/areas/{id}/soft-delete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Area softDelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Area areaBuscada = areaService.findById(id);
+        if (areaBuscada != null) {
+        	areaBuscada = areaService.softDelete(areaBuscada);
+            logger.info(String.format("El usuario '%s' deshabilitó el área con código '%s'.", user.getUsername(), areaBuscada.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar el área con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return areaBuscada;
+    }
+    
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/areas/{id}/soft-undelete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Area softUndelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Area areaBuscada = areaService.findById(id);
+        if (areaBuscada != null) {
+        	areaBuscada = areaService.softUndelete(areaBuscada);
+            logger.info(String.format("El usuario '%s' habilitó el área con código '%s'.", user.getUsername(), areaBuscada.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo habilitar el área con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return areaBuscada;
+    }
 	
 	@Secured("ROLE_ADMIN")
 	@PostMapping("/areas/cargar")

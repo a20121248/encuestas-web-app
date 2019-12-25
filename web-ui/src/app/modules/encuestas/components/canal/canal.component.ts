@@ -104,8 +104,7 @@ export class CanalComponent implements OnInit {
       form3dirty = data.dirty;
       form3pristine = data.pristine;
     });
-    this.url = lineaID+"/"+canalID+"/producto-subcanal";
-    console.log(this.url);
+    this.url = lineaID+"/"+canalID+"/producto-subcanal";    
     // Valida si se haGuardado y las formas son validas, or si no se ha cambiado alguna forma y si son validas
     if((this.haGuardado && form1pristine && form2pristine && form3pristine) || (this.groupForm.valid && !form3dirty && form1valid && !form1dirty && form2valid && !form2dirty)){
       this.router.navigate([this.url], { relativeTo: this.route });

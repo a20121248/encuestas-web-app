@@ -2,6 +2,7 @@ package com.ms.encuestas.repositories;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -44,6 +45,12 @@ public class PosicionMapper implements RowMapper<Posicion> {
 		posicion.setNombre(rs.getString("nombre"));
 		posicion.setFechaCreacion(rs.getTimestamp("fecha_creacion").toLocalDateTime());
 		posicion.setFechaActualizacion(rs.getTimestamp("fecha_actualizacion").toLocalDateTime());
+		try {
+			Timestamp fechaEliminacion = rs.getTimestamp("fecha_eliminacion");
+			if (fechaEliminacion != null)
+				posicion.setFechaEliminacion(fechaEliminacion.toLocalDateTime());
+		} catch (java.sql.SQLException e1) {
+		}
 		
 		if (posicion.getCodigo() == null)
 			return null;

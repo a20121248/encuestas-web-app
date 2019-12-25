@@ -77,6 +77,34 @@ public class SubcanalController {
         }
     }
     
+    @PutMapping("/subcanales/{id}/soft-delete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Objeto softDelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Objeto subcanalBuscado = objetoService.findById(id);
+        if (subcanalBuscado != null) {
+        	subcanalBuscado = objetoService.softDelete(subcanalBuscado);
+            logger.info(String.format("El usuario '%s' deshabilitó el producto con código '%s'.", user.getUsername(), subcanalBuscado.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar el producto con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return subcanalBuscado;
+    }
+    
+    @PutMapping("/subcanales/{id}/soft-undelete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Objeto softUndelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Objeto subcanalBuscado = objetoService.findById(id);
+        if (subcanalBuscado != null) {
+        	subcanalBuscado = objetoService.softUndelete(subcanalBuscado);
+            logger.info(String.format("El usuario '%s' habilitó el subcanal con código '%s'.", user.getUsername(), subcanalBuscado.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo habilitar el subcanal con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return subcanalBuscado;
+    }
+    
     @PostMapping("/subcanales/eliminar-todos")
     @ResponseStatus(HttpStatus.OK)
     public void deleteAll(Authentication authentication) {

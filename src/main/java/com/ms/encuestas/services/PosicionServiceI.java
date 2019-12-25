@@ -19,6 +19,8 @@ public interface PosicionServiceI {
 	public Posicion findByProcesoIdAndUsuarioCodigo(Long procesoId, String usuarioCodigo);
 	public Posicion findByCodigo(String codigo);
 	public void deleteByCodigo(String codigo);
+	public Posicion softDelete(Posicion posicion);
+	public Posicion softUndelete(Posicion posicion);
 	public Posicion insert(Posicion posicion);
 	public Posicion update(Posicion posicion);
 	public void delete(Posicion posicion);

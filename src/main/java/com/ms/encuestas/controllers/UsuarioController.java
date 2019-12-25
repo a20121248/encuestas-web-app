@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ms.encuestas.models.Posicion;
 import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.services.UsuarioServiceI;
 
@@ -88,6 +89,7 @@ public class UsuarioController {
 		return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
 	}
 
+	@Secured({"ROLE_USER"})
 	@PostMapping("/usuarios")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Usuario create(Authentication authentication, @RequestBody Usuario usuario) {
@@ -125,21 +127,57 @@ public class UsuarioController {
 		}
 	}
 	
+	@Secured({"ROLE_ADMIN"})
+    @PutMapping("/usuarios/{codigo}/soft-delete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Usuario softDelete(Authentication authentication, @PathVariable String codigo) {
+        User user = (User) authentication.getPrincipal();   
+        Usuario usuarioBuscado = usuarioService.findByCodigo(codigo);
+        if (usuarioBuscado != null) {
+        	usuarioBuscado = usuarioService.softDelete(usuarioBuscado);
+            logger.info(String.format("El usuario '%s' deshabilitó la posición con código '%s'.", user.getUsername(), usuarioBuscado.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar la posición con código '%s' porque no se encontró en la base de datos.", user.getUsername(), codigo));
+        }
+        return usuarioBuscado;
+    }
+    
+    @Secured({"ROLE_ADMIN"})
+    @PutMapping("/usuarios/{codigo}/soft-undelete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Usuario softUndelete(Authentication authentication, @PathVariable String codigo) {
+        User user = (User) authentication.getPrincipal();   
+        Usuario usuarioBuscado = usuarioService.findByCodigo(codigo);
+        if (usuarioBuscado != null) {
+        	usuarioBuscado = usuarioService.softUndelete(usuarioBuscado);
+            logger.info(String.format("El usuario '%s' habilitó al colaborador con matrícula '%s'.", user.getUsername(), usuarioBuscado.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo habilitar al colaborador con matrícula '%s' porque no se encontró en la base de datos.", user.getUsername(), codigo));
+        }
+        return usuarioBuscado;
+    }
+	
 	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/{procesoId}/usuarios-dependientes/{posicionCodigo}")
-	public List<Usuario> findUsuariosDependientes(@PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
+	public List<Usuario> findUsuariosDependientes(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de usuarios dependientes.", user.getUsername()));
 		return usuarioService.findUsuariosDependientes(procesoId, posicionCodigo);
 	}
 	
 	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/{procesoId}/usuarios-dependientes-completados/{posicionCodigo}")
-	public List<Usuario> findUsuariosDependientesCompletados(@PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
+	public List<Usuario> findUsuariosDependientesCompletados(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de usuarios dependientes completados.", user.getUsername()));
 		return usuarioService.findUsuariosDependientesCompletados(procesoId, posicionCodigo);
 	}
 	
-	//@Secured({"ROLE_USER"})
+	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/{procesoId}/usuarios-dependientes-replicar/{posicionCodigo}/{responsablePosicionCodigo}/{perfilId}")
-	public List<Usuario> findUsuariosReplicar(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable String responsablePosicionCodigo, @PathVariable Long perfilId) throws Exception {
+	public List<Usuario> findUsuariosReplicar(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable String responsablePosicionCodigo, @PathVariable Long perfilId) throws Exception {
+		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de usuarios a replicar.", user.getUsername()));
 		return usuarioService.findUsuariosDependientesReplicar(procesoId, posicionCodigo, responsablePosicionCodigo, perfilId);
 	}
 
@@ -165,11 +203,13 @@ public class UsuarioController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);*/
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("procesos/{procesoId}/usuarios/posicion/{posicionCodigo}")
 	public Usuario showByPosicionCodigo(@PathVariable Long procesoId, @PathVariable String posicionCodigo) {
 		return this.usuarioService.findByPosicionCodigo(posicionCodigo, procesoId);
 	}
 
+	@Secured({"ROLE_USER"})
 	@PostMapping("procesos/{procesoId}/usuarios")
 	public ResponseEntity<?> create(@PathVariable Long procesoId, @PathVariable String codigo) {
 		Usuario usuario = null;
@@ -187,11 +227,13 @@ public class UsuarioController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 
+	@Secured({"ROLE_USER"})
 	@GetMapping("/usuarios-con-posicion/{codigo}")
 	public Usuario showWithPosicion(@PathVariable String codigo) {
 		return this.usuarioService.findByCodigoWithPosicion(codigo);
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@PostMapping("/usuarios/cargar")
 	@ResponseStatus(HttpStatus.OK)
 	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
@@ -203,6 +245,7 @@ public class UsuarioController {
 		}
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@PostMapping("/usuarios/descargar")
 	@Transactional(readOnly = true)
 	public ResponseEntity<?> downloadPerfiles() {

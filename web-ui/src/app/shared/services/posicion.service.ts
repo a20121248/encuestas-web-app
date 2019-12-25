@@ -114,4 +114,14 @@ export class PosicionService {
     const url = `${this.urlServer.api}posiciones/${posicion.codigo}`;
     return this.http.delete<any>(url);
   }
+
+  softDelete(posicion: Posicion): Observable<any> {
+    const url = `${this.urlServer.api}posiciones/${posicion.codigo}/soft-delete`;
+    return this.http.put<any>(url, null);
+  }
+
+  softUndelete(posicion: Posicion): Observable<any> {
+    const url = `${this.urlServer.api}posiciones/${posicion.codigo}/soft-undelete`;
+    return this.http.put<any>(url, null);
+  }
 }

@@ -5,6 +5,7 @@ export class Objeto {
   objetoPadre: Objeto;
   fechaCreacion: Date;
   fechaActualizacion: Date;
+  fechaEliminacion: Date;
   porcentaje: number;
   estado: boolean;
 }

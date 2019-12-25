@@ -73,4 +73,14 @@ export class AreaService {
     const url = `${this.urlServer.api}centros/${area.id}`;
     return this.http.delete<any>(url);
   }
+
+  softDelete(area: Area): Observable<any> {
+    const url = `${this.urlServer.api}areas/${area.id}/soft-delete`;
+    return this.http.put<any>(url, null);
+  }
+
+  softUndelete(area: Area): Observable<any> {
+    const url = `${this.urlServer.api}areas/${area.id}/soft-undelete`;
+    return this.http.put<any>(url, null);
+  }
 }

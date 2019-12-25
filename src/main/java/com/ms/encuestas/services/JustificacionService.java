@@ -31,12 +31,20 @@ public class JustificacionService implements JustificacionServiceI {
 	}
 
 	public void delete(Justificacion justificacion) {
-		// TODO Auto-generated method stub
-
+		justificacionRepository.delete(justificacion);
 	}
 
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
+		justificacionRepository.deleteById(id);
+	}
 
+	@Override
+	public Justificacion softDelete(Justificacion justificacion) {
+		return justificacionRepository.softDelete(justificacion);
+	}
+
+	@Override
+	public Justificacion softUndelete(Justificacion justificacion) {
+		return justificacionRepository.softUndelete(justificacion);
 	}
 }

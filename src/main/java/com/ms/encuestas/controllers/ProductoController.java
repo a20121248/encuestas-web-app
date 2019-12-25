@@ -3,6 +3,7 @@ package com.ms.encuestas.controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.slf4j.Logger;
@@ -31,16 +32,19 @@ public class ProductoController {
 	@Autowired
 	private ObjetoServiceI objetoService;
 	
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/productos/cantidad")
 	public Long count() {		
 		return objetoService.countProductos();
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/productos")
 	public List<Objeto> index() {
 		return objetoService.findAllProductos();
 	}
 	
+	@Secured("ROLE_ADMIN")
     @PostMapping("/productos")
     @ResponseStatus(HttpStatus.CREATED)
     public Objeto create(Authentication authentication, @RequestBody Objeto producto) {
@@ -50,6 +54,7 @@ public class ProductoController {
         return producto;
     }
   
+    @Secured("ROLE_ADMIN")
     @PutMapping("/productos")
     @ResponseStatus(HttpStatus.CREATED)
     public Objeto update(Authentication authentication, @RequestBody Objeto producto) {
@@ -64,6 +69,7 @@ public class ProductoController {
         return producto;
     }
   
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/productos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(Authentication authentication, @PathVariable Long id) {
@@ -77,6 +83,37 @@ public class ProductoController {
         }
     }
     
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/productos/{id}/soft-delete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Objeto softDelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Objeto productoBuscado = objetoService.findById(id);
+        if (productoBuscado != null) {
+        	productoBuscado = objetoService.softDelete(productoBuscado);
+            logger.info(String.format("El usuario '%s' deshabilitó el producto con código '%s'.", user.getUsername(), productoBuscado.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar el producto con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return productoBuscado;
+    }
+    
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/productos/{id}/soft-undelete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Objeto softUndelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Objeto productoBuscado = objetoService.findById(id);
+        if (productoBuscado != null) {
+        	productoBuscado = objetoService.softUndelete(productoBuscado);
+            logger.info(String.format("El usuario '%s' habilitó el producto con código '%s'.", user.getUsername(), productoBuscado.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo habilitar el producto con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return productoBuscado;
+    }
+    
+    @Secured("ROLE_ADMIN")
     @PostMapping("/productos/eliminar-todos")
     @ResponseStatus(HttpStatus.OK)
     public void deleteAll(Authentication authentication) {

@@ -50,7 +50,6 @@ public class PosicionRepository {
 	public List<Posicion> findAll() throws EmptyResultDataAccessException {
 		String sql = "SELECT *\n" +
 				     "  FROM posiciones\n" +
-				     " WHERE fecha_eliminacion IS NULL\n" +
 				     " ORDER BY nombre";
 		return plantilla.query(sql, new PosicionMapper());
 	}
@@ -200,6 +199,41 @@ public class PosicionRepository {
 	public void delete(Posicion posicion) {
 		String sql = "DELETE FROM posiciones WHERE codigo=:codigo";
 		plantilla.update(sql, new MapSqlParameterSource("codigo", posicion.getCodigo()));
+	}
+	
+	public Posicion softDelete(Posicion posicion) throws EmptyResultDataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("codigo", posicion.getCodigo());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		paramMap.put("fecha_eliminacion", fecha);
+		
+		String sql = "UPDATE posiciones\n" +
+			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
+			 	     "		 fecha_eliminacion=:fecha_eliminacion\n" +
+			 	     " WHERE codigo=:codigo";
+		plantilla.update(sql, paramMap);
+		
+		posicion.setFechaActualizacion(fecha);
+		posicion.setFechaEliminacion(fecha);
+		return posicion;
+	}
+	
+	public Posicion softUndelete(Posicion posicion) throws EmptyResultDataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("codigo", posicion.getCodigo());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		
+		String sql = "UPDATE posiciones\n" +
+			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
+			 	     "		 fecha_eliminacion=NULL\n" +
+			 	     " WHERE codigo=:codigo";
+		plantilla.update(sql, paramMap);
+		
+		posicion.setFechaActualizacion(fecha);
+		posicion.setFechaEliminacion(null);
+		return posicion;
 	}
 	
 	public void deleteAll() {

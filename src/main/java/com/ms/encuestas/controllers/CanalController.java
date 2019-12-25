@@ -3,6 +3,7 @@ package com.ms.encuestas.controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.slf4j.Logger;
@@ -75,6 +76,36 @@ public class CanalController {
         } else {
             logger.error(String.format("El usuario '%s' no pudo eliminar el canal con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
         }
+    }
+    
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/canales/{id}/soft-delete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Objeto softDelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Objeto canalBuscado = objetoService.findById(id);
+        if (canalBuscado != null) {
+        	canalBuscado = objetoService.softDelete(canalBuscado);
+            logger.info(String.format("El usuario '%s' deshabilitó el canal con código '%s'.", user.getUsername(), canalBuscado.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar el canal con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return canalBuscado;
+    }
+    
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/canales/{id}/soft-undelete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Objeto softUndelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Objeto canalBuscado = objetoService.findById(id);
+        if (canalBuscado != null) {
+        	canalBuscado = objetoService.softUndelete(canalBuscado);
+            logger.info(String.format("El usuario '%s' habilitó el canal con código '%s'.", user.getUsername(), canalBuscado.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo habilitar el canal con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return canalBuscado;
     }
     
     @PostMapping("/canales/eliminar-todos")

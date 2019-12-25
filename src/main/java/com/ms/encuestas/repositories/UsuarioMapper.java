@@ -2,6 +2,7 @@ package com.ms.encuestas.repositories;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -99,6 +100,12 @@ public class UsuarioMapper implements RowMapper<Usuario> {
 			usuario.setNombreCompleto(rs.getString("usuario_nombre_completo"));
 			usuario.setFechaCreacion(rs.getTimestamp("usuario_fecha_creacion").toLocalDateTime());
 			usuario.setFechaActualizacion(rs.getTimestamp("usuario_fecha_actualizacion").toLocalDateTime());
+			try {
+				Timestamp usuarioFechaEliminacion = rs.getTimestamp("usuario_fecha_eliminacion");
+				if (usuarioFechaEliminacion != null)
+					usuario.setFechaEliminacion(usuarioFechaEliminacion.toLocalDateTime());
+			} catch (java.sql.SQLException e1) {			
+			}
 			usuario.setPosicion(posicion);
 		} catch (java.sql.SQLException e) {
 			usuario = null;

@@ -13,6 +13,7 @@ public class Posicion implements Serializable {
 	private Usuario usuario;
 	private LocalDateTime fechaCreacion;
 	private LocalDateTime fechaActualizacion;
+	private LocalDateTime fechaEliminacion;
 
 	public String getCodigo() {
 		return codigo;
@@ -76,5 +77,13 @@ public class Posicion implements Serializable {
 
 	public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+	
+	public LocalDateTime getFechaEliminacion() {
+		return fechaEliminacion;
+	}
+
+	public void setFechaEliminacion(LocalDateTime fechaEliminacion) {
+		this.fechaEliminacion = fechaEliminacion;
 	}
 }

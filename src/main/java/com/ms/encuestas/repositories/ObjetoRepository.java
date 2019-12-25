@@ -29,12 +29,12 @@ public class ObjetoRepository {
 					 "		 B.codigo padre_codigo,\n" + 
 					 "		 B.nombre padre_nombre,\n" + 
 					 "		 B.fecha_creacion padre_fecha_creacion,\n" + 
-					 "		 B.fecha_actualizacion padre_fecha_actualizacion\n" + 
+					 "		 B.fecha_actualizacion padre_fecha_actualizacion,\n" +
+					 "		 B.fecha_eliminacion padre_fecha_eliminacion\n" +
 					 "  FROM objetos A\n" +
 					 "  LEFT JOIN objetos B\n" +
 					 "    ON A.padre_objeto_id=B.id\n" +
-					 " WHERE A.fecha_eliminacion IS NULL\n" +
-					 "   AND A.objeto_tipo_id=:objeto_tipo_id\n" + 
+					 " WHERE A.objeto_tipo_id=:objeto_tipo_id\n" + 
 					 " ORDER BY B.nombre,A.nombre";
 		return plantilla.query(sql, new MapSqlParameterSource("objeto_tipo_id", objetoTipoId), new ObjetoMapper());
 	}
@@ -92,7 +92,8 @@ public class ObjetoRepository {
 					 "		 B.codigo padre_codigo,\n" + 
 					 "		 B.nombre padre_nombre,\n" + 
 					 "		 B.fecha_creacion padre_fecha_creacion,\n" + 
-					 "		 B.fecha_actualizacion padre_fecha_actualizacion\n" + 
+					 "		 B.fecha_actualizacion padre_fecha_actualizacion,\n" +
+					 "		 B.fecha_actualizacion padre_fecha_eliminacion\n" +
 					 "  FROM objetos A\n" +
 				     "  LEFT JOIN objetos B\n" +
 					 "    ON A.padre_objeto_id=B.id\n" + 
@@ -103,5 +104,40 @@ public class ObjetoRepository {
 	public void deleteById(Long id) {
 		String sql = "DELETE FROM objetos WHERE id=:id";
 		plantilla.update(sql, new MapSqlParameterSource("id", id));
+	}
+
+	public Objeto softDelete(Objeto objeto) throws EmptyResultDataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", objeto.getId());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		paramMap.put("fecha_eliminacion", fecha);
+		
+		String sql = "UPDATE objetos\n" +
+			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
+			 	     "		 fecha_eliminacion=:fecha_eliminacion\n" +
+			 	     " WHERE id=:id";
+		plantilla.update(sql, paramMap);
+		
+		objeto.setFechaActualizacion(fecha);
+		objeto.setFechaEliminacion(fecha);
+		return objeto;
+	}
+	
+	public Objeto softUndelete(Objeto objeto) throws EmptyResultDataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", objeto.getId());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		
+		String sql = "UPDATE objetos\n" +
+			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
+			 	     "		 fecha_eliminacion=NULL\n" +
+			 	     " WHERE id=:id";
+		plantilla.update(sql, paramMap);
+		
+		objeto.setFechaActualizacion(fecha);
+		objeto.setFechaEliminacion(null);
+		return objeto;
 	}
 }

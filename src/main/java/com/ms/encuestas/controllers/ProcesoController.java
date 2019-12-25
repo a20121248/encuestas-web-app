@@ -53,20 +53,23 @@ public class ProcesoController {
 	
 	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/actual")
-	public Proceso getCurrentProceso() {
+	public Proceso getCurrentProceso(Authentication authentication) {
 		return procesoService.getCurrentProceso();
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/procesos/cantidad")
-	public Long count() {
+	public Long count(Authentication authentication) {
 		return procesoService.count();
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos")
-	public List<Proceso> index() {
+	public List<Proceso> index(Authentication authentication) {
 		return procesoService.findAll();
 	}
-
+	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id) {
 		Proceso proceso = null;
@@ -84,10 +87,12 @@ public class ProcesoController {
 		return new ResponseEntity<Proceso>(proceso, HttpStatus.OK);
 	}
 
+	@Secured({"ROLE_ADMIN"})
 	@PostMapping("/procesos")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Proceso create(Authentication authentication, @RequestBody Proceso proceso) {
 		User user = (User) authentication.getPrincipal();
+		logger.info(String.format("El usuario '%s' creó la encuesta '%s'.", user.getUsername(), proceso.getNombre()));
 		Usuario usuario = usuarioService.findByUsuarioRed(user.getUsername());
 		proceso.setUsuario(usuario);
 		proceso = procesoService.insert(proceso);
@@ -95,6 +100,7 @@ public class ProcesoController {
 		return proceso;
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@PutMapping("/procesos")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Proceso update(Authentication authentication, @RequestBody Proceso proceso) {
@@ -112,6 +118,7 @@ public class ProcesoController {
 		return proceso;
 	}
 
+	@Secured({"ROLE_ADMIN"})
 	@DeleteMapping("/procesos/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(Authentication authentication, @PathVariable Long id) {

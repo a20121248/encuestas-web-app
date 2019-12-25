@@ -23,7 +23,7 @@ export class LineasComponent implements OnInit, OnDestroy {
   lineas: Objeto[];
   selectedIndex: number;
   selectedLinea: Objeto;
-  dcLineas = ['codigo', 'nombre', 'fechaCreacion', 'fechaActualizacion'];
+  dcLineas = ['codigo', 'nombre', 'fechaCreacion', 'fechaActualizacion', 'fechaEliminacion'];
   crearDialogRef: MatDialogRef<ModalCrearComponent>;
   editarDialogRef: MatDialogRef<ModalEditarComponent>;
   eliminarDialogRef: MatDialogRef<ModalEliminarComponent>;
@@ -122,6 +122,32 @@ export class LineasComponent implements OnInit, OnDestroy {
     });
   }
 
+  cambiarEstado() {
+    if (this.selectedLinea == null) {
+      swal.fire('Deshabilitar línea', 'Por favor, seleccione una línea.', 'error');
+    } else if (this.selectedLinea.fechaEliminacion == null) {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.lineaService.softDelete(this.selectedLinea).subscribe(response => {
+        this.lineas[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    } else {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.lineaService.softUndelete(this.selectedLinea).subscribe(response => {
+        this.lineas[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    }
+  }
+
   eliminar() {
     if (this.selectedLinea == null) {
       swal.fire('Eliminar línea', 'Por favor, seleccione una línea.', 'error');
@@ -147,15 +173,12 @@ export class LineasComponent implements OnInit, OnDestroy {
             console.log(err);
           }, () => {
             this.selectedIndex = -1;
-            this.selectedLinea = null;
             swal.fire(`Eliminar línea '${this.selectedLinea.codigo}'`, 'La línea ha sido eliminada.', 'success');
+            this.selectedLinea = null;
           });
         }
       });
     }
-  }
-
-  cargar(): void {
   }
 
   limpiar(): void {

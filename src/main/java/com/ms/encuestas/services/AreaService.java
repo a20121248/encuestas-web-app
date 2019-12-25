@@ -208,4 +208,14 @@ public class AreaService implements AreaServiceI {
         }
         return excelService.crearResource(wb);
 	}
+
+	@Override
+	public Area softDelete(Area area) {
+		return areaRepository.softDelete(area);
+	}
+
+	@Override
+	public Area softUndelete(Area area) {
+		return areaRepository.softUndelete(area);
+	}
 }

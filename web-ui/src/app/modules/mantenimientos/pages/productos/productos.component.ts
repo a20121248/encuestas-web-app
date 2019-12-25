@@ -25,7 +25,7 @@ export class ProductosComponent implements OnInit, OnDestroy {
   lineas: Objeto[];
   selectedIndex: number;
   selectedProducto: Objeto;
-  dcProductos = ['codigo', 'nombre', 'lineaCodigo', 'lineaNombre', 'fechaCreacion', 'fechaActualizacion'];
+  dcProductos = ['codigo', 'nombre', 'lineaCodigo', 'lineaNombre', 'fechaCreacion', 'fechaActualizacion', 'fechaEliminacion'];
   crearDialogRef: MatDialogRef<ModalCrearComponent>;
   editarDialogRef: MatDialogRef<ModalEditarComponent>;
   eliminarDialogRef: MatDialogRef<ModalEliminarComponent>;
@@ -145,13 +145,39 @@ export class ProductosComponent implements OnInit, OnDestroy {
     });
   }
 
+  cambiarEstado() {
+    if (this.selectedProducto == null) {
+      swal.fire('Deshabilitar producto', 'Por favor, seleccione un producto.', 'error');
+    } else if (this.selectedProducto.fechaEliminacion == null) {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.productoService.softDelete(this.selectedProducto).subscribe(response => {
+        this.productos[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    } else {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.productoService.softUndelete(this.selectedProducto).subscribe(response => {
+        this.productos[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    }
+  }
+
   eliminar() {
     if (this.selectedProducto == null) {
       swal.fire('Eliminar producto', 'Por favor, seleccione un producto.', 'error');
     } else {
       swal.fire({
         title: `Eliminar producto '${this.selectedProducto.codigo}'`,
-        text: `¿Está seguro de eliminar el producto '${this.selectedProducto.nombre}'?`,
+        text: `¿Está seguro de eliminar el producto '${this.selectedProducto.nombre}'? Esta acción es irreversible.`,
         type: 'warning',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
@@ -170,15 +196,12 @@ export class ProductosComponent implements OnInit, OnDestroy {
             console.log(err);
           }, () => {
             this.selectedIndex = -1;
-            this.selectedProducto = null;
             swal.fire(`Eliminar producto '${this.selectedProducto.codigo}'`, 'El producto ha sido eliminado.', 'success');
+            this.selectedProducto = null;
           });
         }
       });
     }
-  }
-
-  cargar(): void {
   }
 
   limpiar(): void {

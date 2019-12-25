@@ -111,4 +111,14 @@ export class UsuarioService {
     const url = `${this.urlServer.api}usuarios/${usuario.codigo}`;
     return this.http.delete<any>(url);
   }
+
+  softDelete(usuario: Usuario): Observable<any> {
+    const url = `${this.urlServer.api}usuarios/${usuario.codigo}/soft-delete`;
+    return this.http.put<any>(url, null);
+  }
+
+  softUndelete(usuario: Usuario): Observable<any> {
+    const url = `${this.urlServer.api}usuarios/${usuario.codigo}/soft-undelete`;
+    return this.http.put<any>(url, null);
+  }
 }

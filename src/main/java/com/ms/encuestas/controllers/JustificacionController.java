@@ -6,6 +6,11 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,12 +25,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ms.encuestas.models.Justificacion;
+import com.ms.encuestas.models.Objeto;
 import com.ms.encuestas.services.JustificacionServiceI;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
 public class JustificacionController {
+	private final Logger logger = LoggerFactory.getLogger(JustificacionController.class);
 	@Autowired
 	private JustificacionServiceI justificacionService;
 	
@@ -73,4 +80,34 @@ public class JustificacionController {
 		Justificacion currentJustificacion = this.justificacionService.findById(id);
 		this.justificacionService.delete(currentJustificacion);
 	}
+	
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/justificaciones/{id}/soft-delete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Justificacion softDelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Justificacion justificacionBuscada = justificacionService.findById(id);
+        if (justificacionBuscada != null) {
+        	justificacionBuscada = justificacionService.softDelete(justificacionBuscada);
+            logger.info(String.format("El usuario '%s' deshabilitó el producto con ID=%d.", user.getUsername(), justificacionBuscada.getId()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar el producto con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return justificacionBuscada;
+    }
+    
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/justificaciones/{id}/soft-undelete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Justificacion softUndelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Justificacion justificacionBuscada = justificacionService.findById(id);
+        if (justificacionBuscada != null) {
+        	justificacionBuscada = justificacionService.softUndelete(justificacionBuscada);
+            logger.info(String.format("El usuario '%s' habilitó el producto con ID=%d.", user.getUsername(), justificacionBuscada.getId()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo habilitar el producto con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return justificacionBuscada;
+    }
 }

@@ -324,8 +324,9 @@ public class EncuestaRepository {
 			  "    ON C.proceso_id=:proceso_id\n" +
 			  "   AND C.posicion_codigo=:posicion_codigo\n" +
 			  "   AND C.linea_id=A.linea_id\n" + 
-			  " WHERE A.perfil_id=:perfil_id\n" +
-		      " ORDER BY B.codigo";
+			  " WHERE B.fecha_eliminacion IS NULL\n" +
+			  "   AND A.perfil_id=:perfil_id\n" +
+		      " ORDER BY B.nombre";
 		
 		encuesta.setLstItems(plantilla.query(sql, paramMap, new ObjetoMapper()));		
 		return encuesta;
@@ -355,8 +356,9 @@ public class EncuestaRepository {
 					 "    ON C.proceso_id=:proceso_id\n" +
 					 "   AND C.posicion_codigo=:posicion_codigo\n" +
 					 "   AND C.linea_id=A.linea_id\n" + 
-					 " WHERE A.perfil_id=:perfil_id\n" +
-				     " ORDER BY B.codigo";
+					 " WHERE B.fecha_eliminacion IS NULL\n" +
+					 "   AND A.perfil_id=:perfil_id\n" +
+				     " ORDER BY B.nombre";
 		return plantilla.queryForList(sql, paramMap);
 	}
 	
@@ -422,7 +424,9 @@ public class EncuestaRepository {
 			  "   AND D.posicion_codigo=:posicion_codigo\n" +
 			  "   AND D.linea_id=A.linea_id\n" + 
 			  "   AND D.canal_id=A.canal_id\n" + 
-			  " WHERE A.perfil_id=:perfil_id\n" + 
+			  " WHERE B.fecha_eliminacion IS NULL\n" +
+			  "   AND A.perfil_id=:perfil_id\n" +
+			  "   AND C.fecha_eliminacion IS NULL\n" + 
 			  " ORDER BY B.nombre,C.nombre";			
 	   	encuesta.setLstItems(plantilla.query(sql, paramMap, new EncuestaLineaCanalesExtractor()));		
 		
@@ -463,7 +467,9 @@ public class EncuestaRepository {
 				  	 "   AND D.posicion_codigo=:posicion_codigo\n" +
 				  	 "   AND D.linea_id=A.linea_id\n" + 
 				  	 "   AND D.canal_id=A.canal_id\n" + 
-				  	 " WHERE A.perfil_id=:perfil_id\n" + 
+					 " WHERE B.fecha_eliminacion IS NULL\n" +
+					 "   AND A.perfil_id=:perfil_id\n" +
+					 "   AND C.fecha_eliminacion IS NULL\n" +
 				  	 " ORDER BY B.nombre,C.nombre";
 		return plantilla.queryForList(sql, paramMap);
 	}
@@ -540,8 +546,10 @@ public class EncuestaRepository {
 			  "   AND C.posicion_codigo=:posicion_codigo\n" +
 			  "   AND C.producto_id=A1.id\n" + 
 			  "   AND C.subcanal_id=B1.id\n" + 
-			  " WHERE A1.objeto_tipo_id=3\n" +  // productos
+			  " WHERE A1.fecha_eliminacion IS NULL\n" +
+			  "   AND A1.objeto_tipo_id=3\n" +  // productos
 			  "   AND A1.padre_objeto_id=:linea_id" +
+			  "   AND B1.fecha_eliminacion IS NULL\n" +
 			  "   AND B1.objeto_tipo_id=4\n" +  // subcanales 
 			  "   AND B1.padre_objeto_id=:canal_id\n" + 
 			  " ORDER BY A1.nombre,B1.nombre";
@@ -577,9 +585,11 @@ public class EncuestaRepository {
 				  	 "   AND C.posicion_codigo=:posicion_codigo\n" +
 				  	 "   AND C.producto_id=A1.id\n" + 
 				  	 "   AND C.subcanal_id=B1.id\n" + 
-				  	 " WHERE A1.objeto_tipo_id=3\n" +  // productos
+					 " WHERE A1.fecha_eliminacion IS NULL\n" +
+					 "   AND A1.objeto_tipo_id=3\n" +  // productos
 				  	 "   AND A1.padre_objeto_id=:linea_id" +
-				  	 "   AND B1.objeto_tipo_id=4\n" +  // subcanales 
+					 "   AND B1.fecha_eliminacion IS NULL\n" +
+					 "   AND B1.objeto_tipo_id=4\n" +  // subcanales
 				  	 "   AND B1.padre_objeto_id=:canal_id\n" + 
 				  	 " ORDER BY A1.nombre,B1.nombre";
 		return plantilla.queryForList(sql, paramMap);
@@ -656,8 +666,10 @@ public class EncuestaRepository {
 	          "   AND C1.posicion_codigo=:posicion_codigo\n" + 
 	          "   AND C1.producto_id=B1.id\n" + 
 	          "   AND C1.canal_id=A2.id\n" + 
-	          " WHERE A1.linea_id=:linea_id\n" + 
-	          "   AND A1.perfil_id=:perfil_id\n" + 
+	          " WHERE A2.fecha_eliminacion IS NULL\n" +
+	          "   AND A1.linea_id=:linea_id\n" + 
+	          "   AND A1.perfil_id=:perfil_id\n" +
+	          "   AND B1.fecha_eliminacion IS NULL\n" +
 	          " ORDER BY B1.nombre,A2.nombre";
 	   	encuesta.setLstItems(plantilla.query(sql, paramMap, new EncuestaLineaCanalesExtractor()));		
 		
@@ -695,8 +707,10 @@ public class EncuestaRepository {
 		          	 "   AND C1.posicion_codigo=:posicion_codigo\n" + 
 		          	 "   AND C1.producto_id=B1.id\n" + 
 		          	 "   AND C1.canal_id=A2.id\n" + 
-		          	 " WHERE A1.linea_id=:linea_id\n" + 
-		          	 "   AND A1.perfil_id=:perfil_id\n" + 
+			         " WHERE A2.fecha_eliminacion IS NULL\n" +
+			         "   AND A1.linea_id=:linea_id\n" + 
+			         "   AND A1.perfil_id=:perfil_id\n" +
+			         "   AND B1.fecha_eliminacion IS NULL\n" + 
 		          	 " ORDER BY B1.nombre,A2.nombre";
 		return plantilla.queryForList(sql, paramMap);
 	}

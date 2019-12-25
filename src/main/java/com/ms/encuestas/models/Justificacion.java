@@ -10,6 +10,7 @@ public class Justificacion implements Serializable {
 	private String detalle;
 	private Date fechaCreacion;
 	private Date fechaActualizacion;
+	private Date fechaEliminacion;
 
 	public Long getId() {
 		return id;
@@ -49,5 +50,13 @@ public class Justificacion implements Serializable {
 
 	public void setFechaActualizacion(Date fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+	
+	public Date getFechaEliminacion() {
+		return fechaEliminacion;
+	}
+
+	public void setFechaEliminacion(Date fechaEliminacion) {
+		this.fechaEliminacion = fechaEliminacion;
 	}
 }

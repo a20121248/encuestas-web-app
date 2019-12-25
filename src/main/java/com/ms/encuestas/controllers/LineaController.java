@@ -3,6 +3,7 @@ package com.ms.encuestas.controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.slf4j.Logger;
@@ -75,6 +76,36 @@ public class LineaController {
         } else {
             logger.error(String.format("El usuario '%s' no pudo eliminar la línea con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
         }
+    }
+    
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/lineas/{id}/soft-delete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Objeto softDelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Objeto lineaBuscada = objetoService.findById(id);
+        if (lineaBuscada != null) {
+        	lineaBuscada = objetoService.softDelete(lineaBuscada);
+            logger.info(String.format("El usuario '%s' deshabilitó la línea con código '%s'.", user.getUsername(), lineaBuscada.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar la línea con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return lineaBuscada;
+    }
+    
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/lineas/{id}/soft-undelete")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Objeto softUndelete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();   
+        Objeto lineaBuscada = objetoService.findById(id);
+        if (lineaBuscada != null) {
+        	lineaBuscada = objetoService.softUndelete(lineaBuscada);
+            logger.info(String.format("El usuario '%s' habilitó la línea con código '%s'.", user.getUsername(), lineaBuscada.getCodigo()));
+        } else {
+            logger.error(String.format("El usuario '%s' no pudo habilitar la línea con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+        }
+        return lineaBuscada;
     }
     
     @PostMapping("/lineas/eliminar-todos")

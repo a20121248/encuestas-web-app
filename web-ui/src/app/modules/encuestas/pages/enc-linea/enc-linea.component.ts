@@ -138,11 +138,9 @@ export class EncLineaComponent implements OnInit {
     this.haGuardado = true;
     this.encuesta = new Encuesta();
     this.encuesta.lstItems = this.lineaComponent.lstLineas;
-    this.encuesta.justificacion = this.justificacionComponent.justificacion;
-    if (this.encuesta.justificacion.id != 5) {
-      this.encuesta.justificacion.detalle = null;
-    }
-    this.encuesta.observaciones = this.justificacionComponent.observaciones;
+    this.encuesta.justificacion = this.justificacionComponent.justificacionControl.value;
+    this.encuesta.justificacion.detalle = this.justificacionComponent.detalleControl.value;
+    this.encuesta.observaciones = this.justificacionComponent.observacionesControl.value;
     this.lineaService.guardarEncuesta(this.encuesta, this.usuarioSeleccionado).subscribe(
       response => console.log(response), err => console.log(err)
     );

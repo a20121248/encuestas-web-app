@@ -6,7 +6,7 @@
         <ng-template ngFor let-campo [ngForOf]="campos">
           <mat-form-field *ngIf="campo.type=='text'" fxFlex="{{campo.width}}">
             <mat-label>{{campo.label}}</mat-label>
-            <input matInput maxlength="{{campo.maxLength}}" formControlName="{{campo.name}}" oninput="this.value = this.value.toUpperCase()">
+            <input matInput maxlength="{{campo.maxLength}}" formControlName="{{campo.name}}">
             <mat-hint align="end">{{formGroup.get(campo.name).value.length}} / {{campo.maxLength}}</mat-hint>
             <mat-error *ngIf="formGroup.get(campo.name).hasError('required') && formGroup.get(campo.name).touched">{{campo.messages[0]}}</mat-error>
           </mat-form-field>
@@ -15,7 +15,23 @@
             <mat-label>{{campo.label}}</mat-label>
             <input matInput type="number" min="{{campo.items.min}}" max="{{campo.items.max}}" formControlName="{{campo.name}}">
             <mat-error *ngIf="formGroup.get(campo.name).hasError('required') && formGroup.get(campo.name).touched">{{campo.messages[0]}}</mat-error>
-          </mat-form-field>  
+          </mat-form-field>
+
+          <div *ngIf="campo.type=='radio'" class="radio">
+            <div>Estado:</div>
+            <mat-radio-group aria-label="Seleccionar una opción" formControlName="{{campo.name}}">
+              <mat-radio-button *ngFor="let item of campo.items" [value]="item">
+                {{item.nombre}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <mat-form-field *ngIf="campo.type=='date'" fxFlex="{{campo.width}}">
+            <mat-label>{{campo.label}}</mat-label>
+            <input matInput [matDatepicker]="fechaInicioMat" formControlName="{{campo.name}}">
+            <mat-datepicker-toggle matSuffix [for]="fechaInicioMat"></mat-datepicker-toggle>
+            <mat-datepicker #fechaInicioMat></mat-datepicker>
+          </mat-form-field>
   
           <mat-form-field *ngIf="campo.type=='select'" fxFlex="{{campo.width}}">
             <mat-label>{{campo.label}}</mat-label>

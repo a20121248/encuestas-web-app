@@ -64,16 +64,16 @@ public class CentroRepository {
 					 "       A.nivel centro_nivel,\n" + 
 					 "       B.id centro_tipo_id,\n" + 
 					 "       B.nombre centro_tipo_nombre,\n" +
-					 "       B.fecha_creacion tipo_fecha_creacion,\n" +
-					 "       B.fecha_actualizacion tipo_fecha_actualizacion,\n" +
+					 "       B.fecha_creacion centro_tipo_fecha_creacion,\n" +
+					 "       B.fecha_actualizacion centro_tipo_fecha_actualizacion,\n" +
 					 "       A.grupo centro_grupo,\n" + 
-					 "       A.fecha_creacion centro_fecha_creacion,\n" + 
-					 "       A.fecha_actualizacion centro_fecha_actualizacion\n" + 
+				 	 "       A.fecha_creacion centro_fecha_creacion,\n" +
+				 	 "       A.fecha_actualizacion centro_fecha_actualizacion,\n" +
+				 	 "       A.fecha_eliminacion centro_fecha_eliminacion\n" + 
 					 "  FROM centros A\n" + 
 					 "  JOIN centro_tipos B\n" + 
 					 "    ON A.centro_tipo_id=B.id\n" + 
-					 " WHERE A.fecha_eliminacion IS NULL\n" + 
-					 "   AND A.empresa_id=1\n" + 
+					 " WHERE A.empresa_id=1\n" + 
 					 " ORDER BY A.codigo";
 	    return plantilla.query(sql, new CentroMapper());
 	}
@@ -84,10 +84,13 @@ public class CentroRepository {
 				 	 "       A.nombre centro_nombre,\n" + 
 				 	 "       A.nivel centro_nivel,\n" + 
 				 	 "       B.id centro_tipo_id,\n" + 
-				 	 "       B.nombre centro_tipo_nombre,\n" + 
+				 	 "       B.nombre centro_tipo_nombre,\n" +
+				 	 "       B.fecha_creacion centro_tipo_fecha_creacion,\n" +
+				 	 "       B.fecha_actualizacion centro_tipo_fecha_actualizacion,\n" +
 				 	 "       A.grupo centro_grupo,\n" + 
-				 	 "       A.fecha_creacion centro_fecha_creacion,\n" + 
-				 	 "       A.fecha_actualizacion centro_fecha_actualizacion\n" + 
+				 	 "       A.fecha_creacion centro_fecha_creacion,\n" +
+				 	 "       A.fecha_actualizacion centro_fecha_actualizacion,\n" +
+				 	 "       A.fecha_eliminacion centro_fecha_eliminacion\n" +
 				 	 "  FROM centros A\n" + 
 				 	 "  JOIN centro_tipos B\n" + 
 				 	 "    ON A.centro_tipo_id=B.id\n" + 
@@ -103,10 +106,13 @@ public class CentroRepository {
 				 	 "       A.nombre centro_nombre,\n" + 
 				 	 "       A.nivel centro_nivel,\n" + 
 				 	 "       B.id centro_tipo_id,\n" + 
-				 	 "       B.nombre centro_tipo_nombre,\n" + 
+				 	 "       B.nombre centro_tipo_nombre,\n" +
+				 	 "       B.fecha_creacion centro_tipo_fecha_creacion,\n" +
+				 	 "       B.fecha_actualizacion centro_tipo_fecha_actualizacion,\n" +
 				 	 "       A.grupo centro_grupo,\n" + 
-				 	 "       A.fecha_creacion centro_fecha_creacion,\n" + 
-				 	 "       A.fecha_actualizacion centro_fecha_actualizacion\n" + 
+				 	 "       A.fecha_creacion centro_fecha_creacion,\n" +
+				 	 "       A.fecha_actualizacion centro_fecha_actualizacion,\n" +
+				 	 "       A.fecha_eliminacion centro_fecha_eliminacion\n" + 
 				 	 "  FROM centros A\n" + 
 				 	 "  JOIN centro_tipos B\n" + 
 				 	 "    ON A.centro_tipo_id=B.id\n" + 
@@ -172,6 +178,41 @@ public class CentroRepository {
 	public void deleteById(Long id) {
 		String sql = "DELETE FROM centros WHERE id=:id";
 		plantilla.update(sql, new MapSqlParameterSource("id", id));
+	}
+	
+	public Centro softDelete(Centro centro) throws EmptyResultDataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", centro.getId());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		paramMap.put("fecha_eliminacion", fecha);
+		
+		String sql = "UPDATE centros\n" +
+			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
+			 	     "		 fecha_eliminacion=:fecha_eliminacion\n" +
+			 	     " WHERE id=:id";
+		plantilla.update(sql, paramMap);
+		
+		centro.setFechaActualizacion(fecha);
+		centro.setFechaEliminacion(fecha);
+		return centro;
+	}
+	
+	public Centro softUndelete(Centro centro) throws EmptyResultDataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", centro.getId());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		
+		String sql = "UPDATE centros\n" +
+			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
+			 	     "		 fecha_eliminacion=NULL\n" +
+			 	     " WHERE id=:id";
+		plantilla.update(sql, paramMap);
+		
+		centro.setFechaActualizacion(fecha);
+		centro.setFechaEliminacion(null);
+		return centro;
 	}
 	
 	public void deleteAll(Long empresaId) {

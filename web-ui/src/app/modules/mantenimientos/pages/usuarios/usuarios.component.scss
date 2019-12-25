@@ -18,15 +18,20 @@ tr.mat-row {
 }
 
 .mat-column-nombreCompleto {
-  width: 40%;
+  width: 31%;
 }
 
 .mat-column-fechaCreacion {
-  width: 15%;
-  text-align: center;
+  width: 13%;
+text-align: center;
 }
 
 .mat-column-fechaActualizacion {
-  width: 15%;
+  width: 13%;
+  text-align: center;
+}
+
+.mat-column-fechaEliminacion {
+  width: 13%;
   text-align: center;
 }

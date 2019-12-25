@@ -1,6 +1,9 @@
 package com.ms.encuestas.repositories;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -35,5 +38,50 @@ public class JustificacionRepository {
         return plantilla.queryForObject(sql,
         		new MapSqlParameterSource("id", id),
         		new JustificacionMapper());
+	}
+	
+	public void deleteById(Long id) {
+		String sql = "DELETE FROM justificaciones WHERE id=:id";
+		plantilla.update(sql, new MapSqlParameterSource("id", id));
+	}
+	
+	public void delete(Justificacion justificacion) {
+		String sql = "DELETE FROM justificaciones WHERE id=:id";
+		plantilla.update(sql, new MapSqlParameterSource("id", justificacion.getId()));
+	}
+	
+	public Justificacion softDelete(Justificacion justificacion) throws EmptyResultDataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", justificacion.getId());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		paramMap.put("fecha_eliminacion", fecha);
+		
+		String sql = "UPDATE justificaciones\n" +
+			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
+			 	     "		 fecha_eliminacion=:fecha_eliminacion\n" +
+			 	     " WHERE id=:id";
+		plantilla.update(sql, paramMap);
+		
+		//justificacion.setFechaActualizacion(fecha);
+		//justificacion.setFechaEliminacion(fecha);
+		return justificacion;
+	}
+	
+	public Justificacion softUndelete(Justificacion justificacion) throws EmptyResultDataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("id", justificacion.getId());
+		LocalDateTime fecha = LocalDateTime.now();
+		paramMap.put("fecha_actualizacion", fecha);
+		
+		String sql = "UPDATE justificaciones\n" +
+			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
+			 	     "		 fecha_eliminacion=NULL\n" +
+			 	     " WHERE id=:id";
+		plantilla.update(sql, paramMap);
+		
+		//justificacion.setFechaActualizacion(fecha);
+		justificacion.setFechaEliminacion(null);
+		return justificacion;
 	}
 }

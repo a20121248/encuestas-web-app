@@ -31,7 +31,6 @@ export class FileUploadService {
     let headers = new HttpHeaders();
     headers = headers.append('Accept', 'text/csv; charset=utf-8');
     const url =`${this.endpoint}/download-files/${filename}`;
-    console.log(url);
     return this.http.get(url,{
       headers: headers,
       observe: 'response',

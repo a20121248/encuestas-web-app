@@ -39,4 +39,14 @@ export class SubcanalService {
     const url = `${this.urlServer.api}subcanales/${subcanal.id}`;
     return this.http.delete<any>(url);
   }
+
+  softDelete(subcanal: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}subcanales/${subcanal.id}/soft-delete`;
+    return this.http.put<any>(url, null);
+  }
+
+  softUndelete(subcanal: Objeto): Observable<any> {
+    const url = `${this.urlServer.api}subcanales/${subcanal.id}/soft-undelete`;
+    return this.http.put<any>(url, null);
+  }
 }

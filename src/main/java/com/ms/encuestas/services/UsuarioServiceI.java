@@ -20,6 +20,8 @@ public interface UsuarioServiceI {
 	public Usuario insert(Usuario usuario);
 	public Usuario update(Usuario usuario);
 	public void deleteByCodigo(String codigo);
+	public Usuario softDelete(Usuario usuario);
+	public Usuario softUndelete(Usuario usuario);
 	public List<Usuario> findUsuariosDependientes(Long procesoId, String usuarioCodigo);
 	public List<Usuario> findUsuariosDependientesCompletados(Long procesoId, String usuarioCodigo);
 	public List<Usuario> findUsuariosDependientesReplicar(Long procesoId, String posicionCodigo, String responsablePosicionCodigo, Long perfilId);

@@ -24,7 +24,7 @@ export class CentrosComponent implements OnInit, OnDestroy {
   centros: Centro[];
   selectedIndex: number;
   selectedCentro: Centro;
-  dcCentros = ['codigo', 'nombre', 'nivel', 'tipo', 'grupo', 'fechaCreacion', 'fechaActualizacion'];
+  dcCentros = ['codigo', 'nombre', 'nivel', 'tipo', 'grupo', 'fechaCreacion', 'fechaActualizacion', 'fechaEliminacion'];
   crearDialogRef: MatDialogRef<ModalCrearComponent>;
   editarDialogRef: MatDialogRef<ModalEditarComponent>;
   eliminarDialogRef: MatDialogRef<ModalEliminarComponent>;
@@ -169,6 +169,32 @@ export class CentrosComponent implements OnInit, OnDestroy {
     });
   }
 
+  cambiarEstado() {
+    if (this.selectedCentro == null) {
+      swal.fire('Deshabilitar centro', 'Por favor, seleccione un centro.', 'error');
+    } else if (this.selectedCentro.fechaEliminacion == null) {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.centroService.softDelete(this.selectedCentro).subscribe(response => {
+        this.centros[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    } else {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.centroService.softUndelete(this.selectedCentro).subscribe(response => {
+        this.centros[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    }
+  }
+
   eliminar() {
     if (this.selectedCentro == null) {
       swal.fire('Eliminar centro de costos', 'Por favor, seleccione un centro de costos.', 'error');
@@ -194,15 +220,12 @@ export class CentrosComponent implements OnInit, OnDestroy {
             console.log(err);
           }, () => {
             this.selectedIndex = -1;
-            this.selectedCentro = null;
             swal.fire(`Eliminar centro de costos '${this.selectedCentro.codigo}'`, 'El centro de costos ha sido eliminado.', 'success');
+            this.selectedCentro = null;
           });
         }
       });
     }
-  }
-
-  cargar(): void {
   }
 
   limpiar(): void {

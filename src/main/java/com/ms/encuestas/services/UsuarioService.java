@@ -336,4 +336,14 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
         }
         return excelService.crearResource(wb);
 	}
+
+	@Override
+	public Usuario softDelete(Usuario usuario) {
+		return usuarioRepository.softDelete(usuario);
+	}
+
+	@Override
+	public Usuario softUndelete(Usuario usuario) {
+		return usuarioRepository.softUndelete(usuario);
+	}
 }

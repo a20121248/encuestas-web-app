@@ -23,7 +23,7 @@ export class AreasComponent implements OnInit, OnDestroy {
   areas: Area[];
   selectedIndex: number;
   selectedArea: Area;
-  dcAreas = ['codigo', 'nombre', 'division', 'fechaCreacion', 'fechaActualizacion'];
+  dcAreas = ['codigo', 'nombre', 'division', 'fechaCreacion', 'fechaActualizacion', 'fechaEliminacion'];
   crearDialogRef: MatDialogRef<ModalCrearComponent>;
   editarDialogRef: MatDialogRef<ModalEditarComponent>;
   eliminarDialogRef: MatDialogRef<ModalEliminarComponent>;  
@@ -137,6 +137,33 @@ export class AreasComponent implements OnInit, OnDestroy {
     });
   }
 
+  cambiarEstado() {
+    if (this.selectedArea == null) {
+      swal.fire('Deshabilitar área', 'Por favor, seleccione un área.', 'error');
+    } else if (this.selectedArea.fechaEliminacion == null) {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.areaService.softDelete(this.selectedArea).subscribe(response => {
+        console.log(response);
+        this.areas[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    } else {
+      if (this.subscribeEliminar != null) {
+        this.subscribeEliminar.unsubscribe();
+      }
+      this.subscribeEliminar = this.areaService.softUndelete(this.selectedArea).subscribe(response => {
+        this.areas[this.selectedIndex] = response;
+        this.table.renderRows();
+      }, err => {
+        console.log(err);
+      });
+    }
+  }
+
   eliminar() {
     if (this.selectedArea == null) {
       swal.fire('Eliminar áreas', 'Por favor, seleccione un área.', 'error');
@@ -162,15 +189,12 @@ export class AreasComponent implements OnInit, OnDestroy {
             console.log(err);
           }, () => {
             this.selectedIndex = -1;
-            this.selectedArea = null;
             swal.fire(`Eliminar área '${this.selectedArea.codigo}'`, 'El área ha sido eliminada.', 'success');
+            this.selectedArea = null;
           });
         }
       });
     }
-  }
-
-  cargar(): void {
   }
 
   limpiar(): void {

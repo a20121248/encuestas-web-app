@@ -11,6 +11,7 @@ public class Area implements Serializable {
 	private String division;
 	private LocalDateTime fechaCreacion;
 	private LocalDateTime fechaActualizacion;
+	private LocalDateTime fechaEliminacion;
 	private String agrupador;
 
 	public Long getId() {
@@ -59,6 +60,14 @@ public class Area implements Serializable {
 
 	public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+	
+	public LocalDateTime getFechaEliminacion() {
+		return fechaEliminacion;
+	}
+
+	public void setFechaEliminacion(LocalDateTime fechaEliminacion) {
+		this.fechaEliminacion = fechaEliminacion;
 	}
 	
 	public String getAgrupador() {
