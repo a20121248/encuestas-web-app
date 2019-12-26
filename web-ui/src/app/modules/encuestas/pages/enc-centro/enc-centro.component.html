@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-md-7">
         <app-form-centro *ngIf="lstCentros" [lstCentros]="lstCentros" [usuarioSeleccionado]="usuarioSeleccionado"
-        (sendDownloadToParent)="descargarEncuesta($event)" (estadoFormCentroToParent)="estadoFormCentros($event)">
+        (sendDownloadToParent)="descargarEncuesta()" (estadoFormCentroToParent)="estadoFormCentros($event)">
         </app-form-centro>
       </div>
       <div class="col-md-5">

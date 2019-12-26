@@ -20,7 +20,7 @@ export class DescargaLogComponent implements OnInit {
       fileSaver.saveAs(new Blob([response], { type: 'plain/text' }), filename);
     }, err => {
       console.log(err);
-    });;
+    });
   }
 
 }

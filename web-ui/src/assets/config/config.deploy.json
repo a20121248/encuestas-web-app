@@ -3,7 +3,7 @@
     "name": "#{envName}"
   },
   "urlServer": {
-    "api": "https://psjbsdes0100.ppsdes.com.pe:7008/api/",
-    "oauth": "https://psjbsdes0100.ppsdes.com.pe:7008/oauth/"
+    "api": "/api/",
+    "oauth": "/oauth/"
   }
 }

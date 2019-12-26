@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-md-6">
         <app-form-linea-canal *ngIf="lstLineaCanales" (sendLinea)="showCanalesByLinea($event)"
-        (sendDownloadToParent)="descargarEncuesta($event)" (estadoFormLineaToParent)="estadoFormLinea($event)" [lstLineaCanales]="lstLineaCanales">
+        (sendDownloadToParent)="descargarEncuesta()" (estadoFormLineaToParent)="estadoFormLinea($event)" [lstLineaCanales]="lstLineaCanales">
         </app-form-linea-canal>
       </div>
       <div class="col-md-6">
