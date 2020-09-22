@@ -1,7 +1,6 @@
 package com.ms.encuestas.repositories;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -64,8 +63,8 @@ public class CentroRepository {
 					 "       A.nivel centro_nivel,\n" + 
 					 "       B.id centro_tipo_id,\n" + 
 					 "       B.nombre centro_tipo_nombre,\n" +
-					 "       B.fecha_creacion centro_tipo_fecha_creacion,\n" +
-					 "       B.fecha_actualizacion centro_tipo_fecha_actualizacion,\n" +
+					 "       B.fecha_creacion centro_tipo_fec_creacion,\n" +
+					 "       B.fecha_actualizacion centro_tipo_fec_actualizacion,\n" +
 					 "       A.grupo centro_grupo,\n" + 
 				 	 "       A.fecha_creacion centro_fecha_creacion,\n" +
 				 	 "       A.fecha_actualizacion centro_fecha_actualizacion,\n" +
@@ -85,8 +84,8 @@ public class CentroRepository {
 				 	 "       A.nivel centro_nivel,\n" + 
 				 	 "       B.id centro_tipo_id,\n" + 
 				 	 "       B.nombre centro_tipo_nombre,\n" +
-				 	 "       B.fecha_creacion centro_tipo_fecha_creacion,\n" +
-				 	 "       B.fecha_actualizacion centro_tipo_fecha_actualizacion,\n" +
+				 	 "       B.fecha_creacion centro_tipo_fec_creacion,\n" +
+				 	 "       B.fecha_actualizacion centro_tipo_fec_actualizacion,\n" +
 				 	 "       A.grupo centro_grupo,\n" + 
 				 	 "       A.fecha_creacion centro_fecha_creacion,\n" +
 				 	 "       A.fecha_actualizacion centro_fecha_actualizacion,\n" +
@@ -95,8 +94,8 @@ public class CentroRepository {
 				 	 "  JOIN centro_tipos B\n" + 
 				 	 "    ON A.centro_tipo_id=B.id\n" + 
 				 	 " WHERE A.id=:centro_id";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("centro_id", centroId);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("centro_id", centroId);
         return plantilla.queryForObject(sql, paramMap, new CentroMapper());
 	}
 	
@@ -107,8 +106,8 @@ public class CentroRepository {
 				 	 "       A.nivel centro_nivel,\n" + 
 				 	 "       B.id centro_tipo_id,\n" + 
 				 	 "       B.nombre centro_tipo_nombre,\n" +
-				 	 "       B.fecha_creacion centro_tipo_fecha_creacion,\n" +
-				 	 "       B.fecha_actualizacion centro_tipo_fecha_actualizacion,\n" +
+				 	 "       B.fecha_creacion centro_tipo_fec_creacion,\n" +
+				 	 "       B.fecha_actualizacion centro_tipo_fec_actualizacion,\n" +
 				 	 "       A.grupo centro_grupo,\n" + 
 				 	 "       A.fecha_creacion centro_fecha_creacion,\n" +
 				 	 "       A.fecha_actualizacion centro_fecha_actualizacion,\n" +
@@ -117,24 +116,24 @@ public class CentroRepository {
 				 	 "  JOIN centro_tipos B\n" + 
 				 	 "    ON A.centro_tipo_id=B.id\n" + 
 				 	 " WHERE A.codigo=:codigo";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", codigo);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", codigo);
         return plantilla.queryForObject(sql, paramMap, new CentroMapper());
 	}
 
 	public Centro insert(Centro centro, Long empresaId) throws EmptyResultDataAccessException {
 		String sql = "INSERT INTO centros(codigo,nombre,nivel,centro_tipo_id,grupo,empresa_id,fecha_creacion,fecha_actualizacion)\n" +
                      "VALUES(:codigo,:nombre,:nivel,:centro_tipo_id,:grupo,:empresa_id,:fecha_creacion,:fecha_actualizacion)";		
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", centro.getCodigo());
-		paramMap.put("nombre", centro.getNombre());
-		paramMap.put("nivel", centro.getNivel());
-		paramMap.put("centro_tipo_id", centro.getTipo().getId());
-		paramMap.put("grupo", centro.getGrupo());
-		paramMap.put("empresa_id", empresaId);
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_creacion", fecha);
-		paramMap.put("fecha_actualizacion", fecha);        
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", centro.getCodigo());
+		paramMap.addValue("nombre", centro.getNombre());
+		paramMap.addValue("nivel", centro.getNivel());
+		paramMap.addValue("centro_tipo_id", centro.getTipo().getId());
+		paramMap.addValue("grupo", centro.getGrupo());
+		paramMap.addValue("empresa_id", empresaId);
+		Date fecha = new Date();
+		paramMap.addValue("fecha_creacion", fecha, java.sql.Types.DATE);
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		plantilla.update(sql,paramMap);
 		
 		sql = "SELECT centros_seq.currval FROM DUAL";
@@ -154,16 +153,16 @@ public class CentroRepository {
 				 	 "		 empresa_id=:empresa_id,\n" +
 				 	 "		 fecha_actualizacion=:fecha_actualizacion\n" +
 				 	 " WHERE id=:id";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", centro.getId());
-		paramMap.put("codigo", centro.getCodigo());
-		paramMap.put("nombre", centro.getNombre());
-		paramMap.put("nivel", centro.getNivel());
-		paramMap.put("centro_tipo_id", centro.getTipo().getId());
-		paramMap.put("grupo", centro.getGrupo());
-		paramMap.put("empresa_id", empresaId);
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("id", centro.getId());
+		paramMap.addValue("codigo", centro.getCodigo());
+		paramMap.addValue("nombre", centro.getNombre());
+		paramMap.addValue("nivel", centro.getNivel());
+		paramMap.addValue("centro_tipo_id", centro.getTipo().getId());
+		paramMap.addValue("grupo", centro.getGrupo());
+		paramMap.addValue("empresa_id", empresaId);
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		plantilla.update(sql, paramMap);
 		
 		centro.setFechaActualizacion(fecha);
@@ -181,11 +180,11 @@ public class CentroRepository {
 	}
 	
 	public Centro softDelete(Centro centro) throws EmptyResultDataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", centro.getId());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
-		paramMap.put("fecha_eliminacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("id", centro.getId());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
+		paramMap.addValue("fecha_eliminacion", fecha, java.sql.Types.DATE);
 		
 		String sql = "UPDATE centros\n" +
 			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
@@ -199,10 +198,10 @@ public class CentroRepository {
 	}
 	
 	public Centro softUndelete(Centro centro) throws EmptyResultDataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", centro.getId());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("id", centro.getId());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		
 		String sql = "UPDATE centros\n" +
 			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +

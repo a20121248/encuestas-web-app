@@ -1,9 +1,7 @@
 package com.ms.encuestas.repositories;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -46,16 +44,16 @@ public class ObjetoRepository {
 	
 	public Objeto insert(Objeto objeto, Long objetoTipoId) throws EmptyResultDataAccessException {
 		String sql = "INSERT INTO objetos(codigo,nombre,objeto_tipo_id,padre_objeto_id,fecha_creacion,fecha_actualizacion)\n" +
-                     "VALUES(:codigo,:nombre,:objeto_tipo_id,:padre_objeto_id,:fecha_creacion,:fecha_actualizacion)";		
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", objeto.getCodigo());
-		paramMap.put("nombre", objeto.getNombre());
-		paramMap.put("objeto_tipo_id", objetoTipoId);
-		paramMap.put("padre_objeto_id", objeto.getObjetoPadre().getId());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_creacion", fecha);
-		paramMap.put("fecha_actualizacion", fecha);        
-		plantilla.update(sql,paramMap);
+                     "VALUES(:codigo,:nombre,:objeto_tipo_id,:padre_objeto_id,:fecha_creacion,:fecha_actualizacion)";
+		MapSqlParameterSource paramSource = new MapSqlParameterSource();
+		paramSource.addValue("codigo", objeto.getCodigo());
+		paramSource.addValue("nombre", objeto.getNombre());
+		paramSource.addValue("objeto_tipo_id", objetoTipoId);
+		paramSource.addValue("padre_objeto_id", objeto.getObjetoPadre().getId());
+		Date fecha = new Date();
+		paramSource.addValue("fecha_creacion", fecha, java.sql.Types.DATE);
+		paramSource.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
+		plantilla.update(sql,paramSource);
 		
 		sql = "SELECT objetos_seq.currval FROM DUAL";
 		objeto.setId(plantilla.queryForObject(sql, (MapSqlParameterSource) null, Long.class));
@@ -72,15 +70,15 @@ public class ObjetoRepository {
 				 	 "		 padre_objeto_id=:padre_objeto_id,\n" +
 				 	 "		 fecha_actualizacion=:fecha_actualizacion\n" +
 				 	 " WHERE id=:id";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", objeto.getId());
-		paramMap.put("codigo", objeto.getCodigo());
-		paramMap.put("nombre", objeto.getNombre());
-		paramMap.put("objeto_tipo_id", objetoTipoId);
-		paramMap.put("padre_objeto_id", objeto.getObjetoPadre() != null ? objeto.getObjetoPadre().getId() : 0);
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
-		plantilla.update(sql, paramMap);
+		MapSqlParameterSource paramSource = new MapSqlParameterSource();
+		paramSource.addValue("id", objeto.getId());
+		paramSource.addValue("codigo", objeto.getCodigo());
+		paramSource.addValue("nombre", objeto.getNombre());
+		paramSource.addValue("objeto_tipo_id", objetoTipoId);
+		paramSource.addValue("padre_objeto_id", objeto.getObjetoPadre() != null ? objeto.getObjetoPadre().getId() : 0);
+		Date fecha = new Date();
+		paramSource.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
+		plantilla.update(sql,paramSource);
 		
 		objeto.setFechaActualizacion(fecha);
 		return objeto;
@@ -107,11 +105,11 @@ public class ObjetoRepository {
 	}
 
 	public Objeto softDelete(Objeto objeto) throws EmptyResultDataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", objeto.getId());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
-		paramMap.put("fecha_eliminacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("id", objeto.getId());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
+		paramMap.addValue("fecha_eliminacion", fecha, java.sql.Types.DATE);
 		
 		String sql = "UPDATE objetos\n" +
 			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
@@ -125,10 +123,10 @@ public class ObjetoRepository {
 	}
 	
 	public Objeto softUndelete(Objeto objeto) throws EmptyResultDataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", objeto.getId());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("id", objeto.getId());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		
 		String sql = "UPDATE objetos\n" +
 			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +

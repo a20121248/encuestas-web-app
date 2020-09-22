@@ -1,9 +1,7 @@
 package com.ms.encuestas.repositories;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -51,11 +49,11 @@ public class JustificacionRepository {
 	}
 	
 	public Justificacion softDelete(Justificacion justificacion) throws EmptyResultDataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", justificacion.getId());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
-		paramMap.put("fecha_eliminacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("id", justificacion.getId());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
+		paramMap.addValue("fecha_eliminacion", fecha, java.sql.Types.DATE);
 		
 		String sql = "UPDATE justificaciones\n" +
 			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
@@ -63,16 +61,16 @@ public class JustificacionRepository {
 			 	     " WHERE id=:id";
 		plantilla.update(sql, paramMap);
 		
-		//justificacion.setFechaActualizacion(fecha);
-		//justificacion.setFechaEliminacion(fecha);
+		justificacion.setFechaActualizacion(fecha);
+		justificacion.setFechaEliminacion(fecha);
 		return justificacion;
 	}
 	
 	public Justificacion softUndelete(Justificacion justificacion) throws EmptyResultDataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", justificacion.getId());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("id", justificacion.getId());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		
 		String sql = "UPDATE justificaciones\n" +
 			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
@@ -80,7 +78,7 @@ public class JustificacionRepository {
 			 	     " WHERE id=:id";
 		plantilla.update(sql, paramMap);
 		
-		//justificacion.setFechaActualizacion(fecha);
+		justificacion.setFechaActualizacion(fecha);
 		justificacion.setFechaEliminacion(null);
 		return justificacion;
 	}

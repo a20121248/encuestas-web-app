@@ -2,7 +2,7 @@ package com.ms.encuestas.repositories;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -17,12 +17,12 @@ public class ProcesoMapper implements RowMapper<Proceso> {
 		proceso.setCodigo(rs.getString("codigo"));
 		proceso.setNombre(rs.getString("nombre"));
 		proceso.setActivo(rs.getInt("activo")==1);
-		Timestamp fechaInicio = rs.getTimestamp("fecha_inicio");
-		if (fechaInicio != null) proceso.setFechaInicio(fechaInicio.toLocalDateTime());
-		Timestamp fechaCierre = rs.getTimestamp("fecha_cierre");
-		if (fechaCierre != null) proceso.setFechaCierre(fechaCierre.toLocalDateTime());
-		proceso.setFechaCreacion(rs.getTimestamp("fecha_creacion").toLocalDateTime());
-		proceso.setFechaActualizacion(rs.getTimestamp("fecha_actualizacion").toLocalDateTime());
+		Date fechaInicio = rs.getDate("fecha_inicio");
+		if (fechaInicio != null) proceso.setFechaInicio(fechaInicio);
+		Date fechaCierre = rs.getDate("fecha_cierre");
+		if (fechaCierre != null) proceso.setFechaCierre(fechaCierre);
+		proceso.setFechaCreacion(rs.getDate("fecha_creacion"));
+		proceso.setFechaActualizacion(rs.getDate("fecha_actualizacion"));
 		
 		Usuario usuario = new Usuario();
 		usuario.setCodigo(rs.getString("usuario_codigo"));

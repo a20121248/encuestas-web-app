@@ -1,7 +1,7 @@
 package com.ms.encuestas.models;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Proceso implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -10,10 +10,10 @@ public class Proceso implements Serializable {
 	private String nombre;
 	private Usuario usuario;
 	private boolean activo;
-	private LocalDateTime fechaInicio;
-	private LocalDateTime fechaCierre;
-	private LocalDateTime fechaCreacion;
-	private LocalDateTime fechaActualizacion;
+	private Date fechaInicio;
+	private Date fechaCierre;
+	private Date fechaCreacion;
+	private Date fechaActualizacion;
 
 	public Long getId() {
 		return id;
@@ -55,35 +55,35 @@ public class Proceso implements Serializable {
 		this.activo = activo;
 	}
 
-	public LocalDateTime getFechaInicio() {
+	public Date getFechaInicio() {
 		return fechaInicio;
 	}
 
-	public void setFechaInicio(LocalDateTime fechaInicio) {
+	public void setFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
 	
-	public LocalDateTime getFechaCierre() {
+	public Date getFechaCierre() {
 		return fechaCierre;
 	}
 
-	public void setFechaCierre(LocalDateTime fechaCierre) {
+	public void setFechaCierre(Date fechaCierre) {
 		this.fechaCierre = fechaCierre;
 	}
 
-	public LocalDateTime getFechaCreacion() {
+	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}
 
-	public void setFechaCreacion(LocalDateTime fechaCreacion) {
+	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
 
-	public LocalDateTime getFechaActualizacion() {
+	public Date getFechaActualizacion() {
 		return fechaActualizacion;
 	}
 
-	public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
+	public void setFechaActualizacion(Date fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
 	}
 }

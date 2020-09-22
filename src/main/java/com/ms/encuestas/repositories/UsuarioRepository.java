@@ -1,7 +1,6 @@
 package com.ms.encuestas.repositories;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -255,9 +254,9 @@ public class UsuarioRepository {
                   "              WHERE proceso_id=:procesoId\n" + 
                   "                AND responsable_posicion_codigo=:posicionCodigo) USR ON USR.USUARIO_CODIGO = EG.USUARIO_CODIGO\n" + 
                   "             ORDER BY usuario_codigo";
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("procesoId", procesoId);
-        paramMap.put("posicionCodigo", posicionCodigo);
+        MapSqlParameterSource paramMap = new MapSqlParameterSource();
+        paramMap.addValue("procesoId", procesoId);
+        paramMap.addValue("posicionCodigo", posicionCodigo);
 		return plantilla.query(sql, paramMap, new UsuarioMapper());
 	}
 	
@@ -276,11 +275,11 @@ public class UsuarioRepository {
 			         "   AND A.responsable_posicion_codigo=:responsable_posicion_codigo\n" +
 				     "   AND A.perfil_id=:perfil_id\n" +
 				     "   AND A.posicion_codigo!=:posicion_codigo";
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("proceso_id", procesoId);
-        paramMap.put("responsable_posicion_codigo", responsablePosicionCodigo);
-        paramMap.put("perfil_id", perfilId);
-        paramMap.put("posicion_codigo", posicionCodigo);
+        MapSqlParameterSource paramMap = new MapSqlParameterSource();
+        paramMap.addValue("proceso_id", procesoId);
+        paramMap.addValue("responsable_posicion_codigo", responsablePosicionCodigo);
+        paramMap.addValue("perfil_id", perfilId);
+        paramMap.addValue("posicion_codigo", posicionCodigo);
 		return plantilla.query(sql, paramMap, new UsuarioMapper());
 	}
 	
@@ -313,7 +312,7 @@ public class UsuarioRepository {
 				 	 "  LEFT JOIN posiciones D ON A.posicion_codigo=D.codigo\n" +
 				 	 " WHERE B.codigo!='admin.encuestas'\n" +
 				 	 " ORDER BY B.nombre_completo";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
 		return plantilla.query(sql, paramMap, new UsuarioMapper());
 	}
 
@@ -400,9 +399,9 @@ public class UsuarioRepository {
 					 "  LEFT JOIN centro_tipos F ON E.centro_tipo_id=F.id\n" +
 				     " WHERE A.codigo=:usuario_codigo\n" +
 					 "   AND B.proceso_id=:proceso_id";
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("usuario_codigo", usuarioCodigo);
-        paramMap.put("proceso_id", procesoId);
+        MapSqlParameterSource paramMap = new MapSqlParameterSource();
+        paramMap.addValue("usuario_codigo", usuarioCodigo);
+        paramMap.addValue("proceso_id", procesoId);
 		return plantilla.queryForObject(sql, paramMap, new UsuarioMapper());
 	}
 	
@@ -449,9 +448,9 @@ public class UsuarioRepository {
 					 "  LEFT JOIN perfil_tipos I ON H.perfil_tipo_id=I.id\n" +
 				     " WHERE proceso_id=:procesoId\n" +
 					 "   AND B.posicion_codigo=:posicionCodigo";
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("procesoId", procesoId);
-        paramMap.put("posicionCodigo", posicionCodigo);
+        MapSqlParameterSource paramMap = new MapSqlParameterSource();
+        paramMap.addValue("procesoId", procesoId);
+        paramMap.addValue("posicionCodigo", posicionCodigo);
 		return plantilla.queryForObject(sql,paramMap,new UsuarioMapper());
 	}
 	
@@ -477,15 +476,15 @@ public class UsuarioRepository {
 	public Usuario insert(Usuario usuario) throws EmptyResultDataAccessException {
 		String sql = "INSERT INTO usuarios(codigo,contrasenha,usuario_vida,usuario_generales,nombre_completo,fecha_creacion,fecha_actualizacion)\n" +
                      "VALUES(:codigo,:contrasenha,:usuario_vida,:usuario_generales,:nombre_completo,:fecha_creacion,:fecha_actualizacion)";		
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", usuario.getCodigo());
-		paramMap.put("contrasenha", "$2a$10$TrHYVE2HDH7XIi9CaGKbde2EI2aZAlRRTfQpyXOsT3u8l7GXN2qnq");
-		paramMap.put("usuario_vida", usuario.getUsuarioVida());
-		paramMap.put("usuario_generales", usuario.getUsuarioGenerales());
-		paramMap.put("nombre_completo", usuario.getNombreCompleto());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_creacion", fecha);
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", usuario.getCodigo());
+		paramMap.addValue("contrasenha", "$2a$10$TrHYVE2HDH7XIi9CaGKbde2EI2aZAlRRTfQpyXOsT3u8l7GXN2qnq");
+		paramMap.addValue("usuario_vida", usuario.getUsuarioVida());
+		paramMap.addValue("usuario_generales", usuario.getUsuarioGenerales());
+		paramMap.addValue("nombre_completo", usuario.getNombreCompleto());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_creacion", fecha, java.sql.Types.DATE);
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		plantilla.update(sql, paramMap);
 		
 		usuario.setFechaCreacion(fecha);
@@ -500,13 +499,13 @@ public class UsuarioRepository {
 					 "		 nombre_completo=:nombre_completo,\n" +
 					 "		 fecha_actualizacion=:fecha_actualizacion\n" +
                      " WHERE codigo=:codigo";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", usuario.getCodigo());
-		paramMap.put("usuario_vida", usuario.getUsuarioVida());
-		paramMap.put("usuario_generales", usuario.getUsuarioGenerales());
-		paramMap.put("nombre_completo", usuario.getNombreCompleto());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", usuario.getCodigo());
+		paramMap.addValue("usuario_vida", usuario.getUsuarioVida());
+		paramMap.addValue("usuario_generales", usuario.getUsuarioGenerales());
+		paramMap.addValue("nombre_completo", usuario.getNombreCompleto());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		plantilla.update(sql, paramMap);
 		
 		usuario.setFechaActualizacion(fecha);
@@ -524,11 +523,11 @@ public class UsuarioRepository {
 	}
 	
 	public Usuario softDelete(Usuario centro) throws EmptyResultDataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", centro.getCodigo());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
-		paramMap.put("fecha_eliminacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", centro.getCodigo());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
+		paramMap.addValue("fecha_eliminacion", fecha, java.sql.Types.DATE);
 		
 		String sql = "UPDATE usuarios\n" +
 			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
@@ -542,10 +541,10 @@ public class UsuarioRepository {
 	}
 	
 	public Usuario softUndelete(Usuario centro) throws EmptyResultDataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", centro.getCodigo());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", centro.getCodigo());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		
 		String sql = "UPDATE usuarios\n" +
 			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +

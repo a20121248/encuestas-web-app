@@ -1,9 +1,7 @@
 package com.ms.encuestas.repositories;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -72,16 +70,16 @@ public class ProcesoRepository {
 	public Proceso insert(Proceso proceso) {
 		String sql = "INSERT INTO procesos(codigo,nombre,activo,usuario_codigo,fecha_inicio,fecha_cierre,fecha_creacion,fecha_actualizacion)\n" +
                      "VALUES(:codigo,:nombre,:activo,:usuario_codigo,:fecha_inicio,:fecha_cierre,:fecha_creacion,:fecha_actualizacion)";		
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", proceso.getCodigo());
-		paramMap.put("nombre", proceso.getNombre());
-		paramMap.put("activo", proceso.isActivo() ? 1 : 0);
-		paramMap.put("usuario_codigo", proceso.getUsuario().getCodigo());
-		paramMap.put("fecha_inicio", proceso.getFechaInicio());
-		paramMap.put("fecha_cierre", proceso.getFechaCierre());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_creacion", fecha);
-		paramMap.put("fecha_actualizacion", fecha);        
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", proceso.getCodigo());
+		paramMap.addValue("nombre", proceso.getNombre());
+		paramMap.addValue("activo", proceso.isActivo() ? 1 : 0);
+		paramMap.addValue("usuario_codigo", proceso.getUsuario().getCodigo());
+		paramMap.addValue("fecha_inicio", proceso.getFechaInicio());
+		paramMap.addValue("fecha_cierre", proceso.getFechaCierre());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_creacion", fecha);
+		paramMap.addValue("fecha_actualizacion", fecha);        
 		plantilla.update(sql, paramMap);
 		
 		sql = "SELECT procesos_seq.currval FROM DUAL";
@@ -101,16 +99,16 @@ public class ProcesoRepository {
 					 "       fecha_cierre=:fecha_cierre,\n" +
 					 "		 fecha_actualizacion=:fecha_actualizacion\n" +
 				     " WHERE id=:id";		
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", proceso.getId());
-		paramMap.put("codigo", proceso.getCodigo());
-		paramMap.put("nombre", proceso.getNombre());
-		paramMap.put("activo", proceso.isActivo() ? 1 : 0);
-		paramMap.put("usuario_codigo", proceso.getUsuario().getCodigo());
-		paramMap.put("fecha_inicio", proceso.getFechaInicio());
-		paramMap.put("fecha_cierre", proceso.getFechaCierre());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("id", proceso.getId());
+		paramMap.addValue("codigo", proceso.getCodigo());
+		paramMap.addValue("nombre", proceso.getNombre());
+		paramMap.addValue("activo", proceso.isActivo() ? 1 : 0);
+		paramMap.addValue("usuario_codigo", proceso.getUsuario().getCodigo());
+		paramMap.addValue("fecha_inicio", proceso.getFechaInicio());
+		paramMap.addValue("fecha_cierre", proceso.getFechaCierre());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		plantilla.update(sql, paramMap);
 		
 		proceso.setFechaActualizacion(fecha);

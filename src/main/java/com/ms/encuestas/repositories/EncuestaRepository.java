@@ -124,7 +124,8 @@ public class EncuestaRepository {
 
 	public List<Map<String,Object>> getEncuestaEmpresaListEmpty() throws EmptyResultDataAccessException {
 		String sql = "SELECT NULL nombre,\n" +
-	                 "       NULL porcentaje";
+	                 "       NULL porcentaje\n" +
+	                 "  FROM DUAL";
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
 	}
 	
@@ -201,10 +202,12 @@ public class EncuestaRepository {
 				  "       NULL nombre,\n" +
 				  "       NULL nivel,\n" +
 				  "       NULL grupo,\n" +
-				  "       NULL porcentaje";
+				  "       NULL porcentaje\n" +
+				  "  FROM DUAL";
 		} else {
 			sql = "SELECT NULL nombre,\n" +
-				  "       NULL porcentaje";
+				  "       NULL porcentaje\n" +
+				  "  FROM DUAL";
 		}
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
 	}
@@ -335,7 +338,8 @@ public class EncuestaRepository {
 	public List<Map<String,Object>> getEncuestaLineaListEmpty() throws EmptyResultDataAccessException {
 		String sql = "SELECT NULL codigo,\n" +
 	                 "       NULL nombre,\n" +
-	                 "       NULL porcentaje";
+	                 "       NULL porcentaje\n" +
+	                 "  FROM DUAL";
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
 	}
 	
@@ -439,7 +443,8 @@ public class EncuestaRepository {
 			     	 "       NULL LINEA_PORCENTAJE,\n" +
 			     	 "       NULL CANAL_CODIGO,\n" +
 			     	 "       NULL CANAL_NOMBRE,\n" +
-	                 "       NULL CANAL_PORCENTAJE";
+	                 "       NULL CANAL_PORCENTAJE\n" +
+			     	 "  FROM DUAL";
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
 	}
 	
@@ -562,7 +567,8 @@ public class EncuestaRepository {
 				     "       NULL PRODUCTO_NOMBRE,\n" +
 				     "       NULL SUBCANAL_CODIGO,\n" +
 				     "       NULL SUBCANAL_NOMBRE,\n" +
-	                 "       NULL PORCENTAJE";
+	                 "       NULL PORCENTAJE\n" +
+				     "  FROM DUAL";
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
 	}
 	
@@ -681,7 +687,8 @@ public class EncuestaRepository {
 					 "       NULL PRODUCTO_NOMBRE,\n" +
 					 "       NULL CANAL_CODIGO,\n" +
 					 "       NULL CANAL_NOMBRE,\n" +
-	                 "       NULL PORCENTAJE";
+	                 "       NULL PORCENTAJE\n" +
+					 "  FROM DUAL";
 		return plantilla.queryForList(sql, (MapSqlParameterSource) null);		
 	}
 	

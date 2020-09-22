@@ -75,6 +75,10 @@ export class CargarPosicionDatosComponent implements OnInit, OnDestroy {
     this.ruta = rutaArr[rutaArr.length - 1];
   }
 
+  onSelect(e): void {
+    this.obtenerCantidad();
+  }
+
   subir(): void {
     if (this.selectedProceso == null || this.selectedFile == null) {
       swal.fire('Cargar datos de las posiciones', 'Por favor, seleccione una encuesta y un archivo.', 'error');

@@ -1,6 +1,10 @@
 package com.ms.encuestas.auth;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
+
+import javax.xml.ws.WebServiceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +33,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	private UsuarioServiceI usuarioService;
 	@Value("${app.usarAD}")
 	private boolean usarAD;
+	@Value("${app.segCen.url}")
+	private String segCenUrl;
 	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -57,6 +63,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         	String strPIP = "";
         	String strPHostName = "";
         	try {
+        		//SegCenServicio.setSegCenUrl(segCenUrl);        		
         		SegCenServicio segCenServicio = new SegCenServicio();
             	ISegCenServicios segCenServicios = segCenServicio.getBasicHttpBindingISegCenServicios();
             	String response = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);

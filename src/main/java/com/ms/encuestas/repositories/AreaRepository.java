@@ -1,7 +1,6 @@
 package com.ms.encuestas.repositories;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -40,8 +39,8 @@ public class AreaRepository {
 		String queryStr = "SELECT *\n" +
 						  "  FROM areas\n" +
 						  " WHERE id=:id";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", id);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("id", id);
         return plantilla.queryForObject(queryStr, paramMap, new AreaMapper());
 	}
 	
@@ -49,21 +48,21 @@ public class AreaRepository {
 		String queryStr = "SELECT *\n" +
 						  "  FROM areas\n" +
 						  " WHERE codigo=:codigo";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", codigo);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", codigo);
         return plantilla.queryForObject(queryStr, paramMap, new AreaMapper());
 	}
 	
 	public Area insert(Area area) throws EmptyResultDataAccessException {
 		String sql = "INSERT INTO areas(codigo,nombre,division,fecha_creacion,fecha_actualizacion)\n" +
                      "VALUES(:codigo,:nombre,:division,:fecha_creacion,:fecha_actualizacion)";		
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", area.getCodigo());
-		paramMap.put("nombre", area.getNombre());
-		paramMap.put("division", area.getDivision());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_creacion", fecha);
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", area.getCodigo());
+		paramMap.addValue("nombre", area.getNombre());
+		paramMap.addValue("division", area.getDivision());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_creacion", fecha, java.sql.Types.DATE);
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		plantilla.update(sql,paramMap);
 		
 		sql = "SELECT areas_seq.currval FROM DUAL";
@@ -80,13 +79,13 @@ public class AreaRepository {
 					 "		 division=:division,\n" +
 					 "		 fecha_actualizacion=:fecha_actualizacion\n" +
                      " WHERE id=:id";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", area.getId());
-		paramMap.put("codigo", area.getCodigo());
-		paramMap.put("nombre", area.getNombre());
-		paramMap.put("division", area.getDivision());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("id", area.getId());
+		paramMap.addValue("codigo", area.getCodigo());
+		paramMap.addValue("nombre", area.getNombre());
+		paramMap.addValue("division", area.getDivision());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		plantilla.update(sql, paramMap);
 		
 		area.setFechaActualizacion(fecha);
@@ -131,11 +130,11 @@ public class AreaRepository {
 	}
 	
 	public Area softDelete(Area area) throws EmptyResultDataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", area.getId());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
-		paramMap.put("fecha_eliminacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("id", area.getId());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
+		paramMap.addValue("fecha_eliminacion", fecha, java.sql.Types.DATE);
 		
 		String sql = "UPDATE areas\n" +
 			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
@@ -149,10 +148,10 @@ public class AreaRepository {
 	}
 	
 	public Area softUndelete(Area area) throws EmptyResultDataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("id", area.getId());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("id", area.getId());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		
 		String sql = "UPDATE areas\n" +
 			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +

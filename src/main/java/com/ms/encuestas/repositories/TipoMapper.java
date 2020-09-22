@@ -13,8 +13,8 @@ public class TipoMapper implements RowMapper<Tipo> {
 		Tipo tipo = new Tipo();
 		tipo.setId(rs.getLong("id"));
 		tipo.setNombre(rs.getString("nombre"));
-		tipo.setFechaCreacion(rs.getTimestamp("fecha_creacion").toLocalDateTime());
-		tipo.setFechaActualizacion(rs.getTimestamp("fecha_actualizacion").toLocalDateTime());
+		tipo.setFechaCreacion(rs.getDate("fecha_creacion"));
+		tipo.setFechaActualizacion(rs.getDate("fecha_actualizacion"));
 		return tipo;
 	}
 }

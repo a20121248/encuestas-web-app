@@ -156,6 +156,8 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	@Override
 	@Transactional(readOnly = true)
 	public Usuario insert(Usuario usuario) {
+		rolRepository.deletesRolesUsuario(usuario.getCodigo());
+		rolRepository.insertRolUsuario(new Long(2), usuario.getCodigo());
 		return usuarioRepository.insert(usuario);
 	}
 	
@@ -241,7 +243,9 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	   			usuario.setUsuarioGenerales(usuarioGenerales);
 	   			usuario.setNombreCompleto(nombreCompleto);
 
-	   			if (accion.equals("CREAR")) {
+	   			if (codigo.equals("admin.encuestas")) {
+   					logger.error(String.format("FILA %d: No se puede realizar ninguna acción sobre el usuario '%s' ya que es el administrador del sistema.", numFila, codigo));
+   				} else if (accion.equals("CREAR")) {
 	   				if (usuarioCodigosLeidos.contains(codigo)) {
 	   					logger.error(String.format("FILA %d: La matrícula '%s' ya fue procesada para crearse en este Excel. Corregir el archivo y probar una nueva carga.", numFila, codigo));
 	   				} else if (usuarioCodigos.contains(codigo)) {

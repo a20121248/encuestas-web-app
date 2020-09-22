@@ -1,7 +1,7 @@
 package com.ms.encuestas.models;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public class Usuario implements Serializable/*, UserDetails*/ {
@@ -11,9 +11,9 @@ public class Usuario implements Serializable/*, UserDetails*/ {
 	private String usuarioGenerales;
 	private String contrasenha;
 	private String nombreCompleto;
-	private LocalDateTime fechaCreacion;
-	private LocalDateTime fechaActualizacion;
-	private LocalDateTime fechaEliminacion;
+	private Date fechaCreacion;
+	private Date fechaActualizacion;
+	private Date fechaEliminacion;
 	private List<Rol> lstRoles;
 	private Posicion posicion;
 	private boolean estado;
@@ -58,27 +58,27 @@ public class Usuario implements Serializable/*, UserDetails*/ {
 		this.nombreCompleto = nombreCompleto;
 	}
 
-	public LocalDateTime getFechaCreacion() {
+	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}
 
-	public void setFechaCreacion(LocalDateTime fechaCreacion) {
+	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
 
-	public LocalDateTime getFechaActualizacion() {
+	public Date getFechaActualizacion() {
 		return fechaActualizacion;
 	}
 
-	public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
+	public void setFechaActualizacion(Date fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
 	}
 	
-	public LocalDateTime getFechaEliminacion() {
+	public Date getFechaEliminacion() {
 		return fechaEliminacion;
 	}
 
-	public void setFechaEliminacion(LocalDateTime fechaEliminacion) {
+	public void setFechaEliminacion(Date fechaEliminacion) {
 		this.fechaEliminacion = fechaEliminacion;
 	}
 

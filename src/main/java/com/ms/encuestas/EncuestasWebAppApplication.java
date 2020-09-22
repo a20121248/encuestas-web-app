@@ -18,8 +18,8 @@ public class EncuestasWebAppApplication extends SpringBootServletInitializer imp
 	private boolean usarAD;
 	@Value("${app.segCen.url}")
 	private String segCenUrl;
-	@Value("${spring.datasource.jndiName}")
-	private String jndiName;
+	//@Value("${spring.datasource.jndiName}")
+	//private String jndiName;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(EncuestasWebAppApplication.class, args);
@@ -36,7 +36,7 @@ public class EncuestasWebAppApplication extends SpringBootServletInitializer imp
 			logger.info("VALORES LEÍDOS PROPERTIES:");
 			logger.info("- Usar Segcen: " + usarAD);
 			logger.info("- URL Segcen: " + segCenUrl);
-			logger.info("- URL Datasource: " + jndiName);
+			//logger.info("- URL Datasource: " + jndiName);
 		};
 	}
 

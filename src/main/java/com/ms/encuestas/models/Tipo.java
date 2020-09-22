@@ -1,15 +1,15 @@
 package com.ms.encuestas.models;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Tipo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String codigo;
 	private String nombre;	
-	private LocalDateTime fechaCreacion;
-	private LocalDateTime fechaActualizacion;
+	private Date fechaCreacion;
+	private Date fechaActualizacion;
 	
 	public Long getId() {
 		return id;
@@ -35,19 +35,19 @@ public class Tipo implements Serializable {
 		this.nombre = nombre;
 	}
 	
-	public LocalDateTime getFechaCreacion() {
+	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}
 
-	public void setFechaCreacion(LocalDateTime fechaCreacion) {
+	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
 
-	public LocalDateTime getFechaActualizacion() {
+	public Date getFechaActualizacion() {
 		return fechaActualizacion;
 	}
 
-	public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
+	public void setFechaActualizacion(Date fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
 	}
 }

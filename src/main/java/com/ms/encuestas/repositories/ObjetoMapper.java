@@ -2,7 +2,7 @@ package com.ms.encuestas.repositories;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -15,12 +15,12 @@ public class ObjetoMapper implements RowMapper<Objeto> {
 		objeto.setId(rs.getLong("id"));
 		objeto.setCodigo(rs.getString("codigo"));
 		objeto.setNombre(rs.getString("nombre"));
-		objeto.setFechaCreacion(rs.getTimestamp("fecha_creacion").toLocalDateTime());
-		objeto.setFechaActualizacion(rs.getTimestamp("fecha_actualizacion").toLocalDateTime());
+		objeto.setFechaCreacion(rs.getDate("fecha_creacion"));
+		objeto.setFechaActualizacion(rs.getDate("fecha_actualizacion"));
 		try {
-			Timestamp fechaEliminacion = rs.getTimestamp("fecha_eliminacion");
+			Date fechaEliminacion = rs.getDate("fecha_eliminacion");
 			if (fechaEliminacion != null)
-				objeto.setFechaEliminacion(fechaEliminacion.toLocalDateTime());
+				objeto.setFechaEliminacion(fechaEliminacion);
 		} catch (java.sql.SQLException e1) {
 		}
 		
@@ -36,11 +36,11 @@ public class ObjetoMapper implements RowMapper<Objeto> {
 				objetoPadre.setId(objetoPadreId);
 				objetoPadre.setCodigo(rs.getString("padre_codigo"));
 				objetoPadre.setNombre(rs.getString("padre_nombre"));
-				objetoPadre.setFechaCreacion(rs.getTimestamp("padre_fecha_creacion").toLocalDateTime());
-				objetoPadre.setFechaActualizacion(rs.getTimestamp("padre_fecha_actualizacion").toLocalDateTime());
-				Timestamp padreFechaEliminacion = rs.getTimestamp("padre_fecha_eliminacion");
+				objetoPadre.setFechaCreacion(rs.getDate("padre_fecha_creacion"));
+				objetoPadre.setFechaActualizacion(rs.getDate("padre_fecha_actualizacion"));
+				Date padreFechaEliminacion = rs.getDate("padre_fecha_eliminacion");
 				if (padreFechaEliminacion != null)
-					objetoPadre.setFechaEliminacion(padreFechaEliminacion.toLocalDateTime());
+					objetoPadre.setFechaEliminacion(padreFechaEliminacion);
 				objeto.setObjetoPadre(objetoPadre);
 			}
 		} catch (java.sql.SQLException e) { }		

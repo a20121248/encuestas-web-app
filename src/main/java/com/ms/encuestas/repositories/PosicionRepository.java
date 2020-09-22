@@ -1,7 +1,6 @@
 package com.ms.encuestas.repositories;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,9 +40,9 @@ public class PosicionRepository {
 					 "  FROM posicion_datos\n" +
 					 " WHERE proceso_id=:proceso_id\n" +
 					 "   AND posicion_codigo=:posicion_codigo";
-		Map<String, Object> paramMap = new HashMap<String, Object>();		
-		paramMap.put("proceso_id", procesoId);
-		paramMap.put("posicion_codigo", posicionCodigo);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();		
+		paramMap.addValue("proceso_id", procesoId);
+		paramMap.addValue("posicion_codigo", posicionCodigo);
 		return plantilla.queryForObject(sql, paramMap, Integer.class)==1;
 	}
 	
@@ -70,26 +69,26 @@ public class PosicionRepository {
 		String sql = "DELETE FROM posicion_datos\n" +
                      " WHERE proceso_id=:proceso_id\n" +
                      "   AND usuario_codigo=:usuario_codigo";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("proceso_id", procesoId);
-		paramMap.put("usuario_codigo", usuarioCodigo);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("proceso_id", procesoId);
+		paramMap.addValue("usuario_codigo", usuarioCodigo);
 		plantilla.update(sql, paramMap);
 	}
 	
 	public int insertDatos(Proceso proceso, DatosPosicion datos) throws EmptyResultDataAccessException {
 		String sql = "INSERT INTO posicion_datos(proceso_id,area_id,centro_id,posicion_codigo,usuario_codigo,responsable_posicion_codigo,perfil_id,fecha_creacion,fecha_actualizacion)\n" +
                      "VALUES(:proceso_id,:area_id,:centro_id,:posicion_codigo,:usuario_codigo,:responsable_posicion_codigo,:perfil_id,:fecha_creacion,:fecha_actualizacion)";		
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("proceso_id", proceso.getId());
-		paramMap.put("area_id", datos.getArea().getId());
-		paramMap.put("centro_id", datos.getCentro().getId());
-		paramMap.put("posicion_codigo", datos.getPosicion().getCodigo());
-		paramMap.put("usuario_codigo", datos.getUsuario().getCodigo());
-		paramMap.put("responsable_posicion_codigo", datos.getResponsablePosicion().getCodigo());
-		paramMap.put("perfil_id", datos.getPerfil().getId());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_creacion", fecha);
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("proceso_id", proceso.getId());
+		paramMap.addValue("area_id", datos.getArea().getId());
+		paramMap.addValue("centro_id", datos.getCentro().getId());
+		paramMap.addValue("posicion_codigo", datos.getPosicion().getCodigo());
+		paramMap.addValue("usuario_codigo", datos.getUsuario().getCodigo());
+		paramMap.addValue("responsable_posicion_codigo", datos.getResponsablePosicion().getCodigo());
+		paramMap.addValue("perfil_id", datos.getPerfil().getId());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_creacion", fecha, java.sql.Types.DATE);
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		return plantilla.update(sql, paramMap);
 	}
 
@@ -101,9 +100,9 @@ public class PosicionRepository {
 					 " WHERE A.proceso_id=:proceso_id\n" +
 					 "   AND A.usuario_codigo=:usuario_codigo\n" +
 					 "   AND B.fecha_eliminacion IS NULL";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("proceso_id", procesoId);
-		paramMap.put("usuario_codigo", usuarioCodigo);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("proceso_id", procesoId);
+		paramMap.addValue("usuario_codigo", usuarioCodigo);
 		return plantilla.queryForObject(sql, paramMap, new PosicionMapper());
 	}
 
@@ -167,12 +166,12 @@ public class PosicionRepository {
 	public Posicion insert(Posicion posicion) throws EmptyResultDataAccessException {
 		String sql = "INSERT INTO posiciones(codigo,nombre,fecha_creacion,fecha_actualizacion)\n" +
                      "VALUES(:codigo,:nombre,:fecha_creacion,:fecha_actualizacion)";		
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", posicion.getCodigo());
-		paramMap.put("nombre", posicion.getNombre());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_creacion", fecha);
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", posicion.getCodigo());
+		paramMap.addValue("nombre", posicion.getNombre());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_creacion", fecha, java.sql.Types.DATE);
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		plantilla.update(sql, paramMap);
 		
 		posicion.setFechaCreacion(fecha);
@@ -185,11 +184,11 @@ public class PosicionRepository {
 					 "   SET nombre=:nombre,\n" +
 					 "		 fecha_actualizacion=:fecha_actualizacion\n" +
                      " WHERE codigo=:codigo";
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", posicion.getCodigo());
-		paramMap.put("nombre", posicion.getNombre());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", posicion.getCodigo());
+		paramMap.addValue("nombre", posicion.getNombre());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		plantilla.update(sql, paramMap);
 		
 		posicion.setFechaActualizacion(fecha);
@@ -202,11 +201,11 @@ public class PosicionRepository {
 	}
 	
 	public Posicion softDelete(Posicion posicion) throws EmptyResultDataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", posicion.getCodigo());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
-		paramMap.put("fecha_eliminacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", posicion.getCodigo());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
+		paramMap.addValue("fecha_eliminacion", fecha, java.sql.Types.DATE);
 		
 		String sql = "UPDATE posiciones\n" +
 			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +
@@ -220,10 +219,10 @@ public class PosicionRepository {
 	}
 	
 	public Posicion softUndelete(Posicion posicion) throws EmptyResultDataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("codigo", posicion.getCodigo());
-		LocalDateTime fecha = LocalDateTime.now();
-		paramMap.put("fecha_actualizacion", fecha);
+		MapSqlParameterSource paramMap = new MapSqlParameterSource();
+		paramMap.addValue("codigo", posicion.getCodigo());
+		Date fecha = new Date();
+		paramMap.addValue("fecha_actualizacion", fecha, java.sql.Types.DATE);
 		
 		String sql = "UPDATE posiciones\n" +
 			 	     "   SET fecha_actualizacion=:fecha_actualizacion,\n" +

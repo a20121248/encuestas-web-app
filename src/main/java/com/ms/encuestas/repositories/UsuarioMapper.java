@@ -2,7 +2,7 @@ package com.ms.encuestas.repositories;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -37,8 +37,8 @@ public class UsuarioMapper implements RowMapper<Usuario> {
 			posicion = new Posicion();
 			posicion.setCodigo(rs.getString("posicion_codigo"));
 			posicion.setNombre(rs.getString("posicion_nombre"));
-			//posicion.setFechaCreacion(rs.getTimestamp("posicion_fecha_creacion").toLocalDateTime());
-			//posicion.setFechaActualizacion(rs.getTimestamp("posicion_fecha_actualizacion").toLocalDateTime());
+			//posicion.setFechaCreacion(rs.getDate("posicion_fecha_creacion"));
+			//posicion.setFechaActualizacion(rs.getDate("posicion_fecha_actualizacion"));
 			posicion.setPerfil(perfil);
 		} catch (java.sql.SQLException e) {
 			posicion = null;
@@ -63,8 +63,8 @@ public class UsuarioMapper implements RowMapper<Usuario> {
 			Tipo centroTipo = new Tipo();
 			centroTipo.setId(rs.getLong("centro_tipo_id"));
 			centroTipo.setNombre(rs.getString("centro_tipo_nombre"));
-			centroTipo.setFechaCreacion(rs.getTimestamp("centro_tipo_fec_creacion").toLocalDateTime());
-			centroTipo.setFechaActualizacion(rs.getTimestamp("centro_tipo_fec_actualizacion").toLocalDateTime());
+			centroTipo.setFechaCreacion(rs.getDate("centro_tipo_fec_creacion"));
+			centroTipo.setFechaActualizacion(rs.getDate("centro_tipo_fec_actualizacion"));
 			
 			centro = new Centro();
 			centro.setId(rs.getLong("centro_id"));
@@ -73,8 +73,8 @@ public class UsuarioMapper implements RowMapper<Usuario> {
 			centro.setNivel(rs.getInt("centro_nivel"));
 			centro.setTipo(centroTipo);
 			centro.setGrupo(rs.getString("centro_grupo"));
-			centro.setFechaCreacion(rs.getTimestamp("centro_fecha_creacion").toLocalDateTime());
-			centro.setFechaActualizacion(rs.getTimestamp("centro_fecha_actualizacion").toLocalDateTime());
+			centro.setFechaCreacion(rs.getDate("centro_fecha_creacion"));
+			centro.setFechaActualizacion(rs.getDate("centro_fecha_actualizacion"));
 			if (posicion != null)
 				posicion.setCentro(centro);
 		} catch (java.sql.SQLException e) {
@@ -98,12 +98,12 @@ public class UsuarioMapper implements RowMapper<Usuario> {
 			} catch (java.sql.SQLException e1) {			
 			}
 			usuario.setNombreCompleto(rs.getString("usuario_nombre_completo"));
-			usuario.setFechaCreacion(rs.getTimestamp("usuario_fecha_creacion").toLocalDateTime());
-			usuario.setFechaActualizacion(rs.getTimestamp("usuario_fecha_actualizacion").toLocalDateTime());
+			usuario.setFechaCreacion(rs.getDate("usuario_fecha_creacion"));
+			usuario.setFechaActualizacion(rs.getDate("usuario_fecha_actualizacion"));
 			try {
-				Timestamp usuarioFechaEliminacion = rs.getTimestamp("usuario_fecha_eliminacion");
+				Date usuarioFechaEliminacion = rs.getDate("usuario_fecha_eliminacion");
 				if (usuarioFechaEliminacion != null)
-					usuario.setFechaEliminacion(usuarioFechaEliminacion.toLocalDateTime());
+					usuario.setFechaEliminacion(usuarioFechaEliminacion);
 			} catch (java.sql.SQLException e1) {			
 			}
 			usuario.setPosicion(posicion);

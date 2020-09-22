@@ -2,7 +2,7 @@ package com.ms.encuestas.repositories;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -19,8 +19,8 @@ public class PosicionMapper implements RowMapper<Posicion> {
 		try {
 			area.setId(rs.getLong("area_id"));
 			area.setNombre(rs.getString("area_nombre"));
-			area.setFechaCreacion(rs.getTimestamp("area_fecha_creacion").toLocalDateTime());
-			area.setFechaActualizacion(rs.getTimestamp("area_fecha_actualizacion").toLocalDateTime());
+			area.setFechaCreacion(rs.getDate("area_fecha_creacion"));
+			area.setFechaActualizacion(rs.getDate("area_fecha_actualizacion"));
 			area.setDivision(rs.getString("area_division"));
 			posicion.setArea(area);
 		} catch (java.sql.SQLException e) {
@@ -34,8 +34,8 @@ public class PosicionMapper implements RowMapper<Posicion> {
 			centro.setCodigo(rs.getString("centro_codigo"));
 			centro.setNombre(rs.getString("centro_nombre"));
 			centro.setNivel(rs.getInt("centro_nivel"));
-			centro.setFechaCreacion(rs.getTimestamp("centro_fecha_creacion").toLocalDateTime());
-			centro.setFechaActualizacion(rs.getTimestamp("centro_fecha_actualizacion").toLocalDateTime());
+			centro.setFechaCreacion(rs.getDate("centro_fecha_creacion"));
+			centro.setFechaActualizacion(rs.getDate("centro_fecha_actualizacion"));
 			posicion.setCentro(centro);
 		} catch (java.sql.SQLException e) {
 			centro = null;
@@ -43,12 +43,12 @@ public class PosicionMapper implements RowMapper<Posicion> {
 		
 		posicion.setCodigo(rs.getString("codigo"));
 		posicion.setNombre(rs.getString("nombre"));
-		posicion.setFechaCreacion(rs.getTimestamp("fecha_creacion").toLocalDateTime());
-		posicion.setFechaActualizacion(rs.getTimestamp("fecha_actualizacion").toLocalDateTime());
+		posicion.setFechaCreacion(rs.getDate("fecha_creacion"));
+		posicion.setFechaActualizacion(rs.getDate("fecha_actualizacion"));
 		try {
-			Timestamp fechaEliminacion = rs.getTimestamp("fecha_eliminacion");
+			Date fechaEliminacion = rs.getDate("fecha_eliminacion");
 			if (fechaEliminacion != null)
-				posicion.setFechaEliminacion(fechaEliminacion.toLocalDateTime());
+				posicion.setFechaEliminacion(fechaEliminacion);
 		} catch (java.sql.SQLException e1) {
 		}
 		
