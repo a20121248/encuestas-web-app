@@ -2,6 +2,8 @@ package com.ms.encuestas.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -31,6 +33,11 @@ public class CanalController {
     
 	@Autowired
 	private ObjetoServiceI objetoService;
+	
+    @GetMapping("/sesion-prueba")
+    public String index(HttpSession session) {
+        return session.getId();
+    }
 	
 	@GetMapping("/canales/cantidad")
 	public Long count() {		

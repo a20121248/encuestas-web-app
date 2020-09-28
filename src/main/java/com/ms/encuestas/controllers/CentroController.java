@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ms.encuestas.models.Centro;
-import com.ms.encuestas.models.Objeto;
 import com.ms.encuestas.models.Tipo;
 import com.ms.encuestas.services.CentroServiceI;
 

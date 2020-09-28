@@ -1,10 +1,6 @@
 package com.ms.encuestas.auth;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
-
-import javax.xml.ws.WebServiceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +18,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.ms.encuestas.models.Usuario;
+import com.ms.encuestas.services.SegCenServicioInjI;
 import com.ms.encuestas.services.UsuarioServiceI;
-import com.ms.encuestas.services.segcen.ISegCenServicios;
-import com.ms.encuestas.services.segcen.SegCenServicio;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 	private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
+	@Autowired
+	private SegCenServicioInjI segCenService;
 	@Autowired
 	private UsuarioServiceI usuarioService;
 	@Value("${app.usarAD}")
@@ -63,10 +60,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         	String strPIP = "";
         	String strPHostName = "";
         	try {
-        		//SegCenServicio.setSegCenUrl(segCenUrl);        		
-        		SegCenServicio segCenServicio = new SegCenServicio();
-            	ISegCenServicios segCenServicios = segCenServicio.getBasicHttpBindingISegCenServicios();
-            	String response = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
+        		String response = segCenService.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
             	if (response.equals("")) {
             		logger.info(String.format("Respuesta del SegCen: '%s'.", response));
             	} else {

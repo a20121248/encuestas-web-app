@@ -10,8 +10,10 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 
 @SpringBootApplication
+@EnableJdbcHttpSession
 public class EncuestasWebAppApplication extends SpringBootServletInitializer implements CommandLineRunner {
 	private final Logger logger = LoggerFactory.getLogger(EncuestasWebAppApplication.class);
 	@Value("${app.usarAD}")

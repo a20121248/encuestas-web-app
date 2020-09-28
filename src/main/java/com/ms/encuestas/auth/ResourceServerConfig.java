@@ -34,7 +34,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		.antMatchers(HttpMethod.POST,"/web-ui/**").permitAll()
 		.antMatchers(HttpMethod.PUT,"/web-ui/**").permitAll()
 		.antMatchers(HttpMethod.DELETE,"/web-ui/**").permitAll()
-		/*.antMatchers(HttpMethod.GET,"/api/empresas").hasAnyRole("USER","ADMIN")*/
 		.anyRequest().authenticated()
 		.and().cors().configurationSource(corsConfigurationSource());
 	}
@@ -42,7 +41,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
-		//config.setAllowedOrigins(Arrays.asList("*"));
 		config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
 		config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
 		config.setAllowCredentials(true);

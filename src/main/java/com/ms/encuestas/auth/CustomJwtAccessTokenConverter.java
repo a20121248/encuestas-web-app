@@ -20,18 +20,6 @@ public class CustomJwtAccessTokenConverter extends JwtAccessTokenConverter {
             		new User(codigo, "", true, true, true, true, userAuthentication.getAuthorities()),
                     userAuthentication.getCredentials(),
                     userAuthentication.getAuthorities());
-            //if (userDetails != null) {
-            	//System.out.println("wooo: " + userDetails.get("localUserTableField"));
-            	/*
-                // build your principal here
-                String localUserTableField = (String) userDetails.get("localUserTableField");
-                CustomUserDetails extendedPrincipal = new CustomUserDetails(localUserTableField);
-
-                Collection<? extends GrantedAuthority> authorities = userAuthentication.getAuthorities();
-
-                userAuthentication = new UsernamePasswordAuthenticationToken(extendedPrincipal,
-                        userAuthentication.getCredentials(), authorities);*/
-            //}
         }
         return new OAuth2Authentication(authentication.getOAuth2Request(), userAuthentication);
     }
