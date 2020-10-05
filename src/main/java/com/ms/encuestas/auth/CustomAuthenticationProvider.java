@@ -59,7 +59,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         	int intPVersion = 0;
         	String strPIP = "";
         	String strPHostName = "";
-        	try {
+        	if (segCenService.getSegCenServicios() != null) {
         		String response = segCenService.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
             	if (response.equals("")) {
             		logger.info(String.format("Respuesta del SegCen: '%s'.", response));
@@ -72,7 +72,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         		if (usuario == null) {
         			error = true;
         		}
-        	} catch(javax.xml.ws.WebServiceException e) {
+        	} else {
         		logger.error("No se pudo conectar al servicio de directorio activo.");
         		throw new AuthenticationServiceException("No se pudo conectar al servicio de directorio activo.");
         	}        	

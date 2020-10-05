@@ -10,18 +10,17 @@ import com.ms.encuestas.services.segcen.SegCenServicio;
 @Service
 public class SegCenServicioInj implements SegCenServicioInjI {
 	private Logger logger = LoggerFactory.getLogger(SegCenServicioInj.class);
-	SegCenServicio segCenServicio;
-	ISegCenServicios segCenServicios;
+	private SegCenServicio segCenServicio;
+	private ISegCenServicios segCenServicios;
 	
 	public SegCenServicioInj() {
 		logger.info("Ejecutando constructor de SegCenServicio");
 		try {
 			segCenServicio = new SegCenServicio();
-	    	segCenServicios = segCenServicio.getBasicHttpBindingISegCenServicios();			
+	    	setSegCenServicios(segCenServicio.getBasicHttpBindingISegCenServicios());			
 		} catch(javax.xml.ws.WebServiceException e) {
     		logger.error("No se pudo conectar al servicio de directorio activo.");
     		logger.error(e.getMessage());
-    		//throw new AuthenticationServiceException("No se pudo conectar al servicio de directorio activo.");
     	} catch(Exception ex) {
     		logger.error("No se pudo conectar al servicio de directorio activo. Exception");
     		logger.error(ex.getMessage());
@@ -31,8 +30,16 @@ public class SegCenServicioInj implements SegCenServicioInjI {
 	@Override
 	public String validarUsuarioApp(String strPUsuario, String strPContrasenia, String strPCodigoAplicacion,
 			Integer intPMayor, Integer intPMinor, Integer intPVersion, String strPIP, String strPHostName) {
-		String response = segCenServicios.validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
+		String response = getSegCenServicios().validarUsuarioApp(strPUsuario, strPContrasenia, strPCodigoAplicacion, intPMayor, intPMinor, intPVersion, strPIP, strPHostName);
     	return response;
+	}
+
+	public ISegCenServicios getSegCenServicios() {
+		return segCenServicios;
+	}
+
+	public void setSegCenServicios(ISegCenServicios segCenServicios) {
+		this.segCenServicios = segCenServicios;
 	}
 
 }
