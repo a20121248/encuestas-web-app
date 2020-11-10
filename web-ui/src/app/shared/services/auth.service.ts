@@ -88,6 +88,8 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     const payload = this.obtenerDatosToken(this.token);
+    console.log(new Date().getTime() / 1000)
+    console.log(payload)
     if (payload != null && payload.user_name && payload.user_name.length > 0) {
       return true;
     }

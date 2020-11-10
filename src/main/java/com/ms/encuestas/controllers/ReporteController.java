@@ -5,8 +5,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,8 +23,6 @@ public class ReporteController {
 	@Autowired
 	private ReporteServiceI reporteService;
 	
-	private final Logger log = LoggerFactory.getLogger(ReporteController.class);
-
 	@PostMapping("/control")
 	@Transactional(readOnly = true)
 	public ResponseEntity<?> getControl(@RequestBody Filtro filtro) {		

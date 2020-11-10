@@ -33,22 +33,30 @@ export class EncReplicarComponent implements OnInit, OnDestroy {
     private titleService: Title
   ) {
     this.titulo = 'Replicar encuestas';
-    this.subscribeProceso = this.procesoService.getCurrentProceso().subscribe(pro => {
-      if (pro != null) {
-        this.authService.setProceso(pro);
-        const usuarioCodigo = this.authService.usuario.codigo;
-        if (usuarioCodigo != null) {
-          this.subscribePosicion = this.posicionService.findByProcesoIdAndUsuarioCodigo(pro.id, usuarioCodigo).subscribe(pos => {
-            if (pos != null) {
-              this.authService.usuario.posicion = pos;
-              this.usuarioService.getUsuariosDependientesCompletados(pro.id, this.authService.usuario.posicion.codigo).subscribe(usu => {
-                this.usuariosOrigen = usu as Usuario[];
-              });
-            }
-          });
+    this.subscribeProceso = this.procesoService.getCurrentProceso().subscribe(
+      pro => {
+        if (pro != null) {
+          this.authService.setProceso(pro);
+          const usuarioCodigo = this.authService.usuario.codigo;
+          if (usuarioCodigo != null) {
+            this.subscribePosicion = this.posicionService.findByProcesoIdAndUsuarioCodigo(pro.id, usuarioCodigo).subscribe(
+              pos => {
+                if (pos != null) {
+                  this.authService.usuario.posicion = pos;
+                  this.usuarioService.getUsuariosDependientesCompletados(pro.id, this.authService.usuario.posicion.codigo).subscribe(usu => {
+                    this.usuariosOrigen = usu as Usuario[];
+                  });
+                }
+              }, err => {
+                console.log(err);
+              }
+            );
+          }
         }
+      }, err => {
+        console.log(err);
       }
-    });
+    );
   }
 
   updateUsers(usuarioSeleccionado: Usuario) {

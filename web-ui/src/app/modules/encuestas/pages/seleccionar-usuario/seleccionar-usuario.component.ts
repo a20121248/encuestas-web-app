@@ -31,22 +31,26 @@ export class SeleccionarUsuarioComponent implements OnInit, OnDestroy {
     private titleService: Title
   ) {
     this.titulo = 'Colaboradores';
-    this.subscribeProceso = this.procesoService.getCurrentProceso().subscribe(pro => {
-      if (pro != null) {
-        this.authService.setProceso(pro);
-        const usuarioCodigo = this.authService.usuario.codigo;
-        if (usuarioCodigo != null) {
-          this.subscribePosicion = this.posicionService.findByProcesoIdAndUsuarioCodigo(pro.id, usuarioCodigo).subscribe(pos => {
-            if (pos != null) {
-              this.authService.usuario.posicion = pos;
-              this.usuarioService.getUsuariosDependientes(pro.id, this.authService.usuario.posicion.codigo).subscribe(usu => {
-                this.lstUsuario = usu as Usuario[];
-              });
-            }
-          });
+    this.subscribeProceso = this.procesoService.getCurrentProceso().subscribe(
+      pro => {
+        if (pro != null) {
+          this.authService.setProceso(pro);
+          const usuarioCodigo = this.authService.usuario.codigo;
+          if (usuarioCodigo != null) {
+            this.subscribePosicion = this.posicionService.findByProcesoIdAndUsuarioCodigo(pro.id, usuarioCodigo).subscribe(pos => {
+              if (pos != null) {
+                this.authService.usuario.posicion = pos;
+                this.usuarioService.getUsuariosDependientes(pro.id, this.authService.usuario.posicion.codigo).subscribe(usu => {
+                  this.lstUsuario = usu as Usuario[];
+                });
+              }
+            });
+          }
         }
+      }, err => {
+        console.log(err);
       }
-    });
+    );
   }
 
   ngOnInit() {

@@ -242,7 +242,7 @@ export function initializeApp(appConfig: AppConfig) {
     MatToolbarModule,
     NgSelectModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, {useHash: true}),
     MatDatepickerModule,
     MatMomentDateModule,
     MatStepperModule,

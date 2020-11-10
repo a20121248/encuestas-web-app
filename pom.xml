@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.ms</groupId>
 	<artifactId>encuestas-ppto</artifactId>
-	<version>1.1</version>
+	<version>2.1</version>
 	<packaging>war</packaging>
 	<name>encuestas-web-app</name>
 	<description>Herramienta de encuestas</description>
@@ -23,6 +23,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.session</groupId>
@@ -38,11 +42,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -73,12 +72,6 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-jwt</artifactId>
 			<version>1.0.10.RELEASE</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
-		<dependency>
-		    <groupId>io.jsonwebtoken</groupId>
-		    <artifactId>jjwt</artifactId>
-		    <version>0.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

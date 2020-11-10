@@ -13,7 +13,6 @@ import org.apache.poi.ooxml.POIXMLProperties.ExtendedProperties;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -27,16 +26,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ExcelService implements ExcelServiceI {
 	private Logger logger = LoggerFactory.getLogger(ExcelService.class);
-	private DataFormatter dataFormatter;
 	
 	@Autowired
 	public ExcelService() {
-		dataFormatter = new DataFormatter();
 	}
 	
 	@Override
