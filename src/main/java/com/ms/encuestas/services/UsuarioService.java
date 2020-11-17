@@ -72,6 +72,7 @@ public class UsuarioService implements UserDetailsService, UsuarioServiceI {
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String codigo) throws UsernameNotFoundException {
+		logger.info("javier");
 		Usuario usuario = usuarioRepository.findByCodigo(codigo);
 		
 		if (usuario == null) {

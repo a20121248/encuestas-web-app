@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,28 +43,28 @@ public class PerfilController {
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@GetMapping("/perfiles/cantidad")
-	public Long count(Authentication authentication) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó la cantidad de perfiles en la base de datos.", user.getUsername()));
+	public Long count() {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de perfiles en la base de datos.", user.getName()));
 		return perfilService.count();
 	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@GetMapping("/perfiles")
-	public List<Perfil> index(Authentication authentication) throws Exception {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó todos los perfiles en la base de datos.", user.getUsername()));
+	public List<Perfil> index() throws Exception {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó todos los perfiles en la base de datos.", user.getName()));
 		return perfilService.findAll();
 	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@GetMapping("/perfiles/{id}")
-	public ResponseEntity<?> show(Authentication authentication, @PathVariable Long id) {
-		User user = (User) authentication.getPrincipal();
+	public ResponseEntity<?> show(@PathVariable Long id) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
 		Perfil perfil = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			logger.info(String.format("El usuario '%s' buscó el perfil con ID=%d en la base de datos.", user.getUsername(), id));
+			logger.info(String.format("El usuario '%s' buscó el perfil con ID=%d en la base de datos.", user.getName(), id));
 			perfil = this.perfilService.findById(id);
 		} catch (EmptyResultDataAccessException er) {
 			response.put("mensaje", String.format("El perfil %d no existe en la base de datos.", id));
@@ -105,9 +105,9 @@ public class PerfilController {
 	@Secured("ROLE_ADMIN")
 	@PostMapping("/perfiles/eliminar-todos")
 	@ResponseStatus(HttpStatus.OK)
-	public void deleteAll(Authentication authentication) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' eliminó todos los perfiles de la base de datos.", user.getUsername()));
+	public void deleteAll() {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' eliminó todos los perfiles de la base de datos.", user.getName()));
 		perfilService.deleteAll();
 	}
 }

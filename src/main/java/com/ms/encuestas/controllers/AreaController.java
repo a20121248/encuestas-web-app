@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,37 +45,37 @@ public class AreaController {
 	
 	@Secured("ROLE_ADMIN")
 	@GetMapping("/areas/cantidad")
-	public Long count(Authentication authentication) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó la cantidad de áreas en la base de datos.", user.getUsername()));
+	public Long count() {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de áreas en la base de datos.", user.getName()));
 		return areaService.count();
 	}
 	
 	@Secured("ROLE_ADMIN")
 	@GetMapping("/areas")
-	public List<Area> index(Authentication authentication) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó todas las áreas en la base de datos.", user.getUsername()));
+	public List<Area> index() {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó todas las áreas en la base de datos.", user.getName()));
 		return areaService.findAll();
 	}
 
 	@Secured("ROLE_ADMIN")
 	@PostMapping("/areas/eliminar-todos")
 	@ResponseStatus(HttpStatus.OK)
-	public void deleteAll(Authentication authentication) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' eliminó todas las áreas de la base de datos.", user.getUsername()));
+	public void deleteAll() {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' eliminó todas las áreas de la base de datos.", user.getName()));
 		areaService.deleteAll();
 	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@GetMapping("/areas/{id}")
-	public ResponseEntity<?> show(Authentication authentication, @PathVariable Long id) {
-		User user = (User) authentication.getPrincipal();
+	public ResponseEntity<?> show(@PathVariable Long id) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
 		Area area = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			logger.info(String.format("El usuario '%s' buscó el área con ID=%d.", user.getUsername(), id));
+			logger.info(String.format("El usuario '%s' buscó el área con ID=%d.", user.getName(), id));
 			area = areaService.findById(id);
 		} catch (EmptyResultDataAccessException er) {
 			response.put("mensaje", String.format("El área con ID='%d' no existe en la base de datos.", id));
@@ -91,22 +91,22 @@ public class AreaController {
 	@Secured("ROLE_ADMIN")
 	@PostMapping("/areas")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Area create(Authentication authentication, @RequestBody Area area) {
-		User user = (User) authentication.getPrincipal();
+	public Area create(@RequestBody Area area) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
 		area = areaService.insert(area);
-		logger.info(String.format("El usuario '%s' creó el área con código '%s'.", user.getUsername(), area.getCodigo()));
+		logger.info(String.format("El usuario '%s' creó el área con código '%s'.", user.getName(), area.getCodigo()));
 		return area;
 	}
 
 	@Secured("ROLE_ADMIN")
 	@PutMapping("/areas")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Area update(Authentication authentication, @RequestBody Area area) {
-		User user = (User) authentication.getPrincipal();		
+	public Area update(@RequestBody Area area) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
 		Area areaBuscada = areaService.findById(area.getId());
 		if (areaBuscada != null) {
 			area = areaService.update(area);
-			logger.info(String.format("El usuario '%s' actualizó el área con código '%s'.", user.getUsername(), area.getCodigo()));
+			logger.info(String.format("El usuario '%s' actualizó el área con código '%s'.", user.getName(), area.getCodigo()));
 		} else {
 			logger.error(String.format("El usuario '%s' no pudo actualizar el área con ID=%d porque no se encontró en la base de datos.", area.getId()));
 		}
@@ -116,28 +116,28 @@ public class AreaController {
 	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/areas/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(Authentication authentication, @PathVariable Long id) {
-		User user = (User) authentication.getPrincipal();		
+	public void delete(@PathVariable Long id) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();		
 		Area areaBuscada = areaService.findById(id);
 		if (areaBuscada != null) {
-			logger.info(String.format("El usuario '%s' eliminó el área con código '%s'.", user.getUsername(), areaBuscada.getCodigo()));
+			logger.info(String.format("El usuario '%s' eliminó el área con código '%s'.", user.getName(), areaBuscada.getCodigo()));
 			areaService.deleteById(id);
 		} else {
-			logger.error(String.format("El usuario '%s' no pudo eliminar el área con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+			logger.error(String.format("El usuario '%s' no pudo eliminar el área con ID=%d porque no se encontró en la base de datos.", user.getName(), id));
 		}
 	}
 	
     @Secured("ROLE_ADMIN")
     @PutMapping("/areas/{id}/soft-delete")
     @ResponseStatus(HttpStatus.CREATED)
-    public Area softDelete(Authentication authentication, @PathVariable Long id) {
-        User user = (User) authentication.getPrincipal();   
+    public Area softDelete(@PathVariable Long id) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();   
         Area areaBuscada = areaService.findById(id);
         if (areaBuscada != null) {
         	areaBuscada = areaService.softDelete(areaBuscada);
-            logger.info(String.format("El usuario '%s' deshabilitó el área con código '%s'.", user.getUsername(), areaBuscada.getCodigo()));
+            logger.info(String.format("El usuario '%s' deshabilitó el área con código '%s'.", user.getName(), areaBuscada.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo deshabilitar el área con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar el área con ID=%d porque no se encontró en la base de datos.", user.getName(), id));
         }
         return areaBuscada;
     }
@@ -145,14 +145,14 @@ public class AreaController {
     @Secured("ROLE_ADMIN")
     @PutMapping("/areas/{id}/soft-undelete")
     @ResponseStatus(HttpStatus.CREATED)
-    public Area softUndelete(Authentication authentication, @PathVariable Long id) {
-        User user = (User) authentication.getPrincipal();   
+    public Area softUndelete(@PathVariable Long id) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();   
         Area areaBuscada = areaService.findById(id);
         if (areaBuscada != null) {
         	areaBuscada = areaService.softUndelete(areaBuscada);
-            logger.info(String.format("El usuario '%s' habilitó el área con código '%s'.", user.getUsername(), areaBuscada.getCodigo()));
+            logger.info(String.format("El usuario '%s' habilitó el área con código '%s'.", user.getName(), areaBuscada.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo habilitar el área con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+            logger.error(String.format("El usuario '%s' no pudo habilitar el área con ID=%d porque no se encontró en la base de datos.", user.getName(), id));
         }
         return areaBuscada;
     }

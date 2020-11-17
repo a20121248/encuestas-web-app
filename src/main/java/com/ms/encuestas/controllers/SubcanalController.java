@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,21 +43,21 @@ public class SubcanalController {
 	
     @PostMapping("/subcanales")
     @ResponseStatus(HttpStatus.CREATED)
-    public Objeto create(Authentication authentication, @RequestBody Objeto subcanal) {
-        User user = (User) authentication.getPrincipal();
+    public Objeto create(@RequestBody Objeto subcanal) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();
         subcanal = objetoService.insertSubcanal(subcanal);
-        logger.info(String.format("El usuario '%s' creó el subcanal con código '%s'.", user.getUsername(), subcanal.getCodigo()));
+        logger.info(String.format("El usuario '%s' creó el subcanal con código '%s'.", user.getName(), subcanal.getCodigo()));
         return subcanal;
     }
   
     @PutMapping("/subcanales")
     @ResponseStatus(HttpStatus.CREATED)
-    public Objeto update(Authentication authentication, @RequestBody Objeto subcanal) {
-        User user = (User) authentication.getPrincipal();   
+    public Objeto update(@RequestBody Objeto subcanal) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();   
         Objeto subcanalBuscado = objetoService.findById(subcanal.getId());
         if (subcanalBuscado != null) {
             subcanal = objetoService.updateSubcanal(subcanal);
-            logger.info(String.format("El usuario '%s' actualizó el subcanal con código '%s'.", user.getUsername(), subcanal.getCodigo()));
+            logger.info(String.format("El usuario '%s' actualizó el subcanal con código '%s'.", user.getName(), subcanal.getCodigo()));
         } else {
             logger.error(String.format("El usuario '%s' no pudo actualizar el subcanal con ID=%d porque no se encontró en la base de datos.", subcanal.getId()));
         }
@@ -66,41 +66,41 @@ public class SubcanalController {
   
     @DeleteMapping("/subcanales/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(Authentication authentication, @PathVariable Long id) {
-        User user = (User) authentication.getPrincipal();   
+    public void delete(@PathVariable Long id) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();   
         Objeto subcanalBuscado = objetoService.findById(id);
         if (subcanalBuscado != null) {
             objetoService.deleteById(id);
-            logger.info(String.format("El usuario '%s' eliminó el subcanal con código '%s'.", user.getUsername(), subcanalBuscado.getCodigo()));
+            logger.info(String.format("El usuario '%s' eliminó el subcanal con código '%s'.", user.getName(), subcanalBuscado.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo eliminar el subcanal con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+            logger.error(String.format("El usuario '%s' no pudo eliminar el subcanal con ID=%d porque no se encontró en la base de datos.", user.getName(), id));
         }
     }
     
     @PutMapping("/subcanales/{id}/soft-delete")
     @ResponseStatus(HttpStatus.CREATED)
-    public Objeto softDelete(Authentication authentication, @PathVariable Long id) {
-        User user = (User) authentication.getPrincipal();   
+    public Objeto softDelete(@PathVariable Long id) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();   
         Objeto subcanalBuscado = objetoService.findById(id);
         if (subcanalBuscado != null) {
         	subcanalBuscado = objetoService.softDelete(subcanalBuscado);
-            logger.info(String.format("El usuario '%s' deshabilitó el producto con código '%s'.", user.getUsername(), subcanalBuscado.getCodigo()));
+            logger.info(String.format("El usuario '%s' deshabilitó el producto con código '%s'.", user.getName(), subcanalBuscado.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo deshabilitar el producto con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar el producto con ID=%d porque no se encontró en la base de datos.", user.getName(), id));
         }
         return subcanalBuscado;
     }
     
     @PutMapping("/subcanales/{id}/soft-undelete")
     @ResponseStatus(HttpStatus.CREATED)
-    public Objeto softUndelete(Authentication authentication, @PathVariable Long id) {
-        User user = (User) authentication.getPrincipal();   
+    public Objeto softUndelete(@PathVariable Long id) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();   
         Objeto subcanalBuscado = objetoService.findById(id);
         if (subcanalBuscado != null) {
         	subcanalBuscado = objetoService.softUndelete(subcanalBuscado);
-            logger.info(String.format("El usuario '%s' habilitó el subcanal con código '%s'.", user.getUsername(), subcanalBuscado.getCodigo()));
+            logger.info(String.format("El usuario '%s' habilitó el subcanal con código '%s'.", user.getName(), subcanalBuscado.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo habilitar el subcanal con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+            logger.error(String.format("El usuario '%s' no pudo habilitar el subcanal con ID=%d porque no se encontró en la base de datos.", user.getName(), id));
         }
         return subcanalBuscado;
     }
@@ -108,8 +108,8 @@ public class SubcanalController {
     @PostMapping("/subcanales/eliminar-todos")
     @ResponseStatus(HttpStatus.OK)
     public void deleteAll(Authentication authentication) {
-    	User user = (User) authentication.getPrincipal();
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();
         objetoService.deleteAllSubcanales();
-        logger.info(String.format("El usuario '%s' eliminó todos los subcanales de la base de datos.", user.getUsername()));
+        logger.info(String.format("El usuario '%s' eliminó todos los subcanales de la base de datos.", user.getName()));
     }
 }

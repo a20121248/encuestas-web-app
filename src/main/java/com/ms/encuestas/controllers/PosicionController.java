@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,36 +49,36 @@ public class PosicionController {
 	
 	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/posiciones/cantidad")
-	public Long count(Authentication authentication) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó la cantidad de posiciones en la base de datos.", user.getUsername()));
+	public Long count() {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de posiciones en la base de datos.", user.getName()));
 		return posicionService.count();
 	}
 	
 	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/procesos/{procesoId}/cantidad-datos-posiciones")
-	public Long countDatos(Authentication authentication, @PathVariable Long procesoId) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó la cantidad de posiciones en la encuesta con ID=%d en la base de datos.", user.getUsername(), procesoId));
+	public Long countDatos(@PathVariable Long procesoId) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de posiciones en la encuesta con ID=%d en la base de datos.", user.getName(), procesoId));
 		return posicionService.countDatos(procesoId);
 	}
 	
 	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/posiciones")
-	public List<Posicion> index(Authentication authentication) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó todas las posiciones en la base de datos.", user.getUsername()));
+	public List<Posicion> index() {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó todas las posiciones en la base de datos.", user.getName()));
 		return posicionService.findAll();
 	}
 	
 	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/posiciones/{codigo}")
-	public ResponseEntity<?> show(Authentication authentication, @PathVariable String codigo) {
-		User user = (User) authentication.getPrincipal();
+	public ResponseEntity<?> show(@PathVariable String codigo) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
 		Posicion posicion = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			logger.info(String.format("El usuario '%s' buscó la posición con código '%s' en la base de datos.", user.getUsername(), codigo));
+			logger.info(String.format("El usuario '%s' buscó la posición con código '%s' en la base de datos.", user.getName(), codigo));
 			posicion = posicionService.findByCodigo(codigo);
 		} catch (EmptyResultDataAccessException er) {
 			response.put("mensaje", String.format("La posición con código '%s' no existe en la base de datos.", codigo));
@@ -94,23 +94,23 @@ public class PosicionController {
 	@Secured({"ROLE_ADMIN"})
 	@PostMapping("/posiciones")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Posicion create(Authentication authentication, @RequestBody Posicion posicion) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' creó la posición con código '%s'.", user.getUsername(), posicion.getCodigo()));
+	public Posicion create(@RequestBody Posicion posicion) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' creó la posición con código '%s'.", user.getName(), posicion.getCodigo()));
 		return posicionService.insert(posicion);
 	}
 	
 	@Secured({"ROLE_ADMIN"})
 	@PutMapping("/posiciones")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Posicion update(Authentication authentication, @RequestBody Posicion posicion) {
-		User user = (User) authentication.getPrincipal();
+	public Posicion update(@RequestBody Posicion posicion) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
 		Posicion posicionBuscada = posicionService.findByCodigo(posicion.getCodigo());		
 		if (posicionBuscada != null) {
-			logger.info(String.format("El usuario '%s' actualizó la posición con código '%s'.", user.getUsername(), posicion.getCodigo()));
+			logger.info(String.format("El usuario '%s' actualizó la posición con código '%s'.", user.getName(), posicion.getCodigo()));
 			return posicionService.update(posicion);
 		} else {
-			logger.error(String.format("El usuario '%s' no pudo actualizar la posición con código '%s' porque no se encontró en la base de datos.", user.getUsername(), posicion.getCodigo()));
+			logger.error(String.format("El usuario '%s' no pudo actualizar la posición con código '%s' porque no se encontró en la base de datos.", user.getName(), posicion.getCodigo()));
 			return null;
 		}
 	}
@@ -118,14 +118,14 @@ public class PosicionController {
 	@Secured({"ROLE_ADMIN"})
 	@DeleteMapping("/posiciones/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(Authentication authentication, @PathVariable String codigo) {
-		User user = (User) authentication.getPrincipal();		
+	public void delete(@PathVariable String codigo) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();		
 		Posicion posicionBuscada = posicionService.findByCodigo(codigo);
 		if (posicionBuscada != null) {
-			logger.info(String.format("El usuario '%s' eliminó la posición con código '%s'.", user.getUsername(), posicionBuscada.getCodigo()));
+			logger.info(String.format("El usuario '%s' eliminó la posición con código '%s'.", user.getName(), posicionBuscada.getCodigo()));
 			posicionService.deleteByCodigo(codigo);
 		} else {
-			logger.error(String.format("El usuario '%s' no pudo eliminar la posición con código '%s' porque no se encontró en la base de datos.", user.getUsername(), codigo));
+			logger.error(String.format("El usuario '%s' no pudo eliminar la posición con código '%s' porque no se encontró en la base de datos.", user.getName(), codigo));
 		}
 	}
 	
@@ -183,23 +183,23 @@ public class PosicionController {
 	@Secured({"ROLE_ADMIN"})
 	@PostMapping("posiciones/eliminar-datos")
 	@ResponseStatus(HttpStatus.OK)
-	public void deleteAllDatos(Authentication authentication, @RequestBody Proceso proceso) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' eliminó todas las posiciones de la encuesta con código '%s' de la base de datos.", user.getUsername(), proceso.getCodigo()));
+	public void deleteAllDatos(@RequestBody Proceso proceso) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' eliminó todas las posiciones de la encuesta con código '%s' de la base de datos.", user.getName(), proceso.getCodigo()));
 		posicionService.deleteDatos(proceso);
 	}
 	
 	@Secured({"ROLE_ADMIN"})
     @PutMapping("/posiciones/{codigo}/soft-delete")
     @ResponseStatus(HttpStatus.CREATED)
-    public Posicion softDelete(Authentication authentication, @PathVariable String codigo) {
-        User user = (User) authentication.getPrincipal();   
+    public Posicion softDelete(@PathVariable String codigo) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();   
         Posicion posicionBuscada = posicionService.findByCodigo(codigo);
         if (posicionBuscada != null) {
         	posicionBuscada = posicionService.softDelete(posicionBuscada);
-            logger.info(String.format("El usuario '%s' deshabilitó la posición con código '%s'.", user.getUsername(), posicionBuscada.getCodigo()));
+            logger.info(String.format("El usuario '%s' deshabilitó la posición con código '%s'.", user.getName(), posicionBuscada.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo deshabilitar la posición con código '%s' porque no se encontró en la base de datos.", user.getUsername(), codigo));
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar la posición con código '%s' porque no se encontró en la base de datos.", user.getName(), codigo));
         }
         return posicionBuscada;
     }
@@ -207,14 +207,14 @@ public class PosicionController {
     @Secured({"ROLE_ADMIN"})
     @PutMapping("/posiciones/{codigo}/soft-undelete")
     @ResponseStatus(HttpStatus.CREATED)
-    public Posicion softUndelete(Authentication authentication, @PathVariable String codigo) {
-        User user = (User) authentication.getPrincipal();   
+    public Posicion softUndelete(@PathVariable String codigo) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();   
         Posicion posicionBuscada = posicionService.findByCodigo(codigo);
         if (posicionBuscada != null) {
         	posicionBuscada = posicionService.softUndelete(posicionBuscada);
-            logger.info(String.format("El usuario '%s' habilitó la posición con código '%s'.", user.getUsername(), posicionBuscada.getCodigo()));
+            logger.info(String.format("El usuario '%s' habilitó la posición con código '%s'.", user.getName(), posicionBuscada.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo habilitar la posición con código '%s' porque no se encontró en la base de datos.", user.getUsername(), codigo));
+            logger.error(String.format("El usuario '%s' no pudo habilitar la posición con código '%s' porque no se encontró en la base de datos.", user.getName(), codigo));
         }
         return posicionBuscada;
     }
@@ -222,9 +222,9 @@ public class PosicionController {
 	@Secured({"ROLE_ADMIN"})
 	@PostMapping("/posiciones/eliminar-todos")
 	@ResponseStatus(HttpStatus.OK)
-	public void deleteAll(Authentication authentication) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' eliminó todas las posiciones de la base de datos.", user.getUsername()));
+	public void deleteAll() {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' eliminó todas las posiciones de la base de datos.", user.getName()));
 		posicionService.deleteAll();
 	}
 }

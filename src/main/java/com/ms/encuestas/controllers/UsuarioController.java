@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,40 +45,60 @@ public class UsuarioController {
 
 	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/usuarios/cantidad")
-	public Long count(Authentication authentication) throws Exception {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó la cantidad de colaboradores en la base de datos.", user.getUsername()));
+	public Long count() throws Exception {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();		
+		logger.info(String.format("El usuario '%s' consultó la cantidad de colaboradores en la base de datos.", user.getName()));
 		return usuarioService.count();
 	}
 
 	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/usuarios")
-	public List<Usuario> index(Authentication authentication) throws Exception {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó todos los colaboradores en la base de datos.", user.getUsername()));
+	public List<Usuario> index() throws Exception {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó todos los colaboradores en la base de datos.", user.getName()));
 		return usuarioService.findAll();
 	}
 	
 	@Secured({"ROLE_ADMIN"})
 	@PostMapping("/usuarios/eliminar-todos")
 	@ResponseStatus(HttpStatus.OK)
-	public void deleteAll(Authentication authentication) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' eliminó a todos los colaboradores de la base de datos.", user.getUsername()));
+	public void deleteAll() {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' eliminó a todos los colaboradores de la base de datos.", user.getName()));
 		usuarioService.deleteAll();
 	}
 	
 	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/usuarios/{codigo}")
-	public ResponseEntity<?> show(Authentication authentication, @PathVariable String codigo) {
-		User user = (User) authentication.getPrincipal();
+	public ResponseEntity<?> show(@PathVariable String codigo) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			logger.info(String.format("El usuario '%s' buscó al colaborador con código '%s'.", user.getUsername(), codigo));
+			logger.info(String.format("El usuario '%s' buscó al colaborador con código '%s'.", user.getName(), codigo));
 			usuario = usuarioService.findByCodigo(codigo);
 		} catch (EmptyResultDataAccessException er) {
 			response.put("mensaje", String.format("El colaborador con código '%s' no existe en la base de datos.", codigo));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		} catch (DataAccessException dae) {
+			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
+			response.put("error", String.format("%s. %s", dae.getMessage(), dae.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+	}
+	
+	@Secured({"ROLE_ADMIN"})
+	@GetMapping("/usuarios/red/{usuarioRed}")
+	public ResponseEntity<?> showByUsuarioRed(@PathVariable String usuarioRed) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = null;
+		Map<String, Object> response = new HashMap<>();
+		try {
+			logger.info(String.format("El usuario '%s' buscó al colaborador con usuario de red '%s'.", user.getName(), usuarioRed));
+			usuario = usuarioService.findByUsuarioRed(usuarioRed);
+		} catch (EmptyResultDataAccessException er) {
+			response.put("mensaje", String.format("El colaborador con usuario de red '%s' no existe en la base de datos.", usuarioRed));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		} catch (DataAccessException dae) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
@@ -91,23 +111,23 @@ public class UsuarioController {
 	@Secured({"ROLE_USER"})
 	@PostMapping("/usuarios")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Usuario create(Authentication authentication, @RequestBody Usuario usuario) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' creó al colaborador con código '%s'.", user.getUsername(), usuario.getCodigo()));
+	public Usuario create(@RequestBody Usuario usuario) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' creó al colaborador con código '%s'.", user.getName(), usuario.getCodigo()));
 		return usuarioService.insert(usuario);
 	}
 
 	@Secured({"ROLE_USER"})
 	@PutMapping("/usuarios")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Usuario update(Authentication authentication, @RequestBody Usuario usuario) {
-		User user = (User) authentication.getPrincipal();		
+	public Usuario update(@RequestBody Usuario usuario) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();		
 		Usuario usuarioBuscado = usuarioService.findByCodigo(usuario.getCodigo());
 		if (usuarioBuscado != null) {
-			logger.info(String.format("El usuario '%s' actualizó al colaborador con código '%s'.", user.getUsername(), usuario.getCodigo()));
+			logger.info(String.format("El usuario '%s' actualizó al colaborador con código '%s'.", user.getName(), usuario.getCodigo()));
 			return usuarioService.update(usuario);
 		} else {
-			logger.error(String.format("El usuario '%s' no pudo actualizar al colaborador con código '%s' porque no se encontró en la base de datos.", user.getUsername(), usuario.getCodigo()));
+			logger.error(String.format("El usuario '%s' no pudo actualizar al colaborador con código '%s' porque no se encontró en la base de datos.", user.getName(), usuario.getCodigo()));
 			return null;
 		}
 	}
@@ -115,28 +135,28 @@ public class UsuarioController {
 	@Secured({"ROLE_USER"})
 	@DeleteMapping("/usuarios/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(Authentication authentication, @PathVariable String codigo) {
-		User user = (User) authentication.getPrincipal();		
+	public void delete(@PathVariable String codigo) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();		
 		Usuario usuarioBuscado = usuarioService.findByCodigo(codigo);
 		if (usuarioBuscado != null) {
-			logger.info(String.format("El usuario '%s' eliminó al colaborador con código '%s'.", user.getUsername(), usuarioBuscado.getCodigo()));
+			logger.info(String.format("El usuario '%s' eliminó al colaborador con código '%s'.", user.getName(), usuarioBuscado.getCodigo()));
 			usuarioService.deleteByCodigo(codigo);
 		} else {
-			logger.error(String.format("El usuario '%s' no pudo eliminar al colaborador con código '%s' porque no se encontró en la base de datos.", user.getUsername(), codigo));
+			logger.error(String.format("El usuario '%s' no pudo eliminar al colaborador con código '%s' porque no se encontró en la base de datos.", user.getName(), codigo));
 		}
 	}
 	
 	@Secured({"ROLE_ADMIN"})
     @PutMapping("/usuarios/{codigo}/soft-delete")
     @ResponseStatus(HttpStatus.CREATED)
-    public Usuario softDelete(Authentication authentication, @PathVariable String codigo) {
-        User user = (User) authentication.getPrincipal();   
+    public Usuario softDelete(@PathVariable String codigo) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();   
         Usuario usuarioBuscado = usuarioService.findByCodigo(codigo);
         if (usuarioBuscado != null) {
         	usuarioBuscado = usuarioService.softDelete(usuarioBuscado);
-            logger.info(String.format("El usuario '%s' deshabilitó la posición con código '%s'.", user.getUsername(), usuarioBuscado.getCodigo()));
+            logger.info(String.format("El usuario '%s' deshabilitó la posición con código '%s'.", user.getName(), usuarioBuscado.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo deshabilitar la posición con código '%s' porque no se encontró en la base de datos.", user.getUsername(), codigo));
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar la posición con código '%s' porque no se encontró en la base de datos.", user.getName(), codigo));
         }
         return usuarioBuscado;
     }
@@ -144,39 +164,39 @@ public class UsuarioController {
     @Secured({"ROLE_ADMIN"})
     @PutMapping("/usuarios/{codigo}/soft-undelete")
     @ResponseStatus(HttpStatus.CREATED)
-    public Usuario softUndelete(Authentication authentication, @PathVariable String codigo) {
-        User user = (User) authentication.getPrincipal();   
+    public Usuario softUndelete(@PathVariable String codigo) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();
         Usuario usuarioBuscado = usuarioService.findByCodigo(codigo);
         if (usuarioBuscado != null) {
         	usuarioBuscado = usuarioService.softUndelete(usuarioBuscado);
-            logger.info(String.format("El usuario '%s' habilitó al colaborador con matrícula '%s'.", user.getUsername(), usuarioBuscado.getCodigo()));
+            logger.info(String.format("El usuario '%s' habilitó al colaborador con matrícula '%s'.", user.getName(), usuarioBuscado.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo habilitar al colaborador con matrícula '%s' porque no se encontró en la base de datos.", user.getUsername(), codigo));
+            logger.error(String.format("El usuario '%s' no pudo habilitar al colaborador con matrícula '%s' porque no se encontró en la base de datos.", user.getName(), codigo));
         }
         return usuarioBuscado;
     }
 	
 	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/{procesoId}/usuarios-dependientes/{posicionCodigo}")
-	public List<Usuario> findUsuariosDependientes(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó la cantidad de usuarios dependientes.", user.getUsername()));
+	public List<Usuario> findUsuariosDependientes(@PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de usuarios dependientes.", user.getName()));
 		return usuarioService.findUsuariosDependientes(procesoId, posicionCodigo);
 	}
 	
 	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/{procesoId}/usuarios-dependientes-completados/{posicionCodigo}")
-	public List<Usuario> findUsuariosDependientesCompletados(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó la cantidad de usuarios dependientes completados.", user.getUsername()));
+	public List<Usuario> findUsuariosDependientesCompletados(@PathVariable Long procesoId, @PathVariable String posicionCodigo) throws Exception {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de usuarios dependientes completados.", user.getName()));
 		return usuarioService.findUsuariosDependientesCompletados(procesoId, posicionCodigo);
 	}
 	
 	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/{procesoId}/usuarios-dependientes-replicar/{posicionCodigo}/{responsablePosicionCodigo}/{perfilId}")
-	public List<Usuario> findUsuariosReplicar(Authentication authentication, @PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable String responsablePosicionCodigo, @PathVariable Long perfilId) throws Exception {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó la cantidad de usuarios a replicar.", user.getUsername()));
+	public List<Usuario> findUsuariosReplicar(@PathVariable Long procesoId, @PathVariable String posicionCodigo, @PathVariable String responsablePosicionCodigo, @PathVariable Long perfilId) throws Exception {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de usuarios a replicar.", user.getName()));
 		return usuarioService.findUsuariosDependientesReplicar(procesoId, posicionCodigo, responsablePosicionCodigo, perfilId);
 	}
 

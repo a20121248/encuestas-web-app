@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,26 +46,25 @@ public class ProcesoController {
 
 	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/{procesoId}/usuarios/{usuarioCodigo}/posicion")
-	public Posicion findByProcesoIdAndUsuarioCodigo(Authentication authentication, @PathVariable Long procesoId, @PathVariable String usuarioCodigo) {
-		// User user = (User) authentication.getPrincipal();
+	public Posicion findByProcesoIdAndUsuarioCodigo(@PathVariable Long procesoId, @PathVariable String usuarioCodigo) {
 		return posicionService.findByProcesoIdAndUsuarioCodigo(procesoId, usuarioCodigo);
 	}
 	
 	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos/actual")
-	public Proceso getCurrentProceso(Authentication authentication) {
+	public Proceso getCurrentProceso() {
 		return procesoService.getCurrentProceso();
 	}
 	
 	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/procesos/cantidad")
-	public Long count(Authentication authentication) {
+	public Long count() {
 		return procesoService.count();
 	}
 	
 	@Secured({"ROLE_USER"})
 	@GetMapping("/procesos")
-	public List<Proceso> index(Authentication authentication) {
+	public List<Proceso> index() {
 		return procesoService.findAll();
 	}
 	
@@ -90,10 +89,10 @@ public class ProcesoController {
 	@Secured({"ROLE_ADMIN"})
 	@PostMapping("/procesos")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Proceso create(Authentication authentication, @RequestBody Proceso proceso) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' creó la encuesta '%s'.", user.getUsername(), proceso.getNombre()));
-		Usuario usuario = usuarioService.findByUsuarioRed(user.getUsername());
+	public Proceso create(@RequestBody Proceso proceso) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' creó la encuesta '%s'.", user.getName(), proceso.getNombre()));
+		Usuario usuario = usuarioService.findByUsuarioRed(user.getName());
 		proceso.setUsuario(usuario);
 		proceso = procesoService.insert(proceso);
 		logger.info(String.format("El usuario con matrícula '%s' creó la encuesta con código '%s'.", usuario.getCodigo(), proceso.getCodigo()));
@@ -103,9 +102,9 @@ public class ProcesoController {
 	@Secured({"ROLE_ADMIN"})
 	@PutMapping("/procesos")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Proceso update(Authentication authentication, @RequestBody Proceso proceso) {
-		User user = (User) authentication.getPrincipal();
-		Usuario usuario = usuarioService.findByUsuarioRed(user.getUsername());
+	public Proceso update(@RequestBody Proceso proceso) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByUsuarioRed(user.getName());
 		
 		Proceso procesoBuscado = procesoService.findById(proceso.getId());
 		if (procesoBuscado != null) {
@@ -121,9 +120,9 @@ public class ProcesoController {
 	@Secured({"ROLE_ADMIN"})
 	@DeleteMapping("/procesos/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(Authentication authentication, @PathVariable Long id) {
-		User user = (User) authentication.getPrincipal();
-		Usuario usuario = usuarioService.findByUsuarioRed(user.getUsername());
+	public void delete(@PathVariable Long id) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = usuarioService.findByUsuarioRed(user.getName());
 		
 		Proceso procesoBuscado = procesoService.findById(id);
 		if (procesoBuscado != null) {

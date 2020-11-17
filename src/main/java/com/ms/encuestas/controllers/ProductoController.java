@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,22 +47,22 @@ public class ProductoController {
 	@Secured("ROLE_ADMIN")
     @PostMapping("/productos")
     @ResponseStatus(HttpStatus.CREATED)
-    public Objeto create(Authentication authentication, @RequestBody Objeto producto) {
-        User user = (User) authentication.getPrincipal();
+    public Objeto create(@RequestBody Objeto producto) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
         producto = objetoService.insertProducto(producto);
-        logger.info(String.format("El usuario '%s' creó el producto con código '%s'.", user.getUsername(), producto.getCodigo()));
+        logger.info(String.format("El usuario '%s' creó el producto con código '%s'.", user.getName(), producto.getCodigo()));
         return producto;
     }
   
     @Secured("ROLE_ADMIN")
     @PutMapping("/productos")
     @ResponseStatus(HttpStatus.CREATED)
-    public Objeto update(Authentication authentication, @RequestBody Objeto producto) {
-        User user = (User) authentication.getPrincipal();   
+    public Objeto update(@RequestBody Objeto producto) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();   
         Objeto productoBuscado = objetoService.findById(producto.getId());
         if (productoBuscado != null) {
             producto = objetoService.updateProducto(producto);
-            logger.info(String.format("El usuario '%s' actualizó el producto con código '%s'.", user.getUsername(), producto.getCodigo()));
+            logger.info(String.format("El usuario '%s' actualizó el producto con código '%s'.", user.getName(), producto.getCodigo()));
         } else {
             logger.error(String.format("El usuario '%s' no pudo actualizar el producto con ID=%d porque no se encontró en la base de datos.", producto.getId()));
         }
@@ -72,28 +72,28 @@ public class ProductoController {
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/productos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(Authentication authentication, @PathVariable Long id) {
-        User user = (User) authentication.getPrincipal();   
+    public void delete(@PathVariable Long id) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();   
         Objeto productoBuscado = objetoService.findById(id);
         if (productoBuscado != null) {
             objetoService.deleteById(id);
-            logger.info(String.format("El usuario '%s' eliminó el producto con código '%s'.", user.getUsername(), productoBuscado.getCodigo()));
+            logger.info(String.format("El usuario '%s' eliminó el producto con código '%s'.", user.getName(), productoBuscado.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo eliminar el producto con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+            logger.error(String.format("El usuario '%s' no pudo eliminar el producto con ID=%d porque no se encontró en la base de datos.", user.getName(), id));
         }
     }
     
     @Secured("ROLE_ADMIN")
     @PutMapping("/productos/{id}/soft-delete")
     @ResponseStatus(HttpStatus.CREATED)
-    public Objeto softDelete(Authentication authentication, @PathVariable Long id) {
-        User user = (User) authentication.getPrincipal();   
+    public Objeto softDelete(@PathVariable Long id) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();
         Objeto productoBuscado = objetoService.findById(id);
         if (productoBuscado != null) {
         	productoBuscado = objetoService.softDelete(productoBuscado);
-            logger.info(String.format("El usuario '%s' deshabilitó el producto con código '%s'.", user.getUsername(), productoBuscado.getCodigo()));
+            logger.info(String.format("El usuario '%s' deshabilitó el producto con código '%s'.", user.getName(), productoBuscado.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo deshabilitar el producto con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar el producto con ID=%d porque no se encontró en la base de datos.", user.getName(), id));
         }
         return productoBuscado;
     }
@@ -101,14 +101,14 @@ public class ProductoController {
     @Secured("ROLE_ADMIN")
     @PutMapping("/productos/{id}/soft-undelete")
     @ResponseStatus(HttpStatus.CREATED)
-    public Objeto softUndelete(Authentication authentication, @PathVariable Long id) {
-        User user = (User) authentication.getPrincipal();   
+    public Objeto softUndelete(@PathVariable Long id) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();
         Objeto productoBuscado = objetoService.findById(id);
         if (productoBuscado != null) {
         	productoBuscado = objetoService.softUndelete(productoBuscado);
-            logger.info(String.format("El usuario '%s' habilitó el producto con código '%s'.", user.getUsername(), productoBuscado.getCodigo()));
+            logger.info(String.format("El usuario '%s' habilitó el producto con código '%s'.", user.getName(), productoBuscado.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo habilitar el producto con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+            logger.error(String.format("El usuario '%s' no pudo habilitar el producto con ID=%d porque no se encontró en la base de datos.", user.getName(), id));
         }
         return productoBuscado;
     }
@@ -116,9 +116,9 @@ public class ProductoController {
     @Secured("ROLE_ADMIN")
     @PostMapping("/productos/eliminar-todos")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteAll(Authentication authentication) {
-    	User user = (User) authentication.getPrincipal();
+    public void deleteAll() {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();
         objetoService.deleteAllProductos();
-        logger.info(String.format("El usuario '%s' eliminó todos los productos de la base de datos.", user.getUsername()));
+        logger.info(String.format("El usuario '%s' eliminó todos los productos de la base de datos.", user.getName()));
     }
 }

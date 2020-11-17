@@ -2,69 +2,86 @@ package com.ms.encuestas.auth;
 
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+
+import com.ms.encuestas.services.UsuarioService;
+import com.ms.encuestas.services.UsuarioServiceI;
 
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-	@Autowired 
+	private static final Logger logger = LoggerFactory.getLogger(AuthorizationServerConfig.class);
+	
+	UsuarioService userDetailsService;
+	
+    @Autowired
+    private TokenStore tokenStore;
+	
+	@Autowired
 	private BCryptPasswordEncoder passwordEnconder;
 	
 	@Autowired
 	@Qualifier("authenticationManager")
 	private AuthenticationManager authenticationManager;
-	
-	@Autowired
-	private InfoAdicionalToken infoAdicionalToken;
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		security.tokenKeyAccess("permitAll()")
-		.checkTokenAccess("isAuthenticated()");
+				.checkTokenAccess("isAuthenticated()");
 	}
+	
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    	logger.info("asdasd");
+        endpoints.tokenStore(this.tokenStore)
+        		 .tokenServices(tokenServices())
+                 .authenticationManager(this.authenticationManager)
+                 .userDetailsService(userDetailsService);
+    }
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("angularapp")
-		.secret(passwordEnconder.encode("12345"))
-		.scopes("read","write")
-		.authorizedGrantTypes("password", "refresh_token")
-		.accessTokenValiditySeconds(14400)
-		.refreshTokenValiditySeconds(14400);
+		clients.inMemory()
+			   .withClient("encuestappto")
+			   .secret(passwordEnconder.encode("12345"))
+			   .scopes("read","write")
+			   .authorizedGrantTypes("password", "refresh_token");
 	}
 
-	@Override
-	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		TokenEnhancerChain tokenEnhacEnhancerChain = new TokenEnhancerChain();
-		tokenEnhacEnhancerChain.setTokenEnhancers(Arrays.asList(infoAdicionalToken, accessTokenConverter()));
-		
-		endpoints.authenticationManager(authenticationManager)
-				 .tokenStore(tokenStore())
-				 .accessTokenConverter(accessTokenConverter())
-				 .tokenEnhancer(tokenEnhacEnhancerChain);		
-	}
+    @Bean
+    @Primary
+    public DefaultTokenServices tokenServices() {
+        DefaultTokenServices tokenServices = new DefaultTokenServices();
+        tokenServices.setSupportRefreshToken(true);
+        tokenServices.setTokenStore(this.tokenStore);
+        tokenServices.setTokenEnhancer(tokenEnhancer());
+        tokenServices.setAccessTokenValiditySeconds(14400);
+        tokenServices.setRefreshTokenValiditySeconds(14400);
+        return tokenServices;
+    }
+    
+    @Bean
+    public TokenEnhancer tokenEnhancer() {
+        return new CustomTokenEnhancer();
+    }
 
-	@Bean
-	public JwtTokenStore tokenStore() {
-		return new JwtTokenStore(accessTokenConverter());
-	}
-
-	@Bean
-	public JwtAccessTokenConverter accessTokenConverter() {
-        CustomJwtAccessTokenConverter accessTokenConverter = new CustomJwtAccessTokenConverter();
-        return accessTokenConverter;
-	}	
 }

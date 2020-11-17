@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,37 +47,37 @@ public class CentroController {
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@GetMapping("/centros/cantidad")
-	public Long count(Authentication authentication) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó la cantidad de centros de costos en la base de datos.", user.getUsername()));
+	public Long count() {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó la cantidad de centros de costos en la base de datos.", user.getName()));
 		Long empresaId = new Long(1);
 		return centroService.count(empresaId);
 	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@GetMapping("/centros/tipos")
-	public List<Tipo> findAllTipos(Authentication authentication) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó los tipos de centros de costos en la base de datos.", user.getUsername()));
+	public List<Tipo> findAllTipos() {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó los tipos de centros de costos en la base de datos.", user.getName()));
 		return centroService.findAllTipos();
 	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@GetMapping("/centros")
-	public List<Centro> index(Authentication authentication) throws Exception {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' consultó todos los centros de costos en la base de datos.", user.getUsername()));
+	public List<Centro> index() throws Exception {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' consultó todos los centros de costos en la base de datos.", user.getName()));
 		return centroService.findAll();
 	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	@GetMapping("/centros/{id}")
-	public ResponseEntity<?> show(Authentication authentication, @PathVariable Long id) {
-		User user = (User) authentication.getPrincipal();
+	public ResponseEntity<?> show(@PathVariable Long id) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
 		Centro centro = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			logger.info(String.format("El usuario '%s' buscó el centro de costos con ID=%d en la base de datos.", user.getUsername(), id));
+			logger.info(String.format("El usuario '%s' buscó el centro de costos con ID=%d en la base de datos.", user.getName(), id));
 			centro = this.centroService.findById(id);
 		} catch (EmptyResultDataAccessException er) {
 			response.put("mensaje", String.format("El centro %d no existe en la base de datos.", id));
@@ -93,20 +93,20 @@ public class CentroController {
 	@Secured("ROLE_ADMIN")
 	@PostMapping("/centros")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Centro create(Authentication authentication, @RequestBody Centro centro) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' creó el centro de costos con código '%s'.", user.getUsername(), centro.getCodigo()));
+	public Centro create(@RequestBody Centro centro) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' creó el centro de costos con código '%s'.", user.getName(), centro.getCodigo()));
 		return centroService.insert(centro);
 	}
 
 	@Secured("ROLE_ADMIN")
 	@PutMapping("/centros")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Centro update(Authentication authentication, @RequestBody Centro centro) {
-		User user = (User) authentication.getPrincipal();
+	public Centro update(@RequestBody Centro centro) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
 		Centro centroBuscado = centroService.findById(centro.getId());
 		if (centroBuscado != null) {
-			logger.info(String.format("El usuario '%s' actualizó el centro de costos con código '%s'.", user.getUsername(), centro.getCodigo()));
+			logger.info(String.format("El usuario '%s' actualizó el centro de costos con código '%s'.", user.getName(), centro.getCodigo()));
 			return centroService.update(centro);
 		} else {
 			logger.error(String.format("El usuario '%s' no pudo actualizar el centro de costos con ID=%d porque no se encontró en la base de datos.", centro.getId()));
@@ -117,28 +117,28 @@ public class CentroController {
 	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/centros/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(Authentication authentication, @PathVariable Long id) {
-		User user = (User) authentication.getPrincipal();		
+	public void delete(@PathVariable Long id) {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();		
 		Centro centroBuscado = centroService.findById(id);
 		if (centroBuscado != null) {
-			logger.info(String.format("El usuario '%s' eliminó el centro de costos con código '%s'.", user.getUsername(), centroBuscado.getCodigo()));
+			logger.info(String.format("El usuario '%s' eliminó el centro de costos con código '%s'.", user.getName(), centroBuscado.getCodigo()));
 			centroService.deleteById(id);
 		} else {
-			logger.error(String.format("El usuario '%s' no pudo eliminar la encuesta con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+			logger.error(String.format("El usuario '%s' no pudo eliminar la encuesta con ID=%d porque no se encontró en la base de datos.", user.getName(), id));
 		}
 	}
 	
     @Secured("ROLE_ADMIN")
     @PutMapping("/centros/{id}/soft-delete")
     @ResponseStatus(HttpStatus.CREATED)
-    public Centro softDelete(Authentication authentication, @PathVariable Long id) {
-        User user = (User) authentication.getPrincipal();   
+    public Centro softDelete(@PathVariable Long id) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();   
         Centro centroBuscado = centroService.findById(id);
         if (centroBuscado != null) {
         	centroBuscado = centroService.softDelete(centroBuscado);
-            logger.info(String.format("El usuario '%s' deshabilitó el centro con código '%s'.", user.getUsername(), centroBuscado.getCodigo()));
+            logger.info(String.format("El usuario '%s' deshabilitó el centro con código '%s'.", user.getName(), centroBuscado.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo deshabilitar el centro con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+            logger.error(String.format("El usuario '%s' no pudo deshabilitar el centro con ID=%d porque no se encontró en la base de datos.", user.getName(), id));
         }
         return centroBuscado;
     }
@@ -146,14 +146,14 @@ public class CentroController {
     @Secured("ROLE_ADMIN")
     @PutMapping("/centros/{id}/soft-undelete")
     @ResponseStatus(HttpStatus.CREATED)
-    public Centro softUndelete(Authentication authentication, @PathVariable Long id) {
-        User user = (User) authentication.getPrincipal();   
+    public Centro softUndelete(@PathVariable Long id) {
+    	Authentication user = SecurityContextHolder.getContext().getAuthentication();
         Centro centroBuscado = centroService.findById(id);
         if (centroBuscado != null) {
         	centroBuscado = centroService.softUndelete(centroBuscado);
-            logger.info(String.format("El usuario '%s' habilitó el centro con código '%s'.", user.getUsername(), centroBuscado.getCodigo()));
+            logger.info(String.format("El usuario '%s' habilitó el centro con código '%s'.", user.getName(), centroBuscado.getCodigo()));
         } else {
-            logger.error(String.format("El usuario '%s' no pudo habilitar el centro con ID=%d porque no se encontró en la base de datos.", user.getUsername(), id));
+            logger.error(String.format("El usuario '%s' no pudo habilitar el centro con ID=%d porque no se encontró en la base de datos.", user.getName(), id));
         }
         return centroBuscado;
     }
@@ -186,9 +186,9 @@ public class CentroController {
 	@Secured("ROLE_ADMIN")
 	@PostMapping("/centros/eliminar-todos")
 	@ResponseStatus(HttpStatus.OK)
-	public void deleteAllCentros(Authentication authentication) {
-		User user = (User) authentication.getPrincipal();
-		logger.info(String.format("El usuario '%s' eliminó todas los centros de costos de la base de datos.", user.getUsername()));
+	public void deleteAllCentros() {
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
+		logger.info(String.format("El usuario '%s' eliminó todas los centros de costos de la base de datos.", user.getName()));
 		centroService.deleteAllCentros();
 	}
 }
