@@ -35,7 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.services.UsuarioServiceI;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class UsuarioController {

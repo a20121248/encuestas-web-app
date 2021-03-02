@@ -35,7 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ms.encuestas.models.Area;
 import com.ms.encuestas.services.AreaServiceI;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class AreaController {

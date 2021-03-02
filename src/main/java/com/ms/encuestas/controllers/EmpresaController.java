@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ms.encuestas.models.Empresa;
 import com.ms.encuestas.services.EmpresaServiceI;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class EmpresaController {

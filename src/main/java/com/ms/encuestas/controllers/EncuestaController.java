@@ -32,7 +32,7 @@ import com.ms.encuestas.models.EncuestaObjetoObjetos;
 import com.ms.encuestas.models.Usuario;
 import com.ms.encuestas.services.EncuestaServiceI;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class EncuestaController {

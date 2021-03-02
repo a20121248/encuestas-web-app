@@ -37,7 +37,7 @@ import com.ms.encuestas.models.Proceso;
 import com.ms.encuestas.services.PosicionServiceI;
 import com.ms.encuestas.services.ProcesoServiceI;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class PosicionController {

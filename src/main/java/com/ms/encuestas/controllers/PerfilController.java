@@ -32,7 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ms.encuestas.models.Perfil;
 import com.ms.encuestas.services.PerfilServiceI;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class PerfilController {

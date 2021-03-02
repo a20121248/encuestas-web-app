@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ms.encuestas.models.Objeto;
 import com.ms.encuestas.services.ObjetoServiceI;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class LineaController {

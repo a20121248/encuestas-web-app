@@ -36,7 +36,7 @@ import com.ms.encuestas.models.Centro;
 import com.ms.encuestas.models.Tipo;
 import com.ms.encuestas.services.CentroServiceI;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class CentroController {

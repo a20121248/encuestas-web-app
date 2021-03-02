@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ms.encuestas.models.Filtro;
 import com.ms.encuestas.services.ReporteServiceI;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/reportes")
 public class ReporteController {

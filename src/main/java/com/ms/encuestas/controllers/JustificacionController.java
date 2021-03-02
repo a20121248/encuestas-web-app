@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ms.encuestas.models.Justificacion;
 import com.ms.encuestas.services.JustificacionServiceI;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class JustificacionController {
